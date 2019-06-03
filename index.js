@@ -4,6 +4,7 @@ const $ = el => document.querySelector(el)
 
 document.oncontextmenu = e => false
 document.onkeydown = e => false
+window.ontouchmove = e => false
 
 window.onresize = e => {
   $('.landing.home').scrollIntoView({behavior: 'smooth'})
