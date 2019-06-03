@@ -37,10 +37,13 @@ nav {
   display: flex;
   flex-direction: column;
   position: fixed;
-  margin: 5%;
+  margin: 2%;
 }
 
-nav.bar { opacity: 0; }
+nav.bar {
+  opacity: 0;
+  visibility: hidden;
+}
 
 nav.burger {
   cursor: pointer;
@@ -48,7 +51,7 @@ nav.burger {
 }
 
 nav.burger.open {
-  margin-top: 7%;
+  margin-top: 2.5%;
 }
 
 nav.burger.open > span:nth-child(1) {
@@ -94,7 +97,6 @@ div.subtitle { font-size: 1rem }
 
 @media screen and (min-width: 768px) {
   nav.burger { margin: 2% }
-  nav.burger.open { margin-top: 3.5% }
 
   nav.burger > span {
     border: solid 1px var(--foreground);
@@ -114,6 +116,7 @@ div.subtitle { font-size: 1rem }
     flex-direction: row;
     margin: 2%;
     opacity: 1;
+    visibility: visible;
     width: 96%;
   }
 
