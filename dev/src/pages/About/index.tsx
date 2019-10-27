@@ -10,7 +10,7 @@ export default () => {
   return (
     <Page ClassName={Style.About}>
       <div className={Style.name}>Cla.vin June</div>
-      <div className={Style.pronounce}>/klavīn jo͞on/</div>
+      <div className={Style.pronounce}>/klavīn 'jün/</div>
       <div className={Style.category}>Dev</div>
       <div className={Style.description}>
         My name is <HighlightedSpan>Clavianus Juneardo</HighlightedSpan>,
