@@ -1,0 +1,12 @@
+@import '../../variables/main';
+
+.UnderDevelopment {
+  align-items: center;
+  font-size: 2rem;
+  flex-direction: column;
+  justify-content: center;
+
+  @media #{$phone-landscape} { font-size: 4rem }
+  @media #{$tablet-portrait} { font-size: 5rem }
+  @media #{$desktop-1366} { font-size: 8rem }
+}

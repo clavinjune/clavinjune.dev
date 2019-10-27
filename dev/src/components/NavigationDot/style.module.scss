@@ -1,0 +1,21 @@
+@import '../../variables/main';
+
+.NavigationDot {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  right: 5%;
+  top: 45%;
+  z-index: 1;
+  
+
+  & > span {
+    border: solid 5px $comment;
+    border-radius: 5px;
+    margin: 5px 0;
+    transition: transform .5s;
+  }
+}
+
+.active { transform: scale(2) }
+.inactive { transform: scale(.75) }

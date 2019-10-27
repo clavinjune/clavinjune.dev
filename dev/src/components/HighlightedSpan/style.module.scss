@@ -1,0 +1,10 @@
+@import '../../variables/main';
+
+.HighlightedSpan {
+  color: $cyan;
+
+  &::selection {
+    background-color: $selection;
+    color: $foreground
+  }
+}
