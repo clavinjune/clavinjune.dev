@@ -1,0 +1,126 @@
+[
+  {
+    "name": "Java",
+    "isProfessionallyWorkingWith": true
+  },
+  {
+    "name": "Go",
+    "isProfessionallyWorkingWith": false
+  },
+  {
+    "name": "Javascript",
+    "isProfessionallyWorkingWith": true
+  },
+  {
+    "name": "NodeJS",
+    "isProfessionallyWorkingWith": false
+  },
+  {
+    "name": "ReactJS",
+    "isProfessionallyWorkingWith": true
+  },
+  {
+    "name": "Redux",
+    "isProfessionallyWorkingWith": true
+  },
+  {
+    "name": "ExpressJS",
+    "isProfessionallyWorkingWith": false
+  },
+  {
+    "name": "MongoDB",
+    "isProfessionallyWorkingWith": false
+  },
+  {
+    "name": "Python",
+    "isProfessionallyWorkingWith": false
+  },
+  {
+    "name": "GraphQL",
+    "isProfessionallyWorkingWith": false
+  },
+  {
+    "name": "gRPC",
+    "isProfessionallyWorkingWith": false
+  },
+  {
+    "name": "Redis",
+    "isProfessionallyWorkingWith": true
+  },
+  {
+    "name": "SCSS",
+    "isProfessionallyWorkingWith": true
+  },
+  {
+    "name": "Typescript",
+    "isProfessionallyWorkingWith": true
+  },
+  {
+    "name": "PHP",
+    "isProfessionallyWorkingWith": false
+  },
+  {
+    "name": "Laravel",
+    "isProfessionallyWorkingWith": false
+  },
+  {
+    "name": "Linux",
+    "isProfessionallyWorkingWith": true
+  },
+  {
+    "name": "C/C++",
+    "isProfessionallyWorkingWith": false
+  },
+  {
+    "name": "HTML",
+    "isProfessionallyWorkingWith": true
+  },
+  {
+    "name": "MariaDB",
+    "isProfessionallyWorkingWith": true
+  },
+  {
+    "name": "PostgreSQL",
+    "isProfessionallyWorkingWith": true
+  },
+  {
+    "name": "firebase",
+    "isProfessionallyWorkingWith": false
+  },
+  {
+    "name": "Git",
+    "isProfessionallyWorkingWith": true
+  },
+  {
+    "name": "PWA",
+    "isProfessionallyWorkingWith": false
+  },
+  {
+    "name": "JWT",
+    "isProfessionallyWorkingWith": true
+  },
+  {
+    "name": "RESTful",
+    "isProfessionallyWorkingWith": true
+  },
+  {
+    "name": "Bash script",
+    "isProfessionallyWorkingWith": false
+  },
+  {
+    "name": "VueJS",
+    "isProfessionallyWorkingWith": false
+  },
+  {
+    "name": "Docker",
+    "isProfessionallyWorkingWith": true
+  },
+  {
+    "name": "MikroTik",
+    "isProfessionallyWorkingWith": false
+  },
+  {
+    "name": "NLTK",
+    "isProfessionallyWorkingWith": false
+  }
+]

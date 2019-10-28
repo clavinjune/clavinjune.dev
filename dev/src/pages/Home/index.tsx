@@ -1,6 +1,6 @@
 import React from 'react'
-import Page from '../../components/Page'
 import Style from './style.module.scss'
+import Page from '../../components/Page'
 
 export default () => {
   return (
