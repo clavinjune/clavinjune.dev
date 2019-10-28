@@ -1,7 +1,7 @@
 import React from 'react'
+import Style from './style.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import Style from './style.module.scss'
 
 interface IIcon {
   Icon: IconDefinition,
