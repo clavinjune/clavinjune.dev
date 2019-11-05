@@ -1,9 +1,6 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import Style from './style.module.scss'
-
-interface IHighlightedSpan {
-  children: ReactNode
-}
+import { IHighlightedSpan } from '../../interfaces'
 
 export default ({ children }: IHighlightedSpan) => {
   return (

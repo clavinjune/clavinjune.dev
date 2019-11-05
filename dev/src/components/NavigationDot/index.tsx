@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Style from './style.module.scss'
-
-interface INavigationDot {
-  TotalPage: number
-}
+import { INavigationDot } from '../../interfaces'
 
 export default ({ TotalPage }: INavigationDot) => {
   const [page, setPage] = useState(0)

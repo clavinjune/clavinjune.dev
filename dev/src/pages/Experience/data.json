@@ -1,0 +1,72 @@
+[
+  {
+    "title": "MTCNA",
+    "type": "Certification",
+    "place": "Bonavita Vocational Highschool",
+    "description": "Take a MikroTik Certified Network Associate certification before graduate from vocational highschool.",
+    "startDate": {
+      "month": 4,
+      "year": 2016
+    },
+    "endDate": {
+      "month": 4,
+      "year": 2016
+    }
+  },
+  {
+    "title": "BINUS University",
+    "type": "Education",
+    "place": "BINUS University",
+    "description": "Enter Bina Nusantara(BINUS) university majoring in Computer Science and minoring in Artificial Intelligence.",
+    "startDate": {
+      "month": 9,
+      "year": 2016
+    },
+    "endDate": {
+      "month": 0,
+      "year": 0
+    }
+  },
+  {
+    "title": "Web Application Penetration Tester",
+    "type": "Education",
+    "place": "Ethic Ninja Dojo",
+    "description": "Join a short course that focused on web apps pentesting methodology such as SQL injection, XSS attack, CSRF attack, etc.",
+    "startDate": {
+      "month": 9,
+      "year": 2016
+    },
+    "endDate": {
+      "month": 10,
+      "year": 2016
+    }
+  },
+  {
+    "title": "Laboratory Instructor",
+    "type": "Work",
+    "place": "BINUS University",
+    "description": "Work as a laboratory instructor at BINUS university. My responsibilities are teaching and assisting university students in lab sessions of a various programming language and software usage, evaluating laboratory examination and assignments, designing laboratory materials and exam case, providing training for other laboratory instructor, and research of new technology to support laboratory center activities.",
+    "startDate": {
+      "month": 2,
+      "year": 2017
+    },
+    "endDate": {
+      "month": 2,
+      "year": 2019
+    }
+  },
+  {
+    "title": "Software Engineer intern",
+    "type": "Work",
+    "place": "Airyrooms",
+    "description": "work as a SWE intern at Airyrooms in core team. My responsibilities are designing, building, and improving web apps for helping customer support and enterprise department, I have taken a part on revamping rooms booking email notification for customer and hotel, designing PostgreSQL database for central reservation system, building a new system for centralizing rooms reservation using Java and ReactJS, and rooms reservation data migration.",
+    "startDate": {
+      "month": 3,
+      "year": 2019
+    },
+    "endDate": {
+      "month": 3,
+      "year": 2020
+    }
+  }
+]

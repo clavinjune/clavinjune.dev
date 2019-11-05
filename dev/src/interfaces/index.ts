@@ -1,0 +1,5 @@
+export { default as IPage } from './IPage'
+export { default as IHighlightedSpan } from './IHighlightedSpan'
+export { default as IIcon } from './IIcon'
+export { default as INavigationDot } from './INavigationDot'
+export { default as IKnowledge } from './IKnowledge'

@@ -1,16 +1,16 @@
 import React from 'react'
 import Style from './style.module.scss'
 import Page from '../../components/Page'
-import skills from './skills.json'
+import data from './data.json'
+import { IKnowledge } from '../../interfaces'
 
 export default () => {
-
   return (
     <Page ClassName={Style.Knowledge}>
       <div className={Style.title}>Dev Skills</div>
       <div className={Style.skills}>
         {
-          skills.sort( (skill1, skill2) => skill1.name.toUpperCase() > skill2.name.toUpperCase() ? 1 : -1 )
+          data.sort( (skill1: IKnowledge, skill2: IKnowledge) => skill1.name.toUpperCase() > skill2.name.toUpperCase() ? 1 : -1 )
           .map(({ name, isProfessionallyWorkingWith }, idx) => {
 
           const className: string = isProfessionallyWorkingWith ? Style.professional : Style.nonProfessional

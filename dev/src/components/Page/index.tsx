@@ -1,10 +1,6 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import Style from './style.module.scss'
-
-interface IPage {
-  ClassName?: string,
-  children: ReactNode
-}
+import { IPage } from '../../interfaces'
 
 export default ({ ClassName, children }: IPage) => {
   const className: string = `${Style.Page} ${ClassName || ''}`
