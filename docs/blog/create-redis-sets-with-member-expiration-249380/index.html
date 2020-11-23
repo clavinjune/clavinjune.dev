@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    Site Template By: Clavin June | https://github.com/anon-org/jekyll-blog
+  -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatbile" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Clavin June" />
+  <meta name="description" content="This post contains my own experience when using redis as a cache to set sets member expiration on the same key.
+" />
+  <meta property="og:description" content="This post contains my own experience when using redis as a cache to set sets member expiration on the same key.
+" />
+  <meta property="og:title" content="Create Redis Sets With Member Expiration | Clavin June's detached brain" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:url" content="https://clavinjune.dev/blog/blog/create-redis-sets-with-member-expiration-249380/" />
+  <meta property="og:site_name" content="Clavin June's detached brain" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1501139083538-0139583c060f?w=1920" />
+  <meta name="monetization" content="$ilp.uphold.com/RYNmdxrFrPJB">
+  
+  <title> Create Redis Sets With Member Expiration | Clavin June's detached brain </title>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://clavinjune.dev/blog/assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://clavinjune.dev/blog/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://clavinjune.dev/blog/assets/favicon/favicon-16x16.png">
+  <link rel="stylesheet" type="text/css" href="https://clavinjune.dev/blog/assets/css/styles.css" />
+  <link rel="stylesheet" type="text/css" href="https://clavinjune.dev/blog/assets/css/syntax.css" />
+  <link rel="webmention" href="https://webmention.io/clavinjune.dev_blog_/webmention" />
+  <link rel="pingback" href="https://webmention.io/clavinjune.dev_blog_/xmlrpc" />
+  <link rel="pingback" href="https://webmention.io/webmention?forward=https://clavinjune.dev/blog" />
+</head>
+<body><main id="post">
+  <div>
+    <h1 class="title">Create Redis Sets With Member Expiration</h1>
+    <div class="posts-time">
+      <span>Oct 29, 2020</span>
+      <span>&nbsp;&middot;&nbsp;</span>
+      <span>~3min read</span>
+    </div>
+    <div class="posts-tags">
+      <span class="posts-tags-category" id="c73410">
+        Tips & Tricks
+      </span>
+        <span class="posts-tags-content">#cache</span>
+      
+        <span class="posts-tags-content">#redis</span>
+      
+        <span class="posts-tags-content">#sorted-sets</span>
+      
+    </div>
+  </div>
+  <hr>
+  <p><img src="https://images.unsplash.com/photo-1501139083538-0139583c060f?w=1920" alt="Photo by @aronvisuals on Unsplash" /></p>
+
+<p><a href="https://redis.io">Redis</a> is a good in-memory key-value data store that supports many types of value. <a href="https://redis.io/topics/data-types-intro#sorted-sets">Sorted Sets</a> is one of them. According to the docs <code class="language-plaintext highlighter-rouge">sorted sets</code> is:</p>
+
+<blockquote>
+  <p>Sorted sets, similar to Sets but where every string element is associated to a floating number value, called score. The elements are always taken sorted by their score, so unlike Sets it is possible to retrieve a range of elements (for example you may ask: give me the top 10, or the bottom 10).</p>
+</blockquote>
+
+<p>What they didn’t say about <code class="language-plaintext highlighter-rouge">sorted sets</code> is the expiration of <code class="language-plaintext highlighter-rouge">sets members</code> can’t be defined, at least until this blog post is created. Why do we need to define <code class="language-plaintext highlighter-rouge">sets members</code> expiration?</p>
+
+<p>Well, in my case I’ve required to create a phone service that could generate and verify OTP that sent to the users with a specific limit. The prior design is using <a href="https://godoc.org/golang.org/x/time/rate">Golang Rate Limit</a> that I thought it couldn’t be horizontally scalable. That’s why I thought that I would use Redis for this case. The requirement for generating OTP is only like this:</p>
+
+<ul>
+  <li>Each phone number can request OTP up to <code class="language-plaintext highlighter-rouge">X times</code> per <code class="language-plaintext highlighter-rouge">Y minutes</code></li>
+</ul>
+
+<p>That’s why I came up with <code class="language-plaintext highlighter-rouge">Redis sets</code> but <code class="language-plaintext highlighter-rouge">sets members</code> can’t have its own expiration time. Then I was googling around until I found <a href="https://github.com/redis/redis/issues/135#issuecomment-2361996">this issue comment</a> by <a href="https://github.com/pietern">@pietern</a>. This is quite a hacky move, but at least it is doable. That’s why I tried to implement it. Once again comments on Github saved my job.</p>
+
+<p>The idea is quite simple, using the score on sorted-sets as an expiration millis. Fetch the valid members that have a score between <code class="language-plaintext highlighter-rouge">current millis</code> and <code class="language-plaintext highlighter-rouge">current millis + Y minutes</code> and remove the expired members that have a score between zero and <code class="language-plaintext highlighter-rouge">current millis</code>. So the minimum pseudocode would be like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># define variables
+timeLimit := Y
+requestLimit := X
+key := +6212312341234
+otp := randomString(6)
+now := currentMillis()
+exp := now + timeLimit
+
+# get total of generated phone number in key
+validOTPs := redisQuery("ZRANGEBYSCORE $key $now $exp")
+
+# Limitting request
+if count(validOTPs) &gt;= requestLimit
+then exit
+
+# Add members to key
+redisQuery("ZADD $key $exp $otp")
+</code></pre></div></div>
+
+<p>I think this method is good enough and the simplest one to implement. You can add optional operations like, <code class="language-plaintext highlighter-rouge">adding expiration to the key</code>, or <code class="language-plaintext highlighter-rouge">removing members that are no longer valid</code>. But this operation is enough to adding expiration to the <code class="language-plaintext highlighter-rouge">sets member</code>. You can also use this method to limiting the OTP verification to avoid brute-force.</p>
+
+
+  <footer>
+    <hr>
+    <div style="display: flex;justify-content: space-between;">
+      <div>
+        <a href="https://clavinjune.dev/blog">Home</a>
+      </div>
+      <div>
+        <span>Copyright &copy; 2020 &middot; Clavin June</span>
+      </div>
+    </div>
+  </footer>
+</main><script defer type="text/javascript" src="https://clavinjune.dev/blog/assets/js/index.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script>
+<script defer type="text/javascript">
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MTSJ0LHJ06');
+</script>
+</body>
+</html>

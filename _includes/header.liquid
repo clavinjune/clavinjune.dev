@@ -1,0 +1,30 @@
+{%- include variables.liquid -%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    Site Template By: Clavin June | https://github.com/anon-org/jekyll-blog
+  -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatbile" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="{{ author }}" />
+  {{ description_tag }}
+  <meta property="og:title" content="{{ title }}" />
+  <meta property="og:locale" content="{{ locale }}" />
+  <meta property="og:url" content="{{ url }}" />
+  <meta property="og:site_name" content="{{ site_name }}" />
+  {{ thumbnail_tag }}
+  <meta name="monetization" content="$ilp.uphold.com/RYNmdxrFrPJB">
+  {{ canonical_tag }}
+  <title> {{ title }} </title>
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ site.url }}/assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ site.url }}/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ site.url }}/assets/favicon/favicon-16x16.png">
+  <link rel="stylesheet" type="text/css" href="{{ site.url }}/assets/css/styles.css" />
+  <link rel="stylesheet" type="text/css" href="{{ site.url }}/assets/css/syntax.css" />
+  <link rel="webmention" href="https://webmention.io/clavinjune.dev_blog_/webmention" />
+  <link rel="pingback" href="https://webmention.io/clavinjune.dev_blog_/xmlrpc" />
+  <link rel="pingback" href="https://webmention.io/webmention?forward=https://clavinjune.dev/blog" />
+</head>
+<body>

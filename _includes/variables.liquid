@@ -1,0 +1,64 @@
+{%- comment -%} title control {%- endcomment -%}
+{%- if page.title -%}
+  {%- assign title = title | append:page.title -%}
+{%- endif -%}
+{%- if page.title && site.title -%}
+  {%- assign title = title | append:" | " -%}
+{%- endif -%}
+{%- if site.title -%}
+  {%- assign title = title | append:site.title -%}
+{%- endif -%}
+
+{%- comment -%} author control {%- endcomment -%}
+{%- if page.author -%}
+  {%- assign author = page.author -%}
+{%- elsif site.author -%}
+  {%- assign author = site.author -%}
+{%- endif -%}
+
+{%- comment -%} locale control {%- endcomment -%}
+{%- if page.locale -%}
+  {%- assign locale = page.locale -%}
+{%- elsif site.locale -%}
+  {%- assign locale = site.locale -%}
+{%- else -%}
+  {%- assign locale = "en_US" -%}
+{%- endif -%}
+
+{%- comment -%} description control {%- endcomment -%}
+{%- if page.description -%}
+  {%- assign description = page.description -%}
+{%- elsif site.description -%}
+  {%- assign description = site.description -%}
+{%- endif -%}
+
+{%- if description -%}
+  {%- capture description_tag -%}
+  <meta name="description" content="{{ description }}" />
+  <meta property="og:description" content="{{ description }}" />
+  {%- endcapture-%}
+{%- endif -%}
+
+{%- if page.thumbnail -%}
+  {%- capture thumbnail_tag -%}
+  <meta property="og:image" content="{{ page.thumbnail }}" />
+  {%- endcapture-%}
+{%- endif -%}
+
+{%- comment -%} url control {%- endcomment -%}
+{%- assign url = site.url | append:page.url -%}
+
+{%- comment -%} site_name control {%- endcomment -%}
+{%- assign site_name = site.title -%}
+
+{%- comment -%} canonical control {%- endcomment -%}
+{%- if page.canonical_url -%}
+  {%- capture canonical_tag -%}
+    <link rel="canonical" href="{{ page.canonical_url }}" />
+  {%- endcapture-%}
+{%- endif -%}
+
+{%- assign current_url = page.url | replace: ".html" "" | replace: "/index" "" -%}
+
+{%- comment -%} reading time control {%- endcomment -%}
+{%- assign wpm = 150 -%}

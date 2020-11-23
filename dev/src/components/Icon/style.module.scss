@@ -1,9 +1,0 @@
-@import '../../variables/main';
-
-.Icon {
-  font-size: 2.25rem;
-
-  @media #{$tablet-landscape} { font-size: 3rem }
-
-  &:hover { color: $cyan }
-}

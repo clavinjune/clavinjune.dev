@@ -1,0 +1,9 @@
+I"Ž<p>Add this on your spring boot project:
+```java
+@Bean
+@Order(Ordered.HIGHEST_PRECEDENCE)
+public FilterRegistrationBean<CharacterEncodingFilter> characterEncodingFilterRegistration() {
+  CharacterEncodingFilter filter = new CharacterEncodingFilter();
+  filter.setEncoding("UTF-8"); // use your preferred encoding
+  filter.setForceEncoding(true); // force the encoding</CharacterEncodingFilter></p>
+:ET

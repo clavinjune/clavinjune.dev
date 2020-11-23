@@ -1,0 +1,49 @@
+# site
+url: https://clavinjune.dev/blog
+title: Clavin June's detached brain
+description: Contains notes written by Clavin June to avoid forgetfulness.
+author: Clavin June
+collections:
+  feeds:
+    output: true
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      permalink: /blog/:title-:salt/
+  - scope:
+      path: ""
+      type: feeds
+    values:
+      layout: none
+  - scope:
+      path: ""
+    values:
+      layout: default
+
+pagination:
+  enabled: true
+  collection: posts
+  per_page: 7
+  sort_reverse: true
+  permalink: /blog/:num/
+  sort_field: date
+
+sass:
+  sass_dir: assets/_sass
+  style: compressed
+
+feed:
+  path: /feeds/atom.xml
+
+exclude:
+  - docs
+  - Makefile
+  - README.md
+  - LICENSE
+
+plugins:
+  - jekyll-paginate-v2
+  - jekyll-feed

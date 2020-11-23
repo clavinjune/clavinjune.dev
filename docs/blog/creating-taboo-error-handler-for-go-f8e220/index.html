@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    Site Template By: Clavin June | https://github.com/anon-org/jekyll-blog
+  -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatbile" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Clavin June" />
+  <meta name="description" content="This post contains my own experience in creating try-catch-like error handler for golang.
+" />
+  <meta property="og:description" content="This post contains my own experience in creating try-catch-like error handler for golang.
+" />
+  <meta property="og:title" content="Creating Taboo Error Handler For Go | Clavin June's detached brain" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:url" content="https://clavinjune.dev/blog/blog/creating-taboo-error-handler-for-go-f8e220/" />
+  <meta property="og:site_name" content="Clavin June's detached brain" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=1920" />
+  <meta name="monetization" content="$ilp.uphold.com/RYNmdxrFrPJB">
+  
+  <title> Creating Taboo Error Handler For Go | Clavin June's detached brain </title>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://clavinjune.dev/blog/assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://clavinjune.dev/blog/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://clavinjune.dev/blog/assets/favicon/favicon-16x16.png">
+  <link rel="stylesheet" type="text/css" href="https://clavinjune.dev/blog/assets/css/styles.css" />
+  <link rel="stylesheet" type="text/css" href="https://clavinjune.dev/blog/assets/css/syntax.css" />
+  <link rel="webmention" href="https://webmention.io/clavinjune.dev_blog_/webmention" />
+  <link rel="pingback" href="https://webmention.io/clavinjune.dev_blog_/xmlrpc" />
+  <link rel="pingback" href="https://webmention.io/webmention?forward=https://clavinjune.dev/blog" />
+</head>
+<body><main id="post">
+  <div>
+    <h1 class="title">Creating Taboo Error Handler For Go</h1>
+    <div class="posts-time">
+      <span>Oct 28, 2020</span>
+      <span>&nbsp;&middot;&nbsp;</span>
+      <span>~4min read</span>
+    </div>
+    <div class="posts-tags">
+      <span class="posts-tags-category" id="f69c9a">
+        Development
+      </span>
+        <span class="posts-tags-content">#error-handling</span>
+      
+        <span class="posts-tags-content">#go</span>
+      
+        <span class="posts-tags-content">#opensource</span>
+      
+    </div>
+  </div>
+  <hr>
+  <p><img src="https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=1920" alt="Photo by @hhh13 on Unsplash" /></p>
+
+<p>I created <a href="https://github.com/anon-org/taboo">this module</a> for Golang to help me with error handling. This idea showed when a colleague of mine was thinking to pass <code class="language-plaintext highlighter-rouge">context</code> from handler to service, to repository to trace the error log more verbose. I disagreed with him because I thought that’s not what <code class="language-plaintext highlighter-rouge">context</code> is for. Perhaps I was wrong or he was wrong, or maybe both of us wrong because this is our first Golang project that deployed on production.</p>
+
+<p>Despite our opinion about <code class="language-plaintext highlighter-rouge">context</code>, we both agreed that Golang’s error handling is too verbose and bulky. It makes us read more error handling more than read the system flow itself. Then I remember when I was coding using Java/Kotlin that I always use <code class="language-plaintext highlighter-rouge">throws</code>, <code class="language-plaintext highlighter-rouge">throw</code>, and <code class="language-plaintext highlighter-rouge">try-catch block</code> to handle any errors.</p>
+
+<p>Hmm…</p>
+
+<p>Why don’t I create it for Golang?</p>
+
+<p>Then I create this <code class="language-plaintext highlighter-rouge">try-catch block</code> module for Golang called <code class="language-plaintext highlighter-rouge">taboo</code>. Because I know this thing creates polemic among Golang developer but, then I thought why don’t I give it a try?</p>
+
+<p>For the design itself, I was inspired by <a href="https://hackthology.com/exceptions-for-go-as-a-library.html">this article</a> but the whole implementation is all adjusted with my current needs. Instead of <code class="language-plaintext highlighter-rouge">error</code>, this module is based on <code class="language-plaintext highlighter-rouge">panic</code> and <code class="language-plaintext highlighter-rouge">recover</code> so it is quite dangerous whenever used in the wrong condition.</p>
+
+<p>Let’s take an example:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">func</span> <span class="n">div</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">div</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>When <code class="language-plaintext highlighter-rouge">b</code> is filled with <code class="language-plaintext highlighter-rouge">zero</code>, it causes panic</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>panic: runtime error: integer divide by zero
+
+goroutine 1 [running]:
+main.div(...)
+        /tmp/anon-org/taboo/cmd/example.go:4
+main.main()
+        /tmp/anon-org/taboo/cmd/example.go:8 +0x12
+
+Process finished with exit code 2
+</code></pre></div></div>
+
+<p>So, we can handle it using <code class="language-plaintext highlighter-rouge">taboo</code> like this:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">taboo</span><span class="o">.</span><span class="n">Try</span><span class="p">(</span><span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">div</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>  
+<span class="p">})</span><span class="o">.</span><span class="n">Catch</span><span class="p">(</span><span class="k">func</span><span class="p">(</span><span class="n">e</span> <span class="o">*</span><span class="n">taboo</span><span class="o">.</span><span class="n">Exception</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">Error</span><span class="p">())</span>
+<span class="p">})</span><span class="o">.</span><span class="n">Do</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">taboo</code> will catch the <code class="language-plaintext highlighter-rouge">panic</code> and try to <code class="language-plaintext highlighter-rouge">recover</code> it and make a stack of error called <code class="language-plaintext highlighter-rouge">taboo.Exception</code> to trace error more verbose. So the program ends like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>main.div:9 runtime error: integer divide by zero
+
+Process finished with exit code 0
+</code></pre></div></div>
+
+<p>Quite handy right?</p>
+
+<p>Then, what if I want to throw or rethrow the error to the first caller?</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="p">(</span>
+  <span class="s">"errors"</span>
+  <span class="s">"fmt"</span>
+  <span class="s">"github.com/anon-org/taboo/pkg/taboo"</span>
+<span class="p">)</span>
+
+<span class="k">func</span> <span class="n">div</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+    <span class="n">taboo</span><span class="o">.</span><span class="n">Throw</span><span class="p">(</span><span class="n">errors</span><span class="o">.</span><span class="n">New</span><span class="p">(</span><span class="s">"division by zero detected"</span><span class="p">))</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">callDiv</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+  <span class="k">var</span> <span class="n">result</span> <span class="kt">int</span>
+
+  <span class="n">taboo</span><span class="o">.</span><span class="n">Try</span><span class="p">(</span><span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">div</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+  <span class="p">})</span><span class="o">.</span><span class="n">Catch</span><span class="p">(</span><span class="k">func</span><span class="p">(</span><span class="n">e</span> <span class="o">*</span><span class="n">taboo</span><span class="o">.</span><span class="n">Exception</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">e</span><span class="o">.</span><span class="n">Throw</span><span class="p">(</span><span class="s">"callDiv rethrow this error"</span><span class="p">)</span>
+  <span class="p">})</span><span class="o">.</span><span class="n">Do</span><span class="p">()</span>
+
+  <span class="k">return</span> <span class="n">result</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">callCallDiv</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+  <span class="k">var</span> <span class="n">result</span> <span class="kt">int</span>
+
+  <span class="n">taboo</span><span class="o">.</span><span class="n">Try</span><span class="p">(</span><span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">callDiv</span><span class="p">()</span>
+  <span class="p">})</span><span class="o">.</span><span class="n">Catch</span><span class="p">(</span><span class="k">func</span><span class="p">(</span><span class="n">e</span> <span class="o">*</span><span class="n">taboo</span><span class="o">.</span><span class="n">Exception</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">e</span><span class="o">.</span><span class="n">Throw</span><span class="p">(</span><span class="s">"callCallDiv rethrow this error"</span><span class="p">)</span>
+  <span class="p">})</span><span class="o">.</span><span class="n">Do</span><span class="p">()</span>
+
+  <span class="k">return</span> <span class="n">result</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">taboo</span><span class="o">.</span><span class="n">Try</span><span class="p">(</span><span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">callCallDiv</span><span class="p">()</span>
+  <span class="p">})</span><span class="o">.</span><span class="n">Catch</span><span class="p">(</span><span class="k">func</span><span class="p">(</span><span class="n">e</span> <span class="o">*</span><span class="n">taboo</span><span class="o">.</span><span class="n">Exception</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">Error</span><span class="p">())</span>
+  <span class="p">})</span><span class="o">.</span><span class="n">Do</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">e.Throw(message)</code> Will wrap the previous exception, and throw it again to the previous caller. So the printed error will be like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>main.callCallDiv:34 callCallDiv rethrow this error caused by:
+  main.callDiv:22 callDiv rethrow this error caused by:
+    main.div:11 division by zero detected
+
+Process finished with exit code 0
+</code></pre></div></div>
+
+<p>It just like <code class="language-plaintext highlighter-rouge">try-catch block</code> in Java/Kotlin I think but with many flaws lol. This module is still an experiment that I myself is not going to using this module in production. Or perhaps should I?</p>
+
+
+  <footer>
+    <hr>
+    <div style="display: flex;justify-content: space-between;">
+      <div>
+        <a href="https://clavinjune.dev/blog">Home</a>
+      </div>
+      <div>
+        <span>Copyright &copy; 2020 &middot; Clavin June</span>
+      </div>
+    </div>
+  </footer>
+</main><script defer type="text/javascript" src="https://clavinjune.dev/blog/assets/js/index.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script>
+<script defer type="text/javascript">
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MTSJ0LHJ06');
+</script>
+</body>
+</html>

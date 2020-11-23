@@ -1,0 +1,43 @@
+{%- include header.liquid -%}
+{%- assign reading_time = page.content | strip_html | number_of_words | plus:91 | divided_by:wpm -%}
+{%- if reading_time <= 1 -%}
+  {%- assign reading_time = 1 -%}
+{%- endif -%}
+<main id="post">
+  <div>
+    <h1 class="title">{{ page.title }}</h1>
+    <div class="posts-time">
+      <span>{{ page.date | date: "%b %d, %Y" }}</span>
+      <span>&nbsp;&middot;&nbsp;</span>
+      <span>{{ '~' | append:reading_time | append: 'min read' }}</span>
+    </div>
+    <div class="posts-tags">
+      <span class="posts-tags-category" id="{{ page.category | md5 }}">
+        {{ page.category }}
+      </span>
+      {%- assign tags = page.tags | sort -%}
+      {% for tag in tags limit: 4 %}
+        <span class="posts-tags-content">#{{ tag }}</span>
+      {% endfor %}
+    </div>
+  </div>
+  <hr>
+  {{ content }}
+  <hr>
+  <p>
+    If you are Indonesian, you can listen to our podcast on Spotify, and don't forget to visit <a href="https://positif.dev">our web</a> to get the latest update.
+  </p>
+  <iframe src="{{ page.podcast }}" width="100%" height="232" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+  <footer>
+    <hr>
+    <div style="display: flex;justify-content: space-between;">
+      <div>
+        <a href="{{ site.url }}">Home</a>
+      </div>
+      <div>
+        <span>Copyright &copy; {{ site.time | date: '%Y' }} &middot; Clavin June</span>
+      </div>
+    </div>
+  </footer>
+</main>
+{%- include footer.liquid -%}

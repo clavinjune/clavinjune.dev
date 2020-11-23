@@ -1,0 +1,17 @@
+I"ƒ<p>Add this on your spring boot project:</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Bean</span>
+<span class="nd">@Order</span><span class="o">(</span><span class="nc">Ordered</span><span class="o">.</span><span class="na">HIGHEST_PRECEDENCE</span><span class="o">)</span>
+<span class="kd">public</span> <span class="nc">FilterRegistrationBean</span><span class="o">&lt;</span><span class="nc">CharacterEncodingFilter</span><span class="o">&gt;</span> <span class="nf">characterEncodingFilterRegistration</span><span class="o">()</span> <span class="o">{</span>
+  <span class="nc">CharacterEncodingFilter</span> <span class="n">filter</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">CharacterEncodingFilter</span><span class="o">();</span>
+  <span class="n">filter</span><span class="o">.</span><span class="na">setEncoding</span><span class="o">(</span><span class="s">"UTF-8"</span><span class="o">);</span> <span class="c1">// use your preferred encoding</span>
+  <span class="n">filter</span><span class="o">.</span><span class="na">setForceEncoding</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span> <span class="c1">// force the encoding</span>
+
+  <span class="nc">FilterRegistrationBean</span><span class="o">&lt;</span><span class="nc">CharacterEncodingFilter</span><span class="o">&gt;</span> <span class="n">registrationBean</span> <span class="o">=</span>
+    <span class="k">new</span> <span class="nc">FilterRegistrationBean</span><span class="o">&lt;&gt;(</span><span class="n">filter</span><span class="o">);</span> <span class="c1">// register the filter</span>
+  <span class="n">registrationBean</span><span class="o">.</span><span class="na">addUrlPatterns</span><span class="o">(</span><span class="s">"/*"</span><span class="o">);</span> <span class="c1">// set preferred url</span>
+  <span class="k">return</span> <span class="n">registrationBean</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><a href="https://www.baeldung.com/spring-boot-characterencodingfilter">reference</a></p>
+:ET
