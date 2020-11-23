@@ -1,8 +1,0 @@
-I"ó<p>Add this on application configuration:</p>
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">spring</span><span class="pi">:</span>
-  <span class="na">mvc</span><span class="pi">:</span>
-   <span class="na">hiddenmethod</span><span class="pi">:</span>
-     <span class="na">filter</span><span class="pi">:</span>
-       <span class="na">enabled</span><span class="pi">:</span> <span class="no">true</span>
-</code></pre></div></div>
-:ET
