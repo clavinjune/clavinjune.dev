@@ -9,8 +9,8 @@
     <description>Contains notes written by Clavin June to avoid forgetfulness.</description>    
     <sy:updatePeriod>daily</sy:updatePeriod>
     <sy:updateFrequency>1</sy:updateFrequency>
-    <link>https://clavinjune.dev/blog</link>
-    <atom:link href="https://clavinjune.dev/blog/feeds/rss.xml" rel="self" type="application/rss+xml" />
+    <link>https://clavinjune.dev</link>
+    <atom:link href="https://clavinjune.dev/feeds/rss.xml" rel="self" type="application/rss+xml" />
     <lastBuildDate>Wed, 18 Nov 2020 00:00:00 +0700</lastBuildDate>
     
       <item>
@@ -86,8 +86,8 @@ serialization by jackson: {&quot;bar&quot;:&quot;barx&quot;}
 &lt;p&gt;Thank you for reading!&lt;/p&gt;
 </content>
         <pubDate>Wed, 18 Nov 2020 00:00:00 +0700</pubDate>
-        <link>https://clavinjune.dev/blog/blog/transient-modifier-in-java-05f48e/</link>
-        <guid isPermaLink="true">https://clavinjune.dev/blog/blog/transient-modifier-in-java-05f48e/</guid>
+        <link>https://clavinjune.dev/blog/transient-modifier-in-java-05f48e/</link>
+        <guid isPermaLink="true">https://clavinjune.dev/blog/transient-modifier-in-java-05f48e/</guid>
       </item>
     
       <item>
@@ -101,7 +101,7 @@ serialization by jackson: {&quot;bar&quot;:&quot;barx&quot;}
         
         <content>&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=1920&quot; alt=&quot;Photo by @loicleray on Unsplash&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;After I tried to implement &lt;a href=&quot;https://clavinjune.dev/blog/binary-search-tree-in-go-0f34cd/&quot;&gt;BST in Go&lt;/a&gt;, it seems like I want to modify the BST to AVL because BST is not a fairly optimal tree data structure.&lt;/p&gt;
+&lt;p&gt;After I tried to implement &lt;a href=&quot;https://clavinjune.dev/binary-search-tree-in-go-0f34cd/&quot;&gt;BST in Go&lt;/a&gt;, it seems like I want to modify the BST to AVL because BST is not a fairly optimal tree data structure.&lt;/p&gt;
 
 &lt;p&gt;When I said this:&lt;/p&gt;
 
@@ -111,11 +111,11 @@ serialization by jackson: {&quot;bar&quot;:&quot;barx&quot;}
 
 &lt;p&gt;It’s half true because there’s a case that BST makes a linear tree like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;https://clavinjune.dev/blog/assets/img/avl-tree-in-go-5daf99/867edb9c.png&quot; alt=&quot;linear tree&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://clavinjune.dev/assets/img/avl-tree-in-go-5daf99/867edb9c.png&quot; alt=&quot;linear tree&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;And if you want to find a node with value 6, in the end, you will travel the whole tree. That’s why we need AVL to improve the time complexity. AVL will try to rebalance the tree whenever it becomes imbalance after insertion/deletion.&lt;/p&gt;
 
-&lt;p&gt;The whole concept of AVL is much the same with BST besides the rebalancing algorithm. In AVL we need to rebalance the tree by rotating every imbalance sub-tree in every insertion/deletion. So we’re gonna use all the code from &lt;a href=&quot;https://clavinjune.dev/blog/binary-search-tree-in-go-0f34cd/&quot;&gt;here&lt;/a&gt; and modified it a bit.&lt;/p&gt;
+&lt;p&gt;The whole concept of AVL is much the same with BST besides the rebalancing algorithm. In AVL we need to rebalance the tree by rotating every imbalance sub-tree in every insertion/deletion. So we’re gonna use all the code from &lt;a href=&quot;https://clavinjune.dev/binary-search-tree-in-go-0f34cd/&quot;&gt;here&lt;/a&gt; and modified it a bit.&lt;/p&gt;
 
 &lt;p&gt;To see the tree is balanced or not, we need to define the height on each node. We can calculate the height by counting the maximum height of the left and the right node recursively. If the node has no child, it means its height is 1 otherwise we compare the maximum height of the children.&lt;/p&gt;
 
@@ -708,8 +708,8 @@ serialization by jackson: {&quot;bar&quot;:&quot;barx&quot;}
 &lt;p&gt;Thank you for reading!&lt;/p&gt;
 </content>
         <pubDate>Sun, 15 Nov 2020 00:00:00 +0700</pubDate>
-        <link>https://clavinjune.dev/blog/blog/avl-tree-in-go-5daf99/</link>
-        <guid isPermaLink="true">https://clavinjune.dev/blog/blog/avl-tree-in-go-5daf99/</guid>
+        <link>https://clavinjune.dev/blog/avl-tree-in-go-5daf99/</link>
+        <guid isPermaLink="true">https://clavinjune.dev/blog/avl-tree-in-go-5daf99/</guid>
       </item>
     
       <item>
@@ -1271,8 +1271,8 @@ Find the greatest valueable node from the left child of the node
 &lt;p&gt;Thank you for reading.&lt;/p&gt;
 </content>
         <pubDate>Thu, 12 Nov 2020 00:00:00 +0700</pubDate>
-        <link>https://clavinjune.dev/blog/blog/binary-search-tree-in-go-0f34cd/</link>
-        <guid isPermaLink="true">https://clavinjune.dev/blog/blog/binary-search-tree-in-go-0f34cd/</guid>
+        <link>https://clavinjune.dev/blog/binary-search-tree-in-go-0f34cd/</link>
+        <guid isPermaLink="true">https://clavinjune.dev/blog/binary-search-tree-in-go-0f34cd/</guid>
       </item>
     
       <item>
@@ -1300,8 +1300,8 @@ Find the greatest valueable node from the left child of the node
 &lt;p&gt;&lt;a href=&quot;https://www.baeldung.com/spring-boot-characterencodingfilter&quot;&gt;reference&lt;/a&gt;&lt;/p&gt;
 </content>
         <pubDate>Wed, 11 Nov 2020 00:00:00 +0700</pubDate>
-        <link>https://clavinjune.dev/blog/blog/force-set-character-encoding-on-spring-boot-682449/</link>
-        <guid isPermaLink="true">https://clavinjune.dev/blog/blog/force-set-character-encoding-on-spring-boot-682449/</guid>
+        <link>https://clavinjune.dev/blog/force-set-character-encoding-on-spring-boot-682449/</link>
+        <guid isPermaLink="true">https://clavinjune.dev/blog/force-set-character-encoding-on-spring-boot-682449/</guid>
       </item>
     
       <item>
@@ -1328,8 +1328,8 @@ Find the greatest valueable node from the left child of the node
 &lt;p&gt;The last discussion is about what we do in our spare time. While I follow my schedule that I have set up to refresh and improve my personal skills such as learning English, Japanese, side project development and watching Netflix, Devin uses his free time to read books, do side projects, and watch Udemy courses and Netflix.&lt;/p&gt;
 </content>
         <pubDate>Sun, 01 Nov 2020 00:00:00 +0700</pubDate>
-        <link>https://clavinjune.dev/blog/blog/work-life-balance-e39a65/</link>
-        <guid isPermaLink="true">https://clavinjune.dev/blog/blog/work-life-balance-e39a65/</guid>
+        <link>https://clavinjune.dev/blog/work-life-balance-e39a65/</link>
+        <guid isPermaLink="true">https://clavinjune.dev/blog/work-life-balance-e39a65/</guid>
       </item>
     
       <item>
@@ -1341,7 +1341,7 @@ Find the greatest valueable node from the left child of the node
         
         <content>&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=1920&quot; alt=&quot;Photo by @veato on Unsplash&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;In my &lt;a href=&quot;https://clavinjune.dev/blog/i-create-this-blog-using-jekyll-65efbd/&quot;&gt;first post&lt;/a&gt;, I said that:&lt;/p&gt;
+&lt;p&gt;In my &lt;a href=&quot;https://clavinjune.dev/i-create-this-blog-using-jekyll-65efbd/&quot;&gt;first post&lt;/a&gt;, I said that:&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;Perhaps I’m gonna try to integrate this blog using Webmention and Web Monetization after getting a bunch of visitors, but I’m gonna save it for later.&lt;/p&gt;
@@ -1357,21 +1357,21 @@ Find the greatest valueable node from the left child of the node
 
 &lt;p&gt;Currently, &lt;a href=&quot;https://webmonetization.org&quot;&gt;Web Monetization&lt;/a&gt; only provider is &lt;a href=&quot;https://coil.com&quot;&gt;Coil&lt;/a&gt;. For every Coil paid members that visit your monetized content will stream a micro amount of money to your ILP automatically. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Coil&lt;/code&gt; will pay you per second for about &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$0.36/hour&lt;/code&gt; according to &lt;a href=&quot;https://help.coil.com/accounts/creator-accounts#faqs&quot;&gt;this FAQ&lt;/a&gt; which you should read to learn how Coil works. As the paid members of Coil, you can enjoy exclusive contents from &lt;a href=&quot;https://coil.com/explore&quot;&gt;these websites&lt;/a&gt;. This is my content income after integrated with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Web Monetization&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;https://clavinjune.dev/blog/assets/img/monetize-your-content-with-web-monetization-e3ee66/f63ccc7c.png&quot; alt=&quot;Moneeeeeeyyy&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://clavinjune.dev/assets/img/monetize-your-content-with-web-monetization-e3ee66/f63ccc7c.png&quot; alt=&quot;Moneeeeeeyyy&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;To make your “premium” visitors feel more valued when visiting your content, you can give them exclusive content that free member can’t access, or perhaps removing ads. Then, the next question is how can you differentiate premium visitors from free visitors? The answer is in &lt;a href=&quot;https://webmonetization.org/docs/api&quot;&gt;this documentation&lt;/a&gt; along with the examples. Besides your personal web, you can also monetize your &lt;a href=&quot;https://help.coil.com/for-creators/youtube-channels&quot;&gt;Youtube&lt;/a&gt;, &lt;a href=&quot;https://help.coil.com/for-creators/twitch-stream&quot;&gt;Twitch&lt;/a&gt; contents, and &lt;a href=&quot;https://dev.to/devteam/you-can-now-web-monetize-your-dev-posts-but-don-t-get-your-hopes-up-too-quickly-goc&quot;&gt;DEV&lt;/a&gt; posts.&lt;/p&gt;
 
 &lt;p&gt;Even though this post is like sponsoring some companies (which I hope so), they didn’t sponsor me to write this. The whole content of this post is to encourage you to try Web Monetization because I think this is the new future for monetizing digital contents. I really hate it when I only need to read one or two articles from a web then I meet paywall.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;https://clavinjune.dev/blog/assets/img/monetize-your-content-with-web-monetization-e3ee66/fed8e470.png&quot; alt=&quot;Paywall&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://clavinjune.dev/assets/img/monetize-your-content-with-web-monetization-e3ee66/fed8e470.png&quot; alt=&quot;Paywall&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;I like the concept behind this &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Web Monetization&lt;/code&gt; to only subscribe to one provider, then you can consume exclusive contents from many websites instead of subscribing to a lot of websites which perhaps you wouldn’t consume their contents daily. Despite the costs, it’s hard to manage this kind of subscription model.&lt;/p&gt;
 
 &lt;p&gt;Though &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Web Monetization&lt;/code&gt; is not a standard yet for monetizing digital content, it is currently being proposed as a &lt;a href=&quot;https://discourse.wicg.io/t/proposal-web-monetization-a-new-revenue-model-for-the-web/3785&quot;&gt;W3C standard&lt;/a&gt;. I hope it become one and implemented everywhere ASAP.&lt;/p&gt;
 </content>
         <pubDate>Fri, 30 Oct 2020 00:00:00 +0700</pubDate>
-        <link>https://clavinjune.dev/blog/blog/monetize-your-content-with-web-monetization-e3ee66/</link>
-        <guid isPermaLink="true">https://clavinjune.dev/blog/blog/monetize-your-content-with-web-monetization-e3ee66/</guid>
+        <link>https://clavinjune.dev/blog/monetize-your-content-with-web-monetization-e3ee66/</link>
+        <guid isPermaLink="true">https://clavinjune.dev/blog/monetize-your-content-with-web-monetization-e3ee66/</guid>
       </item>
     
       <item>
@@ -1425,8 +1425,8 @@ redisQuery(&quot;ZADD $key $exp $otp&quot;)
 &lt;p&gt;I think this method is good enough and the simplest one to implement. You can add optional operations like, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;adding expiration to the key&lt;/code&gt;, or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;removing members that are no longer valid&lt;/code&gt;. But this operation is enough to adding expiration to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sets member&lt;/code&gt;. You can also use this method to limiting the OTP verification to avoid brute-force.&lt;/p&gt;
 </content>
         <pubDate>Thu, 29 Oct 2020 00:00:00 +0700</pubDate>
-        <link>https://clavinjune.dev/blog/blog/create-redis-sets-with-member-expiration-249380/</link>
-        <guid isPermaLink="true">https://clavinjune.dev/blog/blog/create-redis-sets-with-member-expiration-249380/</guid>
+        <link>https://clavinjune.dev/blog/create-redis-sets-with-member-expiration-249380/</link>
+        <guid isPermaLink="true">https://clavinjune.dev/blog/create-redis-sets-with-member-expiration-249380/</guid>
       </item>
     
       <item>
@@ -1558,8 +1558,8 @@ Process finished with exit code 0
 &lt;p&gt;It just like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;try-catch block&lt;/code&gt; in Java/Kotlin I think but with many flaws lol. This module is still an experiment that I myself is not going to using this module in production. Or perhaps should I?&lt;/p&gt;
 </content>
         <pubDate>Wed, 28 Oct 2020 00:00:00 +0700</pubDate>
-        <link>https://clavinjune.dev/blog/blog/creating-taboo-error-handler-for-go-f8e220/</link>
-        <guid isPermaLink="true">https://clavinjune.dev/blog/blog/creating-taboo-error-handler-for-go-f8e220/</guid>
+        <link>https://clavinjune.dev/blog/creating-taboo-error-handler-for-go-f8e220/</link>
+        <guid isPermaLink="true">https://clavinjune.dev/blog/creating-taboo-error-handler-for-go-f8e220/</guid>
       </item>
     
       <item>
@@ -1580,8 +1580,8 @@ Process finished with exit code 0
 &lt;p&gt;&lt;a href=&quot;https://github.com/spring-projects/spring-boot/issues/18644&quot;&gt;reference&lt;/a&gt;&lt;/p&gt;
 </content>
         <pubDate>Mon, 26 Oct 2020 00:00:00 +0700</pubDate>
-        <link>https://clavinjune.dev/blog/blog/allow-upload-file-on-spring-boot-4374a8/</link>
-        <guid isPermaLink="true">https://clavinjune.dev/blog/blog/allow-upload-file-on-spring-boot-4374a8/</guid>
+        <link>https://clavinjune.dev/blog/allow-upload-file-on-spring-boot-4374a8/</link>
+        <guid isPermaLink="true">https://clavinjune.dev/blog/allow-upload-file-on-spring-boot-4374a8/</guid>
       </item>
     
       <item>
@@ -1610,8 +1610,8 @@ Process finished with exit code 0
 &lt;p&gt;Thank you for reading, all feedbacks and comments are more than welcome!&lt;/p&gt;
 </content>
         <pubDate>Sat, 24 Oct 2020 00:00:00 +0700</pubDate>
-        <link>https://clavinjune.dev/blog/blog/i-create-this-blog-using-jekyll-65efbd/</link>
-        <guid isPermaLink="true">https://clavinjune.dev/blog/blog/i-create-this-blog-using-jekyll-65efbd/</guid>
+        <link>https://clavinjune.dev/blog/i-create-this-blog-using-jekyll-65efbd/</link>
+        <guid isPermaLink="true">https://clavinjune.dev/blog/i-create-this-blog-using-jekyll-65efbd/</guid>
       </item>
     
   </channel>

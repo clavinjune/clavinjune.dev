@@ -14,17 +14,17 @@
 " />
   <meta property="og:title" content="AVL Tree in Go | Clavin June's detached brain" />
   <meta property="og:locale" content="en_US" />
-  <meta property="og:url" content="https://clavinjune.dev/blog/blog/avl-tree-in-go-5daf99/" />
+  <meta property="og:url" content="https://clavinjune.dev/blog/avl-tree-in-go-5daf99/" />
   <meta property="og:site_name" content="Clavin June's detached brain" />
   <meta property="og:image" content="https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=1920" />
   <meta name="monetization" content="$ilp.uphold.com/RYNmdxrFrPJB">
   
   <title> AVL Tree in Go | Clavin June's detached brain </title>
-  <link rel="apple-touch-icon" sizes="180x180" href="https://clavinjune.dev/blog/assets/favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="https://clavinjune.dev/blog/assets/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="https://clavinjune.dev/blog/assets/favicon/favicon-16x16.png">
-  <link rel="stylesheet" type="text/css" href="https://clavinjune.dev/blog/assets/css/styles.css" />
-  <link rel="stylesheet" type="text/css" href="https://clavinjune.dev/blog/assets/css/syntax.css" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://clavinjune.dev/assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://clavinjune.dev/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://clavinjune.dev/assets/favicon/favicon-16x16.png">
+  <link rel="stylesheet" type="text/css" href="https://clavinjune.dev/assets/css/styles.css" />
+  <link rel="stylesheet" type="text/css" href="https://clavinjune.dev/assets/css/syntax.css" />
   <link rel="webmention" href="https://webmention.io/clavinjune.dev_blog_/webmention" />
   <link rel="pingback" href="https://webmention.io/clavinjune.dev_blog_/xmlrpc" />
   <link rel="pingback" href="https://webmention.io/webmention?forward=https://clavinjune.dev/blog" />
@@ -52,7 +52,7 @@
   <hr>
   <p><img src="https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=1920" alt="Photo by @loicleray on Unsplash" /></p>
 
-<p>After I tried to implement <a href="https://clavinjune.dev/blog/binary-search-tree-in-go-0f34cd/">BST in Go</a>, it seems like I want to modify the BST to AVL because BST is not a fairly optimal tree data structure.</p>
+<p>After I tried to implement <a href="https://clavinjune.dev/binary-search-tree-in-go-0f34cd/">BST in Go</a>, it seems like I want to modify the BST to AVL because BST is not a fairly optimal tree data structure.</p>
 
 <p>When I said this:</p>
 
@@ -62,11 +62,11 @@
 
 <p>It’s half true because there’s a case that BST makes a linear tree like this:</p>
 
-<p><img src="https://clavinjune.dev/blog/assets/img/avl-tree-in-go-5daf99/867edb9c.png" alt="linear tree" /></p>
+<p><img src="https://clavinjune.dev/assets/img/avl-tree-in-go-5daf99/867edb9c.png" alt="linear tree" /></p>
 
 <p>And if you want to find a node with value 6, in the end, you will travel the whole tree. That’s why we need AVL to improve the time complexity. AVL will try to rebalance the tree whenever it becomes imbalance after insertion/deletion.</p>
 
-<p>The whole concept of AVL is much the same with BST besides the rebalancing algorithm. In AVL we need to rebalance the tree by rotating every imbalance sub-tree in every insertion/deletion. So we’re gonna use all the code from <a href="https://clavinjune.dev/blog/binary-search-tree-in-go-0f34cd/">here</a> and modified it a bit.</p>
+<p>The whole concept of AVL is much the same with BST besides the rebalancing algorithm. In AVL we need to rebalance the tree by rotating every imbalance sub-tree in every insertion/deletion. So we’re gonna use all the code from <a href="https://clavinjune.dev/binary-search-tree-in-go-0f34cd/">here</a> and modified it a bit.</p>
 
 <p>To see the tree is balanced or not, we need to define the height on each node. We can calculate the height by counting the maximum height of the left and the right node recursively. If the node has no child, it means its height is 1 otherwise we compare the maximum height of the children.</p>
 
@@ -663,14 +663,14 @@
     <hr>
     <div style="display: flex;justify-content: space-between;">
       <div>
-        <a href="https://clavinjune.dev/blog">Home</a>
+        <a href="https://clavinjune.dev">Home</a>
       </div>
       <div>
         <span>Copyright &copy; 2020 &middot; Clavin June</span>
       </div>
     </div>
   </footer>
-</main><script defer type="text/javascript" src="https://clavinjune.dev/blog/assets/js/index.js"></script>
+</main><script defer type="text/javascript" src="https://clavinjune.dev/assets/js/index.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script>
 <script defer type="text/javascript">
