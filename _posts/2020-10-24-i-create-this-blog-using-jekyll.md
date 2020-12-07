@@ -17,5 +17,3 @@ After I think the whole template is ready to be published, I create [this templa
 Integrating blog posts to [DEV](https://dev.to) using RSS is not a new thing. But this is a new experience for me since I only write two posts on DEV before. Despite this is a new blog, I have written my thoughts at [Medium](https://medium.com/@ClavinJune). I was looking for a way to publish to Medium via RSS feeds, but I didn't find any. Luckily DEV supports this kind of thing with simple configuration, perhaps I need to adjust the post a bit before publishing it.
 
 Perhaps I'm gonna try to integrate this blog using [Webmention](https://webmention.io/) and [Web Monetization](https://webmonetization.org/) after getting a bunch of visitors, but I'm gonna save it for later.
-
-Thank you for reading, all feedbacks and comments are more than welcome!

@@ -263,3 +263,42 @@ main#post {
     }
   }
 }
+
+main > div#support {
+  align-items: center;
+  display: flex;
+  flex-direction:column;
+  height: 100vh;
+  justify-content: center;
+  max-width: 100%;
+  width: 100%;
+
+  & > h2 {
+    max-width: 60%;
+    text-align: center;
+  }
+
+  & > div#buttons {
+    align-items: center;
+    display: flex;
+    justify-content: space-evenly;
+    max-width: 60%;
+    width: 60%;
+
+    & > a.button {
+      border: solid 1px $light;
+      border-radius: 50px;
+      text-align: center;
+      min-width: 100px;
+      padding: 1%;
+
+      &:hover {
+        background-color: $light-gray;
+      }
+    }
+  }
+
+  & >div#alternative {
+    margin-top: 2%;
+  }
+}

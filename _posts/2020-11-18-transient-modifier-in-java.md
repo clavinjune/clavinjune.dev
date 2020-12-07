@@ -71,5 +71,3 @@ serialization by jackson: {"bar":"barx"}
 ```
 
 Yep, as we expect, foo attribute isn't serialized. `transient` modifier would work just fine as long as the attribute itself has no `static` or `final` modifier. Whenever a `transient` attribute has `static` or `final` modifier, the `transient` modifier has no effect on that attribute.
-
-Thank you for reading!

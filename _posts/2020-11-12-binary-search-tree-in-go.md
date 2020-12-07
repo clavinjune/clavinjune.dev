@@ -568,5 +568,3 @@ func main() {
   tree.Traverse() // 2 15 20 50
 }
 ```
-
-Thank you for reading.
