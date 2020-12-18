@@ -345,7 +345,7 @@ serialization by jackson: {&quot;bar&quot;:&quot;barx&quot;}
         
         <content>&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=1920&quot; alt=&quot;Photo by @loicleray on Unsplash&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;After I tried to implement &lt;a href=&quot;https://clavinjune.dev/binary-search-tree-in-go-0f34cd/&quot;&gt;BST in Go&lt;/a&gt;, it seems like I want to modify the BST to AVL because BST is not a fairly optimal tree data structure.&lt;/p&gt;
+&lt;p&gt;After I tried to implement &lt;a href=&quot;https://clavinjune.dev/blog/binary-search-tree-in-go-0f34cd/&quot;&gt;BST in Go&lt;/a&gt;, it seems like I want to modify the BST to AVL because BST is not a fairly optimal tree data structure.&lt;/p&gt;
 
 &lt;p&gt;When I said this:&lt;/p&gt;
 
@@ -359,7 +359,7 @@ serialization by jackson: {&quot;bar&quot;:&quot;barx&quot;}
 
 &lt;p&gt;And if you want to find a node with value 6, in the end, you will travel the whole tree. That’s why we need AVL to improve the time complexity. AVL will try to rebalance the tree whenever it becomes imbalance after insertion/deletion.&lt;/p&gt;
 
-&lt;p&gt;The whole concept of AVL is much the same with BST besides the rebalancing algorithm. In AVL we need to rebalance the tree by rotating every imbalance sub-tree in every insertion/deletion. So we’re gonna use all the code from &lt;a href=&quot;https://clavinjune.dev/binary-search-tree-in-go-0f34cd/&quot;&gt;here&lt;/a&gt; and modified it a bit.&lt;/p&gt;
+&lt;p&gt;The whole concept of AVL is much the same with BST besides the rebalancing algorithm. In AVL we need to rebalance the tree by rotating every imbalance sub-tree in every insertion/deletion. So we’re gonna use all the code from &lt;a href=&quot;https://clavinjune.dev/blog/binary-search-tree-in-go-0f34cd/&quot;&gt;here&lt;/a&gt; and modified it a bit.&lt;/p&gt;
 
 &lt;p&gt;To see the tree is balanced or not, we need to define the height on each node. We can calculate the height by counting the maximum height of the left and the right node recursively. If the node has no child, it means its height is 1 otherwise we compare the maximum height of the children.&lt;/p&gt;
 
@@ -1581,7 +1581,7 @@ Find the greatest valueable node from the left child of the node
         
         <content>&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=1920&quot; alt=&quot;Photo by @veato on Unsplash&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;In my &lt;a href=&quot;https://clavinjune.dev/i-create-this-blog-using-jekyll-65efbd/&quot;&gt;first post&lt;/a&gt;, I said that:&lt;/p&gt;
+&lt;p&gt;In my &lt;a href=&quot;https://clavinjune.dev/blog/i-create-this-blog-using-jekyll-65efbd/&quot;&gt;first post&lt;/a&gt;, I said that:&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;Perhaps I’m gonna try to integrate this blog using Webmention and Web Monetization after getting a bunch of visitors, but I’m gonna save it for later.&lt;/p&gt;

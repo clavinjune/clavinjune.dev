@@ -8,7 +8,7 @@ description: >
 
 ![Photo by @veato on Unsplash](https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=1920)
 
-In my [first post]({{ site.url }}/i-create-this-blog-using-jekyll-65efbd/), I said that:
+In my [first post]({{ site.url }}/blog/i-create-this-blog-using-jekyll-65efbd/), I said that:
 
 > Perhaps I’m gonna try to integrate this blog using Webmention and Web Monetization after getting a bunch of visitors, but I’m gonna save it for later.
 
