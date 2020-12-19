@@ -49,3 +49,18 @@ for(const e of $$('img')) {
 for(const e of $$('div.highlighter-rouge')) {
   e.innerHTML = copyButton() + e.innerHTML
 }
+
+// navbar
+let prevOffset = pageYOffset
+
+window.addEventListener('scroll', e => {
+  if ( pageYOffset >= prevOffset ) {
+    $('nav#post').style.visibility = 'hidden'
+    $('nav#post').style.opacity = '0'
+  } else {
+    $('nav#post').style.visibility = 'visible'
+    $('nav#post').style.opacity = '1'
+  }
+
+  prevOffset = pageYOffset
+})

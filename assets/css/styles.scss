@@ -11,6 +11,7 @@ body, html {
   font-size: 15px;
   margin: 0;
   padding: 0;
+  scroll-behavior: smooth;
   width: 100%;
   max-width: 100%;
 
@@ -26,11 +27,38 @@ body, html {
 }
 
 nav {
-  background-color: $light-gray;
-  display: flex;
-  font-size: 1.5em;
-  justify-content: center;
-  padding: .5em 0;
+  &#post {
+    align-items: center;
+    background-color: $dark-gray;
+    color: $light;
+    display: flex;
+    height: 1.5em;
+    justify-content: space-between;
+    padding: .5em 1em;
+    position: fixed;
+    top: 0;
+    max-width: 98%;
+    transition: visibility .1s, opacity .5s;
+    width: 98%;
+    z-index: 99;
+
+    & > a#back {
+      font-size: 2em;
+
+      &:hover {
+        color: $light-gray;
+      }
+    }
+
+    & > div {
+      display: grid;
+      grid-template-columns: repeat(2, auto);
+
+      & > a {
+        margin-right: 1em;
+      }
+    }
+  }
 }
 
 // /posts/
@@ -151,6 +179,7 @@ nav {
 
 // /posts/*
 main#post {
+  margin-top: 3em;
   max-width: 100%;
   padding: 0 30%;
   text-align: justify;
@@ -205,8 +234,6 @@ main#post {
 
   & code {
     background-color: $dark-gray;
-    // margin: 0px 2px;
-    // padding: .5px 2px;
   }
 
   & a {
