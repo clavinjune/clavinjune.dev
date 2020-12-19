@@ -179,7 +179,7 @@ nav {
     user-select: none;
   }
 
-  & > a {
+  & > a, span.button {
     background-color: $light-gray;
     border-radius: 50px;
 

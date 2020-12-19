@@ -53,7 +53,12 @@ pagination:
     {%- assign prev_attribute = 'href="' | append:site.url | append:paginator.previous_page_path | append:'" class="active"' -%}
   {%- endif -%}
 
-  <a {{ prev_attribute }}>Newer</a>
+  {%- if prev_attribute -%}
+    <a {{ prev_attribute }}>Newer</a>
+  {%- else -%}
+    <span class="button">Newer</span>
+  {%- endif -%}
+  
 
   <span>{{ paginator.page }} of {{ paginator.last_page }}</span>
 
@@ -61,7 +66,11 @@ pagination:
     {%- assign next_attribute = 'href="' | append:site.url | append:paginator.next_page_path | append:'" class="active"' -%}
   {%- endif -%}
 
-  <a {{ next_attribute }}>Older</a>
+  {%- if next_attribute -%}
+    <a {{ next_attribute }}>Older</a>
+  {%- else -%}
+    <span class="button">Older</span>
+  {%- endif -%}
 </div>
 {%- endif -%}
 </div>
