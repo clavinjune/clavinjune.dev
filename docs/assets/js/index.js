@@ -51,16 +51,19 @@ for(const e of $$('div.highlighter-rouge')) {
 }
 
 // navbar
-let prevOffset = pageYOffset
 
-window.addEventListener('scroll', e => {
-  if ( pageYOffset > prevOffset ) {
-    $('nav#post').style.visibility = 'hidden'
-    $('nav#post').style.opacity = '0'
-  } else {
-    $('nav#post').style.visibility = 'visible'
-    $('nav#post').style.opacity = '1'
-  }
+if ( window.innerWidth > 800 ) {
+  let prevOffset = window.pageYOffset
 
-  prevOffset = pageYOffset
-})
+  window.addEventListener('scroll', e => {
+    if ( pageYOffset > prevOffset ) {
+      $('nav#post').style.visibility = 'hidden'
+      $('nav#post').style.opacity = '0'
+    } else {
+      $('nav#post').style.visibility = 'visible'
+      $('nav#post').style.opacity = '1'
+    }
+
+    prevOffset = pageYOffset
+  }) 
+}
