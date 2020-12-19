@@ -23,6 +23,14 @@ defaults:
       path: ""
     values:
       layout: default
+  - scope:
+      path: "feeds.html"
+    values:
+      sitemap: false
+  - scope:
+      path: "blog.html"
+    values:
+      sitemap: false
 
 pagination:
   enabled: true

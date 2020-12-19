@@ -2,7 +2,7 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://clavinjune.dev/feeds/rss.xml</loc>
-<lastmod>2020-12-19T03:51:49+00:00</lastmod>
+<lastmod>2020-12-19T03:58:54+00:00</lastmod>
 </url>
 <url>
 <loc>https://clavinjune.dev/blog/i-create-this-blog-using-jekyll-65efbd/</loc>
@@ -51,12 +51,6 @@
 <url>
 <loc>https://clavinjune.dev/blog/contextual-logging-in-go-bfeb94/</loc>
 <lastmod>2020-12-19T00:00:00+00:00</lastmod>
-</url>
-<url>
-<loc>https://clavinjune.dev/blog.html</loc>
-</url>
-<url>
-<loc>https://clavinjune.dev/feeds.html</loc>
 </url>
 <url>
 <loc>https://clavinjune.dev/support.html</loc>
