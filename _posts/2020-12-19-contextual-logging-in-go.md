@@ -3,7 +3,7 @@ category: Development
 tags: go logging context
 thumbnail: https://images.unsplash.com/photo-1580245492316-d542d595001b?w=1920
 description: >
-  This post contains
+  This post contains a reference for creating a contextual logging in golang.
 ---
 ![Photo by @borisview on Unsplash](https://images.unsplash.com/photo-1580245492316-d542d595001b?w=1920)
 
