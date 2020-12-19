@@ -42,6 +42,12 @@ nav {
     width: 98%;
     z-index: 99;
 
+
+    @media #{$tablet-portrait} {
+      top: auto;
+      bottom: 0;
+    }
+
     & > a#back {
       font-size: 2em;
 
@@ -192,6 +198,7 @@ main#post {
   line-height: 1.5;
 
   @media #{$tablet-portrait} {
+    margin-top: 0em;
     padding: 0 10%;
   }
 
