@@ -7,7 +7,7 @@ description: >
 ---
 ![Photo by @borisview on Unsplash](https://images.unsplash.com/photo-1580245492316-d542d595001b?w=1920)
 
-I’ve just woke up and somehow I remember that when I created [taboo]({{site.url}}/blog/creating-taboo-error-handler-for-go-f8e220) to trace the error log. And then I think, would it be better if I pass the logger instead of the error log itself?
+I’ve just woke up and somehow I remembered when I created [taboo]({{site.url}}/blog/creating-taboo-error-handler-for-go-f8e220) to trace the error log. And then I think, would it be better if I pass the logger instead of the error log itself?
 
 As the context passed, it will contain a sub-logger that has `x-request-id` inside it. It’ll trace all the requested event from HTTP Handler to the most corner of the function.
 
