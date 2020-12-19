@@ -54,7 +54,7 @@ for(const e of $$('div.highlighter-rouge')) {
 let prevOffset = pageYOffset
 
 window.addEventListener('scroll', e => {
-  if ( pageYOffset >= prevOffset ) {
+  if ( pageYOffset > prevOffset ) {
     $('nav#post').style.visibility = 'hidden'
     $('nav#post').style.opacity = '0'
   } else {
