@@ -39,6 +39,34 @@
   {%- endcapture-%}
 {%- endif -%}
 
+{%- comment -%} keywords control {%- endcomment -%}
+{%- if page.tags -%}
+  {%- assign tags = page.tags -%}
+{%- endif -%}
+
+{%- if page.category -%}
+  {%- assign tags = tags | push: page.category -%}
+{%- endif -%}
+
+{%- if tags -%}
+  {%- capture keywords_tag -%}
+  <meta name="keywords" content="{{ tags | array_to_sentence_string: "" }}" />
+  {%- endcapture-%}
+{%- endif -%}
+
+{% if page.date %}
+  {%- capture article_tag -%}
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}" />
+  {%- endcapture-%}
+{% endif %}
+
+{% if site.google_site_verification %}
+  {%- capture google_site_verification_tag -%}
+  <meta name="google-site-verification" content="{{ site.google_site_verification }}" />
+  {%- endcapture-%}
+{% endif %}
+
 {%- if page.thumbnail -%}
   {%- capture thumbnail_tag -%}
   <meta property="og:image" content="{{ page.thumbnail }}" />
