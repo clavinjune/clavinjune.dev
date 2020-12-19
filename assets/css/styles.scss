@@ -52,10 +52,16 @@ nav {
 
     & > div {
       display: grid;
-      grid-template-columns: repeat(2, auto);
+      grid-template-columns: repeat(3, auto);
 
       & > a {
+        border-bottom: solid 1px transparent;
         margin-right: 1em;
+        transition: border .2s;
+
+        &:hover {
+          border-color: $light;
+        }
       }
     }
   }
