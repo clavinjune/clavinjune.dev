@@ -288,12 +288,7 @@ main#post {
     color: $light-gray;
     font-size: .95em;
     margin: 5em 0;
-    text-align: center;
-
-    & > div {
-      display: flex;
-      justify-content: space-between;
-    }
+    text-align: right;
   }
 }
 
