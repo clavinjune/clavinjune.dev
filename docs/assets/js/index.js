@@ -52,7 +52,7 @@ for(const e of $$('div.highlighter-rouge')) {
 
 // navbar
 
-if ( window.innerWidth > 800 ) {
+if ( window.innerWidth > 800 && $('nav#post') !== null ) {
   let prevOffset = window.pageYOffset
 
   window.addEventListener('scroll', e => {
