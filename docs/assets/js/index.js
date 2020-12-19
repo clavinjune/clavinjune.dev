@@ -65,5 +65,18 @@ if ( window.innerWidth > 800 && $('nav#post') !== null ) {
     }
 
     prevOffset = pageYOffset
-  }) 
+  })
+}
+
+if ( $('div.progress-bar') !== null ) {
+  const max = Math.max(
+      document.body.scrollHeight,
+      document.body.offsetHeight, 
+      document.documentElement.clientHeight,
+      document.documentElement.scrollHeight,
+      document.documentElement.offsetHeight) - window.innerHeight
+  window.addEventListener('scroll', e => {
+    let current = window.pageYOffset
+    $('div.progress-bar').style.width = `${current / max * 100}%`
+  })
 }

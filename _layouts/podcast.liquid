@@ -3,6 +3,15 @@
 {%- if reading_time <= 1 -%}
   {%- assign reading_time = 1 -%}
 {%- endif -%}
+<div class="progress-bar"></div>
+<nav id="post">
+  <a id="back" href="/">&larr;</a>
+  <div>
+    <a href="https://positif.dev" target="_blank">Podcast</a>
+    <a href="/support">Support</a>
+    <a href="https://gitconnected.com/clavinjune/resume" target="_blank">Author</a>
+  </div>
+</nav>
 <main id="post">
   <div>
     <h1 class="title">{{ page.title }}</h1>
@@ -21,28 +30,14 @@
       {% endfor %}
     </div>
   </div>
+  
+  <iframe src="{{ page.podcast }}" width="100%" height="232" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
   <hr>
   {{ content }}
   <div>Thank you for reading!</div>
-  <hr>
-  <p>
-    If you are Indonesian, you can listen to our podcast on Spotify, and don't forget to visit <a href="https://positif.dev">our web</a> to get the latest update.
-  </p>
-  <iframe src="{{ page.podcast }}" width="100%" height="232" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-
-  <p>
-    Follow Us on <a href="https://facebook.com/positif.dev">Facebook</a>, <a href="https://instagram.com/positif.dev">Instagram</a>, and <a href="https://open.spotify.com/show/6jBnKq2wqFuPoNIzibWVid">Spotify</a>.
-  </p>
   <footer>
     <hr>
-    <div style="display: flex;justify-content: space-between;">
-      <div>
-        <a href="{{ site.url }}">Home</a>
-        <a href="/support">Support</a>
-      </div>
-      <div>
-        <span>Copyright &copy; {{ site.time | date: '%Y' }} &middot; Clavin June</span>
-      </div>
+    <span>Copyright &copy; {{ site.time | date: '%Y' }} &middot; Clavin June</span>
     </div>
   </footer>
 </main>
