@@ -68,7 +68,7 @@ if ( $('nav#post') !== null ) {
   })
 }
 
-if ( $('div.progress-bar') !== null ) {
+if ( window.innerWidth > 800 && $('div.progress-bar') !== null ) {
   const max = Math.max(
       document.body.scrollHeight,
       document.body.offsetHeight, 
