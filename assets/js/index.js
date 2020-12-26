@@ -52,21 +52,21 @@ for(const e of $$('div.highlighter-rouge')) {
 
 // navbar
 
-if ( $('nav#post') !== null ) {
-  let prevOffset = window.pageYOffset
+// if ( $('nav#post') !== null ) {
+//   let prevOffset = window.pageYOffset
 
-  window.addEventListener('scroll', e => {
-    if ( pageYOffset > prevOffset ) {
-      $('nav#post').style.visibility = 'hidden'
-      $('nav#post').style.opacity = '0'
-    } else {
-      $('nav#post').style.visibility = 'visible'
-      $('nav#post').style.opacity = '1'
-    }
+//   window.addEventListener('scroll', e => {
+//     if ( pageYOffset > prevOffset ) {
+//       $('nav#post').style.visibility = 'hidden'
+//       $('nav#post').style.opacity = '0'
+//     } else {
+//       $('nav#post').style.visibility = 'visible'
+//       $('nav#post').style.opacity = '1'
+//     }
 
-    prevOffset = pageYOffset
-  })
-}
+//     prevOffset = pageYOffset
+//   })
+// }
 
 if ( window.innerWidth > 800 && $('div.progress-bar') !== null ) {
   const max = Math.max(
