@@ -11,7 +11,47 @@
     <sy:updateFrequency>1</sy:updateFrequency>
     <link>https://clavinjune.dev</link>
     <atom:link href="https://clavinjune.dev/feeds/rss.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Sun, 10 Jan 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 11 Jan 2021 00:00:00 +0700</lastBuildDate>
+    
+      <item>
+        <title>Greatest Common Divisor and Least Common Multiplier</title>
+        
+          <category>algorithm</category>
+        
+          <category>go</category>
+        
+          <category>math</category>
+        
+        <content>&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1920&quot; alt=&quot;Photo by @roman_lazygeek on Unsplash&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I only rewrite what was written on my &lt;a href=&quot;https://pastebin.com/eDNgaM7F&quot;&gt;pastebin&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-go highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;fmt&quot;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;findGCD&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;findGCD&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;findLCM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;findGCD&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;findGCD&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;25&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;findLCM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;25&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</content>
+        <pubDate>Mon, 11 Jan 2021 00:00:00 +0700</pubDate>
+        <link>https://clavinjune.dev/blog/greatest-common-divisor-and-least-common-multiplier-4a0275/</link>
+        <guid isPermaLink="true">https://clavinjune.dev/blog/greatest-common-divisor-and-least-common-multiplier-4a0275/</guid>
+      </item>
     
       <item>
         <title>Sieve Of Eratosthenes</title>
@@ -80,7 +120,7 @@
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </content>
-        <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
+        <pubDate>Sun, 10 Jan 2021 00:00:00 +0700</pubDate>
         <link>https://clavinjune.dev/blog/sieve-of-eratosthenes-a2a24c/</link>
         <guid isPermaLink="true">https://clavinjune.dev/blog/sieve-of-eratosthenes-a2a24c/</guid>
       </item>
@@ -315,7 +355,7 @@
 
 &lt;p&gt;That should be enough for the reference. Please modify the code according to your usage. I didn’t test for the performance nor benchmarking it so take it with a grain of salt.&lt;/p&gt;
 </content>
-        <pubDate>Sat, 19 Dec 2020 00:00:00 +0000</pubDate>
+        <pubDate>Sat, 19 Dec 2020 00:00:00 +0700</pubDate>
         <link>https://clavinjune.dev/blog/contextual-logging-in-go-bfeb94/</link>
         <guid isPermaLink="true">https://clavinjune.dev/blog/contextual-logging-in-go-bfeb94/</guid>
       </item>
@@ -561,7 +601,7 @@ Sincerely yours, Bob.`&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </content>
-        <pubDate>Mon, 07 Dec 2020 00:00:00 +0000</pubDate>
+        <pubDate>Mon, 07 Dec 2020 00:00:00 +0700</pubDate>
         <link>https://clavinjune.dev/blog/asymmetric-cryptography-signing-vs-encrypting-90e288/</link>
         <guid isPermaLink="true">https://clavinjune.dev/blog/asymmetric-cryptography-signing-vs-encrypting-90e288/</guid>
       </item>
@@ -636,7 +676,7 @@ serialization by jackson: {&quot;bar&quot;:&quot;barx&quot;}
 
 &lt;p&gt;Yep, as we expect, foo attribute isn’t serialized. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;transient&lt;/code&gt; modifier would work just fine as long as the attribute itself has no &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;static&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;final&lt;/code&gt; modifier. Whenever a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;transient&lt;/code&gt; attribute has &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;static&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;final&lt;/code&gt; modifier, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;transient&lt;/code&gt; modifier has no effect on that attribute.&lt;/p&gt;
 </content>
-        <pubDate>Wed, 18 Nov 2020 00:00:00 +0000</pubDate>
+        <pubDate>Wed, 18 Nov 2020 00:00:00 +0700</pubDate>
         <link>https://clavinjune.dev/blog/transient-modifier-in-java-05f48e/</link>
         <guid isPermaLink="true">https://clavinjune.dev/blog/transient-modifier-in-java-05f48e/</guid>
       </item>
@@ -1256,7 +1296,7 @@ serialization by jackson: {&quot;bar&quot;:&quot;barx&quot;}
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </content>
-        <pubDate>Sun, 15 Nov 2020 00:00:00 +0000</pubDate>
+        <pubDate>Sun, 15 Nov 2020 00:00:00 +0700</pubDate>
         <link>https://clavinjune.dev/blog/avl-tree-in-go-5daf99/</link>
         <guid isPermaLink="true">https://clavinjune.dev/blog/avl-tree-in-go-5daf99/</guid>
       </item>
@@ -1817,7 +1857,7 @@ Find the greatest valueable node from the left child of the node
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </content>
-        <pubDate>Thu, 12 Nov 2020 00:00:00 +0000</pubDate>
+        <pubDate>Thu, 12 Nov 2020 00:00:00 +0700</pubDate>
         <link>https://clavinjune.dev/blog/binary-search-tree-in-go-0f34cd/</link>
         <guid isPermaLink="true">https://clavinjune.dev/blog/binary-search-tree-in-go-0f34cd/</guid>
       </item>
@@ -1846,7 +1886,7 @@ Find the greatest valueable node from the left child of the node
 
 &lt;p&gt;&lt;a href=&quot;https://www.baeldung.com/spring-boot-characterencodingfilter&quot;&gt;reference&lt;/a&gt;&lt;/p&gt;
 </content>
-        <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
+        <pubDate>Wed, 11 Nov 2020 00:00:00 +0700</pubDate>
         <link>https://clavinjune.dev/blog/force-set-character-encoding-on-spring-boot-682449/</link>
         <guid isPermaLink="true">https://clavinjune.dev/blog/force-set-character-encoding-on-spring-boot-682449/</guid>
       </item>
@@ -1874,7 +1914,7 @@ Find the greatest valueable node from the left child of the node
 
 &lt;p&gt;The last discussion is about what we do in our spare time. While I follow my schedule that I have set up to refresh and improve my personal skills such as learning English, Japanese, side project development and watching Netflix, Devin uses his free time to read books, do side projects, and watch Udemy courses and Netflix.&lt;/p&gt;
 </content>
-        <pubDate>Sun, 01 Nov 2020 00:00:00 +0000</pubDate>
+        <pubDate>Sun, 01 Nov 2020 00:00:00 +0700</pubDate>
         <link>https://clavinjune.dev/blog/work-life-balance-e39a65/</link>
         <guid isPermaLink="true">https://clavinjune.dev/blog/work-life-balance-e39a65/</guid>
       </item>
@@ -1916,7 +1956,7 @@ Find the greatest valueable node from the left child of the node
 
 &lt;p&gt;Though &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Web Monetization&lt;/code&gt; is not a standard yet for monetizing digital content, it is currently being proposed as a &lt;a href=&quot;https://discourse.wicg.io/t/proposal-web-monetization-a-new-revenue-model-for-the-web/3785&quot;&gt;W3C standard&lt;/a&gt;. I hope it become one and implemented everywhere ASAP.&lt;/p&gt;
 </content>
-        <pubDate>Fri, 30 Oct 2020 00:00:00 +0000</pubDate>
+        <pubDate>Fri, 30 Oct 2020 00:00:00 +0700</pubDate>
         <link>https://clavinjune.dev/blog/monetize-your-content-with-web-monetization-e3ee66/</link>
         <guid isPermaLink="true">https://clavinjune.dev/blog/monetize-your-content-with-web-monetization-e3ee66/</guid>
       </item>
@@ -1971,7 +2011,7 @@ redisQuery(&quot;ZADD $key $exp $otp&quot;)
 
 &lt;p&gt;I think this method is good enough and the simplest one to implement. You can add optional operations like, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;adding expiration to the key&lt;/code&gt;, or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;removing members that are no longer valid&lt;/code&gt;. But this operation is enough to adding expiration to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sets member&lt;/code&gt;. You can also use this method to limiting the OTP verification to avoid brute-force.&lt;/p&gt;
 </content>
-        <pubDate>Thu, 29 Oct 2020 00:00:00 +0000</pubDate>
+        <pubDate>Thu, 29 Oct 2020 00:00:00 +0700</pubDate>
         <link>https://clavinjune.dev/blog/create-redis-sets-with-member-expiration-249380/</link>
         <guid isPermaLink="true">https://clavinjune.dev/blog/create-redis-sets-with-member-expiration-249380/</guid>
       </item>
@@ -2104,7 +2144,7 @@ Process finished with exit code 0
 
 &lt;p&gt;It just like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;try-catch block&lt;/code&gt; in Java/Kotlin I think but with many flaws lol. This module is still an experiment that I myself is not going to using this module in production. Or perhaps should I?&lt;/p&gt;
 </content>
-        <pubDate>Wed, 28 Oct 2020 00:00:00 +0000</pubDate>
+        <pubDate>Wed, 28 Oct 2020 00:00:00 +0700</pubDate>
         <link>https://clavinjune.dev/blog/creating-taboo-error-handler-for-go-f8e220/</link>
         <guid isPermaLink="true">https://clavinjune.dev/blog/creating-taboo-error-handler-for-go-f8e220/</guid>
       </item>
@@ -2126,7 +2166,7 @@ Process finished with exit code 0
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/spring-projects/spring-boot/issues/18644&quot;&gt;reference&lt;/a&gt;&lt;/p&gt;
 </content>
-        <pubDate>Mon, 26 Oct 2020 00:00:00 +0000</pubDate>
+        <pubDate>Mon, 26 Oct 2020 00:00:00 +0700</pubDate>
         <link>https://clavinjune.dev/blog/allow-upload-file-on-spring-boot-4374a8/</link>
         <guid isPermaLink="true">https://clavinjune.dev/blog/allow-upload-file-on-spring-boot-4374a8/</guid>
       </item>
@@ -2154,7 +2194,7 @@ Process finished with exit code 0
 
 &lt;p&gt;Perhaps I’m gonna try to integrate this blog using &lt;a href=&quot;https://webmention.io/&quot;&gt;Webmention&lt;/a&gt; and &lt;a href=&quot;https://webmonetization.org/&quot;&gt;Web Monetization&lt;/a&gt; after getting a bunch of visitors, but I’m gonna save it for later.&lt;/p&gt;
 </content>
-        <pubDate>Sat, 24 Oct 2020 00:00:00 +0100</pubDate>
+        <pubDate>Sat, 24 Oct 2020 00:00:00 +0700</pubDate>
         <link>https://clavinjune.dev/blog/i-create-this-blog-using-jekyll-65efbd/</link>
         <guid isPermaLink="true">https://clavinjune.dev/blog/i-create-this-blog-using-jekyll-65efbd/</guid>
       </item>
