@@ -1,0 +1,428 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    Site Template By: Clavin June | https://github.com/anon-org/jekyll-blog
+  -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatbile" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Clavin June" />
+  <meta name="monetization" content="$ilp.uphold.com/RYNmdxrFrPJB" />
+  <meta name="google-site-verification" content="n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE" />
+  <meta name="keywords" content="go, data-structure, heap,  Development" />
+  <meta name="description" content="This post contains my own experiences in reviewing my knowledge of Max / Min Heap data structure
+" />
+  <meta property="og:description" content="This post contains my own experiences in reviewing my knowledge of Max / Min Heap data structure
+" />
+  <meta property="og:title" content="Max Heap in Go | Clavin June's detached brain" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:url" content="https://clavinjune.dev/blog/max-heap-in-go-102912/" />
+  <meta property="og:site_name" content="Clavin June's detached brain" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?w=1920" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2021-01-16T00:00:00+07:00" />
+  
+  <title> Max Heap in Go | Clavin June's detached brain </title>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://clavinjune.dev/assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://clavinjune.dev/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://clavinjune.dev/assets/favicon/favicon-16x16.png">
+  
+  <link rel="stylesheet" type="text/css" href="https://clavinjune.dev/assets/css/styles.css" />
+  <link rel="stylesheet" type="text/css" href="https://clavinjune.dev/assets/css/syntax.css" />
+</head>
+<body>
+<div class="progress-bar"></div>
+<nav id="post">
+  <a id="back" href="/">&larr;</a>
+  <div>
+    <a href="https://positif.dev" target="_blank">Podcast</a>
+    <a href="/support">Support</a>
+    <a href="https://gitconnected.com/clavinjune/resume" target="_blank">Author</a>
+  </div>
+</nav>
+<main id="post">
+  <div>
+    <h1 class="title">Max Heap in Go</h1>
+    <div class="posts-time">
+      <span>Jan 16, 2021</span>
+      <span>&nbsp;&middot;&nbsp;</span>
+      <span>~9min read</span>
+    </div>
+    <div class="posts-tags">
+      <span class="posts-tags-category" id="f69c9a">
+        Development
+      </span>
+        <span class="posts-tags-content">#data-structure</span>
+      
+        <span class="posts-tags-content">#go</span>
+      
+        <span class="posts-tags-content">#heap</span>
+      
+    </div>
+  </div>
+  <hr>
+  <p><img src="https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?w=1920" alt="Photo by @freestocks on Unsplash" /></p>
+
+<p>Same as the case <a href="https://clavinjune.dev/blog/binary-search-tree-in-go-0f34cd/">here</a>, I just wanted to revisit another data structure. Well, Max Heap (also Min Heap) is a data structure that commonly used to create a priority queue which also a complete binary tree that has nodes which value is greater (or lesser) than its children value.</p>
+
+<p>Not like BST that I implemented before, Max Heap commonly implemented using array in order to make it easier (I think) to access its children. To accessing each nodes parent or children you can visualize the whole array as a tree. I have no image for it, so I pick Max Heap image from another website. The concept is the same with Min Heap tho.</p>
+
+<p><img src="https://iq.opengenus.org/content/images/2019/06/Max-Heap.png" alt="Photo by opengenus.org" /></p>
+
+<p>Finally we start array from 1 (LOL). Why we start from 1? Because index 0 couldn’t be accessed by this formula.</p>
+
+<p>Refer to the provided image above, we can visualize that left child of a node is on the <code class="language-plaintext highlighter-rouge">currentIndex * 2</code>, the right child is on the <code class="language-plaintext highlighter-rouge">currentIndex * 2 + 1</code>, and you can access the parent of the node by using <code class="language-plaintext highlighter-rouge">currentIndex / 2</code>.</p>
+
+<p>For example, Node with value <code class="language-plaintext highlighter-rouge">15</code>, has 2 children which are <code class="language-plaintext highlighter-rouge">10</code> and <code class="language-plaintext highlighter-rouge">5</code>. You can see the index of <code class="language-plaintext highlighter-rouge">15</code> which is <code class="language-plaintext highlighter-rouge">3</code>. Its left child is <code class="language-plaintext highlighter-rouge">10</code> which has index <code class="language-plaintext highlighter-rouge">3 * 2 = 6</code>, and its right children is <code class="language-plaintext highlighter-rouge">5</code> which has index <code class="language-plaintext highlighter-rouge">3 * 2 + 1 = 7</code>.</p>
+
+<p>Enough with the theory, you can read it from your book. I only want to write the implementation here using Go. I only implement <code class="language-plaintext highlighter-rouge">Push</code>, <code class="language-plaintext highlighter-rouge">Pop</code>, and <code class="language-plaintext highlighter-rouge">Peek</code> operation. It’s hard to decide the name of the operation, but as long as it describes the operation please don’t mind.</p>
+
+<h2 id="define-maxheap-struct">Define MaxHeap Struct</h2>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">MaxHeap</span> <span class="k">struct</span> <span class="p">{</span>
+  <span class="n">heap</span>     <span class="p">[]</span><span class="kt">int</span>
+  <span class="n">capacity</span> <span class="kt">int</span>
+  <span class="n">size</span>     <span class="kt">int</span>
+  <span class="n">root</span>     <span class="kt">int</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>MaxHeap will have at least size, capacity, and heap itself. <code class="language-plaintext highlighter-rouge">root</code> attribute will be <code class="language-plaintext highlighter-rouge">constant</code> since its root should always be <code class="language-plaintext highlighter-rouge">1</code>. <code class="language-plaintext highlighter-rouge">size</code> will define the current size of the heap, <code class="language-plaintext highlighter-rouge">capacity</code> will define how much the heap can store data, and the <code class="language-plaintext highlighter-rouge">heap</code> itself is an array that we stored the data into.</p>
+
+<h2 id="constructor">Constructor</h2>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">NewMaxHeap</span><span class="p">(</span><span class="n">capacity</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="n">MaxHeap</span> <span class="p">{</span>
+  <span class="c">// because we used the 0 index</span>
+  <span class="c">// we need to increase the capacity defined by user</span>
+  <span class="n">c</span> <span class="o">:=</span> <span class="n">capacity</span> <span class="o">+</span> <span class="m">1</span>
+  <span class="n">h</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+  <span class="c">// just to mark that it is the minimum one,</span>
+  <span class="c">// you can ignore this</span>
+  <span class="n">h</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">31</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span>
+
+  <span class="k">return</span> <span class="o">&amp;</span><span class="n">MaxHeap</span><span class="p">{</span>
+    <span class="n">root</span><span class="o">:</span>     <span class="m">1</span><span class="p">,</span> <span class="c">// always 1, you can omit this attribute</span>
+    <span class="n">size</span><span class="o">:</span>     <span class="m">0</span><span class="p">,</span>
+    <span class="n">capacity</span><span class="o">:</span> <span class="n">c</span><span class="p">,</span>
+    <span class="n">heap</span><span class="o">:</span>     <span class="n">h</span><span class="p">,</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="helper-method">Helper Method</h2>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="p">(</span><span class="n">MaxHeap</span><span class="p">)</span> <span class="n">getParent</span><span class="p">(</span><span class="n">idx</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">idx</span> <span class="o">/</span> <span class="m">2</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">MaxHeap</span><span class="p">)</span> <span class="n">getLeft</span><span class="p">(</span><span class="n">idx</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">idx</span> <span class="o">*</span> <span class="m">2</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">MaxHeap</span><span class="p">)</span> <span class="n">getRight</span><span class="p">(</span><span class="n">idx</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">idx</span><span class="o">*</span><span class="m">2</span> <span class="o">+</span> <span class="m">1</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">m</span> <span class="o">*</span><span class="n">MaxHeap</span><span class="p">)</span> <span class="n">swap</span><span class="p">(</span><span class="n">idx1</span><span class="p">,</span> <span class="n">idx2</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">idx1</span><span class="p">],</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">idx2</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">idx2</span><span class="p">],</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">idx1</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">m</span> <span class="n">MaxHeap</span><span class="p">)</span> <span class="n">String</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s">`size:     %v
+capacity: %v
+heap:     %v`</span><span class="p">,</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">capacity</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="p">])</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="push">Push</h2>
+
+<p>Push into max / min heap should be easy, just put the element where it belongs according to the index, and check if its value is greater / lesser than its parent, if you’re implementing max heap, check whether its value is greater than its parent, if so swap its value with its parent value.</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="p">(</span><span class="n">m</span> <span class="o">*</span><span class="n">MaxHeap</span><span class="p">)</span> <span class="n">Push</span><span class="p">(</span><span class="n">element</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c">// check whether it can store the element</span>
+  <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;=</span> <span class="n">m</span><span class="o">.</span><span class="n">capacity</span><span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+    <span class="k">return</span>
+  <span class="p">}</span>
+
+  <span class="n">m</span><span class="o">.</span><span class="n">size</span><span class="o">++</span>
+  <span class="n">idx</span> <span class="o">:=</span> <span class="n">m</span><span class="o">.</span><span class="n">size</span>
+
+  <span class="c">// put it according to the index</span>
+  <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">element</span>
+
+  <span class="n">parent</span> <span class="o">:=</span> <span class="n">m</span><span class="o">.</span><span class="n">getParent</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+  
+  <span class="c">// check if its value is greater than its parent</span>
+  <span class="k">for</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">parent</span><span class="p">]</span> <span class="p">{</span>
+    <span class="c">// then swap</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">swap</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+
+    <span class="c">// repeat the process until</span>
+    <span class="c">// the greatest value is on the top</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">parent</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">getParent</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="peek">Peek</h2>
+
+<p>Peek operation will return the greatest / least value which is the root.</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="p">(</span><span class="n">m</span> <span class="n">MaxHeap</span><span class="p">)</span> <span class="n">Peek</span><span class="p">()</span> <span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;=</span> <span class="m">0</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">31</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span><span class="p">,</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Errorf</span><span class="p">(</span><span class="s">"max-heap: heap is empty"</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">root</span><span class="p">],</span> <span class="no">nil</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Let’s check our heap</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">h</span> <span class="o">:=</span> <span class="n">NewMaxHeap</span><span class="p">(</span><span class="m">15</span><span class="p">)</span>
+  <span class="n">h</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="m">1</span><span class="p">)</span>
+  <span class="n">h</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+  <span class="n">h</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+  <span class="n">h</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="m">5</span><span class="p">)</span>
+
+  <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+  <span class="n">g</span><span class="p">,</span> <span class="n">_</span> <span class="o">:=</span> <span class="n">h</span><span class="o">.</span><span class="n">Peek</span><span class="p">()</span>
+  <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"greatest:"</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The output should be like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>size:     4
+capacity: 15
+heap:     [5 4 2 1 0 0 0 0 0 0 0 0 0 0 0]
+greatest: 5
+</code></pre></div></div>
+
+<h2 id="pop">Pop</h2>
+
+<p>Now let’s pop something. Popping operation will return value of the greatest / least value and delete it from the heap. We need to rebalance the heap So the greatest / least value will be the root again.</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="p">(</span><span class="n">m</span> <span class="o">*</span><span class="n">MaxHeap</span><span class="p">)</span> <span class="n">rebalance</span><span class="p">(</span><span class="n">idx</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c">// don't rebalance if node index</span>
+  <span class="c">// is greater than heap size</span>
+  <span class="k">if</span> <span class="n">idx</span> <span class="o">&gt;=</span> <span class="n">m</span><span class="o">.</span><span class="n">size</span> <span class="p">{</span>
+    <span class="k">return</span>
+  <span class="p">}</span>
+
+  <span class="c">// fetch the left child index</span>
+  <span class="n">left</span> <span class="o">:=</span> <span class="n">m</span><span class="o">.</span><span class="n">getLeft</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+  <span class="c">// fetch the right child index</span>
+  <span class="n">right</span> <span class="o">:=</span> <span class="n">m</span><span class="o">.</span><span class="n">getRight</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+  <span class="c">// only swap if children position is wrong</span>
+  <span class="c">// and only the children index is less than heap size</span>
+  <span class="c">// and then rebalance it</span>
+  <span class="k">if</span> <span class="n">left</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="o">.</span><span class="n">size</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="p">{</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">swap</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">left</span><span class="p">)</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">rebalance</span><span class="p">(</span><span class="n">left</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="n">right</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="o">.</span><span class="n">size</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="p">{</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">swap</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">right</span><span class="p">)</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">rebalance</span><span class="p">(</span><span class="n">right</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">m</span> <span class="o">*</span><span class="n">MaxHeap</span><span class="p">)</span> <span class="n">Pop</span><span class="p">()</span> <span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;=</span> <span class="m">0</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">31</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span><span class="p">,</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Errorf</span><span class="p">(</span><span class="s">"max-heap: heap is empty"</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="c">// fetch the root</span>
+  <span class="n">max</span> <span class="o">:=</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">root</span><span class="p">]</span>
+  <span class="c">// make the route is the last element in the heap</span>
+  <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">root</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">size</span><span class="p">]</span>
+  <span class="c">// make it zero value</span>
+  <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="m">0</span>
+  <span class="c">// decrease the size so the zero value won't be counted</span>
+  <span class="n">m</span><span class="o">.</span><span class="n">size</span><span class="o">--</span>
+
+  <span class="c">// rebalance the heap</span>
+  <span class="n">m</span><span class="o">.</span><span class="n">rebalance</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+
+  <span class="c">// return the greatest</span>
+  <span class="k">return</span> <span class="n">max</span><span class="p">,</span> <span class="no">nil</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>So whenever Pop operation is called, the heap will rebalance it from the top until its leaf. The whole code should be look like this:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="s">"fmt"</span>
+
+<span class="k">type</span> <span class="n">MaxHeap</span> <span class="k">struct</span> <span class="p">{</span>
+  <span class="n">heap</span>     <span class="p">[]</span><span class="kt">int</span>
+  <span class="n">capacity</span> <span class="kt">int</span>
+  <span class="n">size</span>     <span class="kt">int</span>
+  <span class="n">root</span>     <span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">MaxHeap</span><span class="p">)</span> <span class="n">getParent</span><span class="p">(</span><span class="n">idx</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">idx</span> <span class="o">/</span> <span class="m">2</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">MaxHeap</span><span class="p">)</span> <span class="n">getLeft</span><span class="p">(</span><span class="n">idx</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">idx</span> <span class="o">*</span> <span class="m">2</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">MaxHeap</span><span class="p">)</span> <span class="n">getRight</span><span class="p">(</span><span class="n">idx</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">idx</span><span class="o">*</span><span class="m">2</span> <span class="o">+</span> <span class="m">1</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">m</span> <span class="o">*</span><span class="n">MaxHeap</span><span class="p">)</span> <span class="n">swap</span><span class="p">(</span><span class="n">idx1</span><span class="p">,</span> <span class="n">idx2</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">idx1</span><span class="p">],</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">idx2</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">idx2</span><span class="p">],</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">idx1</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">m</span> <span class="n">MaxHeap</span><span class="p">)</span> <span class="n">String</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s">`size:     %v
+capacity: %v
+heap:     %v`</span><span class="p">,</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">capacity</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="p">])</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">m</span> <span class="o">*</span><span class="n">MaxHeap</span><span class="p">)</span> <span class="n">rebalance</span><span class="p">(</span><span class="n">idx</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="n">idx</span> <span class="o">&gt;=</span> <span class="n">m</span><span class="o">.</span><span class="n">size</span> <span class="p">{</span>
+    <span class="k">return</span>
+  <span class="p">}</span>
+
+  <span class="n">left</span> <span class="o">:=</span> <span class="n">m</span><span class="o">.</span><span class="n">getLeft</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+  <span class="n">right</span> <span class="o">:=</span> <span class="n">m</span><span class="o">.</span><span class="n">getRight</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">left</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="o">.</span><span class="n">size</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="p">{</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">swap</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">left</span><span class="p">)</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">rebalance</span><span class="p">(</span><span class="n">left</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="n">right</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="o">.</span><span class="n">size</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="p">{</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">swap</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">right</span><span class="p">)</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">rebalance</span><span class="p">(</span><span class="n">right</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">m</span> <span class="o">*</span><span class="n">MaxHeap</span><span class="p">)</span> <span class="n">Pop</span><span class="p">()</span> <span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;=</span> <span class="m">0</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">31</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span><span class="p">,</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Errorf</span><span class="p">(</span><span class="s">"max-heap: heap is empty"</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="c">// fetch the root</span>
+  <span class="n">max</span> <span class="o">:=</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">root</span><span class="p">]</span>
+  <span class="c">// make the route is the last element in the heap</span>
+  <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">root</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">size</span><span class="p">]</span>
+  <span class="c">// make it zero value</span>
+  <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="m">0</span>
+  <span class="c">// decrease the size so the zero value won't be counted</span>
+  <span class="n">m</span><span class="o">.</span><span class="n">size</span><span class="o">--</span>
+
+  <span class="c">// rebalance the heap</span>
+  <span class="n">m</span><span class="o">.</span><span class="n">rebalance</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+
+  <span class="c">// return the greatest</span>
+  <span class="k">return</span> <span class="n">max</span><span class="p">,</span> <span class="no">nil</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">m</span> <span class="n">MaxHeap</span><span class="p">)</span> <span class="n">Peek</span><span class="p">()</span> <span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;=</span> <span class="m">0</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">31</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span><span class="p">,</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Errorf</span><span class="p">(</span><span class="s">"max-heap: heap is empty"</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">root</span><span class="p">],</span> <span class="no">nil</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">m</span> <span class="o">*</span><span class="n">MaxHeap</span><span class="p">)</span> <span class="n">Push</span><span class="p">(</span><span class="n">element</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c">// exceed the limit</span>
+  <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;=</span> <span class="n">m</span><span class="o">.</span><span class="n">capacity</span><span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+    <span class="k">return</span>
+  <span class="p">}</span>
+
+  <span class="n">m</span><span class="o">.</span><span class="n">size</span><span class="o">++</span>
+  <span class="n">idx</span> <span class="o">:=</span> <span class="n">m</span><span class="o">.</span><span class="n">size</span>
+
+  <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">element</span>
+
+  <span class="n">parent</span> <span class="o">:=</span> <span class="n">m</span><span class="o">.</span><span class="n">getParent</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+  <span class="k">for</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">m</span><span class="o">.</span><span class="n">heap</span><span class="p">[</span><span class="n">parent</span><span class="p">]</span> <span class="p">{</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">swap</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">parent</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">getParent</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">NewMaxHeap</span><span class="p">(</span><span class="n">capacity</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="n">MaxHeap</span> <span class="p">{</span>
+  <span class="c">// because we used the 0 index</span>
+  <span class="c">// we need to increase the capacity defined by user</span>
+  <span class="n">c</span> <span class="o">:=</span> <span class="n">capacity</span> <span class="o">+</span> <span class="m">1</span>
+  <span class="n">h</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+  <span class="c">// just to mark that it is the minimum one,</span>
+  <span class="c">// you can ignore this</span>
+  <span class="n">h</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">31</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span>
+
+  <span class="k">return</span> <span class="o">&amp;</span><span class="n">MaxHeap</span><span class="p">{</span>
+    <span class="n">root</span><span class="o">:</span>     <span class="m">1</span><span class="p">,</span> <span class="c">// always 1, you can omit this attribute</span>
+    <span class="n">size</span><span class="o">:</span>     <span class="m">0</span><span class="p">,</span>
+    <span class="n">capacity</span><span class="o">:</span> <span class="n">c</span><span class="p">,</span>
+    <span class="n">heap</span><span class="o">:</span>     <span class="n">h</span><span class="p">,</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">h</span> <span class="o">:=</span> <span class="n">NewMaxHeap</span><span class="p">(</span><span class="m">15</span><span class="p">)</span>
+  <span class="n">h</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="m">1</span><span class="p">)</span>
+  <span class="n">h</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+  <span class="n">h</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+  <span class="n">h</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="m">5</span><span class="p">)</span>
+  <span class="n">h</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="m">3</span><span class="p">)</span>
+  <span class="n">h</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="m">10</span><span class="p">)</span>
+
+  <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">Pop</span><span class="p">())</span>
+  <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">Pop</span><span class="p">())</span>
+  <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">Pop</span><span class="p">())</span>
+  <span class="n">h</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="m">11</span><span class="p">)</span>
+
+  <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+  <div>Thank you for reading!</div>
+  <footer>
+    <hr>
+    <span>Copyright &copy; 2021 &middot; Clavin June</span>
+    </div>
+  </footer>
+</main><script defer type="text/javascript" src="https://clavinjune.dev/assets/js/index.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script>
+<script defer type="text/javascript">
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MTSJ0LHJ06');
+</script>
+</body>
+</html>

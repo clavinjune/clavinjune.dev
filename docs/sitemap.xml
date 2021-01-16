@@ -2,7 +2,7 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://clavinjune.dev/feeds/rss.xml</loc>
-<lastmod>2021-01-11T00:21:55+07:00</lastmod>
+<lastmod>2021-01-16T23:24:44+07:00</lastmod>
 </url>
 <url>
 <loc>https://clavinjune.dev/blog/i-create-this-blog-using-jekyll-65efbd/</loc>
@@ -59,6 +59,10 @@
 <url>
 <loc>https://clavinjune.dev/blog/greatest-common-divisor-and-least-common-multiplier-4a0275/</loc>
 <lastmod>2021-01-11T00:00:00+07:00</lastmod>
+</url>
+<url>
+<loc>https://clavinjune.dev/blog/max-heap-in-go-102912/</loc>
+<lastmod>2021-01-16T00:00:00+07:00</lastmod>
 </url>
 <url>
 <loc>https://clavinjune.dev/support.html</loc>
