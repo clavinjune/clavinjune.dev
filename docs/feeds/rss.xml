@@ -14,6 +14,28 @@
     <lastBuildDate>Sat, 16 Jan 2021 00:00:00 +0700</lastBuildDate>
     
       <item>
+        <title>Python Format Specifier for Thousands Separator</title>
+        
+          <category>format</category>
+        
+          <category>number</category>
+        
+          <category>python</category>
+        
+        <content>&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?w=1920&quot; alt=&quot;Photo by @volkanolmez on Unsplash&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I hate to say this, but I forgot this one-liner syntax in my online coding test. So, I think I need to put this here.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'{:,}'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1234567890&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# -1,234,567,890
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</content>
+        <pubDate>Sat, 16 Jan 2021 00:00:00 +0700</pubDate>
+        <link>https://clavinjune.dev/blog/python-format-specifier-thousands-separator-ed92cc/</link>
+        <guid isPermaLink="true">https://clavinjune.dev/blog/python-format-specifier-thousands-separator-ed92cc/</guid>
+      </item>
+    
+      <item>
         <title>Max Heap in Go</title>
         
           <category>data-structure</category>
