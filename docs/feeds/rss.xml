@@ -11,7 +11,226 @@
     <sy:updateFrequency>1</sy:updateFrequency>
     <link>https://clavinjune.dev</link>
     <atom:link href="https://clavinjune.dev/feeds/rss.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Sat, 16 Jan 2021 00:00:00 +0700</lastBuildDate>
+    <lastBuildDate>Sat, 23 Jan 2021 00:00:00 +0700</lastBuildDate>
+    
+      <item>
+        <title>Linux Retains the Size of the Deleted File</title>
+        
+          <category>descriptor</category>
+        
+          <category>fd</category>
+        
+          <category>file</category>
+        
+          <category>linux</category>
+        
+        <content>&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?w=1920&quot; alt=&quot;Photo by @ilyapavlov on Unsplash&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;While interning, I once had an application that logged every request and response to the Linux file system. That app easily fills up our disks due to traffic. I got confused when I tried to delete log files because disk usage didn’t decrease even after the log files were deleted. So I restarted the app and finally, the disk usage decreased.&lt;/p&gt;
+
+&lt;p&gt;But it is ineffective because we need to kill the application which is making a downtime at that time. Recently, I learned that it was caused by something called a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;file descriptor&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;tldr&quot;&gt;TL;DR&lt;/h2&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; &amp;lt;big file &lt;span class=&quot;nb&quot;&gt;dir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# check the current usage&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; &amp;lt;big file&amp;gt; &lt;span class=&quot;c&quot;&gt;# remove the big file&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; &amp;lt;big file &lt;span class=&quot;nb&quot;&gt;dir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# it still the same&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;lsof +L1 | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &amp;lt;big file&amp;gt; &lt;span class=&quot;c&quot;&gt;# get the running app PID&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /proc/&amp;lt;PID&amp;gt;/fd/ &lt;span class=&quot;c&quot;&gt;# go to the running app fd&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &amp;lt;big file&amp;gt; &lt;span class=&quot;c&quot;&gt;# get the symlink&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &amp;lt;symlink&amp;gt; &lt;span class=&quot;c&quot;&gt;# empty the symlink&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; &amp;lt;big file &lt;span class=&quot;nb&quot;&gt;dir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# it backs to normal&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Let’s reproduce that incident.&lt;/p&gt;
+
+&lt;h2 id=&quot;creating-a-big-file&quot;&gt;Creating a big file&lt;/h2&gt;
+
+&lt;p&gt;We need to create a big file, to fill our disk up. I think 3GB is enough. Well, you don’t need to make it big just to reproduce, but more than 1GB could show the difference easily in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;df -h&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;yes &lt;/span&gt;lorem ipsum dolor sit amet &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  | &lt;span class=&quot;nb&quot;&gt;head&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; 3GB &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; big-file.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Yep, now you have a 3GB file contains lorem ipsum called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;big-file.txt&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;create-a-simple-app&quot;&gt;Create a simple app&lt;/h2&gt;
+
+&lt;p&gt;Then we need to create an app that simply read &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;big-file.txt&lt;/code&gt;. But I want to show you even if the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;big-file.txt&lt;/code&gt; is deleted, our app still writing to it. So I make the app read and append the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;big-file.txt&lt;/code&gt; using Golang, you can do it with whatever you prefer. Let’s call it &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;write-to-file.go&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-go highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;&quot;fmt&quot;&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;&quot;os&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OpenFile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;big-file.txt&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;O_APPEND&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;O_CREATE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;O_WRONLY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0644&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;panic&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;defer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Scanln&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Fprintf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;%d&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;written&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;It will wait for our input and loop forever until we terminate the app.&lt;/p&gt;
+
+&lt;h2 id=&quot;check-current-disk-usage&quot;&gt;Check current disk usage&lt;/h2&gt;
+
+&lt;p&gt;Well, because I put it in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;home dir&lt;/code&gt;, I check the size of the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/home&lt;/code&gt; using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;df&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; /home
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdb1       913G   34G  832G   4% /home
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;tail-the-appended-text-in-the-file&quot;&gt;Tail the appended text in the file&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tail -f&lt;/code&gt; will follow the last 10 lines in the file and it would show this&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;tail&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; big-file.txt 
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lor
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;run-the-app&quot;&gt;Run the app&lt;/h2&gt;
+
+&lt;p&gt;Let’s run our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;write-to-file.go&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;go run write-to-file.go
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;For every &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Enter&lt;/code&gt; you input, it will append the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;big-file.txt&lt;/code&gt; like this&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;tail&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; big-file.txt 
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lor0
+1
+2
+3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;go run write-to-file.go 
+
+0 written
+
+1 written
+
+2 written
+
+3 written
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;remove-the-file&quot;&gt;Remove the file&lt;/h2&gt;
+
+&lt;p&gt;Now let’s stop the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tail -f&lt;/code&gt; and remove that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;big-file.txt&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;rm &lt;/span&gt;big-file.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Does your disk usage decreased? Unfortunately, mine is not. It might be karma working there isn’t it?&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; /home
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdb1       913G   34G  832G   4% /home
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, how to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;really remove&lt;/code&gt; the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;big-file.txt&lt;/code&gt;?&lt;/p&gt;
+
+&lt;p&gt;For doing that we need to check the current running process that still open that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;big-file.txt&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;lsof +L1 | &lt;span class=&quot;nb&quot;&gt;grep &lt;/span&gt;big-file.txt
+write-to- 102333 clavinjune    3w   REG   8,17 3000000008     0  7341204 /home/clavinjune/Public/file-descriptor/big-file.txt &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;deleted&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now we got the app’s name, its PID, and we know that the Linux know the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;big-file.txt&lt;/code&gt; is already &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;deleted&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Let’s open the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;file descriptor&lt;/code&gt; of the app at &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/proc/&amp;lt;PID&amp;gt;/fd&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /proc/102333/fd
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep &lt;/span&gt;big-file.txt
+l-wx------ 1 clavinjune clavinjune 64 Jan 23 01:38 3 -&amp;gt; /home/clavinjune/Public/file-descriptor/big-file.txt &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;deleted&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;It seems like, we have a symlink called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;3&lt;/code&gt; that linked to our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;big-file.txt&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Now if you &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tail -f&lt;/code&gt; to the symlink and input some &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Enter&lt;/code&gt; to the app, it will show something like this&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;tail&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; 3
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lor0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Interesting isn’t it? Even if the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;big-file.txt&lt;/code&gt; is deleted, the app still writing into the symlink. That symlink held our disk space, so we need to make that symlink is empty. By simply echoing nothing to the symlink in this case echoing nothing to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;3&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; 3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now check the disk usage it will return to normal like we really delete the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;big-file.txt&lt;/code&gt; and the program is still running and still appending to the file.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; /home
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdb1       913G   32G  835G   4% /home
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Let’s input some &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Enter&lt;/code&gt; to the app again then the symlink will filled up again by the app.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;tail&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; 3 
+11
+12
+13
+14
+15
+16
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</content>
+        <pubDate>Sat, 23 Jan 2021 00:00:00 +0700</pubDate>
+        <link>https://clavinjune.dev/blog/linux-retains-the-size-of-the-deleted-file-4765b9/</link>
+        <guid isPermaLink="true">https://clavinjune.dev/blog/linux-retains-the-size-of-the-deleted-file-4765b9/</guid>
+      </item>
     
       <item>
         <title>Python Format Specifier for Thousands Separator</title>

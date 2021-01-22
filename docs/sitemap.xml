@@ -2,7 +2,7 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://clavinjune.dev/feeds/rss.xml</loc>
-<lastmod>2021-01-16T23:40:11+07:00</lastmod>
+<lastmod>2021-01-23T02:02:16+07:00</lastmod>
 </url>
 <url>
 <loc>https://clavinjune.dev/blog/i-create-this-blog-using-jekyll-65efbd/</loc>
@@ -67,6 +67,10 @@
 <url>
 <loc>https://clavinjune.dev/blog/python-format-specifier-thousands-separator-ed92cc/</loc>
 <lastmod>2021-01-16T00:00:00+07:00</lastmod>
+</url>
+<url>
+<loc>https://clavinjune.dev/blog/linux-retains-the-size-of-the-deleted-file-4765b9/</loc>
+<lastmod>2021-01-23T00:00:00+07:00</lastmod>
 </url>
 <url>
 <loc>https://clavinjune.dev/support.html</loc>

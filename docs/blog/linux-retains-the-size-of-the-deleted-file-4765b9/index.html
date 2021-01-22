@@ -1,0 +1,289 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    Site Template By: Clavin June | https://github.com/anon-org/jekyll-blog
+  -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatbile" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Clavin June" />
+  <meta name="monetization" content="$ilp.uphold.com/RYNmdxrFrPJB" />
+  <meta name="google-site-verification" content="n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE" />
+  <meta name="keywords" content="linux, descriptor, file, fd,  Notes" />
+  <meta name="description" content="This post contains notes on how to retrieve back the size that Linux preserves from a deleted file if the file is being used by the process that we can't kill or restart
+" />
+  <meta property="og:description" content="This post contains notes on how to retrieve back the size that Linux preserves from a deleted file if the file is being used by the process that we can't kill or restart
+" />
+  <meta property="og:title" content="Linux Retains the Size of the Deleted File | Clavin June's detached brain" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:url" content="https://clavinjune.dev/blog/linux-retains-the-size-of-the-deleted-file-4765b9/" />
+  <meta property="og:site_name" content="Clavin June's detached brain" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?w=1920" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2021-01-23T00:00:00+07:00" />
+  
+  <title> Linux Retains the Size of the Deleted File | Clavin June's detached brain </title>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://clavinjune.dev/assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://clavinjune.dev/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://clavinjune.dev/assets/favicon/favicon-16x16.png">
+  
+  <link rel="stylesheet" type="text/css" href="https://clavinjune.dev/assets/css/styles.css" />
+  <link rel="stylesheet" type="text/css" href="https://clavinjune.dev/assets/css/syntax.css" />
+</head>
+<body>
+<div class="progress-bar"></div>
+<nav id="post">
+  <a id="back" href="/">&larr;</a>
+  <div>
+    <a href="https://positif.dev" target="_blank">Podcast</a>
+    <a href="/support">Support</a>
+    <a href="https://gitconnected.com/clavinjune/resume" target="_blank">Author</a>
+  </div>
+</nav>
+<main id="post">
+  <div>
+    <h1 class="title">Linux Retains the Size of the Deleted File</h1>
+    <div class="posts-time">
+      <span>Jan 23, 2021</span>
+      <span>&nbsp;&middot;&nbsp;</span>
+      <span>~6min read</span>
+    </div>
+    <div class="posts-tags">
+      <span class="posts-tags-category" id="8a45d9">
+        Notes
+      </span>
+        <span class="posts-tags-content">#descriptor</span>
+      
+        <span class="posts-tags-content">#fd</span>
+      
+        <span class="posts-tags-content">#file</span>
+      
+        <span class="posts-tags-content">#linux</span>
+      
+    </div>
+  </div>
+  <hr>
+  <p><img src="https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?w=1920" alt="Photo by @ilyapavlov on Unsplash" /></p>
+
+<p>While interning, I once had an application that logged every request and response to the Linux file system. That app easily fills up our disks due to traffic. I got confused when I tried to delete log files because disk usage didn’t decrease even after the log files were deleted. So I restarted the app and finally, the disk usage decreased.</p>
+
+<p>But it is ineffective because we need to kill the application which is making a downtime at that time. Recently, I learned that it was caused by something called a <code class="language-plaintext highlighter-rouge">file descriptor</code>.</p>
+
+<h2 id="tldr">TL;DR</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">df</span> <span class="nt">-h</span> &lt;big file <span class="nb">dir</span><span class="o">&gt;</span> <span class="c"># check the current usage</span>
+<span class="nv">$ </span><span class="nb">rm</span> <span class="nt">-f</span> &lt;big file&gt; <span class="c"># remove the big file</span>
+<span class="nv">$ </span><span class="nb">df</span> <span class="nt">-h</span> &lt;big file <span class="nb">dir</span><span class="o">&gt;</span> <span class="c"># it still the same</span>
+<span class="nv">$ </span>lsof +L1 | <span class="nb">grep</span> &lt;big file&gt; <span class="c"># get the running app PID</span>
+<span class="nv">$ </span><span class="nb">cd</span> /proc/&lt;PID&gt;/fd/ <span class="c"># go to the running app fd</span>
+<span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-l</span> | <span class="nb">grep</span> &lt;big file&gt; <span class="c"># get the symlink</span>
+<span class="nv">$ </span><span class="o">&gt;</span> &lt;symlink&gt; <span class="c"># empty the symlink</span>
+<span class="nv">$ </span><span class="nb">df</span> <span class="nt">-h</span> &lt;big file <span class="nb">dir</span><span class="o">&gt;</span> <span class="c"># it backs to normal</span>
+</code></pre></div></div>
+
+<p>Let’s reproduce that incident.</p>
+
+<h2 id="creating-a-big-file">Creating a big file</h2>
+
+<p>We need to create a big file, to fill our disk up. I think 3GB is enough. Well, you don’t need to make it big just to reproduce, but more than 1GB could show the difference easily in the <code class="language-plaintext highlighter-rouge">df -h</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">yes </span>lorem ipsum dolor sit amet <span class="se">\</span>
+  | <span class="nb">head</span> <span class="nt">-c</span> 3GB <span class="o">&gt;&gt;</span> big-file.txt
+</code></pre></div></div>
+
+<p>Yep, now you have a 3GB file contains lorem ipsum called <code class="language-plaintext highlighter-rouge">big-file.txt</code></p>
+
+<h2 id="create-a-simple-app">Create a simple app</h2>
+
+<p>Then we need to create an app that simply read <code class="language-plaintext highlighter-rouge">big-file.txt</code>. But I want to show you even if the <code class="language-plaintext highlighter-rouge">big-file.txt</code> is deleted, our app still writing to it. So I make the app read and append the <code class="language-plaintext highlighter-rouge">big-file.txt</code> using Golang, you can do it with whatever you prefer. Let’s call it <code class="language-plaintext highlighter-rouge">write-to-file.go</code></p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="p">(</span>
+  <span class="s">"fmt"</span>
+  <span class="s">"os"</span>
+<span class="p">)</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">f</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">os</span><span class="o">.</span><span class="n">OpenFile</span><span class="p">(</span><span class="s">"big-file.txt"</span><span class="p">,</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">O_APPEND</span><span class="o">|</span><span class="n">os</span><span class="o">.</span><span class="n">O_CREATE</span><span class="o">|</span><span class="n">os</span><span class="o">.</span><span class="n">O_WRONLY</span><span class="p">,</span> <span class="m">0644</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+    <span class="nb">panic</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="k">defer</span> <span class="n">f</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span>
+
+  <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Scanln</span><span class="p">()</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Fprintf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s">"written"</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>It will wait for our input and loop forever until we terminate the app.</p>
+
+<h2 id="check-current-disk-usage">Check current disk usage</h2>
+
+<p>Well, because I put it in the <code class="language-plaintext highlighter-rouge">home dir</code>, I check the size of the <code class="language-plaintext highlighter-rouge">/home</code> using <code class="language-plaintext highlighter-rouge">df</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">df</span> <span class="nt">-h</span> /home
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdb1       913G   34G  832G   4% /home
+</code></pre></div></div>
+
+<h2 id="tail-the-appended-text-in-the-file">Tail the appended text in the file</h2>
+
+<p><code class="language-plaintext highlighter-rouge">tail -f</code> will follow the last 10 lines in the file and it would show this</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">tail</span> <span class="nt">-f</span> big-file.txt 
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lor
+</code></pre></div></div>
+
+<h2 id="run-the-app">Run the app</h2>
+
+<p>Let’s run our <code class="language-plaintext highlighter-rouge">write-to-file.go</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>go run write-to-file.go
+</code></pre></div></div>
+
+<p>For every <code class="language-plaintext highlighter-rouge">Enter</code> you input, it will append the <code class="language-plaintext highlighter-rouge">big-file.txt</code> like this</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">tail</span> <span class="nt">-f</span> big-file.txt 
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lor0
+1
+2
+3
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>go run write-to-file.go 
+
+0 written
+
+1 written
+
+2 written
+
+3 written
+
+</code></pre></div></div>
+
+<h2 id="remove-the-file">Remove the file</h2>
+
+<p>Now let’s stop the <code class="language-plaintext highlighter-rouge">tail -f</code> and remove that <code class="language-plaintext highlighter-rouge">big-file.txt</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">rm </span>big-file.txt
+</code></pre></div></div>
+
+<p>Does your disk usage decreased? Unfortunately, mine is not. It might be karma working there isn’t it?</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">df</span> <span class="nt">-h</span> /home
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdb1       913G   34G  832G   4% /home
+</code></pre></div></div>
+
+<p>Now, how to <code class="language-plaintext highlighter-rouge">really remove</code> the <code class="language-plaintext highlighter-rouge">big-file.txt</code>?</p>
+
+<p>For doing that we need to check the current running process that still open that <code class="language-plaintext highlighter-rouge">big-file.txt</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>lsof +L1 | <span class="nb">grep </span>big-file.txt
+write-to- 102333 clavinjune    3w   REG   8,17 3000000008     0  7341204 /home/clavinjune/Public/file-descriptor/big-file.txt <span class="o">(</span>deleted<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Now we got the app’s name, its PID, and we know that the Linux know the <code class="language-plaintext highlighter-rouge">big-file.txt</code> is already <code class="language-plaintext highlighter-rouge">deleted</code>.</p>
+
+<p>Let’s open the <code class="language-plaintext highlighter-rouge">file descriptor</code> of the app at <code class="language-plaintext highlighter-rouge">/proc/&lt;PID&gt;/fd</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd</span> /proc/102333/fd
+<span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-l</span> | <span class="nb">grep </span>big-file.txt
+l-wx------ 1 clavinjune clavinjune 64 Jan 23 01:38 3 -&gt; /home/clavinjune/Public/file-descriptor/big-file.txt <span class="o">(</span>deleted<span class="o">)</span>
+</code></pre></div></div>
+
+<p>It seems like, we have a symlink called <code class="language-plaintext highlighter-rouge">3</code> that linked to our <code class="language-plaintext highlighter-rouge">big-file.txt</code>.</p>
+
+<p>Now if you <code class="language-plaintext highlighter-rouge">tail -f</code> to the symlink and input some <code class="language-plaintext highlighter-rouge">Enter</code> to the app, it will show something like this</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">tail</span> <span class="nt">-f</span> 3
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lorem ipsum dolor sit amet
+lor0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</code></pre></div></div>
+
+<p>Interesting isn’t it? Even if the <code class="language-plaintext highlighter-rouge">big-file.txt</code> is deleted, the app still writing into the symlink. That symlink held our disk space, so we need to make that symlink is empty. By simply echoing nothing to the symlink in this case echoing nothing to <code class="language-plaintext highlighter-rouge">3</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="o">&gt;</span> 3
+</code></pre></div></div>
+
+<p>Now check the disk usage it will return to normal like we really delete the <code class="language-plaintext highlighter-rouge">big-file.txt</code> and the program is still running and still appending to the file.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">df</span> <span class="nt">-h</span> /home
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdb1       913G   32G  835G   4% /home
+</code></pre></div></div>
+
+<p>Let’s input some <code class="language-plaintext highlighter-rouge">Enter</code> to the app again then the symlink will filled up again by the app.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">tail</span> <span class="nt">-f</span> 3 
+11
+12
+13
+14
+15
+16
+</code></pre></div></div>
+
+  <div>Thank you for reading!</div>
+  <footer>
+    <hr>
+    <span>Copyright &copy; 2021 &middot; Clavin June</span>
+    </div>
+  </footer>
+</main><script defer type="text/javascript" src="https://clavinjune.dev/assets/js/index.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script>
+<script defer type="text/javascript">
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MTSJ0LHJ06');
+</script>
+</body>
+</html>
