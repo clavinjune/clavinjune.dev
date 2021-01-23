@@ -35,7 +35,7 @@ defaults:
 pagination:
   enabled: true
   collection: posts
-  per_page: 7
+  per_page: 5
   sort_reverse: true
   permalink: /blog/:num/
   sort_field: date
