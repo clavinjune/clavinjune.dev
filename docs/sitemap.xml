@@ -2,7 +2,7 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://clavinjune.dev/feeds/rss.xml</loc>
-<lastmod>2021-01-24T00:25:01+07:00</lastmod>
+<lastmod>2021-02-06T08:57:13+07:00</lastmod>
 </url>
 <url>
 <loc>https://clavinjune.dev/blog/i-create-this-blog-using-jekyll-65efbd/</loc>
@@ -75,6 +75,10 @@
 <url>
 <loc>https://clavinjune.dev/blog/buffered-vs-unbuffered-channel-in-golang-dc97bf/</loc>
 <lastmod>2021-01-24T00:00:00+07:00</lastmod>
+</url>
+<url>
+<loc>https://clavinjune.dev/blog/lru-cache-in-go-e7351e/</loc>
+<lastmod>2021-02-06T00:00:00+07:00</lastmod>
 </url>
 <url>
 <loc>https://clavinjune.dev/support.html</loc>
