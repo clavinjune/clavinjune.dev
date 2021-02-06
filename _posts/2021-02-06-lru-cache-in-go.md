@@ -8,7 +8,7 @@ description: >
 ---
 ![Photo by @mrthetrain on Unsplash](https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=1920)
 
-Two days ago, I failed to implement the optimized LRU cache in coding interview due to panic and stopped by the interviewer. Yes I suck at coding interviews. I have implemented LRU cache before, so I know how it works and of course know how to implement it. But if you never heard of it I think [this explanation](https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_recently_used_(LRU)) is enough.
+Two days ago, I failed to implement the optimized LRU cache in coding interview due to panic and stopped by the interviewer. Yes, I suck at coding interviews. I have implemented LRU cache before, so I know how it works and of course know how to implement it. But if you never heard of it, I think [this explanation](https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_recently_used_(LRU)) is enough.
 
 ## Brief definition
 
