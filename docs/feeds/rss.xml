@@ -44,6 +44,8 @@ path &quot;secret/data/your-path&quot; {
 &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;EOF
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
+&lt;p&gt;Please notify that we add policy rules for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;secret/data/your-path&lt;/code&gt; even though we use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;secret/your-path&lt;/code&gt; as a path. Because KV-V2 add &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;data&lt;/code&gt; prefix before your path name&lt;/p&gt;
+
 &lt;p&gt;Apply the policy file to your role&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;vault policy write your-role policyfile.hcl

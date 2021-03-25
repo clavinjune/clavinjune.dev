@@ -31,6 +31,8 @@ path "secret/data/your-path" {
 EOF
 ```
 
+Please notify that we add policy rules for `secret/data/your-path` even though we use `secret/your-path` as a path. Because KV-V2 add `data` prefix before your path name
+
 Apply the policy file to your role
 
 ```bash
