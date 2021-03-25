@@ -39,10 +39,7 @@ path &quot;secret/*&quot; {
   capabilities = [ &quot;list&quot; ]
 }
 path &quot;secret/data/your-path&quot; {
-  capabilities = [ &quot;list&quot;, &quot;read&quot; ]
-}
-path &quot;secret/metadata/your-path&quot; {
-  capabilities = [&quot;list&quot;]
+  capabilities = [ &quot;read&quot; ]
 }
 &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;EOF
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;

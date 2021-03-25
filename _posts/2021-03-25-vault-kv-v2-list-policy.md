@@ -26,10 +26,7 @@ path "secret/*" {
   capabilities = [ "list" ]
 }
 path "secret/data/your-path" {
-  capabilities = [ "list", "read" ]
-}
-path "secret/metadata/your-path" {
-  capabilities = ["list"]
+  capabilities = [ "read" ]
 }
 EOF
 ```
