@@ -1,0 +1,93 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    Site Template By: Clavin June | https://github.com/anon-org/jekyll-blog
+  -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatbile" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Clavin June" />
+  <meta name="monetization" content="$ilp.uphold.com/RYNmdxrFrPJB" />
+  <meta name="google-site-verification" content="n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE" />
+  <meta name="keywords" content="linux, cron, date,  Notes" />
+  <meta name="description" content="This post contains notes on how to execute date formatting in cron
+" />
+  <meta property="og:description" content="This post contains notes on how to execute date formatting in cron
+" />
+  <meta property="og:title" content="Execute Date Format In Cron | Clavin June's detached brain" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:url" content="https://clavinjune.dev/blog/execute-date-format-in-cron-2d96c1/" />
+  <meta property="og:site_name" content="Clavin June's detached brain" />
+  
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2021-03-26T00:00:00+07:00" />
+  
+  <title> Execute Date Format In Cron | Clavin June's detached brain </title>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://clavinjune.dev/assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://clavinjune.dev/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://clavinjune.dev/assets/favicon/favicon-16x16.png">
+  
+  <link rel="stylesheet" type="text/css" href="https://clavinjune.dev/assets/css/styles.css" />
+  <link rel="stylesheet" type="text/css" href="https://clavinjune.dev/assets/css/syntax.css" />
+</head>
+<body>
+<div class="progress-bar"></div>
+<nav id="post">
+  <a id="back" href="/">&larr;</a>
+  <div>
+    <a href="https://positif.dev" target="_blank">Podcast</a>
+    <a href="/support">Support</a>
+    <a href="https://gitconnected.com/clavinjune/resume" target="_blank">Author</a>
+  </div>
+</nav>
+<main id="post">
+  <div>
+    <h1 class="title">Execute Date Format In Cron</h1>
+    <div class="posts-time">
+      <span>Mar 26, 2021</span>
+      <span>&nbsp;&middot;&nbsp;</span>
+      <span>~1min read</span>
+    </div>
+    <div class="posts-tags">
+      <span class="posts-tags-category" id="8a45d9">
+        Notes
+      </span>
+        <span class="posts-tags-content">#cron</span>
+      
+        <span class="posts-tags-content">#date</span>
+      
+        <span class="posts-tags-content">#linux</span>
+      
+    </div>
+  </div>
+  <hr>
+  <p>Escaping <code class="language-plaintext highlighter-rouge">%</code> in crontab using <code class="language-plaintext highlighter-rouge">\%</code></p>
+
+<p>example</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0 0 <span class="k">*</span> <span class="k">*</span> 5 <span class="nb">cat</span> ~/log <span class="o">&gt;&gt;</span> <span class="se">\</span>
+~/log-<span class="sb">`</span><span class="nb">date</span> +<span class="s2">"</span><span class="se">\%</span><span class="s2">Y-</span><span class="se">\%</span><span class="s2">m-</span><span class="se">\%</span><span class="s2">d"</span><span class="sb">`</span> <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="o">&gt;</span> ~/log
+</code></pre></div></div>
+
+  <div>Thank you for reading!</div>
+  <footer>
+    <hr>
+    <span>Copyright &copy; 2021 &middot; Clavin June</span>
+    </div>
+  </footer>
+</main><script defer type="text/javascript" src="https://clavinjune.dev/assets/js/index.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script>
+<script defer type="text/javascript">
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MTSJ0LHJ06');
+</script>
+</body>
+</html>

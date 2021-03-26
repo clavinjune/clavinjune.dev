@@ -11,7 +11,30 @@
     <sy:updateFrequency>1</sy:updateFrequency>
     <link>https://clavinjune.dev</link>
     <atom:link href="https://clavinjune.dev/feeds/rss.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Thu, 25 Mar 2021 00:00:00 +0700</lastBuildDate>
+    <lastBuildDate>Fri, 26 Mar 2021 00:00:00 +0700</lastBuildDate>
+    
+      <item>
+        <title>Execute Date Format In Cron</title>
+        
+          <category>cron</category>
+        
+          <category>date</category>
+        
+          <category>linux</category>
+        
+        <content>&lt;p&gt;Escaping &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%&lt;/code&gt; in crontab using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\%&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;example&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;0 0 &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; 5 &lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; ~/log &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+~/log-&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt; +&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\%&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;Y-&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\%&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;m-&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\%&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;d&quot;&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; ~/log
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</content>
+        <pubDate>Fri, 26 Mar 2021 00:00:00 +0700</pubDate>
+        <link>https://clavinjune.dev/blog/execute-date-format-in-cron-2d96c1/</link>
+        <guid isPermaLink="true">https://clavinjune.dev/blog/execute-date-format-in-cron-2d96c1/</guid>
+      </item>
     
       <item>
         <title>Vault KV-V2 list policy</title>
