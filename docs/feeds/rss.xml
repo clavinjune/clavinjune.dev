@@ -11,7 +11,37 @@
     <sy:updateFrequency>1</sy:updateFrequency>
     <link>https://clavinjune.dev</link>
     <atom:link href="https://clavinjune.dev/feeds/rss.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Thu, 22 Apr 2021 00:00:00 +0700</lastBuildDate>
+    <lastBuildDate>Thu, 29 Apr 2021 00:00:00 +0700</lastBuildDate>
+    
+      <item>
+        <title>Passing Hostname To Docker Services</title>
+        
+          <category>docker</category>
+        
+          <category>hostname</category>
+        
+          <category>linux</category>
+        
+        <content>&lt;p&gt;Passing hostname to docker container won’t work&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;environment&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;HOST_HOSTNAME=$HOSTNAME&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Do this instead&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;environment&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;HOST_HOSTNAME={{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;.Node.Hostname&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;}}&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;It will fetch the hostname from docker placeholder&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.docker.com/engine/reference/commandline/service_create/#create-services-using-templates&quot;&gt;Reference&lt;/a&gt;&lt;/p&gt;
+</content>
+        <pubDate>Thu, 29 Apr 2021 00:00:00 +0700</pubDate>
+        <link>https://clavinjune.dev/blog/passing-hostname-to-docker-services-c7339b/</link>
+        <guid isPermaLink="true">https://clavinjune.dev/blog/passing-hostname-to-docker-services-c7339b/</guid>
+      </item>
     
       <item>
         <title>My Mistake On Converting Slice To Slice Of Ptr In Golang</title>

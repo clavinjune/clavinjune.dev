@@ -1,0 +1,100 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    Site Template By: Clavin June | https://github.com/anon-org/jekyll-blog
+  -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatbile" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Clavin June" />
+  <meta name="monetization" content="$ilp.uphold.com/RYNmdxrFrPJB" />
+  <meta name="google-site-verification" content="n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE" />
+  <meta name="keywords" content="docker, linux, hostname,  Notes" />
+  <meta name="description" content="This post contains notes on how to pass host hostname to docker services via environment variable without changing service hostname
+" />
+  <meta property="og:description" content="This post contains notes on how to pass host hostname to docker services via environment variable without changing service hostname
+" />
+  <meta property="og:title" content="Passing Hostname To Docker Services | Clavin June's detached brain" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:url" content="https://clavinjune.dev/blog/passing-hostname-to-docker-services-c7339b/" />
+  <meta property="og:site_name" content="Clavin June's detached brain" />
+  
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2021-04-29T00:00:00+07:00" />
+  
+  <title> Passing Hostname To Docker Services | Clavin June's detached brain </title>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://clavinjune.dev/assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://clavinjune.dev/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://clavinjune.dev/assets/favicon/favicon-16x16.png">
+  
+  <link rel="stylesheet" type="text/css" href="https://clavinjune.dev/assets/css/styles.css" />
+  <link rel="stylesheet" type="text/css" href="https://clavinjune.dev/assets/css/syntax.css" />
+</head>
+<body>
+<div class="progress-bar"></div>
+<nav id="post">
+  <a id="back" href="/">&larr;</a>
+  <div>
+    <a href="https://positif.dev" target="_blank">Podcast</a>
+    <a href="/support">Support</a>
+    <a href="https://gitconnected.com/clavinjune/resume" target="_blank">Author</a>
+  </div>
+</nav>
+<main id="post">
+  <div>
+    <h1 class="title">Passing Hostname To Docker Services</h1>
+    <div class="posts-time">
+      <span>Apr 29, 2021</span>
+      <span>&nbsp;&middot;&nbsp;</span>
+      <span>~1min read</span>
+    </div>
+    <div class="posts-tags">
+      <span class="posts-tags-category" id="8a45d9">
+        Notes
+      </span>
+        <span class="posts-tags-content">#docker</span>
+      
+        <span class="posts-tags-content">#hostname</span>
+      
+        <span class="posts-tags-content">#linux</span>
+      
+    </div>
+  </div>
+  <hr>
+  <p>Passing hostname to docker container won’t work</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">environment</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s2">"</span><span class="s">HOST_HOSTNAME=$HOSTNAME"</span>
+</code></pre></div></div>
+
+<p>Do this instead</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">environment</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s2">"</span><span class="s">HOST_HOSTNAME={{</span><span class="nv"> </span><span class="s">.Node.Hostname</span><span class="nv"> </span><span class="s">}}"</span>
+</code></pre></div></div>
+
+<p>It will fetch the hostname from docker placeholder</p>
+
+<p><a href="https://docs.docker.com/engine/reference/commandline/service_create/#create-services-using-templates">Reference</a></p>
+
+  <div>Thank you for reading!</div>
+  <footer>
+    <hr>
+    <span>Copyright &copy; 2021 &middot; Clavin June</span>
+    </div>
+  </footer>
+</main><script defer type="text/javascript" src="https://clavinjune.dev/assets/js/index.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script>
+<script defer type="text/javascript">
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MTSJ0LHJ06');
+</script>
+</body>
+</html>
