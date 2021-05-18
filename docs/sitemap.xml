@@ -2,7 +2,7 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://clavinjune.dev/feeds/rss.xml</loc>
-<lastmod>2021-04-29T10:40:59+07:00</lastmod>
+<lastmod>2021-05-18T22:12:31+07:00</lastmod>
 </url>
 <url>
 <loc>https://clavinjune.dev/blog/i-create-this-blog-using-jekyll-65efbd/</loc>
@@ -103,6 +103,10 @@
 <url>
 <loc>https://clavinjune.dev/blog/passing-hostname-to-docker-services-c7339b/</loc>
 <lastmod>2021-04-29T00:00:00+07:00</lastmod>
+</url>
+<url>
+<loc>https://clavinjune.dev/blog/my-custom-http-error-in-golang-9c193b/</loc>
+<lastmod>2021-05-18T00:00:00+07:00</lastmod>
 </url>
 <url>
 <loc>https://clavinjune.dev/support.html</loc>
