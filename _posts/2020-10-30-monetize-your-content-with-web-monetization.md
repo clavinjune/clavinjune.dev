@@ -33,3 +33,5 @@ Even though this post is like sponsoring some companies (which I hope so), they 
 I like the concept behind this `Web Monetization` to only subscribe to one provider, then you can consume exclusive contents from many websites instead of subscribing to a lot of websites which perhaps you wouldn't consume their contents daily. Despite the costs, it's hard to manage this kind of subscription model.
 
 Though `Web Monetization` is not a standard yet for monetizing digital content, it is currently being proposed as a [W3C standard](https://discourse.wicg.io/t/proposal-web-monetization-a-new-revenue-model-for-the-web/3785). I hope it become one and implemented everywhere ASAP.
+
+If you are interested in monetizing your website, You can read these 10 tips for monetizing anything from [codefuel](https://www.codefuel.com/blog/if-its-online-you-can-monetize-it-10-tips-for-monetizing-anything/).
