@@ -52,6 +52,8 @@ exclude:
   - Makefile
   - README.md
   - LICENSE
+include:
+  - brave-rewards-verification.txt
 
 plugins:
   - jekyll-paginate-v2
