@@ -53,7 +53,7 @@ exclude:
   - README.md
   - LICENSE
 include:
-  - .well-known
+  - ".well-known"
 
 plugins:
   - jekyll-paginate-v2
