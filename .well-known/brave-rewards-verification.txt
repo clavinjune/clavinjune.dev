@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: clavinjune.dev
+Token: d9937cb30deebb4e3217f139245bc352c0ef9dd36f9da457b7c579c68b9d839a
