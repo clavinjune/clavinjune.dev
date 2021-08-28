@@ -2,5 +2,6 @@ serve:
 	@rm -rf docs/ .jekyll-cache && bundle exec jekyll serve -d docs/
 build:
 	@rm -rf docs/ .jekyll-cache && bundle exec jekyll build -d docs/
+	cp -r .well-known/ docs/
 publish: build
 	@git add . && git commit -m "add new post" && git push origin master
