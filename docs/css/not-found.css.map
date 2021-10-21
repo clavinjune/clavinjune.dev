@@ -1,0 +1,17 @@
+{
+	"version": 3,
+	"file": "not-found.css",
+	"sourceRoot": "/home/clavinjune/Public/ClavinJune.github.io",
+	"sources": [
+		"themes/june/assets/sass/not-found.scss",
+		"themes/june/assets/sass/_colors.scss",
+		"themes/june/assets/sass/_fonts.scss"
+	],
+	"sourcesContent": [
+		"@import \"_colors.scss\";\n@import \"_fonts.scss\";\n\nmain.not-found {\n  align-items: center;\n  display: flex;\n  font-family: $roboto-condensed;\n  font-size: 120px;\n  font-weight: bolder;\n  justify-content: center;\n}",
+		"$black: hsla(0, 0%, 20%, 1);\n$black-01: hsla(0, 0%, 20%, .1);\n$black-02: hsla(0, 0%, 20%, .2);\n$black-04: hsla(0, 0%, 20%, .4);\n$black-0675: hsla(0, 0%, 20%, .675);\n$black-08: hsla(0, 0%, 20%, .8);\n$red:   hsla(0, 79%, 65%, 1);\n$red-01:   hsla(0, 79%, 65%, .1);\n$white: hsla(0, 0%, 100%, 1);",
+		"$fira: 'Fira Code', monospace;\n$roboto: 'Roboto', sans-serif;\n$roboto-condensed: 'Roboto Condensed', sans-serif;"
+	],
+	"names": [],
+	"mappings": "AAGA,AAAA,IAAI,AAAA,UAAU,AAAC,CACb,WAAW,CAAE,MAAM,CACnB,OAAO,CAAE,IAAI,CACb,WAAW,CEJM,kBAAkB,CAAE,UAAU,CFK/C,SAAS,CAAE,KAAK,CAChB,WAAW,CAAE,MAAM,CACnB,eAAe,CAAE,MAAM,CACxB"
+}

@@ -1,0 +1,518 @@
+<!doctype html><html lang=en>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatbile content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=author content="Clavin June">
+<meta http-equiv=content-security-policy content="default-src 'self' 'unsafe-inline' https:; object-src 'none'; style-src 'self' 'unsafe-inline' fonts.googleapis.com github.githubassets.com; font-src fonts.gstatic.com; script-src 'self' 'unsafe-inline' www.googletagmanager.com gist.github.com giscus.app; base-uri 'none'; img-src 'self' images.unsplash.com i.kym-cdn.com iq.opengenus.org; frame-src open.spotify.com">
+<meta name=google-site-verification content="n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE">
+<meta name=monetization content="$ilp.uphold.com/RYNmdxrFrPJB">
+<meta name=description content="This post contains notes about the differences between Signing and Encrypting methods in terms of asymmetric cryptography and its implementation using golang, featuring Alice and Bob.
+">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="June Personal Web">
+<meta property="og:title" content="Asymmetric Cryptography Signing vs Encrypting">
+<meta property="og:description" content="This post contains notes about the differences between Signing and Encrypting methods in terms of asymmetric cryptography and its implementation using golang, featuring Alice and Bob.
+">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://clavinjune.dev/en/blogs/asymmetric-cryptography-signing-vs-encrypting/"><meta property="og:image" content="https://images.unsplash.com/photo-1575908539614-ff89490f4a78?w=1920&q=50"><meta property="article:section" content="blogs">
+<meta property="article:published_time" content="2020-12-07T00:00:00+07:00">
+<meta property="article:modified_time" content="2020-12-07T00:00:00+07:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://images.unsplash.com/photo-1575908539614-ff89490f4a78?w=1920&q=50">
+<meta name=twitter:title content="Asymmetric Cryptography Signing vs Encrypting">
+<meta name=twitter:description content="This post contains notes about the differences between Signing and Encrypting methods in terms of asymmetric cryptography and its implementation using golang, featuring Alice and Bob.
+">
+<title>June Personal Web - Asymmetric Cryptography Signing vs Encrypting</title>
+<link rel=stylesheet href="/css/style.min.caf3859664f2f17538a5252c2da2fafd55c3c16af6cf7edc370e96f06f065494.css" integrity="sha256-yvOFlmTy8XU4pSUsLaL6/VXDwWr2z37cNw6W8G8GVJQ=">
+<link rel=preconnect href=https://fonts.googleapis.com>
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=preconnect href=https://www.googletagmanager.com>
+<link rel=preload href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap" as=style onload="this.onload=null,this.rel='stylesheet'">
+<noscript>
+<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap">
+</noscript>
+<link rel=preload href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" as=style onload="this.onload=null,this.rel='stylesheet'">
+<noscript>
+<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap">
+</noscript>
+<link rel=stylesheet href="/css/single.min.46dd30eecaa7841e2e9f0b70105fbd33c105e168b7ac9b6e17f2efcbac7192a2.css" integrity="sha256-Rt0w7sqnhB4unwtwEF+9M8EF4Wi3rJtuF/Lvy6xxkqI=">
+</head>
+<body><nav class=fg-bold>
+<a id=skip-to-content href=#content>Skip to content</a>
+<ul id=menu><li><a href=https://clavinjune.dev/en/>HOME</a></li><li><a class=active href=https://clavinjune.dev/en/blogs/>BLOG</a></li></ul>
+</nav>
+<main class=single>
+<h1 class=title>Asymmetric Cryptography Signing vs Encrypting</h1>
+<div class="metadata font-16">
+<a class=category href=https://clavinjune.dev/en/categories/tech>tech</a>
+<span class=middot>&#183;</span>
+<span>Dec 7, 2020</span>
+<span class=middot>&#183;</span>
+<span>~6 min</span>
+</div>
+<div id=content>
+<figure>
+<img src="https://images.unsplash.com/photo-1575908539614-ff89490f4a78?w=1920&q=50" alt="Photo by @hocza on Unsplash" title="Photo by @hocza on Unsplash" width=100%>
+<figcaption class=font-16>Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target=_blank href=https://unsplash.com/@hocza>@hocza</a> on Unsplash</figcaption>
+</figure>
+<p>When we talk about crypto-something, we need to talk about Alice and Bob acting as actors in the example section. I hope you don&rsquo;t get bored with them as I will use them as examples too. Here, Alice and Bob will use RSA for the asymmetric key, SHA256 for hash function, OAEP for encrypt/decrypt, PSS for sign/verify, and Base64 for the encoding.</p>
+<h2 id=encrypting>Encrypting</h2>
+<p>Alice wants to send Bob an important message securely and <strong><code>Alice doesn't want anybody to read that message except Bob</code></strong>. It might be a love confession, a nuclear code, or perhaps just private spam. Due to their close relationship, Alice and Bob have exchanged their public keys, so romantic, isn&rsquo;t it? So Alice thought of creating a small Go program to create encrypted messages to send to Bob and <strong><code>encrypt the message with Bob's public key</code></strong>.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>import</span> (
+  <span style=color:#a31515>&#34;crypto/rand&#34;</span>
+  <span style=color:#a31515>&#34;crypto/rsa&#34;</span>
+  <span style=color:#a31515>&#34;crypto/sha256&#34;</span>
+  <span style=color:#a31515>&#34;encoding/base64&#34;</span>
+  <span style=color:#a31515>&#34;fmt&#34;</span>
+)
+
+<span style=color:#00f>func</span> encrypt(key *rsa.PublicKey, plainText <span style=color:#2b91af>string</span>) (<span style=color:#2b91af>string</span>, <span style=color:#2b91af>error</span>) {
+  cipherText, err := rsa.EncryptOAEP(sha256.New(), rand.Reader, key, []byte(plainText), <span style=color:#00f>nil</span>)
+
+  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> <span style=color:#a31515>&#34;&#34;</span>, fmt.Errorf(<span style=color:#a31515>&#34;encrypt error: %w&#34;</span>, err)
+  }
+
+  <span style=color:#00f>return</span> base64.StdEncoding.EncodeToString(cipherText), <span style=color:#00f>nil</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>Alice&rsquo;s encrypted message looks like this:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>fUYx0yO6gkkCah9LmcX2e7puUkl0x4WsCl8UOajVG6sNse6ly6uGnXIXcRKY2R6khxHrPcvsuTaPK6b83QBgNmO0KU7C6kK2kYvah1/rkRK0WAiAfvA3Z+/i5CvUDJ2ZvbvCHjl9YH97qgUrXrZk7DrYMi+J8VIiF6h85ltLRBxAsTtE2zyYr5gZsWYBCp/NRV4i2kF5mBskbDMW6f/f6jm3jWl5zmaxcxF2NX14itK9VIoNUlFukx+5vR/y17ei7ClX4hgkF/Kdw8ruMpyxX74f9RpqK5KRHSjoJThOp2oDqdpK8r4T8wNGx/VfVcwRM8SyV+VMR91w37ppSCCm2E+XzZeFysKGG9Csbwgsh/KzsuJ3rZ30hYit0fDBqJ1PJTt3bNR05503xY7yaoUtQeDRzr+kfi0hdAYHZyiod/ZkUuphB7zYPS26Utn1synocQ82p1FlH8aAtSOREL9Pw9pNNNMi8Cq18Kcn0rmsjC+JFwlnEk5PkFY5ZLdSNMaXcwfh2kx6bH5d65GgRS1rbrRMBPwywkMmQgukjS9QN2R/GXqZlGeznrt/Pf4r0dV+ZLSgRPb0hSDRfEvjMBWLOvGFI/1dxx7AJhoGB/F9VveBHE6Ry5gMrgNs9Fr0cuMw8I651+GhpatwGVoX13WZaa5Q675RGaiVQaZW/W5bYrs=
+</code></pre></td></tr></table>
+</div>
+</div><p>When Bob receives the encrypted message from Alice, Bob wants to read it immediately. So Bob created a program to <strong><code>decrypt the message with his private key</code></strong>.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>import</span> (
+  <span style=color:#a31515>&#34;crypto/rand&#34;</span>
+  <span style=color:#a31515>&#34;crypto/rsa&#34;</span>
+  <span style=color:#a31515>&#34;crypto/sha256&#34;</span>
+  <span style=color:#a31515>&#34;encoding/base64&#34;</span>
+  <span style=color:#a31515>&#34;fmt&#34;</span>
+)
+
+<span style=color:#00f>func</span> decrypt(key *rsa.PrivateKey, cipherText <span style=color:#2b91af>string</span>) (<span style=color:#2b91af>string</span>, <span style=color:#2b91af>error</span>) {
+  cipherBytes, err := base64.StdEncoding.DecodeString(cipherText)
+
+  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> <span style=color:#a31515>&#34;&#34;</span>, fmt.Errorf(<span style=color:#a31515>&#34;decode error: %w&#34;</span>, err)
+  }
+
+  plainText, err := rsa.DecryptOAEP(sha256.New(), rand.Reader, key, cipherBytes, <span style=color:#00f>nil</span>)
+
+  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> <span style=color:#a31515>&#34;&#34;</span>, fmt.Errorf(<span style=color:#a31515>&#34;decrypt error: %w&#34;</span>, err)
+  }
+
+  <span style=color:#00f>return</span> string(plainText), <span style=color:#00f>nil</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>And finally, Bob was able to read Alice&rsquo;s message. Because <strong><code>Bob keeps his private key to himself, People can't decrypt Alice's message</code></strong> including me, so I can&rsquo;t show the plain message to you in this blog post. Sorry guys.</p>
+<h2 id=signing>Signing</h2>
+<p>After receiving the message from Alice, Bob was very happy. Bob wants to reply to Alice&rsquo;s message. But Bob forgot where to put Alice&rsquo;s public key. Bob thought of announcing a reply where everyone would know how happy he was after receiving Alice&rsquo;s message. But the problem is, how can <strong><code>Bob ensure that the reply isn't modified by others and can be ensured that Bob who announces the reply</code></strong>. Bob starts creating a Go program to <strong><code>sign the message with his private key so everyone who has Bob's public key can verify that the reply is announced by Bob</code></strong> including Alice.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>import</span> (
+  <span style=color:#a31515>&#34;crypto&#34;</span>
+  <span style=color:#a31515>&#34;crypto/rand&#34;</span>
+  <span style=color:#a31515>&#34;crypto/rsa&#34;</span>
+  <span style=color:#a31515>&#34;crypto/sha256&#34;</span>
+  <span style=color:#a31515>&#34;encoding/base64&#34;</span>
+  <span style=color:#a31515>&#34;fmt&#34;</span>
+)
+
+<span style=color:#00f>func</span> sign(key *rsa.PrivateKey, plainText <span style=color:#2b91af>string</span>) (<span style=color:#2b91af>string</span>, <span style=color:#2b91af>error</span>) {
+  hash := sha256.New()
+  hash.Write([]byte(plainText))
+  digest := hash.Sum(<span style=color:#00f>nil</span>)
+
+  signature, err := rsa.SignPSS(rand.Reader, key, crypto.SHA256, digest, <span style=color:#00f>nil</span>)
+
+  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> <span style=color:#a31515>&#34;&#34;</span>, fmt.Errorf(<span style=color:#a31515>&#34;sign error: %w&#34;</span>, err)
+  }
+
+  <span style=color:#00f>return</span> base64.StdEncoding.EncodeToString(signature), <span style=color:#00f>nil</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>Bob&rsquo;s reply looks like this:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>Dear Alice,
+I&#39;m so happy hearing that from you.
+Sincerely yours, Bob.
+</code></pre></td></tr></table>
+</div>
+</div><p>Bob&rsquo;s signature looks like this:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>Jsl61bOJIzBs+Ccv8jkrVIeyCBPEU9Ps75ig/GnrP7aUncD3BbIP6AJ8x2jR0UK7aGSE6M/MhRN8zWIgwz8qthcACrec+fz99TGF9CRPn+R9cMezdOzZEMT00unO9u6DppNlQeNHLiCEVfVzvZrRP3GnLBYUzmFNM7LdySbwWmeUE/uOWYQT86FM0i1Tr4DXaVJwyVkIURgRIcmqFAYovQM4m+9Br93+SpnPmEiA4P8eWZ8E+Y5qzA4Hv0HXUHYLnGKUVVsVNhM4o8iL7CVgHr5Fd5JWCmGQPbrNUIOzGRiYOV0BQi/uDRkOW0yGbHtjPHjcuykXeHjgAFE1vVZCT1HwMdsJNOKruuXxoeD43UaoJ/h9ac+8sPKwuWEV476oN2Pm9df0E/JRytGYU7/7MDjs2yEuShhKjGWfj2gWCgJzTbx4IVYs+lwmfcODTkM5b4T+CjINzRXFX73INNWP67g3KxgL4k/3ys7i64HIn3ApMli8aZEvAwjkWyh9JHN7xAeE1TtMN3K3zKXqpRNyfg98kazsV7ViOdP7+oGap9z+22B2SIXgUC4B36UBhk+0chcKJv8fFkowQS0lNLwLM1kRwx69SBEgQpy2KV1ia6X81Q3twEz0nQSiy0iJ5/fN7Wllh+F088SLuyOLo7uK1Ieh+DKJda9R+BsgMC+xBG8=
+</code></pre></td></tr></table>
+</div>
+</div><p>Alice who read the announcement <strong><code>wants to make sure that the message isn't modified and sent by Bob</code></strong>. So Alice <strong><code>verified the message using the signature and Bob's public key</code></strong>.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>import</span> (
+  <span style=color:#a31515>&#34;crypto&#34;</span>
+  <span style=color:#a31515>&#34;crypto/rand&#34;</span>
+  <span style=color:#a31515>&#34;crypto/rsa&#34;</span>
+  <span style=color:#a31515>&#34;crypto/sha256&#34;</span>
+  <span style=color:#a31515>&#34;encoding/base64&#34;</span>
+  <span style=color:#a31515>&#34;fmt&#34;</span>
+)
+
+<span style=color:#00f>func</span> verify(key *rsa.PublicKey, message, signature <span style=color:#2b91af>string</span>) (<span style=color:#2b91af>bool</span>, <span style=color:#2b91af>error</span>) {
+  hash := sha256.New()
+  hash.Write([]byte(message))
+  digest := hash.Sum(<span style=color:#00f>nil</span>)
+
+  signatureBytes, err := base64.StdEncoding.DecodeString(signature)
+
+  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> <span style=color:#00f>false</span>, fmt.Errorf(<span style=color:#a31515>&#34;decode error: %w&#34;</span>, err)
+  }
+
+  err = rsa.VerifyPSS(key, crypto.SHA256, digest, signatureBytes, <span style=color:#00f>nil</span>)
+
+  <span style=color:#00f>return</span> err == <span style=color:#00f>nil</span>, err
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>And it&rsquo;s verified that Bob announced the reply!
+To be summarized, <code>Encrypt</code> is the method you want to use when <code>you don't want anyone to read the message except the recipient</code> while <code>Sign</code> is the method you want to use when <code>you want to make sure the message hasn't been changed and it can be verified that only you who sent it</code></p>
+<p>You can read the whole Golang code here:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>  1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>  2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>  3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>  4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>  5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>  6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>  7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>  8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9>  9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10> 10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11> 11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12> 12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13> 13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14> 14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15> 15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16> 16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17> 17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18> 18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19> 19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20> 20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21> 21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22> 22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23> 23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24> 24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25> 25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26> 26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27> 27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28> 28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29> 29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30> 30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31> 31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32> 32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33> 33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34> 34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35> 35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36> 36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37> 37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38> 38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39> 39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40> 40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41> 41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42> 42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43> 43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44> 44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45> 45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46> 46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47> 47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48> 48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49> 49</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50> 50</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51> 51</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52> 52</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53> 53</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54> 54</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55> 55</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56><a style=outline:none;text-decoration:none;color:inherit href=#56> 56</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57><a style=outline:none;text-decoration:none;color:inherit href=#57> 57</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58> 58</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59><a style=outline:none;text-decoration:none;color:inherit href=#59> 59</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60><a style=outline:none;text-decoration:none;color:inherit href=#60> 60</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=61><a style=outline:none;text-decoration:none;color:inherit href=#61> 61</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=62><a style=outline:none;text-decoration:none;color:inherit href=#62> 62</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=63><a style=outline:none;text-decoration:none;color:inherit href=#63> 63</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=64><a style=outline:none;text-decoration:none;color:inherit href=#64> 64</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=65><a style=outline:none;text-decoration:none;color:inherit href=#65> 65</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=66><a style=outline:none;text-decoration:none;color:inherit href=#66> 66</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=67><a style=outline:none;text-decoration:none;color:inherit href=#67> 67</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=68><a style=outline:none;text-decoration:none;color:inherit href=#68> 68</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=69><a style=outline:none;text-decoration:none;color:inherit href=#69> 69</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=70><a style=outline:none;text-decoration:none;color:inherit href=#70> 70</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=71><a style=outline:none;text-decoration:none;color:inherit href=#71> 71</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=72><a style=outline:none;text-decoration:none;color:inherit href=#72> 72</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=73><a style=outline:none;text-decoration:none;color:inherit href=#73> 73</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=74><a style=outline:none;text-decoration:none;color:inherit href=#74> 74</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=75><a style=outline:none;text-decoration:none;color:inherit href=#75> 75</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=76><a style=outline:none;text-decoration:none;color:inherit href=#76> 76</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=77><a style=outline:none;text-decoration:none;color:inherit href=#77> 77</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=78><a style=outline:none;text-decoration:none;color:inherit href=#78> 78</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=79><a style=outline:none;text-decoration:none;color:inherit href=#79> 79</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=80><a style=outline:none;text-decoration:none;color:inherit href=#80> 80</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=81><a style=outline:none;text-decoration:none;color:inherit href=#81> 81</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=82><a style=outline:none;text-decoration:none;color:inherit href=#82> 82</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=83><a style=outline:none;text-decoration:none;color:inherit href=#83> 83</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=84><a style=outline:none;text-decoration:none;color:inherit href=#84> 84</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=85><a style=outline:none;text-decoration:none;color:inherit href=#85> 85</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=86><a style=outline:none;text-decoration:none;color:inherit href=#86> 86</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=87><a style=outline:none;text-decoration:none;color:inherit href=#87> 87</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=88><a style=outline:none;text-decoration:none;color:inherit href=#88> 88</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=89><a style=outline:none;text-decoration:none;color:inherit href=#89> 89</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=90><a style=outline:none;text-decoration:none;color:inherit href=#90> 90</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=91><a style=outline:none;text-decoration:none;color:inherit href=#91> 91</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=92><a style=outline:none;text-decoration:none;color:inherit href=#92> 92</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=93><a style=outline:none;text-decoration:none;color:inherit href=#93> 93</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=94><a style=outline:none;text-decoration:none;color:inherit href=#94> 94</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=95><a style=outline:none;text-decoration:none;color:inherit href=#95> 95</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=96><a style=outline:none;text-decoration:none;color:inherit href=#96> 96</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=97><a style=outline:none;text-decoration:none;color:inherit href=#97> 97</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=98><a style=outline:none;text-decoration:none;color:inherit href=#98> 98</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=99><a style=outline:none;text-decoration:none;color:inherit href=#99> 99</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=100><a style=outline:none;text-decoration:none;color:inherit href=#100>100</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> main
+
+<span style=color:#00f>import</span> (
+  <span style=color:#a31515>&#34;crypto&#34;</span>
+  <span style=color:#a31515>&#34;crypto/rand&#34;</span>
+  <span style=color:#a31515>&#34;crypto/rsa&#34;</span>
+  <span style=color:#a31515>&#34;crypto/sha256&#34;</span>
+  <span style=color:#a31515>&#34;encoding/base64&#34;</span>
+  <span style=color:#a31515>&#34;fmt&#34;</span>
+)
+
+<span style=color:#00f>func</span> hash(message <span style=color:#2b91af>string</span>) []<span style=color:#2b91af>byte</span> {
+  hash := sha256.New()
+  hash.Write([]byte(message))
+  <span style=color:#00f>return</span> hash.Sum(<span style=color:#00f>nil</span>)
+}
+
+<span style=color:#00f>func</span> encode(message []<span style=color:#2b91af>byte</span>) <span style=color:#2b91af>string</span> {
+  <span style=color:#00f>return</span> base64.StdEncoding.EncodeToString(message)
+}
+
+<span style=color:#00f>func</span> decode(message <span style=color:#2b91af>string</span>) ([]<span style=color:#2b91af>byte</span>, <span style=color:#2b91af>error</span>) {
+  <span style=color:#00f>return</span> base64.StdEncoding.DecodeString(message)
+}
+
+<span style=color:#00f>func</span> encrypt(publicKey *rsa.PublicKey, plainText <span style=color:#2b91af>string</span>) (<span style=color:#2b91af>string</span>, <span style=color:#2b91af>error</span>) {
+  cipherText, err := rsa.EncryptOAEP(sha256.New(), rand.Reader, publicKey, []byte(plainText), <span style=color:#00f>nil</span>)
+
+  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> <span style=color:#a31515>&#34;&#34;</span>, fmt.Errorf(<span style=color:#a31515>&#34;encrypt error: %w&#34;</span>, err)
+  }
+
+  <span style=color:#00f>return</span> encode(cipherText), <span style=color:#00f>nil</span>
+}
+
+<span style=color:#00f>func</span> decrypt(key *rsa.PrivateKey, cipherText <span style=color:#2b91af>string</span>) (<span style=color:#2b91af>string</span>, <span style=color:#2b91af>error</span>) {
+  cipherBytes, err := decode(cipherText)
+
+  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> <span style=color:#a31515>&#34;&#34;</span>, fmt.Errorf(<span style=color:#a31515>&#34;decode error: %w&#34;</span>, err)
+  }
+
+  plainText, err := rsa.DecryptOAEP(sha256.New(), rand.Reader, key, cipherBytes, <span style=color:#00f>nil</span>)
+
+  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> <span style=color:#a31515>&#34;&#34;</span>, fmt.Errorf(<span style=color:#a31515>&#34;decrypt error: %w&#34;</span>, err)
+  }
+
+  <span style=color:#00f>return</span> string(plainText), <span style=color:#00f>nil</span>
+}
+
+<span style=color:#00f>func</span> sign(key *rsa.PrivateKey, plainText <span style=color:#2b91af>string</span>) (<span style=color:#2b91af>string</span>, <span style=color:#2b91af>error</span>) {
+  digest := hash(plainText)
+
+  signature, err := rsa.SignPSS(rand.Reader, key, crypto.SHA256, digest, <span style=color:#00f>nil</span>)
+
+  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> <span style=color:#a31515>&#34;&#34;</span>, fmt.Errorf(<span style=color:#a31515>&#34;sign error: %w&#34;</span>, err)
+  }
+
+  <span style=color:#00f>return</span> encode(signature), <span style=color:#00f>nil</span>
+}
+
+<span style=color:#00f>func</span> verify(key *rsa.PublicKey, message, signature <span style=color:#2b91af>string</span>) (<span style=color:#2b91af>bool</span>, <span style=color:#2b91af>error</span>) {
+  digest := hash(message)
+
+  signatureBytes, err := decode(signature)
+
+  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> <span style=color:#00f>false</span>, fmt.Errorf(<span style=color:#a31515>&#34;decode error: %w&#34;</span>, err)
+  }
+
+  err = rsa.VerifyPSS(key, crypto.SHA256, digest, signatureBytes, <span style=color:#00f>nil</span>)
+
+  <span style=color:#00f>return</span> err == <span style=color:#00f>nil</span>, err
+}
+
+<span style=color:#00f>func</span> getBobKey() (*rsa.PrivateKey, *rsa.PublicKey) {
+  privateKey, _ := rsa.GenerateKey(rand.Reader, 4096)
+  <span style=color:#00f>return</span> privateKey, &amp;privateKey.PublicKey
+}
+
+<span style=color:#00f>func</span> main() {
+  bobPriv, bobPub := getBobKey()
+  cipher, _ := encrypt(bobPub, <span style=color:#a31515>&#34;Dear Bob, &lt;REDACTED&gt;&#34;</span>)
+  plain, _ := decrypt(bobPriv, cipher)
+  fmt.Println(<span style=color:#a31515>&#34;cipher text from Alice:&#34;</span>, cipher)
+  fmt.Println(<span style=color:#a31515>&#34;plain text from Alice:&#34;</span>, plain)
+
+  bobReply := <span style=color:#a31515>`Dear Alice,
+</span><span style=color:#a31515>I&#39;m so happy hearing that from you.
+</span><span style=color:#a31515>Sincerely yours, Bob.`</span>
+
+  replySignature, _ := sign(bobPriv, bobReply)
+  fmt.Println(<span style=color:#a31515>&#34;reply from Bob:&#34;</span>, bobReply)
+  fmt.Println(<span style=color:#a31515>&#34;reply signature from Bob:&#34;</span>, replySignature)
+
+  isVerified, _ := verify(bobPub, bobReply, replySignature)
+  fmt.Println(<span style=color:#a31515>&#34;Was it Bob who sent the message?&#34;</span>, isVerified)
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>Thank you for reading!</p>
+</div>
+<div class=separator>
+<span>&#183;</span>
+<span>&#183;</span>
+<span>&#183;</span>
+</div>
+<h2 class=subtitle>Love This Content?</h2>
+<div class="fg-light support-me">Kindly support me via <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://www.blockchain.com/btc/address/17Afj6o7xm3ZxQ38adnvSFHSBKhHiCDiev>Bitcoin</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://ko-fi.com/clavinjune>Ko-fi</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://trakteer.id/clavinjune>Trakteer</a>, or just continue to read another content. Any kind of supports is greatly appreciated!</div>
+</script>
+</main>
+<script type=text/javascript src=https://clavinjune.dev/js/ga.js defer></script>
+<script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script><footer>
+Copyright &copy; 2021 &#183; Clavin June
+</footer>
+<script defer type=text/javascript src=https://clavinjune.dev/js/copy.js></script>
+</body>
+</html>

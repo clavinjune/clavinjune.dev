@@ -1,0 +1,3 @@
+[submodule "themes/june"]
+	path = themes/june
+	url = https://github.com/ClavinJune/hugo-june-theme

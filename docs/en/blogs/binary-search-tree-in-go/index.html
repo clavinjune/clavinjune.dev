@@ -1,0 +1,1131 @@
+<!doctype html><html lang=en>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatbile content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=author content="Clavin June">
+<meta http-equiv=content-security-policy content="default-src 'self' 'unsafe-inline' https:; object-src 'none'; style-src 'self' 'unsafe-inline' fonts.googleapis.com github.githubassets.com; font-src fonts.gstatic.com; script-src 'self' 'unsafe-inline' www.googletagmanager.com gist.github.com giscus.app; base-uri 'none'; img-src 'self' images.unsplash.com i.kym-cdn.com iq.opengenus.org; frame-src open.spotify.com">
+<meta name=google-site-verification content="n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE">
+<meta name=monetization content="$ilp.uphold.com/RYNmdxrFrPJB">
+<meta name=description content="This post contains my own experiences in reviewing my knowledge of BST data structure
+">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="June Personal Web">
+<meta property="og:title" content="Binary Search Tree in Go">
+<meta property="og:description" content="This post contains my own experiences in reviewing my knowledge of BST data structure
+">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://clavinjune.dev/en/blogs/binary-search-tree-in-go/"><meta property="og:image" content="https://images.unsplash.com/photo-1507100403890-47482dcd79e0?w=1920&q=50"><meta property="article:section" content="blogs">
+<meta property="article:published_time" content="2020-11-12T00:00:00+07:00">
+<meta property="article:modified_time" content="2020-11-12T00:00:00+07:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://images.unsplash.com/photo-1507100403890-47482dcd79e0?w=1920&q=50">
+<meta name=twitter:title content="Binary Search Tree in Go">
+<meta name=twitter:description content="This post contains my own experiences in reviewing my knowledge of BST data structure
+">
+<title>June Personal Web - Binary Search Tree in Go</title>
+<link rel=stylesheet href="/css/style.min.caf3859664f2f17538a5252c2da2fafd55c3c16af6cf7edc370e96f06f065494.css" integrity="sha256-yvOFlmTy8XU4pSUsLaL6/VXDwWr2z37cNw6W8G8GVJQ=">
+<link rel=preconnect href=https://fonts.googleapis.com>
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=preconnect href=https://www.googletagmanager.com>
+<link rel=preload href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap" as=style onload="this.onload=null,this.rel='stylesheet'">
+<noscript>
+<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap">
+</noscript>
+<link rel=preload href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" as=style onload="this.onload=null,this.rel='stylesheet'">
+<noscript>
+<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap">
+</noscript>
+<link rel=stylesheet href="/css/single.min.46dd30eecaa7841e2e9f0b70105fbd33c105e168b7ac9b6e17f2efcbac7192a2.css" integrity="sha256-Rt0w7sqnhB4unwtwEF+9M8EF4Wi3rJtuF/Lvy6xxkqI=">
+</head>
+<body><nav class=fg-bold>
+<a id=skip-to-content href=#content>Skip to content</a>
+<ul id=menu><li><a href=https://clavinjune.dev/en/>HOME</a></li><li><a class=active href=https://clavinjune.dev/en/blogs/>BLOG</a></li></ul>
+</nav>
+<main class=single>
+<h1 class=title>Binary Search Tree in Go</h1>
+<div class="metadata font-16">
+<a class=category href=https://clavinjune.dev/en/categories/tech>tech</a>
+<span class=middot>&#183;</span>
+<span>Nov 12, 2020</span>
+<span class=middot>&#183;</span>
+<span>~12 min</span>
+</div>
+<div id=content>
+<figure>
+<img src="https://images.unsplash.com/photo-1507100403890-47482dcd79e0?w=1920&q=50" alt="Photo by @danfreemanphoto on Unsplash" title="Photo by @danfreemanphoto on Unsplash" width=100%>
+<figcaption class=font-16>Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target=_blank href=https://unsplash.com/@danfreemanphoto>@danfreemanphoto</a> on Unsplash</figcaption>
+</figure>
+<p>So long since I learned to create BST back then at university. I feel like wanna revisit the BST things, so I make this post. BST is not that scary. You only need to create a tree without duplicated value on each node, then the less valuable nodes go to the left, and then the rest of the nodes go to the right or vice-versa. In this post, I&rsquo;ll make a BST in Go Language with less valuable nodes of integer go to the left. I assume you have a basic knowledge of Go Language and tree data structure.</p>
+<h2 id=directory-structure>Directory Structure</h2>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>$ tree
+.
+├── bst
+│   ├── node.go
+│   └── tree.go
+├── go.mod
+└── main.go
+</code></pre></td></tr></table>
+</div>
+</div><p>I used <code>tree</code> command to list down the directory structure (no pun intended).</p>
+<h2 id=code>Code</h2>
+<p>Let&rsquo;s make a <code>node struct</code> first inside the <code>node.go</code> file.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>type</span> node <span style=color:#00f>struct</span> {
+  value       <span style=color:#2b91af>int</span>
+  left, right *node
+}
+
+<span style=color:#00f>func</span> newNode(value <span style=color:#2b91af>int</span>) *node {
+  <span style=color:#00f>return</span> &amp;node{
+    value: val,
+    left:  <span style=color:#00f>nil</span>,
+    right: <span style=color:#00f>nil</span>,
+  }
+}
+
+<span style=color:#00f>func</span> (n *node) Value() <span style=color:#2b91af>int</span> {
+  <span style=color:#00f>return</span> n.value
+}
+
+<span style=color:#00f>func</span> (n *node) Left() *node {
+  <span style=color:#00f>return</span> n.left
+}
+
+<span style=color:#00f>func</span> (n *node) Right() *node {
+  <span style=color:#00f>return</span> n.right
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>I make it unexported so <code>user</code> can&rsquo;t use <code>node struct</code> directly to avoid data mutability and give it some <code>getter functions</code>.</p>
+<p>And then make <code>binarySearchTree struct</code> inside the <code>tree.go</code> file to wrap the usage of the <code>node</code>. It stores <code>pointer of node struct</code> as a <code>root</code> so we can keep track the root fo the tree.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>type</span> binarySearchTree <span style=color:#00f>struct</span> {
+  root *node
+}
+
+<span style=color:#00f>func</span> New() *binarySearchTree {
+  <span style=color:#00f>return</span> &amp;binarySearchTree{}
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>With current code, we can create the BST like this in <code>main function</code>.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> main() {
+  tree := bst.New()
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>Now we want to give the tree some functionalities such as <code>insert</code>, <code>find</code>, <code>traverse</code>, and <code>remove</code>. Let&rsquo;s go with <code>insert</code> first. The pseudo-code will be like this.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>If there&#39;s no node, then create a new node.
+If a node with same value is already exists inside the tree, returns error.
+If the value is greater than current node&#39;s value, then insert to the right.
+If the value is less than current node&#39;s value, then insert to the left.
+</code></pre></td></tr></table>
+</div>
+</div><p>We&rsquo;ll make the function recursive and not directly change the tree value. So if there&rsquo;s happened to be an error, the tree remains the same.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> insertNode(node *node, val <span style=color:#2b91af>int</span>) (*node, <span style=color:#2b91af>error</span>) {
+  <span style=color:green>// if there&#39;s no node, create one
+</span><span style=color:green></span>  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> newNode(val), <span style=color:#00f>nil</span>
+  }
+
+  <span style=color:#00f>if</span> node.value == val {
+    <span style=color:green>// if there&#39;s duplicated node returns error
+</span><span style=color:green></span>    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, ErrDuplicatedNode
+  }
+
+  <span style=color:#00f>if</span> val &gt; node.value {
+    <span style=color:green>// if value is greater than current node&#39;s value, insert to the right
+</span><span style=color:green></span>    right, err := insertNode(node.right, val)
+
+    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+    }
+
+    node.right = right
+  } <span style=color:#00f>else</span> <span style=color:#00f>if</span> val &lt; node.value {
+    <span style=color:green>// if value is less than current node&#39;s value, insert to the left
+</span><span style=color:green></span>    left, err := insertNode(node.left, val)
+
+    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+    }
+
+    node.left = left
+  }
+
+  <span style=color:#00f>return</span> node, <span style=color:#00f>nil</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>Let&rsquo;s expose the function to the user via the <code>binarySearchTree struct</code>.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (tree *binarySearchTree) Insert(val <span style=color:#2b91af>int</span>) <span style=color:#2b91af>error</span> {
+  <span style=color:green>// always start insert from the root
+</span><span style=color:green></span>  root, err := insertNode(tree.root, val)
+
+  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> err
+  }
+
+  tree.root = root
+  <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>To check whether the value we entered is in the correct position, then we create the traverse function first. There are 3 ways to traverse the tree, <code>pre-order</code>, <code>in-order</code>, and <code>post-order</code>. Here&rsquo;s the difference:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain># pre-order
+1. print current value
+2. go recursively to the left
+3. go recursively to the right
+
+# in-order
+1. go recursively to the left
+2. print current value
+3. go recursively to the right
+
+# post-order
+1. go recursively to the left
+2. go recursively to the right
+3. print current value
+</code></pre></td></tr></table>
+</div>
+</div><p>To remember it easily, remember when you need to print the current value. if <code>pre</code> then print first, if <code>post</code> then print at the end, otherwise print in the middle. we&rsquo;re gonna make <code>in order traverse</code>, because it will go recursively to the left first and then print the value which means in our case it will print <code>from least valuable nodes to the greatest</code>.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> traverse(node *node) {
+  <span style=color:green>// exit condition
+</span><span style=color:green></span>  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span>
+  }
+
+  traverse(node.left)
+  fmt.Println(node.value)
+  traverse(node.right)
+}
+
+<span style=color:#00f>func</span> (tree *binarySearchTree) Traverse() {
+  <span style=color:green>// traverse from the root
+</span><span style=color:green></span>  traverse(tree.root)
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>Let&rsquo;s check our code first.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> main() {
+  tree := bst.New()
+
+  tree.Insert(23)
+  tree.Insert(10)
+  tree.Insert(15)
+  tree.Insert(20)
+  tree.Insert(2)
+  tree.Insert(25)
+  tree.Insert(50)
+
+  tree.Traverse() <span style=color:green>// 2 10 15 20 23 25 50
+</span><span style=color:green></span>}
+</code></pre></td></tr></table>
+</div>
+</div><p>Now that you find your <code>traverse</code> results sorted, let&rsquo;s move to the <code>find</code> function. To find a specific node you don&rsquo;t have to go around the whole tree, you need to know that BST can route to a specific node by checking the node value. Just like the <code>insert</code> function, we only need to go to the left if the node value we are looking for is less than the current node and to the right, if the node value is greater.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> findNode(node *node, val <span style=color:#2b91af>int</span>) *node {
+  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
+  }
+
+  <span style=color:green>// if the node is found, return the node
+</span><span style=color:green></span>  <span style=color:#00f>if</span> node.value == val {
+    <span style=color:#00f>return</span> node
+  }
+
+  <span style=color:green>// if value is greater than current node&#39;s value, search recursively to the right
+</span><span style=color:green></span>  <span style=color:#00f>if</span> val &gt; node.value  {
+    <span style=color:#00f>return</span> findNode(node.right, val)
+  }
+
+  <span style=color:green>// if value is less than current node&#39;s value, search recursively to the left
+</span><span style=color:green></span>  <span style=color:#00f>if</span> val &lt; node.value {
+    <span style=color:#00f>return</span> findNode(node.left, val)
+  }
+
+  <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
+}
+
+<span style=color:#00f>func</span> (tree *binarySearchTree) Find(val <span style=color:#2b91af>int</span>) *node {
+  <span style=color:green>// as always, search from the root
+</span><span style=color:green></span>  <span style=color:#00f>return</span> findNode(tree.root, val)
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>Now we return the specified node if there is a node with given value otherwise, we return nil. Since we encapsulate the node attributes and leave the user only with the Getter function, there is no need to worry about data mutability.</p>
+<p>Now let&rsquo;s move to the <code>remove</code> function. Just like <code>insert</code> and <code>find</code> function, we need to locate the position of the node first and then do the deletion. There are 3 rules to remove a node from its tree.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>If the node has no child, then Simply make it nil
+If the node has 1 child, then move the child to the node position.
+If the node has 2 children, then find the successor and move the successor to the node position.
+</code></pre></td></tr></table>
+</div>
+</div><p>To find the successor of the node there are 2 ways</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>Find the least valueable node from the right child of the node
+OR
+Find the greatest valueable node from the left child of the node
+</code></pre></td></tr></table>
+</div>
+</div><p>I will use the first approach, <code>find the least valuable node of the right child node</code>. To find the least valuable node from the current node, you only need to go to the leftmost node. And to find the most valuable node of the current node, just go to the rightmost node.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47>47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48>48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49>49</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50>50</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51>51</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52>52</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53>53</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54>54</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55>55</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56><a style=outline:none;text-decoration:none;color:inherit href=#56>56</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57><a style=outline:none;text-decoration:none;color:inherit href=#57>57</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58>58</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59><a style=outline:none;text-decoration:none;color:inherit href=#59>59</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60><a style=outline:none;text-decoration:none;color:inherit href=#60>60</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=61><a style=outline:none;text-decoration:none;color:inherit href=#61>61</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=62><a style=outline:none;text-decoration:none;color:inherit href=#62>62</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=63><a style=outline:none;text-decoration:none;color:inherit href=#63>63</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=64><a style=outline:none;text-decoration:none;color:inherit href=#64>64</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=65><a style=outline:none;text-decoration:none;color:inherit href=#65>65</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> least(node *node) *node {
+  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
+  }
+
+  <span style=color:#00f>if</span> node.left == <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> node
+  }
+
+  <span style=color:#00f>return</span> least(node.left)
+}
+
+<span style=color:#00f>func</span> removeNode(node *node, val <span style=color:#2b91af>int</span>) (*node, <span style=color:#2b91af>error</span>) {
+  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, ErrNodeNotFound
+  }
+
+  <span style=color:#00f>if</span> val &gt; node.value {
+    right, err := removeNode(node.right, val)
+    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+    }
+
+    node.right = right
+  } <span style=color:#00f>else</span> <span style=color:#00f>if</span> val &lt; node.value {
+    left, err := removeNode(node.left, val)
+    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+    }
+
+    node.left = left
+  } <span style=color:#00f>else</span> {
+    <span style=color:#00f>if</span> node.left != <span style=color:#00f>nil</span> &amp;&amp; node.right != <span style=color:#00f>nil</span> {
+      <span style=color:green>// has 2 children
+</span><span style=color:green></span>
+      <span style=color:green>// find the successor
+</span><span style=color:green></span>      successor := least(node.right)
+      value := successor.value
+
+      <span style=color:green>// remove the successor
+</span><span style=color:green></span>      right, err := removeNode(node.right, value)
+      <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+        <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+      }
+      node.right = right
+
+      <span style=color:green>// copy the successor value to the current node
+</span><span style=color:green></span>      node.value = value
+    } <span style=color:#00f>else</span> <span style=color:#00f>if</span> node.left != <span style=color:#00f>nil</span> || node.right != <span style=color:#00f>nil</span> {
+      <span style=color:green>// has 1 child
+</span><span style=color:green></span>      <span style=color:green>// move the child position to the current node
+</span><span style=color:green></span>      <span style=color:#00f>if</span> node.left != <span style=color:#00f>nil</span> {
+        node = node.left
+      } <span style=color:#00f>else</span> {
+        node = node.right
+      }
+    } <span style=color:#00f>else</span> <span style=color:#00f>if</span> node.left == <span style=color:#00f>nil</span> &amp;&amp; node.right == <span style=color:#00f>nil</span> {
+      <span style=color:green>// has no child
+</span><span style=color:green></span>      <span style=color:green>// simply remove the node
+</span><span style=color:green></span>      node = <span style=color:#00f>nil</span>
+    }
+  }
+
+  <span style=color:#00f>return</span> node, <span style=color:#00f>nil</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>That&rsquo;s all, folks. If I curate the code it will be like this.</p>
+<h2 id=nodego>node.go</h2>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>  1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>  2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>  3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>  4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>  5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>  6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>  7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>  8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9>  9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10> 10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11> 11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12> 12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13> 13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14> 14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15> 15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16> 16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17> 17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18> 18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19> 19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20> 20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21> 21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22> 22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23> 23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24> 24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25> 25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26> 26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27> 27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28> 28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29> 29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30> 30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31> 31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32> 32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33> 33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34> 34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35> 35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36> 36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37> 37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38> 38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39> 39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40> 40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41> 41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42> 42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43> 43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44> 44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45> 45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46> 46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47> 47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48> 48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49> 49</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50> 50</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51> 51</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52> 52</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53> 53</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54> 54</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55> 55</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56><a style=outline:none;text-decoration:none;color:inherit href=#56> 56</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57><a style=outline:none;text-decoration:none;color:inherit href=#57> 57</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58> 58</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59><a style=outline:none;text-decoration:none;color:inherit href=#59> 59</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60><a style=outline:none;text-decoration:none;color:inherit href=#60> 60</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=61><a style=outline:none;text-decoration:none;color:inherit href=#61> 61</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=62><a style=outline:none;text-decoration:none;color:inherit href=#62> 62</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=63><a style=outline:none;text-decoration:none;color:inherit href=#63> 63</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=64><a style=outline:none;text-decoration:none;color:inherit href=#64> 64</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=65><a style=outline:none;text-decoration:none;color:inherit href=#65> 65</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=66><a style=outline:none;text-decoration:none;color:inherit href=#66> 66</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=67><a style=outline:none;text-decoration:none;color:inherit href=#67> 67</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=68><a style=outline:none;text-decoration:none;color:inherit href=#68> 68</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=69><a style=outline:none;text-decoration:none;color:inherit href=#69> 69</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=70><a style=outline:none;text-decoration:none;color:inherit href=#70> 70</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=71><a style=outline:none;text-decoration:none;color:inherit href=#71> 71</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=72><a style=outline:none;text-decoration:none;color:inherit href=#72> 72</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=73><a style=outline:none;text-decoration:none;color:inherit href=#73> 73</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=74><a style=outline:none;text-decoration:none;color:inherit href=#74> 74</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=75><a style=outline:none;text-decoration:none;color:inherit href=#75> 75</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=76><a style=outline:none;text-decoration:none;color:inherit href=#76> 76</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=77><a style=outline:none;text-decoration:none;color:inherit href=#77> 77</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=78><a style=outline:none;text-decoration:none;color:inherit href=#78> 78</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=79><a style=outline:none;text-decoration:none;color:inherit href=#79> 79</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=80><a style=outline:none;text-decoration:none;color:inherit href=#80> 80</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=81><a style=outline:none;text-decoration:none;color:inherit href=#81> 81</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=82><a style=outline:none;text-decoration:none;color:inherit href=#82> 82</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=83><a style=outline:none;text-decoration:none;color:inherit href=#83> 83</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=84><a style=outline:none;text-decoration:none;color:inherit href=#84> 84</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=85><a style=outline:none;text-decoration:none;color:inherit href=#85> 85</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=86><a style=outline:none;text-decoration:none;color:inherit href=#86> 86</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=87><a style=outline:none;text-decoration:none;color:inherit href=#87> 87</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=88><a style=outline:none;text-decoration:none;color:inherit href=#88> 88</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=89><a style=outline:none;text-decoration:none;color:inherit href=#89> 89</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=90><a style=outline:none;text-decoration:none;color:inherit href=#90> 90</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=91><a style=outline:none;text-decoration:none;color:inherit href=#91> 91</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=92><a style=outline:none;text-decoration:none;color:inherit href=#92> 92</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=93><a style=outline:none;text-decoration:none;color:inherit href=#93> 93</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=94><a style=outline:none;text-decoration:none;color:inherit href=#94> 94</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=95><a style=outline:none;text-decoration:none;color:inherit href=#95> 95</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=96><a style=outline:none;text-decoration:none;color:inherit href=#96> 96</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=97><a style=outline:none;text-decoration:none;color:inherit href=#97> 97</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=98><a style=outline:none;text-decoration:none;color:inherit href=#98> 98</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=99><a style=outline:none;text-decoration:none;color:inherit href=#99> 99</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=100><a style=outline:none;text-decoration:none;color:inherit href=#100>100</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=101><a style=outline:none;text-decoration:none;color:inherit href=#101>101</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=102><a style=outline:none;text-decoration:none;color:inherit href=#102>102</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=103><a style=outline:none;text-decoration:none;color:inherit href=#103>103</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=104><a style=outline:none;text-decoration:none;color:inherit href=#104>104</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=105><a style=outline:none;text-decoration:none;color:inherit href=#105>105</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=106><a style=outline:none;text-decoration:none;color:inherit href=#106>106</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=107><a style=outline:none;text-decoration:none;color:inherit href=#107>107</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=108><a style=outline:none;text-decoration:none;color:inherit href=#108>108</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=109><a style=outline:none;text-decoration:none;color:inherit href=#109>109</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=110><a style=outline:none;text-decoration:none;color:inherit href=#110>110</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=111><a style=outline:none;text-decoration:none;color:inherit href=#111>111</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=112><a style=outline:none;text-decoration:none;color:inherit href=#112>112</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=113><a style=outline:none;text-decoration:none;color:inherit href=#113>113</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=114><a style=outline:none;text-decoration:none;color:inherit href=#114>114</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=115><a style=outline:none;text-decoration:none;color:inherit href=#115>115</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=116><a style=outline:none;text-decoration:none;color:inherit href=#116>116</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=117><a style=outline:none;text-decoration:none;color:inherit href=#117>117</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=118><a style=outline:none;text-decoration:none;color:inherit href=#118>118</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=119><a style=outline:none;text-decoration:none;color:inherit href=#119>119</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=120><a style=outline:none;text-decoration:none;color:inherit href=#120>120</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=121><a style=outline:none;text-decoration:none;color:inherit href=#121>121</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=122><a style=outline:none;text-decoration:none;color:inherit href=#122>122</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=123><a style=outline:none;text-decoration:none;color:inherit href=#123>123</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=124><a style=outline:none;text-decoration:none;color:inherit href=#124>124</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=125><a style=outline:none;text-decoration:none;color:inherit href=#125>125</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=126><a style=outline:none;text-decoration:none;color:inherit href=#126>126</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=127><a style=outline:none;text-decoration:none;color:inherit href=#127>127</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=128><a style=outline:none;text-decoration:none;color:inherit href=#128>128</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=129><a style=outline:none;text-decoration:none;color:inherit href=#129>129</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=130><a style=outline:none;text-decoration:none;color:inherit href=#130>130</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=131><a style=outline:none;text-decoration:none;color:inherit href=#131>131</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=132><a style=outline:none;text-decoration:none;color:inherit href=#132>132</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=133><a style=outline:none;text-decoration:none;color:inherit href=#133>133</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=134><a style=outline:none;text-decoration:none;color:inherit href=#134>134</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=135><a style=outline:none;text-decoration:none;color:inherit href=#135>135</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=136><a style=outline:none;text-decoration:none;color:inherit href=#136>136</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=137><a style=outline:none;text-decoration:none;color:inherit href=#137>137</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=138><a style=outline:none;text-decoration:none;color:inherit href=#138>138</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=139><a style=outline:none;text-decoration:none;color:inherit href=#139>139</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=140><a style=outline:none;text-decoration:none;color:inherit href=#140>140</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=141><a style=outline:none;text-decoration:none;color:inherit href=#141>141</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=142><a style=outline:none;text-decoration:none;color:inherit href=#142>142</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=143><a style=outline:none;text-decoration:none;color:inherit href=#143>143</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=144><a style=outline:none;text-decoration:none;color:inherit href=#144>144</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=145><a style=outline:none;text-decoration:none;color:inherit href=#145>145</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=146><a style=outline:none;text-decoration:none;color:inherit href=#146>146</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=147><a style=outline:none;text-decoration:none;color:inherit href=#147>147</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=148><a style=outline:none;text-decoration:none;color:inherit href=#148>148</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=149><a style=outline:none;text-decoration:none;color:inherit href=#149>149</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=150><a style=outline:none;text-decoration:none;color:inherit href=#150>150</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=151><a style=outline:none;text-decoration:none;color:inherit href=#151>151</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=152><a style=outline:none;text-decoration:none;color:inherit href=#152>152</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=153><a style=outline:none;text-decoration:none;color:inherit href=#153>153</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=154><a style=outline:none;text-decoration:none;color:inherit href=#154>154</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=155><a style=outline:none;text-decoration:none;color:inherit href=#155>155</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=156><a style=outline:none;text-decoration:none;color:inherit href=#156>156</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=157><a style=outline:none;text-decoration:none;color:inherit href=#157>157</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=158><a style=outline:none;text-decoration:none;color:inherit href=#158>158</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=159><a style=outline:none;text-decoration:none;color:inherit href=#159>159</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=160><a style=outline:none;text-decoration:none;color:inherit href=#160>160</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=161><a style=outline:none;text-decoration:none;color:inherit href=#161>161</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=162><a style=outline:none;text-decoration:none;color:inherit href=#162>162</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=163><a style=outline:none;text-decoration:none;color:inherit href=#163>163</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=164><a style=outline:none;text-decoration:none;color:inherit href=#164>164</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=165><a style=outline:none;text-decoration:none;color:inherit href=#165>165</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=166><a style=outline:none;text-decoration:none;color:inherit href=#166>166</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=167><a style=outline:none;text-decoration:none;color:inherit href=#167>167</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=168><a style=outline:none;text-decoration:none;color:inherit href=#168>168</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=169><a style=outline:none;text-decoration:none;color:inherit href=#169>169</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=170><a style=outline:none;text-decoration:none;color:inherit href=#170>170</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> bst
+
+<span style=color:#00f>import</span> (
+  <span style=color:#a31515>&#34;errors&#34;</span>
+  <span style=color:#a31515>&#34;fmt&#34;</span>
+)
+
+<span style=color:#00f>var</span> (
+  ErrDuplicatedNode <span style=color:#2b91af>error</span> = errors.New(<span style=color:#a31515>&#34;bst: found duplicated value on tree&#34;</span>)
+  ErrNodeNotFound   <span style=color:#2b91af>error</span> = errors.New(<span style=color:#a31515>&#34;bst: node not found&#34;</span>)
+)
+
+<span style=color:#00f>type</span> node <span style=color:#00f>struct</span> {
+  value       <span style=color:#2b91af>int</span>
+  left, right *node
+}
+
+<span style=color:#00f>func</span> (n *node) Value() <span style=color:#2b91af>int</span> {
+  <span style=color:#00f>return</span> n.value
+}
+
+<span style=color:#00f>func</span> (n *node) Left() *node {
+  <span style=color:#00f>return</span> n.left
+}
+
+<span style=color:#00f>func</span> (n *node) Right() *node {
+  <span style=color:#00f>return</span> n.right
+}
+
+<span style=color:#00f>func</span> newNode(val <span style=color:#2b91af>int</span>) *node {
+  <span style=color:#00f>return</span> &amp;node{
+    value: val,
+    left:  <span style=color:#00f>nil</span>,
+    right: <span style=color:#00f>nil</span>,
+  }
+}
+
+<span style=color:#00f>func</span> insertNode(node *node, val <span style=color:#2b91af>int</span>) (*node, <span style=color:#2b91af>error</span>) {
+  <span style=color:green>// if there&#39;s no node, create one
+</span><span style=color:green></span>  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> newNode(val), <span style=color:#00f>nil</span>
+  }
+
+  <span style=color:#00f>if</span> node.value == val {
+    <span style=color:green>// if there&#39;s duplicated node returns error
+</span><span style=color:green></span>    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, ErrDuplicatedNode
+  }
+
+  <span style=color:#00f>if</span> val &gt; node.value {
+    <span style=color:green>// if value is greater than current node&#39;s value, insert to the right
+</span><span style=color:green></span>    right, err := insertNode(node.right, val)
+
+    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+    }
+
+    node.right = right
+  } <span style=color:#00f>else</span> <span style=color:#00f>if</span> val &lt; node.value {
+    <span style=color:green>// if value is less than current node&#39;s value, insert to the left
+</span><span style=color:green></span>    left, err := insertNode(node.left, val)
+
+    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+    }
+
+    node.left = left
+  }
+
+  <span style=color:#00f>return</span> node, <span style=color:#00f>nil</span>
+}
+
+<span style=color:#00f>func</span> removeNode(node *node, val <span style=color:#2b91af>int</span>) (*node, <span style=color:#2b91af>error</span>) {
+  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, ErrNodeNotFound
+  }
+
+  <span style=color:#00f>if</span> val &gt; node.value {
+    right, err := removeNode(node.right, val)
+    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+    }
+
+    node.right = right
+  } <span style=color:#00f>else</span> <span style=color:#00f>if</span> val &lt; node.value {
+    left, err := removeNode(node.left, val)
+    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+    }
+
+    node.left = left
+  } <span style=color:#00f>else</span> {
+    <span style=color:#00f>if</span> node.left != <span style=color:#00f>nil</span> &amp;&amp; node.right != <span style=color:#00f>nil</span> {
+      <span style=color:green>// has 2 children
+</span><span style=color:green></span>
+      <span style=color:green>// find the successor
+</span><span style=color:green></span>      successor := least(node.right)
+      value := successor.value
+
+      <span style=color:green>// remove the successor
+</span><span style=color:green></span>      right, err := removeNode(node.right, value)
+      <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+        <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+      }
+      node.right = right
+
+      <span style=color:green>// copy the successor value to the current node
+</span><span style=color:green></span>      node.value = value
+    } <span style=color:#00f>else</span> <span style=color:#00f>if</span> node.left != <span style=color:#00f>nil</span> || node.right != <span style=color:#00f>nil</span> {
+      <span style=color:green>// has 1 child
+</span><span style=color:green></span>      <span style=color:green>// move the child position to the current node
+</span><span style=color:green></span>      <span style=color:#00f>if</span> node.left != <span style=color:#00f>nil</span> {
+        node = node.left
+      } <span style=color:#00f>else</span> {
+        node = node.right
+      }
+    } <span style=color:#00f>else</span> <span style=color:#00f>if</span> node.left == <span style=color:#00f>nil</span> &amp;&amp; node.right == <span style=color:#00f>nil</span> {
+      <span style=color:green>// has no child
+</span><span style=color:green></span>      <span style=color:green>// simply remove the node
+</span><span style=color:green></span>      node = <span style=color:#00f>nil</span>
+    }
+  }
+
+  <span style=color:#00f>return</span> node, <span style=color:#00f>nil</span>
+}
+
+<span style=color:#00f>func</span> findNode(node *node, val <span style=color:#2b91af>int</span>) *node {
+  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
+  }
+
+  <span style=color:green>// if the node is found, return the node
+</span><span style=color:green></span>  <span style=color:#00f>if</span> node.value == val {
+    <span style=color:#00f>return</span> node
+  }
+
+  <span style=color:green>// if value is greater than current node&#39;s value, search recursively to the right
+</span><span style=color:green></span>  <span style=color:#00f>if</span> val &gt; node.value  {
+    <span style=color:#00f>return</span> findNode(node.right, val)
+  }
+
+  <span style=color:green>// if value is less than current node&#39;s value, search recursively to the left
+</span><span style=color:green></span>  <span style=color:#00f>if</span> val &lt; node.value {
+    <span style=color:#00f>return</span> findNode(node.left, val)
+  }
+
+  <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
+}
+
+<span style=color:#00f>func</span> least(node *node) *node {
+  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
+  }
+
+  <span style=color:#00f>if</span> node.left == <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> node
+  }
+
+  <span style=color:#00f>return</span> least(node.left)
+}
+
+<span style=color:#00f>func</span> traverse(node *node) {
+  <span style=color:green>// exit condition
+</span><span style=color:green></span>  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span>
+  }
+
+  traverse(node.left)
+  fmt.Println(node.value)
+  traverse(node.right)
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=treego>tree.go</h2>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> bst
+
+<span style=color:#00f>type</span> binarySearchTree <span style=color:#00f>struct</span> {
+  root *node
+}
+
+<span style=color:#00f>func</span> New() *binarySearchTree {
+  <span style=color:#00f>return</span> &amp;binarySearchTree{}
+}
+
+<span style=color:#00f>func</span> (tree *binarySearchTree) Insert(val <span style=color:#2b91af>int</span>) <span style=color:#2b91af>error</span> {
+  <span style=color:green>// always start insert from the root
+</span><span style=color:green></span>  root, err := insertNode(tree.root, val)
+
+  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> err
+  }
+
+  tree.root = root
+  <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
+}
+
+<span style=color:#00f>func</span> (tree *binarySearchTree) Remove(val <span style=color:#2b91af>int</span>) <span style=color:#2b91af>error</span> {
+  root, err := removeNode(tree.root, val)
+
+  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> err
+  }
+
+  tree.root = root
+  <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
+}
+
+<span style=color:#00f>func</span> (tree *binarySearchTree) Find(val <span style=color:#2b91af>int</span>) *node {
+  <span style=color:green>// as always, search from the root
+</span><span style=color:green></span>  <span style=color:#00f>return</span> findNode(tree.root, val)
+}
+
+<span style=color:#00f>func</span> (tree *binarySearchTree) Traverse() {
+  <span style=color:green>// traverse from the root
+</span><span style=color:green></span>  traverse(tree.root)
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=maingo>main.go</h2>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> main
+
+<span style=color:#00f>import</span> (
+  <span style=color:#a31515>&#34;learn/bst&#34;</span>
+)
+
+<span style=color:#00f>func</span> main() {
+  tree := bst.New()
+
+  tree.Insert(23)
+  tree.Insert(10)
+  tree.Insert(15)
+
+  tree.Remove(10)
+
+  tree.Insert(20)
+  tree.Insert(2)
+  tree.Insert(25)
+
+  tree.Remove(25)
+  tree.Remove(23)
+  tree.Insert(50)
+
+  tree.Traverse() <span style=color:green>// 2 15 20 50
+</span><span style=color:green></span>}
+</code></pre></td></tr></table>
+</div>
+</div><p>Thank you for reading!</p>
+</div>
+<div class=separator>
+<span>&#183;</span>
+<span>&#183;</span>
+<span>&#183;</span>
+</div>
+<h2 class=subtitle>Love This Content?</h2>
+<div class="fg-light support-me">Kindly support me via <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://www.blockchain.com/btc/address/17Afj6o7xm3ZxQ38adnvSFHSBKhHiCDiev>Bitcoin</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://ko-fi.com/clavinjune>Ko-fi</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://trakteer.id/clavinjune>Trakteer</a>, or just continue to read another content. Any kind of supports is greatly appreciated!</div>
+</script>
+</main>
+<script type=text/javascript src=https://clavinjune.dev/js/ga.js defer></script>
+<script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script><footer>
+Copyright &copy; 2021 &#183; Clavin June
+</footer>
+<script defer type=text/javascript src=https://clavinjune.dev/js/copy.js></script>
+</body>
+</html>

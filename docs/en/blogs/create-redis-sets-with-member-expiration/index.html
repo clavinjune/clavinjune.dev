@@ -1,0 +1,126 @@
+<!doctype html><html lang=en>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatbile content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=author content="Clavin June">
+<meta http-equiv=content-security-policy content="default-src 'self' 'unsafe-inline' https:; object-src 'none'; style-src 'self' 'unsafe-inline' fonts.googleapis.com github.githubassets.com; font-src fonts.gstatic.com; script-src 'self' 'unsafe-inline' www.googletagmanager.com gist.github.com giscus.app; base-uri 'none'; img-src 'self' images.unsplash.com i.kym-cdn.com iq.opengenus.org; frame-src open.spotify.com">
+<meta name=google-site-verification content="n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE">
+<meta name=monetization content="$ilp.uphold.com/RYNmdxrFrPJB">
+<meta name=description content="This post contains my own experience when using redis as a cache to set sets member expiration on the same key.
+">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="June Personal Web">
+<meta property="og:title" content="Create Redis Sets With Member Expiration">
+<meta property="og:description" content="This post contains my own experience when using redis as a cache to set sets member expiration on the same key.
+">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://clavinjune.dev/en/blogs/create-redis-sets-with-member-expiration/"><meta property="og:image" content="https://images.unsplash.com/photo-1501139083538-0139583c060f?w=1920&q=50"><meta property="article:section" content="blogs">
+<meta property="article:published_time" content="2020-10-29T00:00:00+07:00">
+<meta property="article:modified_time" content="2020-10-29T00:00:00+07:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://images.unsplash.com/photo-1501139083538-0139583c060f?w=1920&q=50">
+<meta name=twitter:title content="Create Redis Sets With Member Expiration">
+<meta name=twitter:description content="This post contains my own experience when using redis as a cache to set sets member expiration on the same key.
+">
+<title>June Personal Web - Create Redis Sets With Member Expiration</title>
+<link rel=stylesheet href="/css/style.min.caf3859664f2f17538a5252c2da2fafd55c3c16af6cf7edc370e96f06f065494.css" integrity="sha256-yvOFlmTy8XU4pSUsLaL6/VXDwWr2z37cNw6W8G8GVJQ=">
+<link rel=preconnect href=https://fonts.googleapis.com>
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=preconnect href=https://www.googletagmanager.com>
+<link rel=preload href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap" as=style onload="this.onload=null,this.rel='stylesheet'">
+<noscript>
+<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap">
+</noscript>
+<link rel=preload href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" as=style onload="this.onload=null,this.rel='stylesheet'">
+<noscript>
+<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap">
+</noscript>
+<link rel=stylesheet href="/css/single.min.46dd30eecaa7841e2e9f0b70105fbd33c105e168b7ac9b6e17f2efcbac7192a2.css" integrity="sha256-Rt0w7sqnhB4unwtwEF+9M8EF4Wi3rJtuF/Lvy6xxkqI=">
+</head>
+<body><nav class=fg-bold>
+<a id=skip-to-content href=#content>Skip to content</a>
+<ul id=menu><li><a href=https://clavinjune.dev/en/>HOME</a></li><li><a class=active href=https://clavinjune.dev/en/blogs/>BLOG</a></li></ul>
+</nav>
+<main class=single>
+<h1 class=title>Create Redis Sets With Member Expiration</h1>
+<div class="metadata font-16">
+<a class=category href=https://clavinjune.dev/en/categories/tech>tech</a>
+<span class=middot>&#183;</span>
+<span>Oct 29, 2020</span>
+<span class=middot>&#183;</span>
+<span>~3 min</span>
+</div>
+<div id=content>
+<figure>
+<img src="https://images.unsplash.com/photo-1501139083538-0139583c060f?w=1920&q=50" alt="Photo by @aronvisuals on Unsplash" title="Photo by @aronvisuals on Unsplash" width=100%>
+<figcaption class=font-16>Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target=_blank href=https://unsplash.com/@aronvisuals>@aronvisuals</a> on Unsplash</figcaption>
+</figure>
+<p><a class=link rel="noreferrer noopener" target=_blank href=https://redis.io>Redis</a> is a good in-memory key-value data store that supports many types of value. <a class=link rel="noreferrer noopener" target=_blank href=https://redis.io/topics/data-types-intro#sorted-sets>Sorted Sets</a> is one of them. According to the docs <code>sorted sets</code> is:</p>
+<blockquote>
+<p>Sorted sets, similar to Sets but where every string element is associated to a floating number value, called score. The elements are always taken sorted by their score, so unlike Sets it is possible to retrieve a range of elements (for example you may ask: give me the top 10, or the bottom 10).</p>
+</blockquote>
+<p>What they didn&rsquo;t say about <code>sorted sets</code> is the expiration of <code>sets members</code> can&rsquo;t be defined, at least until this blog post is created. Why do we need to define <code>sets members</code> expiration?</p>
+<p>Well, in my case I&rsquo;ve required to create a phone service that could generate and verify OTP that sent to the users with a specific limit. The prior design is using <a class=link rel="noreferrer noopener" target=_blank href=https://godoc.org/golang.org/x/time/rate>Golang Rate Limit</a> that I thought it couldn&rsquo;t be horizontally scalable. That&rsquo;s why I thought that I would use Redis for this case. The requirement for generating OTP is only like this:</p>
+<ul>
+<li>Each phone number can request OTP up to <code>X times</code> per <code>Y minutes</code></li>
+</ul>
+<p>That&rsquo;s why I came up with <code>Redis sets</code> but <code>sets members</code> can&rsquo;t have its own expiration time. Then I was googling around until I found <a class=link rel="noreferrer noopener" target=_blank href=https://github.com/redis/redis/issues/135#issuecomment-2361996>this issue comment</a> by <a class=link rel="noreferrer noopener" target=_blank href=https://github.com/pietern>@pietern</a>. This is quite a hacky move, but at least it is doable. That&rsquo;s why I tried to implement it. Once again comments on Github saved my job.</p>
+<p>The idea is quite simple, using the score on sorted-sets as an expiration millis. Fetch the valid members that have a score between <code>current millis</code> and <code>current millis + Y minutes</code> and remove the expired members that have a score between zero and <code>current millis</code>. So the minimum pseudocode would be like this:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain># define variables
+timeLimit := Y
+requestLimit := X
+key := +6212312341234
+otp := randomString(6)
+now := currentMillis()
+exp := now + timeLimit
+
+# get total of generated phone number in key
+validOTPs := redisQuery(&#34;ZRANGEBYSCORE $key $now $exp&#34;)
+
+# Limitting request
+if count(validOTPs) &gt;= requestLimit
+then exit
+
+# Add members to key
+redisQuery(&#34;ZADD $key $exp $otp&#34;)
+</code></pre></td></tr></table>
+</div>
+</div><p>I think this method is good enough and the simplest one to implement. You can add optional operations like, <code>adding expiration to the key</code>, or <code>removing members that are no longer valid</code>. But this operation is enough to adding expiration to the <code>sets member</code>. You can also use this method to limiting the OTP verification to avoid brute-force.</p>
+<p>Thank you for reading!</p>
+</div>
+<div class=separator>
+<span>&#183;</span>
+<span>&#183;</span>
+<span>&#183;</span>
+</div>
+<h2 class=subtitle>Love This Content?</h2>
+<div class="fg-light support-me">Kindly support me via <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://www.blockchain.com/btc/address/17Afj6o7xm3ZxQ38adnvSFHSBKhHiCDiev>Bitcoin</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://ko-fi.com/clavinjune>Ko-fi</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://trakteer.id/clavinjune>Trakteer</a>, or just continue to read another content. Any kind of supports is greatly appreciated!</div>
+</script>
+</main>
+<script type=text/javascript src=https://clavinjune.dev/js/ga.js defer></script>
+<script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script><footer>
+Copyright &copy; 2021 &#183; Clavin June
+</footer>
+<script defer type=text/javascript src=https://clavinjune.dev/js/copy.js></script>
+</body>
+</html>

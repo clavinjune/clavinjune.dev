@@ -1,0 +1,176 @@
+baseURL = 'https://clavinjune.dev'
+canonifyURLs = true
+enableEmoji = true
+defaultContentLanguage = 'en'
+defaultContentLanguageInSubdir = true
+enableMissingTranslationPlaceholders = true
+enableRobotsTXT = true
+googleAnalytics = 'G-MTSJ0LHJ06'
+hasCJKLanguage = true
+languageCode = 'en-us'
+paginate = 5
+publishDir = 'docs'
+title = 'June Personal Web'
+theme = 'june'
+
+[markup]
+  [markup.tableOfContents]
+    endLevel = 3
+    ordered = true
+    startLevel = 1
+  [markup.highlight]
+    anchorLineNos = true
+    codeFences = true
+    guessSyntax = true
+    lineNos = true
+    lineNumbersInTable = true
+    style = 'vs'
+    tabWidth = 4
+
+# [related]
+#   includeNewer = true
+#   threshold = 80
+#   toLower = true
+# [[related.indices]]
+#   name = 'categories'
+#   weight = 90
+# [[related.indices]]
+#   name = 'date'
+#   weight = 10
+  
+[taxonomies]
+  category = 'categories'
+
+[languages]
+  [languages.en]
+    contentDir = 'content/en'
+    languageName = 'English'
+    weight = 1
+    [languages.en.params]
+    description = 'Clavin June Personal Web'
+    locale = "en_US"
+
+    [[languages.en.menu.main]]
+      name = 'HOME'
+      url = '/'
+      weight = 1
+
+    [[languages.en.menu.main]]
+      name = 'BLOG'
+      url = '/blogs/'
+      weight = 2
+
+    # [[languages.en.menu.main]]
+    #   name = 'PODCAST'
+    #   url = '/podcasts/'
+    #   weight = 3
+
+    # [[languages.en.menu.main]]
+    #   name = 'WORK'
+    #   url = '/works/'
+    #   weight = 4
+
+  [languages.id]
+    contentDir = 'content/id'
+    languageName = 'Bahasa Indonesia'
+    weight = 2
+    [languages.id.params]
+      description = 'Clavin June Personal Web'
+      locale = "id_ID"
+
+    [[languages.id.menu.main]]
+      name = 'HOME'
+      url = '/'
+      weight = 1
+
+    [[languages.id.menu.main]]
+      name = 'BLOG'
+      url = '/blogs/'
+      weight = 2
+
+    # [[languages.id.menu.main]]
+    #   name = 'SINIAR'
+    #   url = '/podcasts/'
+    #   weight = 3
+
+    # [[languages.id.menu.main]]
+    #   name = 'KARYA'
+    #   url = '/works/'
+    #   weight = 4
+
+  [languages.ja]
+    contentDir = 'content/ja'
+    languageName = '日本語'
+    weight = 3
+    [languages.ja.params]
+      description = 'Clavin June Personal Web'
+      locale = "ja_JP"
+
+    [[languages.ja.menu.main]]
+      name = 'ホーム'
+      url = '/'
+      weight = 1
+
+    [[languages.ja.menu.main]]
+      name = 'ブログ'
+      url = '/blogs/'
+      weight = 2
+
+    # [[languages.ja.menu.main]]
+    #   # name = '放送'
+    #   # name = 'PODCAST'
+    #   name = 'ポード'
+    #   # name = 'ポードキャスト'
+    #   url = '/podcasts/'
+    #   weight = 3
+
+    # [[languages.ja.menu.main]]
+    #   name = '作品'
+    #   url = '/works/'
+    #   weight = 4
+
+[author]
+  Name = "Clavin June"
+  Email = 'juneardoc@gmail.com'
+
+[params]
+  [params.june]
+    braveRewardsVerification = 'ze0dec1b3acfbd430cac887ce390fdefcb56679334fcd39bc49d434660a52e26c'
+    # canonicalURL = 'https://another-page.com'
+    csp = "default-src 'self' 'unsafe-inline' https:; object-src 'none'; style-src 'self' 'unsafe-inline' fonts.googleapis.com github.githubassets.com; font-src fonts.gstatic.com; script-src 'self' 'unsafe-inline' www.googletagmanager.com gist.github.com giscus.app; base-uri 'none'; img-src 'self' images.unsplash.com i.kym-cdn.com iq.opengenus.org; frame-src open.spotify.com"
+    googleSiteVerification = 'n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE'
+    monetization = '$ilp.uphold.com/RYNmdxrFrPJB'
+
+    [[params.june.support]]
+      Name = 'Bitcoin'
+      URL = 'https://www.blockchain.com/btc/address/17Afj6o7xm3ZxQ38adnvSFHSBKhHiCDiev'
+
+    [[params.june.support]]
+      Name = 'Ko-fi'
+      URL = 'https://ko-fi.com/clavinjune'
+
+    [[params.june.support]]
+      Name = 'Trakteer'
+      URL = 'https://trakteer.id/clavinjune'
+
+    [[params.june.contact]]
+      Name = "Email"
+      URL  = "mailto:juneardoc@gmail.com"
+
+    [[params.june.contact]]
+      Name = "Github"
+      URL  = "https://github.com/ClavinJune"
+
+    [[params.june.contact]]
+      Name = "LinkedIn"
+      URL  = "https://linkedin.com/in/juneardoc"
+      
+    [params.june.giscus]
+      Repo =  "ClavinJune/testing-hugo"
+      RepoID = "R_kgDOGODXSw"
+      Category = "General"
+      CategoryID = "DIC_kwDOGODXS84B_gov"
+      Mapping = "title"
+      Reaction = "1"
+      Metadata = "0"
+      Theme = "light"
