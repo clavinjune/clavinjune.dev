@@ -11,7 +11,7 @@ https://images.unsplash.com/photo-1576444356170-66073046b1bc?w=1366&amp;amp;q=50
 https://images.unsplash.com/photo-1576444356170-66073046b1bc?w=1920&amp;amp;q=50 1920w
 "
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1576444356170-66073046b1bc?w=1920&amp;amp;q=50" alt="Photo by @flowforfrank on Unsplash" title="Photo by @flowforfrank on Unsplash" width="100%" />
+src="https://images.unsplash.com/photo-1576444356170-66073046b1bc?w=1920&amp;amp;q=50" alt="Photo by @flowforfrank on Unsplash" title="Photo by @flowforfrank on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@flowforfrank">@flowforfrank&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;h2 id="introduction">Introduction&lt;/h2>
@@ -504,7 +504,7 @@ https://images.unsplash.com/photo-1461360228754-6e81c478b882?w=1366&amp;amp;q=50
 https://images.unsplash.com/photo-1461360228754-6e81c478b882?w=1920&amp;amp;q=50 1920w
 "
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1461360228754-6e81c478b882?w=1920&amp;amp;q=50" alt="Photo by @iammrcup on Unsplash" title="Photo by @iammrcup on Unsplash" width="100%" />
+src="https://images.unsplash.com/photo-1461360228754-6e81c478b882?w=1920&amp;amp;q=50" alt="Photo by @iammrcup on Unsplash" title="Photo by @iammrcup on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@iammrcup">@iammrcup&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;h2 id="introduction">Introduction&lt;/h2>
@@ -1025,7 +1025,7 @@ https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1366&amp;amp;q=50
 https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1920&amp;amp;q=50 1920w
 "
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1920&amp;amp;q=50" alt="Photo by @iavnt on Unsplash" title="Photo by @iavnt on Unsplash" width="100%" />
+src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1920&amp;amp;q=50" alt="Photo by @iavnt on Unsplash" title="Photo by @iavnt on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@iavnt">@iavnt&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>I once made a function to convert a slice to slice of ptr and made a mistake.&lt;/p>
@@ -1135,7 +1135,7 @@ https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=1366&amp;amp;q=50
 https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=1920&amp;amp;q=50 1920w
 "
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=1920&amp;amp;q=50" alt="Photo by @kellysikkema on Unsplash" title="Photo by @kellysikkema on Unsplash" width="100%" />
+src="https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=1920&amp;amp;q=50" alt="Photo by @kellysikkema on Unsplash" title="Photo by @kellysikkema on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@kellysikkema">@kellysikkema&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>This blog post code is running on go1.16.2&lt;/p>
@@ -1637,7 +1637,7 @@ https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=1366&amp;amp;q=50
 https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=1920&amp;amp;q=50 1920w
 "
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=1920&amp;amp;q=50" alt="Photo by @mrthetrain on Unsplash" title="Photo by @mrthetrain on Unsplash" width="100%" />
+src="https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=1920&amp;amp;q=50" alt="Photo by @mrthetrain on Unsplash" title="Photo by @mrthetrain on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@mrthetrain">@mrthetrain&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>Two days ago, I failed to implement the optimized LRU cache in coding interview due to panic and stopped by the interviewer. Yes, I suck at coding interviews. I have implemented LRU cache before, so I know how it works and of course know how to implement it. But if you never heard of it, I think &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_recently_used_%28LRU%29" >this explanation&lt;/a> is enough.&lt;/p>
@@ -2316,7 +2316,7 @@ https://images.unsplash.com/photo-1499159058454-75067059248a?w=1366&amp;amp;q=50
 https://images.unsplash.com/photo-1499159058454-75067059248a?w=1920&amp;amp;q=50 1920w
 "
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1499159058454-75067059248a?w=1920&amp;amp;q=50" alt="Photo by @quinoal on Unsplash" title="Photo by @quinoal on Unsplash" width="100%" />
+src="https://images.unsplash.com/photo-1499159058454-75067059248a?w=1920&amp;amp;q=50" alt="Photo by @quinoal on Unsplash" title="Photo by @quinoal on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@quinoal">@quinoal&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;h2 id="small-talk-about-channel">Small talk about channel&lt;/h2>
@@ -2630,7 +2630,7 @@ https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?w=1366&amp;amp;q=50
 https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?w=1920&amp;amp;q=50 1920w
 "
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?w=1920&amp;amp;q=50" alt="Photo by @ilyapavlov on Unsplash" title="Photo by @ilyapavlov on Unsplash" width="100%" />
+src="https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?w=1920&amp;amp;q=50" alt="Photo by @ilyapavlov on Unsplash" title="Photo by @ilyapavlov on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@ilyapavlov">@ilyapavlov&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>While interning, I once had an application that logged every request and response to the Linux file system. That app easily fills up our disks due to traffic. I got confused when I tried to delete log files because disk usage didn&amp;rsquo;t decrease even after the log files were deleted. So I restarted the app and finally, the disk usage decreased.&lt;/p>
@@ -2982,7 +2982,7 @@ https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?w=1366&amp;amp;q=50
 https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?w=1920&amp;amp;q=50 1920w
 "
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?w=1920&amp;amp;q=50" alt="Photo by @freestocks on Unsplash" title="Photo by @freestocks on Unsplash" width="100%" />
+src="https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?w=1920&amp;amp;q=50" alt="Photo by @freestocks on Unsplash" title="Photo by @freestocks on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@freestocks">@freestocks&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>Same as the case &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://clavinjune.dev/blog/binary-search-tree-in-go-0f34cd/" >here&lt;/a>, I just wanted to revisit another data structure. Well, Max Heap (also Min Heap) is a data structure that commonly used to create a priority queue which also a complete binary tree that has nodes which value is greater (or lesser) than its children value.&lt;/p>
@@ -3594,7 +3594,7 @@ https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?w=1366&amp;amp;q=50
 https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?w=1920&amp;amp;q=50 1920w
 "
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?w=1920&amp;amp;q=50" alt="Photo by @volkanolmez on Unsplash" title="Photo by @volkanolmez on Unsplash" width="100%" />
+src="https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?w=1920&amp;amp;q=50" alt="Photo by @volkanolmez on Unsplash" title="Photo by @volkanolmez on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@volkanolmez">@volkanolmez&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>I hate to say this, but I forgot this one-liner syntax in my online coding test. So, I think I need to put this here.&lt;/p>
@@ -3621,7 +3621,7 @@ https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1366&amp;amp;q=50
 https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1920&amp;amp;q=50 1920w
 "
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1920&amp;amp;q=50" alt="Photo by @roman_lazygeek on Unsplash" title="Photo by @roman_lazygeek on Unsplash" width="100%" />
+src="https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1920&amp;amp;q=50" alt="Photo by @roman_lazygeek on Unsplash" title="Photo by @roman_lazygeek on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@roman_lazygeek">@roman_lazygeek&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>I only rewrite what was written on my &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://pastebin.com/eDNgaM7F" >pastebin&lt;/a>&lt;/p>
@@ -3679,7 +3679,7 @@ https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1366&amp;amp;q=50
 https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1920&amp;amp;q=50 1920w
 "
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1920&amp;amp;q=50" alt="Photo by @roman_lazygeek on Unsplash" title="Photo by @roman_lazygeek on Unsplash" width="100%" />
+src="https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1920&amp;amp;q=50" alt="Photo by @roman_lazygeek on Unsplash" title="Photo by @roman_lazygeek on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@roman_lazygeek">@roman_lazygeek&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>I don&amp;rsquo;t do anything except converting the pseudocode from &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes#Pseudocode" >wiki&lt;/a> into Golang code&lt;/p>
@@ -3795,7 +3795,7 @@ https://images.unsplash.com/photo-1580245492316-d542d595001b?w=1366&amp;amp;q=50
 https://images.unsplash.com/photo-1580245492316-d542d595001b?w=1920&amp;amp;q=50 1920w
 "
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1580245492316-d542d595001b?w=1920&amp;amp;q=50" alt="Photo by @borisview on Unsplash" title="Photo by @borisview on Unsplash" width="100%" />
+src="https://images.unsplash.com/photo-1580245492316-d542d595001b?w=1920&amp;amp;q=50" alt="Photo by @borisview on Unsplash" title="Photo by @borisview on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@borisview">@borisview&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>I’ve just woke up and somehow I remembered when I created &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://clavinjune.dev/blog/creating-taboo-error-handler-for-go-f8e220" >taboo&lt;/a> to trace the error log. And then I think, would it be better if I pass the logger instead of the error log itself?&lt;/p>
@@ -4170,7 +4170,7 @@ https://images.unsplash.com/photo-1575908539614-ff89490f4a78?w=1366&amp;amp;q=50
 https://images.unsplash.com/photo-1575908539614-ff89490f4a78?w=1920&amp;amp;q=50 1920w
 "
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1575908539614-ff89490f4a78?w=1920&amp;amp;q=50" alt="Photo by @hocza on Unsplash" title="Photo by @hocza on Unsplash" width="100%" />
+src="https://images.unsplash.com/photo-1575908539614-ff89490f4a78?w=1920&amp;amp;q=50" alt="Photo by @hocza on Unsplash" title="Photo by @hocza on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@hocza">@hocza&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>When we talk about crypto-something, we need to talk about Alice and Bob acting as actors in the example section. I hope you don&amp;rsquo;t get bored with them as I will use them as examples too. Here, Alice and Bob will use RSA for the asymmetric key, SHA256 for hash function, OAEP for encrypt/decrypt, PSS for sign/verify, and Base64 for the encoding.&lt;/p>
@@ -4696,7 +4696,7 @@ https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=1366&amp;amp;q=50 13
 https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=1920&amp;amp;q=50 1920w
 "
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=1920&amp;amp;q=50" alt="Photo by @loicleray on Unsplash" title="Photo by @loicleray on Unsplash" width="100%" />
+src="https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=1920&amp;amp;q=50" alt="Photo by @loicleray on Unsplash" title="Photo by @loicleray on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@loicleray">@loicleray&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>After I tried to implement &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://clavinjune.dev/blog/binary-search-tree-in-go-0f34cd/" >BST in Go&lt;/a>, it seems like I want to modify the BST to AVL because BST is not a fairly optimal tree data structure.&lt;/p>
@@ -5756,7 +5756,7 @@ https://images.unsplash.com/photo-1507100403890-47482dcd79e0?w=1366&amp;amp;q=50
 https://images.unsplash.com/photo-1507100403890-47482dcd79e0?w=1920&amp;amp;q=50 1920w
 "
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1507100403890-47482dcd79e0?w=1920&amp;amp;q=50" alt="Photo by @danfreemanphoto on Unsplash" title="Photo by @danfreemanphoto on Unsplash" width="100%" />
+src="https://images.unsplash.com/photo-1507100403890-47482dcd79e0?w=1920&amp;amp;q=50" alt="Photo by @danfreemanphoto on Unsplash" title="Photo by @danfreemanphoto on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@danfreemanphoto">@danfreemanphoto&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>So long since I learned to create BST back then at university. I feel like wanna revisit the BST things, so I make this post. BST is not that scary. You only need to create a tree without duplicated value on each node, then the less valuable nodes go to the left, and then the rest of the nodes go to the right or vice-versa. In this post, I&amp;rsquo;ll make a BST in Go Language with less valuable nodes of integer go to the left. I assume you have a basic knowledge of Go Language and tree data structure.&lt;/p>
@@ -6789,7 +6789,7 @@ https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=1366&amp;amp;q=50
 https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=1920&amp;amp;q=50 1920w
 "
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=1920&amp;amp;q=50" alt="Photo by @veato on Unsplash" title="Photo by @veato on Unsplash" width="100%" />
+src="https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=1920&amp;amp;q=50" alt="Photo by @veato on Unsplash" title="Photo by @veato on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@veato">@veato&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>In my &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://clavinjune.dev/blog/i-create-this-blog-using-jekyll-65efbd" >first post&lt;/a>, I said that:&lt;/p>
@@ -6829,7 +6829,7 @@ https://images.unsplash.com/photo-1501139083538-0139583c060f?w=1366&amp;amp;q=50
 https://images.unsplash.com/photo-1501139083538-0139583c060f?w=1920&amp;amp;q=50 1920w
 "
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1501139083538-0139583c060f?w=1920&amp;amp;q=50" alt="Photo by @aronvisuals on Unsplash" title="Photo by @aronvisuals on Unsplash" width="100%" />
+src="https://images.unsplash.com/photo-1501139083538-0139583c060f?w=1920&amp;amp;q=50" alt="Photo by @aronvisuals on Unsplash" title="Photo by @aronvisuals on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@aronvisuals">@aronvisuals&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>&lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://redis.io" >Redis&lt;/a> is a good in-memory key-value data store that supports many types of value. &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://redis.io/topics/data-types-intro#sorted-sets" >Sorted Sets&lt;/a> is one of them. According to the docs &lt;code>sorted sets&lt;/code> is:&lt;/p>
@@ -6894,7 +6894,7 @@ https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=1366&amp;amp;q=50
 https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=1920&amp;amp;q=50 1920w
 "
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=1920&amp;amp;q=50" alt="Photo by @hhh13 on Unsplash" title="Photo by @hhh13 on Unsplash" width="100%" />
+src="https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=1920&amp;amp;q=50" alt="Photo by @hhh13 on Unsplash" title="Photo by @hhh13 on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@hhh13">@hhh13&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>I created &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://github.com/anon-org/taboo" >this module&lt;/a> for Golang to help me with error handling. This idea showed when a colleague of mine was thinking to pass &lt;code>context&lt;/code> from handler to service, to repository to trace the error log more verbose. I disagreed with him because I thought that&amp;rsquo;s not what &lt;code>context&lt;/code> is for. Perhaps I was wrong or he was wrong, or maybe both of us wrong because this is our first Golang project that deployed on production.&lt;/p>
@@ -7117,7 +7117,7 @@ https://images.unsplash.com/photo-1542435503-956c469947f6?w=1366&amp;amp;q=50 13
 https://images.unsplash.com/photo-1542435503-956c469947f6?w=1920&amp;amp;q=50 1920w
 "
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1542435503-956c469947f6?w=1920&amp;amp;q=50" alt="Photo by @jessbaileydesigns on Unsplash" title="Photo by @jessbaileydesigns on Unsplash" width="100%" />
+src="https://images.unsplash.com/photo-1542435503-956c469947f6?w=1920&amp;amp;q=50" alt="Photo by @jessbaileydesigns on Unsplash" title="Photo by @jessbaileydesigns on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@jessbaileydesigns">@jessbaileydesigns&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>&lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://clavinjune.dev/" >This blog&lt;/a> is the result of my learning journey about a static-site generator made on top of &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://jekyllrb.com/" >Jekyll&lt;/a>. The design is kinda bad due to my lacked sense of design. To avoid creating a whole trash blog, I tried to ask my friends to give me feedback about the design a bit.&lt;/p>
