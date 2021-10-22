@@ -11,7 +11,7 @@ description: >
   This post contains notes about how to find first N prime numbers in Go using Sieve of Eratosthenes
 ---
 
-{{< unsplash user="@roman_lazygeek" src="photo-1453733190371-0a9bedd82893" w="1920" q="50" >}}
+{{< unsplash user="@roman_lazygeek" src="photo-1453733190371-0a9bedd82893" q="50" >}}
 
 I don't do anything except converting the pseudocode from [wiki](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes#Pseudocode) into Golang code
 

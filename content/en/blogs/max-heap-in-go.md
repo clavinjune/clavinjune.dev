@@ -11,7 +11,7 @@ description: >
   This post contains my own experiences in reviewing my knowledge of Max / Min Heap data structure
 ---
 
-{{< unsplash user="@freestocks" src="photo-1532543307581-8b01a7ff954f" w="1920" q="50" >}}
+{{< unsplash user="@freestocks" src="photo-1532543307581-8b01a7ff954f" q="50" >}}
 
 Same as the case [here](/blog/binary-search-tree-in-go-0f34cd/), I just wanted to revisit another data structure. Well, Max Heap (also Min Heap) is a data structure that commonly used to create a priority queue which also a complete binary tree that has nodes which value is greater (or lesser) than its children value.
 

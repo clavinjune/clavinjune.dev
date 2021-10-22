@@ -11,7 +11,7 @@ description: >
   This post contains a reference for creating a contextual logging in golang.
 ---
 
-{{< unsplash user="@borisview" src="photo-1580245492316-d542d595001b" w="1920" q="50" >}}
+{{< unsplash user="@borisview" src="photo-1580245492316-d542d595001b" q="50" >}}
 
 I’ve just woke up and somehow I remembered when I created [taboo](/blog/creating-taboo-error-handler-for-go-f8e220) to trace the error log. And then I think, would it be better if I pass the logger instead of the error log itself?
 

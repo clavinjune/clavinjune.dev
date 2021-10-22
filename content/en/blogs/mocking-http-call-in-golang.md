@@ -11,7 +11,7 @@ description: >
   This post contains notes on how to mock HTTP Call in golang.
 ---
 
-{{< unsplash user="@kellysikkema" src="photo-1507925921958-8a62f3d1a50d" w="1920" q="50" >}}
+{{< unsplash user="@kellysikkema" src="photo-1507925921958-8a62f3d1a50d" q="50" >}}
 
 This blog post code is running on go1.16.2
 

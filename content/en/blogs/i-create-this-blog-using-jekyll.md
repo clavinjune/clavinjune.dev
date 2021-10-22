@@ -11,7 +11,7 @@ description: >
   This post contains my own experience in building the Jekyll static site from scratch until integrating this post using RSS.
 ---
 
-{{< unsplash user="@jessbaileydesigns" src="photo-1542435503-956c469947f6" w="1920" q="50" >}}
+{{< unsplash user="@jessbaileydesigns" src="photo-1542435503-956c469947f6" q="50" >}}
 
 [This blog](https://clavinjune.dev/) is the result of my learning journey about a static-site generator made on top of [Jekyll](https://jekyllrb.com/). The design is kinda bad due to my lacked sense of design. To avoid creating a whole trash blog, I tried to ask my friends to give me feedback about the design a bit.
 

@@ -11,7 +11,7 @@ description: >
   This post contains my own experiences in reviewing my knowledge of BST data structure
 ---
 
-{{< unsplash user="@danfreemanphoto" src="photo-1507100403890-47482dcd79e0" w="1920" q="50" >}}
+{{< unsplash user="@danfreemanphoto" src="photo-1507100403890-47482dcd79e0" q="50" >}}
 
 So long since I learned to create BST back then at university. I feel like wanna revisit the BST things, so I make this post. BST is not that scary. You only need to create a tree without duplicated value on each node, then the less valuable nodes go to the left, and then the rest of the nodes go to the right or vice-versa. In this post, I'll make a BST in Go Language with less valuable nodes of integer go to the left. I assume you have a basic knowledge of Go Language and tree data structure.
 

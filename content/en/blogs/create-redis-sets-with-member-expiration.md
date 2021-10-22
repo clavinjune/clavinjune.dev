@@ -11,7 +11,7 @@ description: >
   This post contains my own experience when using redis as a cache to set sets member expiration on the same key.
 ---
 
-{{< unsplash user="@aronvisuals" src="photo-1501139083538-0139583c060f" w="1920" q="50" >}}
+{{< unsplash user="@aronvisuals" src="photo-1501139083538-0139583c060f" q="50" >}}
 
 [Redis](https://redis.io) is a good in-memory key-value data store that supports many types of value. [Sorted Sets](https://redis.io/topics/data-types-intro#sorted-sets) is one of them. According to the docs `sorted sets` is:
 

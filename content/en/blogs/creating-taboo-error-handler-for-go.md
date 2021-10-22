@@ -11,7 +11,7 @@ description: >
   This post contains my own experience in creating try-catch-like error handler for golang.
 ---
 
-{{< unsplash user="@hhh13" src="photo-1525785967371-87ba44b3e6cf" w="1920" q="50" >}}
+{{< unsplash user="@hhh13" src="photo-1525785967371-87ba44b3e6cf" q="50" >}}
 
 I created [this module](https://github.com/anon-org/taboo) for Golang to help me with error handling. This idea showed when a colleague of mine was thinking to pass `context` from handler to service, to repository to trace the error log more verbose. I disagreed with him because I thought that's not what `context` is for. Perhaps I was wrong or he was wrong, or maybe both of us wrong because this is our first Golang project that deployed on production.
 

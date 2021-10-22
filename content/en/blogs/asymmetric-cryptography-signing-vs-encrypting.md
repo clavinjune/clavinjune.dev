@@ -11,7 +11,7 @@ description: >
   This post contains notes about the differences between Signing and Encrypting methods in terms of asymmetric cryptography and its implementation using golang, featuring Alice and Bob.
 ---
 
-{{< unsplash user="@hocza" src="photo-1575908539614-ff89490f4a78" w="1920" q="50" >}}
+{{< unsplash user="@hocza" src="photo-1575908539614-ff89490f4a78" q="50" >}}
 
 When we talk about crypto-something, we need to talk about Alice and Bob acting as actors in the example section. I hope you don't get bored with them as I will use them as examples too. Here, Alice and Bob will use RSA for the asymmetric key, SHA256 for hash function, OAEP for encrypt/decrypt, PSS for sign/verify, and Base64 for the encoding.
 

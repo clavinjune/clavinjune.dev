@@ -11,7 +11,7 @@ description: >
   This post contains my own experiences in Modifying the BST Code to AVL
 ---
 
-{{< unsplash user="@loicleray" src="photo-1561900478-5001f6b4d8ed" w="1920" q="50" >}}
+{{< unsplash user="@loicleray" src="photo-1561900478-5001f6b4d8ed" q="50" >}}
 
 After I tried to implement [BST in Go](/blog/binary-search-tree-in-go-0f34cd/), it seems like I want to modify the BST to AVL because BST is not a fairly optimal tree data structure.
 

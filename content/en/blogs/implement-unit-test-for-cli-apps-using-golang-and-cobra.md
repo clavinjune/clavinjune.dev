@@ -11,7 +11,7 @@ description: >
   Implementing unit test for command-line interface (CLI) Apps using Golang and Cobra
 ---
 
-{{< unsplash user="@flowforfrank" src="photo-1576444356170-66073046b1bc" w="1920" q="50" >}}
+{{< unsplash user="@flowforfrank" src="photo-1576444356170-66073046b1bc" q="50" >}}
 
 ## Introduction
 

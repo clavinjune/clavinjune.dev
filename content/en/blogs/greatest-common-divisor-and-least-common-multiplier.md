@@ -11,7 +11,7 @@ description: >
   This post contains notes about how to create pow function and find greatest common divisor & least common multiplier
 ---
 
-{{< unsplash user="@roman_lazygeek" src="photo-1453733190371-0a9bedd82893" w="1920" q="50" >}}
+{{< unsplash user="@roman_lazygeek" src="photo-1453733190371-0a9bedd82893" q="50" >}}
 
 I only rewrite what was written on my [pastebin](https://pastebin.com/eDNgaM7F)
 

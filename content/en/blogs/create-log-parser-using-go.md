@@ -11,7 +11,7 @@ description: >
   Create a log parser using Go and Regex to read and understand the system logs
 ---
 
-{{< unsplash user="@iammrcup" src="photo-1461360228754-6e81c478b882" w="1920" q="50" >}}
+{{< unsplash user="@iammrcup" src="photo-1461360228754-6e81c478b882" q="50" >}}
 
 ## Introduction
 

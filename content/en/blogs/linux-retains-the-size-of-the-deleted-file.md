@@ -11,7 +11,7 @@ description: >
   This post contains notes on how to retrieve back the size that Linux preserves from a deleted file if the file is being used by the process that we can't kill or restart
 ---
 
-{{< unsplash user="@ilyapavlov" src="photo-1512317049220-d3c6fcaf6681" w="1920" q="50" >}}
+{{< unsplash user="@ilyapavlov" src="photo-1512317049220-d3c6fcaf6681" q="50" >}}
 
 While interning, I once had an application that logged every request and response to the Linux file system. That app easily fills up our disks due to traffic. I got confused when I tried to delete log files because disk usage didn't decrease even after the log files were deleted. So I restarted the app and finally, the disk usage decreased.
 

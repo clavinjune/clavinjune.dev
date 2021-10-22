@@ -11,7 +11,7 @@ description: >
   This post contains notes on my mistake when converting slice of int to slice of int ptr
 ---
 
-{{< unsplash user="@iavnt" src="photo-1513104890138-7c749659a591" w="1920" q="50" >}}
+{{< unsplash user="@iavnt" src="photo-1513104890138-7c749659a591" q="50" >}}
 
 I once made a function to convert a slice to slice of ptr and made a mistake.
 
