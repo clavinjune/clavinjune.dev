@@ -112,7 +112,7 @@ rootCmd.Flags().BoolP(&lt;span style="color:#a31515">&amp;#34;toggle&amp;#34;&lt
 }
 &lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>Now we have a simple running CLI app. Let&amp;rsquo;s try to run it.&lt;/p>
+&lt;/div>&lt;p>Now you have a simple running CLI app. Let&amp;rsquo;s try to run it.&lt;/p>
 &lt;p>With toggle&lt;/p>
 &lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 &lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">

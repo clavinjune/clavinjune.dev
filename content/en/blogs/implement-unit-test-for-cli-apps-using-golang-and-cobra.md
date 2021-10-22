@@ -83,7 +83,7 @@ func init() {
 
 ```
 
-Now we have a simple running CLI app. Let's try to run it.
+Now you have a simple running CLI app. Let's try to run it.
 
 With toggle
 
