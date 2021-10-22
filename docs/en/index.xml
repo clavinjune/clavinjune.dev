@@ -1,20 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Thu, 21 Oct 2021 21:28:31 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><item><title>Implement Unit Test for CLI Apps using Golang and Cobra</title><link>https://clavinjune.dev/en/blogs/implement-unit-test-for-cli-apps-using-golang-and-cobra/</link><pubDate>Thu, 21 Oct 2021 21:28:31 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/implement-unit-test-for-cli-apps-using-golang-and-cobra/</guid><description>
 &lt;figure>
 &lt;img
-srcset="
-https://images.unsplash.com/photo-1576444356170-66073046b1bc?w=240&amp;amp;q=50 240w,
-https://images.unsplash.com/photo-1576444356170-66073046b1bc?w=300&amp;amp;q=50 300w,
-https://images.unsplash.com/photo-1576444356170-66073046b1bc?w=480&amp;amp;q=50 480w,
-https://images.unsplash.com/photo-1576444356170-66073046b1bc?w=768&amp;amp;q=50 768w,
-https://images.unsplash.com/photo-1576444356170-66073046b1bc?w=800&amp;amp;q=50 800w,
-https://images.unsplash.com/photo-1576444356170-66073046b1bc?w=960&amp;amp;q=50 960w,
-https://images.unsplash.com/photo-1576444356170-66073046b1bc?w=1024&amp;amp;q=50 1024w,
-https://images.unsplash.com/photo-1576444356170-66073046b1bc?w=1200&amp;amp;q=50 1200w,
-https://images.unsplash.com/photo-1576444356170-66073046b1bc?w=1366&amp;amp;q=50 1366w,
-https://images.unsplash.com/photo-1576444356170-66073046b1bc?w=1920&amp;amp;q=50 1920w
-"
+srcset="https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=1920 1920w"
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1576444356170-66073046b1bc?w=1920&amp;amp;q=50" alt="Photo by @flowforfrank on Unsplash" title="Photo by @flowforfrank on Unsplash" width="100%" height="auto"/>
+src="https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=1920" alt="Photo by @flowforfrank on Unsplash" title="Photo by @flowforfrank on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@flowforfrank">@flowforfrank&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;h2 id="introduction">Introduction&lt;/h2>
@@ -497,20 +486,9 @@ is.Equal(tc.out, out)
 &lt;p>Thank you for reading!&lt;/p></description></item><item><title>Create Log Parser Using Go</title><link>https://clavinjune.dev/en/blogs/create-log-parser-using-go/</link><pubDate>Thu, 21 Oct 2021 15:42:38 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/create-log-parser-using-go/</guid><description>
 &lt;figure>
 &lt;img
-srcset="
-https://images.unsplash.com/photo-1461360228754-6e81c478b882?w=240&amp;amp;q=50 240w,
-https://images.unsplash.com/photo-1461360228754-6e81c478b882?w=300&amp;amp;q=50 300w,
-https://images.unsplash.com/photo-1461360228754-6e81c478b882?w=480&amp;amp;q=50 480w,
-https://images.unsplash.com/photo-1461360228754-6e81c478b882?w=768&amp;amp;q=50 768w,
-https://images.unsplash.com/photo-1461360228754-6e81c478b882?w=800&amp;amp;q=50 800w,
-https://images.unsplash.com/photo-1461360228754-6e81c478b882?w=960&amp;amp;q=50 960w,
-https://images.unsplash.com/photo-1461360228754-6e81c478b882?w=1024&amp;amp;q=50 1024w,
-https://images.unsplash.com/photo-1461360228754-6e81c478b882?w=1200&amp;amp;q=50 1200w,
-https://images.unsplash.com/photo-1461360228754-6e81c478b882?w=1366&amp;amp;q=50 1366w,
-https://images.unsplash.com/photo-1461360228754-6e81c478b882?w=1920&amp;amp;q=50 1920w
-"
+srcset="https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;amp;w=1920 1920w"
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1461360228754-6e81c478b882?w=1920&amp;amp;q=50" alt="Photo by @iammrcup on Unsplash" title="Photo by @iammrcup on Unsplash" width="100%" height="auto"/>
+src="https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;amp;w=1920" alt="Photo by @iammrcup on Unsplash" title="Photo by @iammrcup on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@iammrcup">@iammrcup&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;h2 id="introduction">Introduction&lt;/h2>
@@ -1021,20 +999,9 @@ true
 &lt;p>Thank you for reading!&lt;/p></description></item><item><title>My Mistake on Converting Slice to Slice of Ptr in Golang</title><link>https://clavinjune.dev/en/blogs/my-mistake-on-converting-slice-to-slice-of-ptr-in-golang/</link><pubDate>Thu, 22 Apr 2021 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/my-mistake-on-converting-slice-to-slice-of-ptr-in-golang/</guid><description>
 &lt;figure>
 &lt;img
-srcset="
-https://images.unsplash.com/photo-1513104890138-7c749659a591?w=240&amp;amp;q=50 240w,
-https://images.unsplash.com/photo-1513104890138-7c749659a591?w=300&amp;amp;q=50 300w,
-https://images.unsplash.com/photo-1513104890138-7c749659a591?w=480&amp;amp;q=50 480w,
-https://images.unsplash.com/photo-1513104890138-7c749659a591?w=768&amp;amp;q=50 768w,
-https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&amp;amp;q=50 800w,
-https://images.unsplash.com/photo-1513104890138-7c749659a591?w=960&amp;amp;q=50 960w,
-https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1024&amp;amp;q=50 1024w,
-https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1200&amp;amp;q=50 1200w,
-https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1366&amp;amp;q=50 1366w,
-https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1920&amp;amp;q=50 1920w
-"
+srcset="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1513104890138-7c749659a591?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1513104890138-7c749659a591?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1513104890138-7c749659a591?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1513104890138-7c749659a591?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1513104890138-7c749659a591?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1513104890138-7c749659a591?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1513104890138-7c749659a591?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1513104890138-7c749659a591?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1513104890138-7c749659a591?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1513104890138-7c749659a591?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1513104890138-7c749659a591?q=50&amp;amp;w=1920 1920w"
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1920&amp;amp;q=50" alt="Photo by @iavnt on Unsplash" title="Photo by @iavnt on Unsplash" width="100%" height="auto"/>
+src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=50&amp;amp;w=1920" alt="Photo by @iavnt on Unsplash" title="Photo by @iavnt on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@iavnt">@iavnt&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>I once made a function to convert a slice to slice of ptr and made a mistake.&lt;/p>
@@ -1134,20 +1101,9 @@ r[i] = &amp;amp;slice[i]
 &lt;/div>&lt;p>Thank you for reading!&lt;/p></description></item><item><title>Mocking HTTP Call in Golang</title><link>https://clavinjune.dev/en/blogs/mocking-http-call-in-golang/</link><pubDate>Sun, 11 Apr 2021 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/mocking-http-call-in-golang/</guid><description>
 &lt;figure>
 &lt;img
-srcset="
-https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=240&amp;amp;q=50 240w,
-https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=300&amp;amp;q=50 300w,
-https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=480&amp;amp;q=50 480w,
-https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=768&amp;amp;q=50 768w,
-https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=800&amp;amp;q=50 800w,
-https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=960&amp;amp;q=50 960w,
-https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=1024&amp;amp;q=50 1024w,
-https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=1200&amp;amp;q=50 1200w,
-https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=1366&amp;amp;q=50 1366w,
-https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=1920&amp;amp;q=50 1920w
-"
+srcset="https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?q=50&amp;amp;w=1920 1920w"
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=1920&amp;amp;q=50" alt="Photo by @kellysikkema on Unsplash" title="Photo by @kellysikkema on Unsplash" width="100%" height="auto"/>
+src="https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?q=50&amp;amp;w=1920" alt="Photo by @kellysikkema on Unsplash" title="Photo by @kellysikkema on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@kellysikkema">@kellysikkema&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>This blog post code is running on go1.16.2&lt;/p>
@@ -1639,20 +1595,9 @@ http.ListenAndServe(&lt;span style="color:#a31515">&amp;#34;:8888&amp;#34;&lt;/s
 &lt;/div>&lt;p>Thank you for reading!&lt;/p></description></item><item><title>LRU Cache in Go</title><link>https://clavinjune.dev/en/blogs/lru-cache-in-go/</link><pubDate>Sat, 06 Feb 2021 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/lru-cache-in-go/</guid><description>
 &lt;figure>
 &lt;img
-srcset="
-https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=240&amp;amp;q=50 240w,
-https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=300&amp;amp;q=50 300w,
-https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=480&amp;amp;q=50 480w,
-https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=768&amp;amp;q=50 768w,
-https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=800&amp;amp;q=50 800w,
-https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=960&amp;amp;q=50 960w,
-https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=1024&amp;amp;q=50 1024w,
-https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=1200&amp;amp;q=50 1200w,
-https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=1366&amp;amp;q=50 1366w,
-https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=1920&amp;amp;q=50 1920w
-"
+srcset="https://images.unsplash.com/photo-1580188911874-f95af62924ee?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?q=50&amp;amp;w=1920 1920w"
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=1920&amp;amp;q=50" alt="Photo by @mrthetrain on Unsplash" title="Photo by @mrthetrain on Unsplash" width="100%" height="auto"/>
+src="https://images.unsplash.com/photo-1580188911874-f95af62924ee?q=50&amp;amp;w=1920" alt="Photo by @mrthetrain on Unsplash" title="Photo by @mrthetrain on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@mrthetrain">@mrthetrain&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>Two days ago, I failed to implement the optimized LRU cache in coding interview due to panic and stopped by the interviewer. Yes, I suck at coding interviews. I have implemented LRU cache before, so I know how it works and of course know how to implement it. But if you never heard of it, I think &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_recently_used_%28LRU%29" >this explanation&lt;/a> is enough.&lt;/p>
@@ -2321,20 +2266,9 @@ lru.Set(4, 4)
 &lt;/div>&lt;p>Thank you for reading!&lt;/p></description></item><item><title>Buffered vs Unbuffered Channel in Golang</title><link>https://clavinjune.dev/en/blogs/buffered-vs-unbuffered-channel-in-golang/</link><pubDate>Sun, 24 Jan 2021 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/buffered-vs-unbuffered-channel-in-golang/</guid><description>
 &lt;figure>
 &lt;img
-srcset="
-https://images.unsplash.com/photo-1499159058454-75067059248a?w=240&amp;amp;q=50 240w,
-https://images.unsplash.com/photo-1499159058454-75067059248a?w=300&amp;amp;q=50 300w,
-https://images.unsplash.com/photo-1499159058454-75067059248a?w=480&amp;amp;q=50 480w,
-https://images.unsplash.com/photo-1499159058454-75067059248a?w=768&amp;amp;q=50 768w,
-https://images.unsplash.com/photo-1499159058454-75067059248a?w=800&amp;amp;q=50 800w,
-https://images.unsplash.com/photo-1499159058454-75067059248a?w=960&amp;amp;q=50 960w,
-https://images.unsplash.com/photo-1499159058454-75067059248a?w=1024&amp;amp;q=50 1024w,
-https://images.unsplash.com/photo-1499159058454-75067059248a?w=1200&amp;amp;q=50 1200w,
-https://images.unsplash.com/photo-1499159058454-75067059248a?w=1366&amp;amp;q=50 1366w,
-https://images.unsplash.com/photo-1499159058454-75067059248a?w=1920&amp;amp;q=50 1920w
-"
+srcset="https://images.unsplash.com/photo-1499159058454-75067059248a?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1499159058454-75067059248a?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1499159058454-75067059248a?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1499159058454-75067059248a?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1499159058454-75067059248a?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1499159058454-75067059248a?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1499159058454-75067059248a?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1499159058454-75067059248a?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1499159058454-75067059248a?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1499159058454-75067059248a?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1499159058454-75067059248a?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1499159058454-75067059248a?q=50&amp;amp;w=1920 1920w"
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1499159058454-75067059248a?w=1920&amp;amp;q=50" alt="Photo by @quinoal on Unsplash" title="Photo by @quinoal on Unsplash" width="100%" height="auto"/>
+src="https://images.unsplash.com/photo-1499159058454-75067059248a?q=50&amp;amp;w=1920" alt="Photo by @quinoal on Unsplash" title="Photo by @quinoal on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@quinoal">@quinoal&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;h2 id="small-talk-about-channel">Small talk about channel&lt;/h2>
@@ -2638,20 +2572,9 @@ ch &amp;lt;- 2
 &lt;/div>&lt;p>Thank you for reading!&lt;/p></description></item><item><title>Linux Retains the Size of the Deleted File</title><link>https://clavinjune.dev/en/blogs/linux-retains-the-size-of-the-deleted-file/</link><pubDate>Sat, 23 Jan 2021 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/linux-retains-the-size-of-the-deleted-file/</guid><description>
 &lt;figure>
 &lt;img
-srcset="
-https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?w=240&amp;amp;q=50 240w,
-https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?w=300&amp;amp;q=50 300w,
-https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?w=480&amp;amp;q=50 480w,
-https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?w=768&amp;amp;q=50 768w,
-https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?w=800&amp;amp;q=50 800w,
-https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?w=960&amp;amp;q=50 960w,
-https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?w=1024&amp;amp;q=50 1024w,
-https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?w=1200&amp;amp;q=50 1200w,
-https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?w=1366&amp;amp;q=50 1366w,
-https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?w=1920&amp;amp;q=50 1920w
-"
+srcset="https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?q=50&amp;amp;w=1920 1920w"
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?w=1920&amp;amp;q=50" alt="Photo by @ilyapavlov on Unsplash" title="Photo by @ilyapavlov on Unsplash" width="100%" height="auto"/>
+src="https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?q=50&amp;amp;w=1920" alt="Photo by @ilyapavlov on Unsplash" title="Photo by @ilyapavlov on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@ilyapavlov">@ilyapavlov&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>While interning, I once had an application that logged every request and response to the Linux file system. That app easily fills up our disks due to traffic. I got confused when I tried to delete log files because disk usage didn&amp;rsquo;t decrease even after the log files were deleted. So I restarted the app and finally, the disk usage decreased.&lt;/p>
@@ -2993,20 +2916,9 @@ Filesystem Size Used Avail Use% Mounted on
 &lt;/div>&lt;p>Thank you for reading!&lt;/p></description></item><item><title>Max Heap in Go</title><link>https://clavinjune.dev/en/blogs/max-heap-in-go/</link><pubDate>Sat, 16 Jan 2021 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/max-heap-in-go/</guid><description>
 &lt;figure>
 &lt;img
-srcset="
-https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?w=240&amp;amp;q=50 240w,
-https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?w=300&amp;amp;q=50 300w,
-https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?w=480&amp;amp;q=50 480w,
-https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?w=768&amp;amp;q=50 768w,
-https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?w=800&amp;amp;q=50 800w,
-https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?w=960&amp;amp;q=50 960w,
-https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?w=1024&amp;amp;q=50 1024w,
-https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?w=1200&amp;amp;q=50 1200w,
-https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?w=1366&amp;amp;q=50 1366w,
-https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?w=1920&amp;amp;q=50 1920w
-"
+srcset="https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?q=50&amp;amp;w=1920 1920w"
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?w=1920&amp;amp;q=50" alt="Photo by @freestocks on Unsplash" title="Photo by @freestocks on Unsplash" width="100%" height="auto"/>
+src="https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?q=50&amp;amp;w=1920" alt="Photo by @freestocks on Unsplash" title="Photo by @freestocks on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@freestocks">@freestocks&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>Same as the case &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://clavinjune.dev/blog/binary-search-tree-in-go-0f34cd/" >here&lt;/a>, I just wanted to revisit another data structure. Well, Max Heap (also Min Heap) is a data structure that commonly used to create a priority queue which also a complete binary tree that has nodes which value is greater (or lesser) than its children value.&lt;/p>
@@ -3608,20 +3520,9 @@ fmt.Println(h)
 &lt;/div>&lt;p>Thank you for reading!&lt;/p></description></item><item><title>Python Format Specifier Thousands Separator</title><link>https://clavinjune.dev/en/blogs/python-format-specifier-thousands-separator/</link><pubDate>Sat, 16 Jan 2021 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/python-format-specifier-thousands-separator/</guid><description>
 &lt;figure>
 &lt;img
-srcset="
-https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?w=240&amp;amp;q=50 240w,
-https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?w=300&amp;amp;q=50 300w,
-https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?w=480&amp;amp;q=50 480w,
-https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?w=768&amp;amp;q=50 768w,
-https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?w=800&amp;amp;q=50 800w,
-https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?w=960&amp;amp;q=50 960w,
-https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?w=1024&amp;amp;q=50 1024w,
-https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?w=1200&amp;amp;q=50 1200w,
-https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?w=1366&amp;amp;q=50 1366w,
-https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?w=1920&amp;amp;q=50 1920w
-"
+srcset="https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?q=50&amp;amp;w=1920 1920w"
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?w=1920&amp;amp;q=50" alt="Photo by @volkanolmez on Unsplash" title="Photo by @volkanolmez on Unsplash" width="100%" height="auto"/>
+src="https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?q=50&amp;amp;w=1920" alt="Photo by @volkanolmez on Unsplash" title="Photo by @volkanolmez on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@volkanolmez">@volkanolmez&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>I hate to say this, but I forgot this one-liner syntax in my online coding test. So, I think I need to put this here.&lt;/p>
@@ -3638,20 +3539,9 @@ print(format(-1234567890)) &lt;span style="color:#008000"># -1,234,567,890&lt;/s
 &lt;/div>&lt;p>Thank you for reading!&lt;/p></description></item><item><title>Greatest Common Divisor and Least Common Multiplier</title><link>https://clavinjune.dev/en/blogs/greatest-common-divisor-and-least-common-multiplier/</link><pubDate>Mon, 11 Jan 2021 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/greatest-common-divisor-and-least-common-multiplier/</guid><description>
 &lt;figure>
 &lt;img
-srcset="
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=240&amp;amp;q=50 240w,
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=300&amp;amp;q=50 300w,
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=480&amp;amp;q=50 480w,
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=768&amp;amp;q=50 768w,
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=800&amp;amp;q=50 800w,
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=960&amp;amp;q=50 960w,
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1024&amp;amp;q=50 1024w,
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1200&amp;amp;q=50 1200w,
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1366&amp;amp;q=50 1366w,
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1920&amp;amp;q=50 1920w
-"
+srcset="https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=1920 1920w"
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1920&amp;amp;q=50" alt="Photo by @roman_lazygeek on Unsplash" title="Photo by @roman_lazygeek on Unsplash" width="100%" height="auto"/>
+src="https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=1920" alt="Photo by @roman_lazygeek on Unsplash" title="Photo by @roman_lazygeek on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@roman_lazygeek">@roman_lazygeek&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>I only rewrite what was written on my &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://pastebin.com/eDNgaM7F" >pastebin&lt;/a>&lt;/p>
@@ -3699,20 +3589,9 @@ fmt.Println(findLCM(25, 100))
 &lt;/div>&lt;p>Thank you for reading!&lt;/p></description></item><item><title>Sieve of Eratosthenes</title><link>https://clavinjune.dev/en/blogs/sieve-of-eratosthenes/</link><pubDate>Sun, 10 Jan 2021 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/sieve-of-eratosthenes/</guid><description>
 &lt;figure>
 &lt;img
-srcset="
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=240&amp;amp;q=50 240w,
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=300&amp;amp;q=50 300w,
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=480&amp;amp;q=50 480w,
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=768&amp;amp;q=50 768w,
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=800&amp;amp;q=50 800w,
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=960&amp;amp;q=50 960w,
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1024&amp;amp;q=50 1024w,
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1200&amp;amp;q=50 1200w,
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1366&amp;amp;q=50 1366w,
-https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1920&amp;amp;q=50 1920w
-"
+srcset="https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=1920 1920w"
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1920&amp;amp;q=50" alt="Photo by @roman_lazygeek on Unsplash" title="Photo by @roman_lazygeek on Unsplash" width="100%" height="auto"/>
+src="https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;amp;w=1920" alt="Photo by @roman_lazygeek on Unsplash" title="Photo by @roman_lazygeek on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@roman_lazygeek">@roman_lazygeek&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>I don&amp;rsquo;t do anything except converting the pseudocode from &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes#Pseudocode" >wiki&lt;/a> into Golang code&lt;/p>
@@ -3818,20 +3697,9 @@ fmt.Println(fetchFirstPrimeNumbersOf(100))
 &lt;/div>&lt;p>Thank you for reading!&lt;/p></description></item><item><title>Contextual Logging in Go</title><link>https://clavinjune.dev/en/blogs/contextual-logging-in-go/</link><pubDate>Sat, 19 Dec 2020 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/contextual-logging-in-go/</guid><description>
 &lt;figure>
 &lt;img
-srcset="
-https://images.unsplash.com/photo-1580245492316-d542d595001b?w=240&amp;amp;q=50 240w,
-https://images.unsplash.com/photo-1580245492316-d542d595001b?w=300&amp;amp;q=50 300w,
-https://images.unsplash.com/photo-1580245492316-d542d595001b?w=480&amp;amp;q=50 480w,
-https://images.unsplash.com/photo-1580245492316-d542d595001b?w=768&amp;amp;q=50 768w,
-https://images.unsplash.com/photo-1580245492316-d542d595001b?w=800&amp;amp;q=50 800w,
-https://images.unsplash.com/photo-1580245492316-d542d595001b?w=960&amp;amp;q=50 960w,
-https://images.unsplash.com/photo-1580245492316-d542d595001b?w=1024&amp;amp;q=50 1024w,
-https://images.unsplash.com/photo-1580245492316-d542d595001b?w=1200&amp;amp;q=50 1200w,
-https://images.unsplash.com/photo-1580245492316-d542d595001b?w=1366&amp;amp;q=50 1366w,
-https://images.unsplash.com/photo-1580245492316-d542d595001b?w=1920&amp;amp;q=50 1920w
-"
+srcset="https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&amp;amp;w=1920 1920w"
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1580245492316-d542d595001b?w=1920&amp;amp;q=50" alt="Photo by @borisview on Unsplash" title="Photo by @borisview on Unsplash" width="100%" height="auto"/>
+src="https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&amp;amp;w=1920" alt="Photo by @borisview on Unsplash" title="Photo by @borisview on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@borisview">@borisview&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>I’ve just woke up and somehow I remembered when I created &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://clavinjune.dev/blog/creating-taboo-error-handler-for-go-f8e220" >taboo&lt;/a> to trace the error log. And then I think, would it be better if I pass the logger instead of the error log itself?&lt;/p>
@@ -4196,20 +4064,9 @@ log.Error().Msg(err.Error())
 &lt;p>Thank you for reading!&lt;/p></description></item><item><title>Asymmetric Cryptography Signing vs Encrypting</title><link>https://clavinjune.dev/en/blogs/asymmetric-cryptography-signing-vs-encrypting/</link><pubDate>Mon, 07 Dec 2020 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/asymmetric-cryptography-signing-vs-encrypting/</guid><description>
 &lt;figure>
 &lt;img
-srcset="
-https://images.unsplash.com/photo-1575908539614-ff89490f4a78?w=240&amp;amp;q=50 240w,
-https://images.unsplash.com/photo-1575908539614-ff89490f4a78?w=300&amp;amp;q=50 300w,
-https://images.unsplash.com/photo-1575908539614-ff89490f4a78?w=480&amp;amp;q=50 480w,
-https://images.unsplash.com/photo-1575908539614-ff89490f4a78?w=768&amp;amp;q=50 768w,
-https://images.unsplash.com/photo-1575908539614-ff89490f4a78?w=800&amp;amp;q=50 800w,
-https://images.unsplash.com/photo-1575908539614-ff89490f4a78?w=960&amp;amp;q=50 960w,
-https://images.unsplash.com/photo-1575908539614-ff89490f4a78?w=1024&amp;amp;q=50 1024w,
-https://images.unsplash.com/photo-1575908539614-ff89490f4a78?w=1200&amp;amp;q=50 1200w,
-https://images.unsplash.com/photo-1575908539614-ff89490f4a78?w=1366&amp;amp;q=50 1366w,
-https://images.unsplash.com/photo-1575908539614-ff89490f4a78?w=1920&amp;amp;q=50 1920w
-"
+srcset="https://images.unsplash.com/photo-1575908539614-ff89490f4a78?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1575908539614-ff89490f4a78?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1575908539614-ff89490f4a78?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1575908539614-ff89490f4a78?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1575908539614-ff89490f4a78?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1575908539614-ff89490f4a78?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1575908539614-ff89490f4a78?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1575908539614-ff89490f4a78?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1575908539614-ff89490f4a78?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1575908539614-ff89490f4a78?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1575908539614-ff89490f4a78?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1575908539614-ff89490f4a78?q=50&amp;amp;w=1920 1920w"
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1575908539614-ff89490f4a78?w=1920&amp;amp;q=50" alt="Photo by @hocza on Unsplash" title="Photo by @hocza on Unsplash" width="100%" height="auto"/>
+src="https://images.unsplash.com/photo-1575908539614-ff89490f4a78?q=50&amp;amp;w=1920" alt="Photo by @hocza on Unsplash" title="Photo by @hocza on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@hocza">@hocza&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>When we talk about crypto-something, we need to talk about Alice and Bob acting as actors in the example section. I hope you don&amp;rsquo;t get bored with them as I will use them as examples too. Here, Alice and Bob will use RSA for the asymmetric key, SHA256 for hash function, OAEP for encrypt/decrypt, PSS for sign/verify, and Base64 for the encoding.&lt;/p>
@@ -4725,20 +4582,9 @@ serialization by jackson: {&amp;#34;bar&amp;#34;:&amp;#34;barx&amp;#34;}
 &lt;p>Thank you for reading!&lt;/p></description></item><item><title>AVL Tree in Go</title><link>https://clavinjune.dev/en/blogs/avl-tree-in-go/</link><pubDate>Sun, 15 Nov 2020 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/avl-tree-in-go/</guid><description>
 &lt;figure>
 &lt;img
-srcset="
-https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=240&amp;amp;q=50 240w,
-https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=300&amp;amp;q=50 300w,
-https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=480&amp;amp;q=50 480w,
-https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=768&amp;amp;q=50 768w,
-https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=800&amp;amp;q=50 800w,
-https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=960&amp;amp;q=50 960w,
-https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=1024&amp;amp;q=50 1024w,
-https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=1200&amp;amp;q=50 1200w,
-https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=1366&amp;amp;q=50 1366w,
-https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=1920&amp;amp;q=50 1920w
-"
+srcset="https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?q=50&amp;amp;w=1920 1920w"
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=1920&amp;amp;q=50" alt="Photo by @loicleray on Unsplash" title="Photo by @loicleray on Unsplash" width="100%" height="auto"/>
+src="https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?q=50&amp;amp;w=1920" alt="Photo by @loicleray on Unsplash" title="Photo by @loicleray on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@loicleray">@loicleray&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>After I tried to implement &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://clavinjune.dev/blog/binary-search-tree-in-go-0f34cd/" >BST in Go&lt;/a>, it seems like I want to modify the BST to AVL because BST is not a fairly optimal tree data structure.&lt;/p>
@@ -5788,20 +5634,9 @@ traverse(node.right)
 &lt;/div>&lt;p>Thank you for reading!&lt;/p></description></item><item><title>Binary Search Tree in Go</title><link>https://clavinjune.dev/en/blogs/binary-search-tree-in-go/</link><pubDate>Thu, 12 Nov 2020 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/binary-search-tree-in-go/</guid><description>
 &lt;figure>
 &lt;img
-srcset="
-https://images.unsplash.com/photo-1507100403890-47482dcd79e0?w=240&amp;amp;q=50 240w,
-https://images.unsplash.com/photo-1507100403890-47482dcd79e0?w=300&amp;amp;q=50 300w,
-https://images.unsplash.com/photo-1507100403890-47482dcd79e0?w=480&amp;amp;q=50 480w,
-https://images.unsplash.com/photo-1507100403890-47482dcd79e0?w=768&amp;amp;q=50 768w,
-https://images.unsplash.com/photo-1507100403890-47482dcd79e0?w=800&amp;amp;q=50 800w,
-https://images.unsplash.com/photo-1507100403890-47482dcd79e0?w=960&amp;amp;q=50 960w,
-https://images.unsplash.com/photo-1507100403890-47482dcd79e0?w=1024&amp;amp;q=50 1024w,
-https://images.unsplash.com/photo-1507100403890-47482dcd79e0?w=1200&amp;amp;q=50 1200w,
-https://images.unsplash.com/photo-1507100403890-47482dcd79e0?w=1366&amp;amp;q=50 1366w,
-https://images.unsplash.com/photo-1507100403890-47482dcd79e0?w=1920&amp;amp;q=50 1920w
-"
+srcset="https://images.unsplash.com/photo-1507100403890-47482dcd79e0?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1507100403890-47482dcd79e0?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1507100403890-47482dcd79e0?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1507100403890-47482dcd79e0?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1507100403890-47482dcd79e0?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1507100403890-47482dcd79e0?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1507100403890-47482dcd79e0?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1507100403890-47482dcd79e0?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1507100403890-47482dcd79e0?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1507100403890-47482dcd79e0?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1507100403890-47482dcd79e0?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1507100403890-47482dcd79e0?q=50&amp;amp;w=1920 1920w"
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1507100403890-47482dcd79e0?w=1920&amp;amp;q=50" alt="Photo by @danfreemanphoto on Unsplash" title="Photo by @danfreemanphoto on Unsplash" width="100%" height="auto"/>
+src="https://images.unsplash.com/photo-1507100403890-47482dcd79e0?q=50&amp;amp;w=1920" alt="Photo by @danfreemanphoto on Unsplash" title="Photo by @danfreemanphoto on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@danfreemanphoto">@danfreemanphoto&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>So long since I learned to create BST back then at university. I feel like wanna revisit the BST things, so I make this post. BST is not that scary. You only need to create a tree without duplicated value on each node, then the less valuable nodes go to the left, and then the rest of the nodes go to the right or vice-versa. In this post, I&amp;rsquo;ll make a BST in Go Language with less valuable nodes of integer go to the left. I assume you have a basic knowledge of Go Language and tree data structure.&lt;/p>
@@ -6824,20 +6659,9 @@ FilterRegistrationBean&amp;lt;CharacterEncodingFilter&amp;gt; registrationBean =
 &lt;p>Thank you for reading!&lt;/p></description></item><item><title>Monetize Your Content With Web Monetization</title><link>https://clavinjune.dev/en/blogs/monetize-your-content-with-web-monetization/</link><pubDate>Fri, 30 Oct 2020 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/monetize-your-content-with-web-monetization/</guid><description>
 &lt;figure>
 &lt;img
-srcset="
-https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=240&amp;amp;q=50 240w,
-https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=300&amp;amp;q=50 300w,
-https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=480&amp;amp;q=50 480w,
-https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=768&amp;amp;q=50 768w,
-https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=800&amp;amp;q=50 800w,
-https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=960&amp;amp;q=50 960w,
-https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=1024&amp;amp;q=50 1024w,
-https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=1200&amp;amp;q=50 1200w,
-https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=1366&amp;amp;q=50 1366w,
-https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=1920&amp;amp;q=50 1920w
-"
+srcset="https://images.unsplash.com/photo-1517232117795-40c9d8212a04?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1517232117795-40c9d8212a04?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1517232117795-40c9d8212a04?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1517232117795-40c9d8212a04?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1517232117795-40c9d8212a04?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1517232117795-40c9d8212a04?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1517232117795-40c9d8212a04?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1517232117795-40c9d8212a04?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1517232117795-40c9d8212a04?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1517232117795-40c9d8212a04?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1517232117795-40c9d8212a04?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1517232117795-40c9d8212a04?q=50&amp;amp;w=1920 1920w"
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=1920&amp;amp;q=50" alt="Photo by @veato on Unsplash" title="Photo by @veato on Unsplash" width="100%" height="auto"/>
+src="https://images.unsplash.com/photo-1517232117795-40c9d8212a04?q=50&amp;amp;w=1920" alt="Photo by @veato on Unsplash" title="Photo by @veato on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@veato">@veato&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>In my &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://clavinjune.dev/blog/i-create-this-blog-using-jekyll-65efbd" >first post&lt;/a>, I said that:&lt;/p>
@@ -6867,20 +6691,9 @@ src="https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=1920&amp;amp
 &lt;p>Thank you for reading!&lt;/p></description></item><item><title>Create Redis Sets With Member Expiration</title><link>https://clavinjune.dev/en/blogs/create-redis-sets-with-member-expiration/</link><pubDate>Thu, 29 Oct 2020 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/create-redis-sets-with-member-expiration/</guid><description>
 &lt;figure>
 &lt;img
-srcset="
-https://images.unsplash.com/photo-1501139083538-0139583c060f?w=240&amp;amp;q=50 240w,
-https://images.unsplash.com/photo-1501139083538-0139583c060f?w=300&amp;amp;q=50 300w,
-https://images.unsplash.com/photo-1501139083538-0139583c060f?w=480&amp;amp;q=50 480w,
-https://images.unsplash.com/photo-1501139083538-0139583c060f?w=768&amp;amp;q=50 768w,
-https://images.unsplash.com/photo-1501139083538-0139583c060f?w=800&amp;amp;q=50 800w,
-https://images.unsplash.com/photo-1501139083538-0139583c060f?w=960&amp;amp;q=50 960w,
-https://images.unsplash.com/photo-1501139083538-0139583c060f?w=1024&amp;amp;q=50 1024w,
-https://images.unsplash.com/photo-1501139083538-0139583c060f?w=1200&amp;amp;q=50 1200w,
-https://images.unsplash.com/photo-1501139083538-0139583c060f?w=1366&amp;amp;q=50 1366w,
-https://images.unsplash.com/photo-1501139083538-0139583c060f?w=1920&amp;amp;q=50 1920w
-"
+srcset="https://images.unsplash.com/photo-1501139083538-0139583c060f?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1501139083538-0139583c060f?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1501139083538-0139583c060f?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1501139083538-0139583c060f?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1501139083538-0139583c060f?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1501139083538-0139583c060f?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1501139083538-0139583c060f?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1501139083538-0139583c060f?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1501139083538-0139583c060f?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1501139083538-0139583c060f?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1501139083538-0139583c060f?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1501139083538-0139583c060f?q=50&amp;amp;w=1920 1920w"
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1501139083538-0139583c060f?w=1920&amp;amp;q=50" alt="Photo by @aronvisuals on Unsplash" title="Photo by @aronvisuals on Unsplash" width="100%" height="auto"/>
+src="https://images.unsplash.com/photo-1501139083538-0139583c060f?q=50&amp;amp;w=1920" alt="Photo by @aronvisuals on Unsplash" title="Photo by @aronvisuals on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@aronvisuals">@aronvisuals&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>&lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://redis.io" >Redis&lt;/a> is a good in-memory key-value data store that supports many types of value. &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://redis.io/topics/data-types-intro#sorted-sets" >Sorted Sets&lt;/a> is one of them. According to the docs &lt;code>sorted sets&lt;/code> is:&lt;/p>
@@ -6935,20 +6748,9 @@ redisQuery(&amp;#34;ZADD $key $exp $otp&amp;#34;)
 &lt;p>Thank you for reading!&lt;/p></description></item><item><title>Creating Taboo Error Handler for Go</title><link>https://clavinjune.dev/en/blogs/creating-taboo-error-handler-for-go/</link><pubDate>Wed, 28 Oct 2020 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/creating-taboo-error-handler-for-go/</guid><description>
 &lt;figure>
 &lt;img
-srcset="
-https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=240&amp;amp;q=50 240w,
-https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=300&amp;amp;q=50 300w,
-https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=480&amp;amp;q=50 480w,
-https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=768&amp;amp;q=50 768w,
-https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=800&amp;amp;q=50 800w,
-https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=960&amp;amp;q=50 960w,
-https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=1024&amp;amp;q=50 1024w,
-https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=1200&amp;amp;q=50 1200w,
-https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=1366&amp;amp;q=50 1366w,
-https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=1920&amp;amp;q=50 1920w
-"
+srcset="https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?q=50&amp;amp;w=1920 1920w"
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=1920&amp;amp;q=50" alt="Photo by @hhh13 on Unsplash" title="Photo by @hhh13 on Unsplash" width="100%" height="auto"/>
+src="https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?q=50&amp;amp;w=1920" alt="Photo by @hhh13 on Unsplash" title="Photo by @hhh13 on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@hhh13">@hhh13&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>I created &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://github.com/anon-org/taboo" >this module&lt;/a> for Golang to help me with error handling. This idea showed when a colleague of mine was thinking to pass &lt;code>context&lt;/code> from handler to service, to repository to trace the error log more verbose. I disagreed with him because I thought that&amp;rsquo;s not what &lt;code>context&lt;/code> is for. Perhaps I was wrong or he was wrong, or maybe both of us wrong because this is our first Golang project that deployed on production.&lt;/p>
@@ -7161,20 +6963,9 @@ enabled: &lt;span style="color:#00f">true&lt;/span>
 &lt;p>Thank you for reading!&lt;/p></description></item><item><title>I Create This Blog Using Jekyll</title><link>https://clavinjune.dev/en/blogs/i-create-this-blog-using-jekyll/</link><pubDate>Sat, 24 Oct 2020 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/i-create-this-blog-using-jekyll/</guid><description>
 &lt;figure>
 &lt;img
-srcset="
-https://images.unsplash.com/photo-1542435503-956c469947f6?w=240&amp;amp;q=50 240w,
-https://images.unsplash.com/photo-1542435503-956c469947f6?w=300&amp;amp;q=50 300w,
-https://images.unsplash.com/photo-1542435503-956c469947f6?w=480&amp;amp;q=50 480w,
-https://images.unsplash.com/photo-1542435503-956c469947f6?w=768&amp;amp;q=50 768w,
-https://images.unsplash.com/photo-1542435503-956c469947f6?w=800&amp;amp;q=50 800w,
-https://images.unsplash.com/photo-1542435503-956c469947f6?w=960&amp;amp;q=50 960w,
-https://images.unsplash.com/photo-1542435503-956c469947f6?w=1024&amp;amp;q=50 1024w,
-https://images.unsplash.com/photo-1542435503-956c469947f6?w=1200&amp;amp;q=50 1200w,
-https://images.unsplash.com/photo-1542435503-956c469947f6?w=1366&amp;amp;q=50 1366w,
-https://images.unsplash.com/photo-1542435503-956c469947f6?w=1920&amp;amp;q=50 1920w
-"
+srcset="https://images.unsplash.com/photo-1542435503-956c469947f6?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1542435503-956c469947f6?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1542435503-956c469947f6?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1542435503-956c469947f6?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1542435503-956c469947f6?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1542435503-956c469947f6?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1542435503-956c469947f6?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1542435503-956c469947f6?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1542435503-956c469947f6?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1542435503-956c469947f6?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1542435503-956c469947f6?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1542435503-956c469947f6?q=50&amp;amp;w=1920 1920w"
 sizes="(max-width: 480px) 480px, 100vw"
-src="https://images.unsplash.com/photo-1542435503-956c469947f6?w=1920&amp;amp;q=50" alt="Photo by @jessbaileydesigns on Unsplash" title="Photo by @jessbaileydesigns on Unsplash" width="100%" height="auto"/>
+src="https://images.unsplash.com/photo-1542435503-956c469947f6?q=50&amp;amp;w=1920" alt="Photo by @jessbaileydesigns on Unsplash" title="Photo by @jessbaileydesigns on Unsplash" width="100%" height="auto"/>
 &lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@jessbaileydesigns">@jessbaileydesigns&lt;/a> on Unsplash&lt;/figcaption>
 &lt;/figure>
 &lt;p>&lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://clavinjune.dev/" >This blog&lt;/a> is the result of my learning journey about a static-site generator made on top of &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://jekyllrb.com/" >Jekyll&lt;/a>. The design is kinda bad due to my lacked sense of design. To avoid creating a whole trash blog, I tried to ask my friends to give me feedback about the design a bit.&lt;/p>
