@@ -1,0 +1,9 @@
+User-agent: *
+
+Sitemap: {{ .Site.BaseURL }}/sitemap.xml
+{{- range .Site.Languages }}
+Sitemap: {{ $.Site.BaseURL }}/{{ . }}/sitemap.xml
+{{- end }}
+
+Allow: /
+Disallow: /blog/
