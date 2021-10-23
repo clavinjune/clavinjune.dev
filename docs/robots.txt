@@ -7,3 +7,4 @@ Sitemap: https://clavinjune.dev/ja/sitemap.xml
 
 Allow: /
 Disallow: /blog/
+Disallow: /support/
