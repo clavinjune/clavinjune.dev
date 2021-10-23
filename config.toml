@@ -19,7 +19,6 @@ theme = 'june'
     ordered = true
     startLevel = 1
   [markup.highlight]
-    anchorLineNos = true
     codeFences = true
     guessSyntax = true
     lineNos = true
