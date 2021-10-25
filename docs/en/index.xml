@@ -1,4 +1,353 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Thu, 21 Oct 2021 21:28:31 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><item><title>Implement Unit Test for CLI Apps using Golang and Cobra</title><link>https://clavinjune.dev/en/blogs/implement-unit-test-for-cli-apps-using-golang-and-cobra/</link><pubDate>Thu, 21 Oct 2021 21:28:31 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/implement-unit-test-for-cli-apps-using-golang-and-cobra/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Mon, 25 Oct 2021 15:34:44 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><item><title>Image Processing Using Hugo</title><link>https://clavinjune.dev/en/blogs/image-processing-using-hugo/</link><pubDate>Mon, 25 Oct 2021 15:34:44 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/image-processing-using-hugo/</guid><description>
+&lt;figure>
+&lt;img
+srcset="https://images.unsplash.com/photo-1513434007132-241c9f0ecb56?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1513434007132-241c9f0ecb56?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1513434007132-241c9f0ecb56?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1513434007132-241c9f0ecb56?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1513434007132-241c9f0ecb56?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1513434007132-241c9f0ecb56?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1513434007132-241c9f0ecb56?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1513434007132-241c9f0ecb56?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1513434007132-241c9f0ecb56?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1513434007132-241c9f0ecb56?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1513434007132-241c9f0ecb56?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1513434007132-241c9f0ecb56?q=50&amp;amp;w=1920 1920w"
+sizes="(max-width: 480px) 480px, 100vw"
+src="https://images.unsplash.com/photo-1513434007132-241c9f0ecb56?q=50&amp;amp;w=1920" alt="Photo by @pascalwhoop on Unsplash" title="Photo by @pascalwhoop on Unsplash" width="100%" height="auto"/>
+&lt;figcaption class="font-16">Photo by &lt;a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@pascalwhoop">@pascalwhoop&lt;/a> on Unsplash&lt;/figcaption>
+&lt;/figure>
+&lt;h2 id="introduction">Introduction&lt;/h2>
+&lt;p>Since I migrated &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://clavinjune.dev" >this blog&lt;/a> from Jekyll to Hugo, I want to try all the features provided by Hugo. One of the features is image processing. It could help me to develop a mobile-friendly blog. An image processing might help you, who read these contents from a smartphone which might have a slow internet connection to load images faster.&lt;/p>
+&lt;p>Though I developed this blog as minimal as possible, processing an image might be a problem. That&amp;rsquo;s where Hugo&amp;rsquo;s feature helps me to create a solution for this problem. In this article, you will learn to implement image processing using Hugo.&lt;/p>
+&lt;h2 id="shortcodes">Shortcodes&lt;/h2>
+&lt;p>Shortcodes is one of Hugo&amp;rsquo;s feature that could help to reuse the implementation of image processing easily. You may want to read more about shortcodes &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://gohugo.io/content-management/shortcodes/" >here&lt;/a>. Now let&amp;rsquo;s create one.&lt;/p>
+&lt;p>You may create your shortcodes in your Hugo project at either one of these paths:&lt;/p>
+&lt;ol>
+&lt;li>&lt;code>/layouts/shortcodes/&amp;lt;name&amp;gt;.html&lt;/code>&lt;/li>
+&lt;li>&lt;code>/themes/&amp;lt;theme&amp;gt;/layouts/shortcodes/&amp;lt;name&amp;gt;.html&lt;/code>&lt;/li>
+&lt;/ol>
+&lt;p>You can create the shortcodes at &lt;code>/layouts/shortcodes/img.html&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go">{{- &lt;span style="">$&lt;/span>src := .Get &lt;span style="color:#a31515">&amp;#34;src&amp;#34;&lt;/span> -}}
+{{- &lt;span style="">$&lt;/span>alt := .Get &lt;span style="color:#a31515">&amp;#34;alt&amp;#34;&lt;/span> -}}
+&amp;lt;figure&amp;gt;
+&amp;lt;img
+src=&lt;span style="color:#a31515">&amp;#34;{{ $src }}&amp;#34;&lt;/span>
+alt=&lt;span style="color:#a31515">&amp;#34;{{ $alt }}&amp;#34;&lt;/span>
+width=&lt;span style="color:#a31515">&amp;#34;100%&amp;#34;&lt;/span>
+height=&lt;span style="color:#a31515">&amp;#34;auto&amp;#34;&lt;/span>/&amp;gt;
+&amp;lt;figcaption&amp;gt;{{ &lt;span style="">$&lt;/span>alt }}&amp;lt;/figcaption&amp;gt;
+&amp;lt;/figure&amp;gt;
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Let&amp;rsquo;s say you have put your images in &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://gohugo.io/hugo-pipes/introduction/#asset-directory" >Hugo&amp;rsquo;s assets directory&lt;/a>. For example, you put your image file in &lt;code>/assets/img/testing/ehe.png&lt;/code>, and then you can use it at your content like this:&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go">{{&amp;lt; img src=&lt;span style="color:#a31515">&amp;#34;/img/testing/ehe.png&amp;#34;&lt;/span> alt=&lt;span style="color:#a31515">&amp;#34;alt&amp;#34;&lt;/span> &amp;gt;}}
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>At the moment, Hugo will not render it yet. Let&amp;rsquo;s adjust the shortcode so it will render the image.&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go">{{- &lt;span style="">$&lt;/span>alt := .Get &lt;span style="color:#a31515">&amp;#34;alt&amp;#34;&lt;/span> -}}
+{{- &lt;span style="">$&lt;/span>res := resources.GetMatch (.Get &lt;span style="color:#a31515">&amp;#34;src&amp;#34;&lt;/span>) -}}
+&amp;lt;figure&amp;gt;
+&amp;lt;img
+src=&lt;span style="color:#a31515">&amp;#34;{{ $res.RelPermalink }}&amp;#34;&lt;/span>
+alt=&lt;span style="color:#a31515">&amp;#34;{{ $alt }}&amp;#34;&lt;/span>
+width=&lt;span style="color:#a31515">&amp;#34;100%&amp;#34;&lt;/span>
+height=&lt;span style="color:#a31515">&amp;#34;auto&amp;#34;&lt;/span>/&amp;gt;
+&amp;lt;figcaption&amp;gt;{{ &lt;span style="">$&lt;/span>alt }}&amp;lt;/figcaption&amp;gt;
+&amp;lt;/figure&amp;gt;
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Now your image is rendered. Let&amp;rsquo;s create multiple versions of it with different widths.&lt;/p>
+&lt;h2 id="widths">Widths&lt;/h2>
+&lt;p>Now define the widths you want to render. For example:&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go">...
+{{- &lt;span style="">$&lt;/span>ws := slice 480 768 1366 1920 -}}
+...
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Then, iterate over it with &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://gohugo.io/content-management/image-processing/#resize" >Hugo&amp;rsquo;s resize function&lt;/a>.&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go">...
+{{- &lt;span style="color:#00f">range&lt;/span> &lt;span style="">$&lt;/span>ws -}}
+{{- &lt;span style="">$&lt;/span>w := printf &lt;span style="color:#a31515">&amp;#34;%dx&amp;#34;&lt;/span> . -}}
+{{- (&lt;span style="">$&lt;/span>res.Resize &lt;span style="">$&lt;/span>w).RelPermalink | safeURL -}}
+{{- end -}}
+...
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Now you will get the output similar to this:&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-plain" data-lang="plain">/img/testing/ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_480x0_resize_box_3.png
+/img/testing/ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_768x0_resize_box_3.png
+/img/testing/ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_1366x0_resize_box_3.png
+/img/testing/ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_1920x0_resize_box_3.png
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Those are your processed image URL with every width which you defined before. Now let&amp;rsquo;s use them inside your image&amp;rsquo;s source sets.&lt;/p>
+&lt;h2 id="source-set">Source Set&lt;/h2>
+&lt;p>To define &lt;code>srcset attribute&lt;/code> on your image, you can use this &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-srcset" >format&lt;/a>:&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-html" data-lang="html">&amp;lt;img srcset=&lt;span style="color:#a31515">&amp;#34;
+&lt;/span>&lt;span style="color:#a31515">/url/to/480.png 480w,
+&lt;/span>&lt;span style="color:#a31515">/url/to/768.png 768w,
+&lt;/span>&lt;span style="color:#a31515">/url/to/1366.png 1366w,
+&lt;/span>&lt;span style="color:#a31515">/url/to/1920.png 1920w
+&lt;/span>&lt;span style="color:#a31515">&amp;#34;&lt;/span> alt=&lt;span style="color:#a31515">&amp;#34;alt&amp;#34;&lt;/span>&amp;gt;
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Let&amp;rsquo;s generate it inside your shortcodes.&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go">...
+{{- &lt;span style="">$&lt;/span>ws := slice 480 768 1366 1920 -}}
+{{- &lt;span style="">$&lt;/span>srcset := slice -}}
+{{- &lt;span style="color:#00f">range&lt;/span> &lt;span style="">$&lt;/span>ws -}}
+{{&lt;span style="color:#008000">/* to avoid creating an image that is larger than the source */&lt;/span>}}
+{{- &lt;span style="color:#00f">if&lt;/span> (le . &lt;span style="">$&lt;/span>res.Width) -}}
+{{- &lt;span style="">$&lt;/span>w := printf &lt;span style="color:#a31515">&amp;#34;%dx&amp;#34;&lt;/span> . -}}
+{{- &lt;span style="">$&lt;/span>url := (&lt;span style="">$&lt;/span>res.Resize &lt;span style="">$&lt;/span>w).RelPermalink | safeURL -}}
+{{- &lt;span style="">$&lt;/span>fmt := printf &lt;span style="color:#a31515">&amp;#34;%s %dw&amp;#34;&lt;/span> &lt;span style="">$&lt;/span>url . -}}
+{{- &lt;span style="">$&lt;/span>srcset = &lt;span style="">$&lt;/span>srcset | append &lt;span style="">$&lt;/span>fmt -}}
+{{- end -}}
+{{- end -}}
+...
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Now you have your &lt;code>srcset&lt;/code> format in a slice. You can join them using &lt;code>Hugo's delimit function&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go">...
+{{- &lt;span style="">$&lt;/span>set := delimit &lt;span style="">$&lt;/span>srcset &lt;span style="color:#a31515">&amp;#34;,&amp;#34;&lt;/span> -}}
+...
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Then, use it as &lt;code>srcset attribute&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-html" data-lang="html">...
+&amp;lt;figure&amp;gt;
+&amp;lt;img
+srcset=&lt;span style="color:#a31515">&amp;#34;{{ $set }}&amp;#34;&lt;/span>
+src=&lt;span style="color:#a31515">&amp;#34;{{ $res.RelPermalink }}&amp;#34;&lt;/span>
+alt=&lt;span style="color:#a31515">&amp;#34;{{ $alt }}&amp;#34;&lt;/span>
+width=&lt;span style="color:#a31515">&amp;#34;100%&amp;#34;&lt;/span>
+height=&lt;span style="color:#a31515">&amp;#34;auto&amp;#34;&lt;/span>/&amp;gt;
+&amp;lt;figcaption&amp;gt;{{ $alt }}&amp;lt;/figcaption&amp;gt;
+&amp;lt;/figure&amp;gt;
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Lastly, let&amp;rsquo;s make the HTML render the image according to the viewport width.&lt;/p>
+&lt;h2 id="sizes">sizes&lt;/h2>
+&lt;p>To define &lt;code>sizes attribute&lt;/code> on your image, you can use this &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-sizes" >format&lt;/a>:&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-html" data-lang="html">...
+&amp;lt;figure&amp;gt;
+&amp;lt;img
+srcset=&lt;span style="color:#a31515">&amp;#34;{{ $set }}&amp;#34;&lt;/span>
+sizes=&lt;span style="color:#a31515">&amp;#34;(max-width: 480px) 480px, 100vw&amp;#34;&lt;/span>
+src=&lt;span style="color:#a31515">&amp;#34;{{ $res.RelPermalink }}&amp;#34;&lt;/span>
+alt=&lt;span style="color:#a31515">&amp;#34;{{ $alt }}&amp;#34;&lt;/span>
+width=&lt;span style="color:#a31515">&amp;#34;100%&amp;#34;&lt;/span>
+height=&lt;span style="color:#a31515">&amp;#34;auto&amp;#34;&lt;/span>/&amp;gt;
+&amp;lt;figcaption&amp;gt;{{ $alt }}&amp;lt;/figcaption&amp;gt;
+&amp;lt;/figure&amp;gt;
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Here is the complete source code of &lt;code>/layouts/shortcodes/img.html&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go">{{- &lt;span style="">$&lt;/span>alt := .Get &lt;span style="color:#a31515">&amp;#34;alt&amp;#34;&lt;/span> -}}
+{{- &lt;span style="">$&lt;/span>res := resources.GetMatch (.Get &lt;span style="color:#a31515">&amp;#34;src&amp;#34;&lt;/span>) -}}
+{{- &lt;span style="">$&lt;/span>ws := slice 480 768 1366 1920 -}}
+{{- &lt;span style="">$&lt;/span>srcset := slice -}}
+{{- &lt;span style="color:#00f">range&lt;/span> &lt;span style="">$&lt;/span>ws -}}
+{{&lt;span style="color:#008000">/* to avoid creating an image that is larger than the source */&lt;/span>}}
+{{- &lt;span style="color:#00f">if&lt;/span> (le . &lt;span style="">$&lt;/span>res.Width) -}}
+{{- &lt;span style="">$&lt;/span>w := printf &lt;span style="color:#a31515">&amp;#34;%dx&amp;#34;&lt;/span> . -}}
+{{- &lt;span style="">$&lt;/span>url := (&lt;span style="">$&lt;/span>res.Resize &lt;span style="">$&lt;/span>w).RelPermalink | safeURL -}}
+{{- &lt;span style="">$&lt;/span>fmt := printf &lt;span style="color:#a31515">&amp;#34;%s %dw&amp;#34;&lt;/span> &lt;span style="">$&lt;/span>url . -}}
+{{- &lt;span style="">$&lt;/span>srcset = &lt;span style="">$&lt;/span>srcset | append &lt;span style="">$&lt;/span>fmt -}}
+{{- end -}}
+{{- end -}}
+{{- &lt;span style="">$&lt;/span>set := delimit &lt;span style="">$&lt;/span>srcset &lt;span style="color:#a31515">&amp;#34;,&amp;#34;&lt;/span> -}}
+&amp;lt;figure&amp;gt;
+&amp;lt;img
+srcset=&lt;span style="color:#a31515">&amp;#34;{{ $set }}&amp;#34;&lt;/span>
+sizes=&lt;span style="color:#a31515">&amp;#34;(max-width: 480px) 480px, 100vw&amp;#34;&lt;/span>
+src=&lt;span style="color:#a31515">&amp;#34;{{ $res.RelPermalink }}&amp;#34;&lt;/span>
+alt=&lt;span style="color:#a31515">&amp;#34;{{ $alt }}&amp;#34;&lt;/span>
+width=&lt;span style="color:#a31515">&amp;#34;100%&amp;#34;&lt;/span>
+height=&lt;span style="color:#a31515">&amp;#34;auto&amp;#34;&lt;/span>/&amp;gt;
+&amp;lt;figcaption&amp;gt;{{ &lt;span style="">$&lt;/span>alt }}&amp;lt;/figcaption&amp;gt;
+&amp;lt;/figure&amp;gt;
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Now if you build your Hugo site, you will see your images is auto-generated.&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-bash" data-lang="bash">$ tree img/
+img/
+└── testing
+├── ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_1366x0_resize_box_3.png
+├── ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_480x0_resize_box_3.png
+├── ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_768x0_resize_box_3.png
+└── ehe.png
+1 directory, 4 files
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Thank you for reading!&lt;/p></description></item><item><title>Implement Unit Test for CLI Apps using Golang and Cobra</title><link>https://clavinjune.dev/en/blogs/implement-unit-test-for-cli-apps-using-golang-and-cobra/</link><pubDate>Thu, 21 Oct 2021 21:28:31 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/implement-unit-test-for-cli-apps-using-golang-and-cobra/</guid><description>
 &lt;figure>
 &lt;img
 srcset="https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=240 240w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=300 300w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=360 360w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=480 480w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=768 768w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=800 800w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=960 960w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=1024 1024w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=1080 1080w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=1200 1200w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=1366 1366w,https://images.unsplash.com/photo-1576444356170-66073046b1bc?q=50&amp;amp;w=1920 1920w"
