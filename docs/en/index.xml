@@ -1465,8 +1465,7 @@ StatusCode: test.StatusCode,
 &lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-bash" data-lang="bash">$ go test ./... -race -coverprofile /tmp/coverage.out &amp;amp;&amp;amp; go tool cover -html=/tmp/coverage.out
 &lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>
-&lt;figure>
+&lt;/div>&lt;p>&lt;figure>
 &lt;img src="https://clavinjune.dev/img/mocking-http-call-in-golang/coverage.png" alt="Test Coverage" title="Test Coverage" width="100%" height="auto" />
 &lt;figcaption>Test Coverage&lt;/figcaption>
 &lt;/figure>&lt;/p>
@@ -2923,8 +2922,7 @@ src="https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?q=50&amp;amp;w
 &lt;/figure>
 &lt;p>Same as the case &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://clavinjune.dev/blog/binary-search-tree-in-go-0f34cd/" >here&lt;/a>, I just wanted to revisit another data structure. Well, Max Heap (also Min Heap) is a data structure that commonly used to create a priority queue which also a complete binary tree that has nodes which value is greater (or lesser) than its children value.&lt;/p>
 &lt;p>Not like BST that I implemented before, Max Heap commonly implemented using array in order to make it easier (I think) to access its children. To accessing each nodes parent or children you can visualize the whole array as a tree. I have no image for it, so I pick Max Heap image from another website. The concept is the same with Min Heap tho.&lt;/p>
-&lt;p>
-&lt;figure>
+&lt;p>&lt;figure>
 &lt;img src="https://iq.opengenus.org/content/images/2019/06/Max-Heap.png" alt="Photo by opengenus.org" title="Photo by opengenus.org" width="100%" height="auto" />
 &lt;figcaption>Photo by opengenus.org&lt;/figcaption>
 &lt;/figure>&lt;/p>
@@ -4593,8 +4591,7 @@ src="https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?q=50&amp;amp;w=19
 &lt;p>To find a specific node you don&amp;rsquo;t have to go around the whole tree, you need to know that BST can route to a specific node by checking the node value&lt;/p>
 &lt;/blockquote>
 &lt;p>It&amp;rsquo;s half true because there&amp;rsquo;s a case that BST makes a linear tree like this:&lt;/p>
-&lt;p>
-&lt;figure>
+&lt;p>&lt;figure>
 &lt;img src="https://clavinjune.dev/img/avl-tree-in-go/linear-tree.png" alt="linear tree" title="linear tree" width="100%" height="auto" />
 &lt;figcaption>linear tree&lt;/figcaption>
 &lt;/figure>&lt;/p>
@@ -6647,8 +6644,7 @@ FilterRegistrationBean&amp;lt;CharacterEncodingFilter&amp;gt; registrationBean =
 &lt;/div>&lt;p>&lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://www.baeldung.com/spring-boot-characterencodingfilter" >reference&lt;/a>&lt;/p>
 &lt;p>Thank you for reading!&lt;/p></description></item><item><title>Work Life Balance</title><link>https://clavinjune.dev/en/blogs/work-life-balance/</link><pubDate>Sun, 01 Nov 2020 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/work-life-balance/</guid><description>&lt;p>On one of the &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://open.spotify.com/episode/6U5LH5iAZNNDd32N3nKIJl?si=06f11v9nSAWHHf11IwDmRg" >episode&lt;/a> of &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://positif.dev" >positif.dev&lt;/a>, Devin and I discussed about what is work-life balance. I described work-life balance as a happiness that hard to achieve, since we need to separate both our work and life, time and environment where we don’t need to think about work after work-hour.&lt;/p>
 &lt;p>So far I have had a work-life balance in terms of work, but personally I sometimes have problems with my habit of working outside working hours when I’m in the zone. Devin said it is quite difficult not to think about work outside of working hours when the work itself is almost done because there are factors such as the urgency of the job and curiosity. And because of curiosity itself, we forget to take a break, then because we forget to take a break, we can’t finish things that make us curious. Ironic right?&lt;/p>
-&lt;p>
-&lt;figure>
+&lt;p>&lt;figure>
 &lt;img src="https://i.kym-cdn.com/entries/icons/original/000/030/338/New.jpg" alt="Photo From Know Your Meme" title="Photo From Know Your Meme" width="100%" height="auto" />
 &lt;figcaption>Photo From Know Your Meme&lt;/figcaption>
 &lt;/figure>&lt;/p>
@@ -6673,15 +6669,13 @@ src="https://images.unsplash.com/photo-1517232117795-40c9d8212a04?q=50&amp;amp;w
 &lt;p>The implementation was so easy, you just need to have a digital wallet account. Currently, &lt;code>Web Monetization&lt;/code> only supports digital wallet like &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://webmonetization.org/docs/gatehub" >Gatehub&lt;/a>, &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://webmonetization.org/docs/uphold" >Uphold&lt;/a>, and &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://webmonetization.org/docs/xrptipbot" >XRP Tipbot&lt;/a>. I personally use uphold because it has many withdrawal currencies. You can follow the registration steps by clicking the link that I referred on each wallet, find your &lt;code>Interledger payment pointer&lt;/code> (&lt;strong>ILP&lt;/strong>) which has this format &lt;code>$wallet.example.com/alice&lt;/code>, and finally put it on your blog&amp;rsquo;s &lt;code>meta tag&lt;/code>. &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://webmonetization.org/docs/getting-started" >This docs&lt;/a> is to the point and clear.&lt;/p>
 &lt;h2 id="where-the-money-comes-from">Where the money comes from?&lt;/h2>
 &lt;p>Currently, &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://webmonetization.org" >Web Monetization&lt;/a> only provider is &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://coil.com" >Coil&lt;/a>. For every Coil paid members that visit your monetized content will stream a micro amount of money to your ILP automatically. &lt;code>Coil&lt;/code> will pay you per second for about &lt;code>$0.36/hour&lt;/code> according to &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://help.coil.com/accounts/creator-accounts#faqs" >this FAQ&lt;/a> which you should read to learn how Coil works. As the paid members of Coil, you can enjoy exclusive contents from &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://coil.com/explore" >these websites&lt;/a>. This is my content income after integrated with &lt;code>Web Monetization&lt;/code>.&lt;/p>
-&lt;p>
-&lt;figure>
+&lt;p>&lt;figure>
 &lt;img src="https://clavinjune.dev/img/monetize-your-content-with-web-monetization/uphold.png" alt="Moneeeeeeyyy" title="Moneeeeeeyyy" width="100%" height="auto" />
 &lt;figcaption>Moneeeeeeyyy&lt;/figcaption>
 &lt;/figure>&lt;/p>
 &lt;p>To make your “premium” visitors feel more valued when visiting your content, you can give them exclusive content that free member can’t access, or perhaps removing ads. Then, the next question is how can you differentiate premium visitors from free visitors? The answer is in &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://webmonetization.org/docs/api" >this documentation&lt;/a> along with the examples. Besides your personal web, you can also monetize your &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://help.coil.com/for-creators/youtube-channels" >Youtube&lt;/a>, &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://help.coil.com/for-creators/twitch-stream" >Twitch&lt;/a> contents, and &lt;a class="link" rel="noreferrer noopener" target="_blank" href="https://dev.to/devteam/you-can-now-web-monetize-your-dev-posts-but-don-t-get-your-hopes-up-too-quickly-goc" >DEV&lt;/a> posts.&lt;/p>
 &lt;p>Even though this post is like sponsoring some companies (which I hope so), they didn&amp;rsquo;t sponsor me to write this. The whole content of this post is to encourage you to try Web Monetization because I think this is the new future for monetizing digital contents. I really hate it when I only need to read one or two articles from a web then I meet paywall.&lt;/p>
-&lt;p>
-&lt;figure>
+&lt;p>&lt;figure>
 &lt;img src="https://clavinjune.dev/img/monetize-your-content-with-web-monetization/paywall.png" alt="Paywall" title="Paywall" width="100%" height="auto" />
 &lt;figcaption>Paywall&lt;/figcaption>
 &lt;/figure>&lt;/p>
