@@ -3,3 +3,4 @@ https://git.io/cj-4ad0a => https://clavinjune.github.io/en/blogs/image-processin
 https://git.io/cj-11afa => https://clavinjune.github.io/en/blogs/create-log-parser-using-go/
 https://git.io/cj-92799 => https://clavinjune.github.io/en/blogs/my-custom-http-error-in-golang/
 https://git.io/cj-b41d1 => https://clavinjune.github.io/en/blogs/this-is-why-you-should-learn-golang/
+https://git.io/cj-0f0dc => https://clavinjune.github.io/en/blogs/golang-http-client-interceptors/
