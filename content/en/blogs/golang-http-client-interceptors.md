@@ -37,7 +37,7 @@ First thing first, let's create a simple project called interceptor.
 
 > Please be aware that inside this project, all errors are ignored to simplify the code. You may not want to copy and paste all of this code into a production code. Please take it with a grain of salt.
 
-```bash
+```bash {linenos=false}
 $ tree .
 .
 ├── client
@@ -139,13 +139,13 @@ func main() {
 
 Now, if you run the server:
 
-```bash
+```bash {linenos=false}
 $ go run server/main.go
 ```
 
 And run the client:
 
-```bash
+```bash {linenos=false}
 $ go run client/main.go
 ```
 
@@ -163,7 +163,9 @@ Now let's create the custom HTTP Client that will intercept our request to the s
 
 Golang has this one interface called RoundTripper that is implemented by Golang as a DefaultTransport, which is called every time you make an HTTP Request using the DefaultClient. I advise you to **really** read the [docs](https://pkg.go.dev/net/http#RoundTripper) before implementing this RoundTripper.
 
-```go
+```go {linenostart=12}
+...
+
 type Interceptor struct {
   core http.RoundTripper
 }
@@ -193,13 +195,15 @@ func (i Interceptor) RoundTrip(r *http.Request) (*http.Response, error) {
   // send the request using the DefaultTransport
   return i.core.RoundTrip(newReq)
 }
+
+...
 ```
 
 Now let's use the Interceptor inside the HTTP client.
 
 Change this line inside `client/main.go`
 
-```go
+```go {linenostart=48}
 ...
 
 c := http.DefaultClient
@@ -209,7 +213,7 @@ c := http.DefaultClient
 
 into this:
 
-```go
+```go {linenostart=48}
 ...
 
 c := &http.Client{
@@ -233,7 +237,7 @@ Now if you try to re-run the client, the output should be like this:
 
 In the same way, you can also intercept the server's response.
 
-```go
+```go {linenostart=30}
 ...
 
 func (Interceptor) modifyResponse(r *http.Response) *http.Response {

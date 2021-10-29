@@ -27,7 +27,7 @@ In this blog post, you will create a simple logs parser using Go as a first step
 
 Let's say there's a single line of log formatted like this:
 
-```plain
+```plain {linenos=false}
 [2021-08-27T07:39:54.173Z] "GET /healthz HTTP/1.1" 200 - 0 61 225 - "111.114.195.106,10.0.0.11" "okhttp/3.12.1" "0557b0bd-4c1c-4c7a-ab7f-2120d67bee2f" "example.com" "172.16.0.1:8080"
 ```
 
@@ -41,13 +41,13 @@ You could extract the data you want from that line, for example:
 
 Then create the log format according to that line. Let's say you want to name the `timestamp` as `$time_stamp`, and the unimportant data as `$_`. Now you will have a formatted string like this:
 
-```plain
+```plain {linenos=false}
 [$time_stamp] "$http_method $request_path $_" $response_code - $_ $_ $_ - "$ips" "$_" "$_" "$_" "$_"
 ```
 
 So you can read your logs data like this:
 
-```plain
+```plain {linenos=false}
   $time_stamp    => 2021-08-27T07:39:54.173Z
   $http_method   => GET
   $request_path  => /healthz
@@ -59,7 +59,9 @@ So you can read your logs data like this:
 
 Let's create a `main.go` file with the logs data and the format. To be easily used by the regex, you should escape the special symbol in your format using `\`.
 
-```go
+```go  {linenostart=3}
+...
+
 func main() {
   logsExample := `[2021-08-27T07:39:54.173Z] "GET /healthz HTTP/1.1" 200 - 0 61 225 - "111.114.195.106,10.0.0.11" "okhttp/3.12.1" "0557b0bd-4c1c-4c7a-ab7f-2120d67bee2f" "example.com" "172.16.0.1:8080"`
   logsFormat := `\[$time_stamp\] \"$http_method $request_path $_\" $response_code - $_ $_ $_ - \"$ips\" \"$_\" \"$_\" \"$_\" \"$_\"`
@@ -68,7 +70,7 @@ func main() {
 
 After define the format, adjust your `logFormat` to a format that regex could read. Because your variable starts with `$` and only contains `alphanumeric` and `underscore`. You can match the variable using this regex `\$([\w_]*)` then change all of the variables into a `named capturing group` in regex. Which is `(?P<name>re)`. Because you want to `replace` the `<name>` to your defined variable name, you can modify the `named capturing group` to `(?P<$1>.*)`. So if you put that in the code, it should be like this:
 
-```go
+```go {linenostart=6}
   ...
 
   regexFormat := regexp.MustCompile(`\$([\w_]*)`).ReplaceAllString(logsFormat, `(?P<$1>.*)`)
@@ -78,13 +80,13 @@ After define the format, adjust your `logFormat` to a format that regex could re
 
 Now your `regexFormat` looks like this:
 
-```plain
+```plain {linenos=false}
 \[(?P<time_stamp>.*)\] \"(?P<http_method>.*) (?P<request_path>.*) (?P<_>.*)\" (?P<response_code>.*) - (?P<_>.*) (?P<_>.*) (?P<_>.*) - \"(?P<ips>.*)\" \"(?P<_>.*)\" \"(?P<_>.*)\" \"(?P<_>.*)\" \"(?P<_>.*)\"
 ```
 
 Then compile your `regexFormat` to find all data in the logs line.
 
-```go
+```go {linenostart=7}
   ...
 
   re := regexp.MustCompile(regexFormat)
@@ -95,7 +97,7 @@ Then compile your `regexFormat` to find all data in the logs line.
 
 Now `matches` should have all your matched data. Let's print it.
 
-```go
+```go {linenostart=10}
   ...
 
   for i, k := range re.SubexpNames() {
@@ -112,7 +114,7 @@ Now `matches` should have all your matched data. Let's print it.
 
 The output should be like this:
 
-```plain
+```plain {linenos=false}
 $ go run main.go 
 time_stamp      => 2021-08-27T07:39:54.173Z
 http_method     => GET

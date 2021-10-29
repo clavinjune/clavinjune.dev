@@ -23,7 +23,7 @@ Cobra also has no excuse for no tests. Even though it only helps you to create a
 
 ## Initialize Cobra Project
 
-```bash
+```bash {linenos=false} {linenos=false}
 $ cobra init example --pkg-name example
 Your Cobra application is ready at
 /tmp/example
@@ -87,14 +87,14 @@ Now you have a simple running CLI app. Let's try to run it.
 
 With toggle
 
-```bash
+```bash {linenos=false}
 $ go run main.go -t
 ok
 ```
 
 Without toggle
 
-```bash
+```bash {linenos=false}
 $ go run main.go 
 Error: not ok
 Usage:
@@ -251,7 +251,9 @@ It's up to you to choose either option [1](#option-1) or [2](#option-2). You can
 
 Let's say you stick with `option 2`. Now you need to create the test cases. In this case, the test cases will be either `with the toggle flag` or `without`. But first, let's make a helper function that will execute the root command and store the output to a variable. By storing the command output to a variable, you can compare the command output with your expectations.
 
-```go
+```go {linenostart=9}
+...
+
 func execute(t *testing.T, c *cobra.Command, args ...string) (string, error) {
   t.Helper()
 
@@ -263,11 +265,15 @@ func execute(t *testing.T, c *cobra.Command, args ...string) (string, error) {
   err := c.Execute()
   return strings.TrimSpace(buf.String()), err
 }
+
+...
 ```
 
 After creating the helper function, let's make the test cases.
 
-```go
+```go {linenostart=21}
+...
+
 func TestRootCmd(t *testing.T) {
   is := is.New(t)
 

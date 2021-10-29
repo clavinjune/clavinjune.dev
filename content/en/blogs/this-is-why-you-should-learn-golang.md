@@ -82,7 +82,7 @@ import (
 
 Binary! Golang builds your code into a binary. If you are on Windows, it will build your code into executable files, if you are on Linux it will build an ELF file, and so on. Also, you can control the build by only using an Environment variable. Let's say you are on a Linux machine, but you want to create an executable file for windows, just tell it so.
 
-```bash
+```bash {linenos=false}
 $ ls
 main.go
 $ GOOS=windows GOARCH=amd64 go build main.go 
@@ -95,7 +95,7 @@ main: Mach-O 64-bit x86_64 executable
 
 You can also create a Web Assembly module:
 
-```bash
+```bash {linenos=false}
 $ GOOS=js GOARCH=wasm go build -o main.wasm main.go
 $ file main.wasm
 main.wasm: WebAssembly (wasm) binary module version 0x1 (MVP)

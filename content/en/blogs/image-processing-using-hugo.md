@@ -72,7 +72,7 @@ Now your image is rendered. Let's create multiple versions of it with different 
 
 Now define the widths you want to render. For example:
 
-```go
+```go {linenostart=2}
 ...
 
 {{- $ws := slice 480 768 1366 1920 -}}
@@ -82,7 +82,7 @@ Now define the widths you want to render. For example:
 
 Then, iterate over it with [Hugo's resize function](https://gohugo.io/content-management/image-processing/#resize).
 
-```go
+```go {linenostart=2}
 ...
 
 {{- range $ws -}}
@@ -95,7 +95,7 @@ Then, iterate over it with [Hugo's resize function](https://gohugo.io/content-ma
 
 Now you will get the output similar to this:
 
-```plain
+```plain {linenos=false}
 /img/testing/ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_480x0_resize_box_3.png
 /img/testing/ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_768x0_resize_box_3.png
 /img/testing/ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_1366x0_resize_box_3.png
@@ -119,7 +119,7 @@ To define `srcset attribute` on your image, you can use this [format](https://de
 
 Let's generate it inside your shortcodes.
 
-```go
+```go {linenostart=2}
 ...
 
 {{- $ws := slice 480 768 1366 1920 -}}
@@ -139,7 +139,7 @@ Let's generate it inside your shortcodes.
 
 Now you have your `srcset` format in a slice. You can join them using `Hugo's delimit function`.
 
-```go
+```go {linenostart=14}
 ...
 
 {{- $set := delimit $srcset "," -}}
@@ -149,7 +149,7 @@ Now you have your `srcset` format in a slice. You can join them using `Hugo's de
 
 Then, use it as `srcset attribute`.
 
-```html
+```html {linenostart=16}
 ...
 
 <figure>
@@ -169,7 +169,7 @@ Lastly, let's make the HTML render the image according to the viewport width.
 
 To define `sizes attribute` on your image, you can use this [format](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-sizes):
 
-```html
+```html {linenostart=16}
 ...
 
 <figure>
@@ -218,7 +218,7 @@ Here is the complete source code of `/layouts/shortcodes/img.html`:
 
 Now if you build your Hugo site, you will see your images is auto-generated.
 
-```bash
+```bash {linenos=false}
 $ tree img/
 img/
 └── testing
