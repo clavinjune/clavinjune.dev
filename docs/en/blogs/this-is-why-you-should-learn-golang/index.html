@@ -152,7 +152,19 @@
 </div>
 </div><h2 id=build-result>Build Result</h2>
 <p>Binary! Golang builds your code into a binary. If you are on Windows, it will build your code into executable files, if you are on Linux it will build an ELF file, and so on. Also, you can control the build by only using an Environment variable. Let&rsquo;s say you are on a Linux machine, but you want to create an executable file for windows, just tell it so.</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ ls
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ ls
 main.go
 $ GOOS=windows GOARCH=amd64 go build main.go 
 $ file main.exe 
@@ -160,11 +172,22 @@ main.exe: PE32+ executable (console) x86-64 (stripped to external PDB), <span st
 $ GOOS=darwin GOARCH=amd64 go build main.go 
 $ file main
 main: Mach-O 64-bit x86_64 executable
-</code></pre></div><p>You can also create a Web Assembly module:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ GOOS=js GOARCH=wasm go build -o main.wasm main.go
+</code></pre></td></tr></table>
+</div>
+</div><p>You can also create a Web Assembly module:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ GOOS=js GOARCH=wasm go build -o main.wasm main.go
 $ file main.wasm
 main.wasm: WebAssembly (wasm) binary module version 0x1 (MVP)
-</code></pre></div><h2 id=conclusion>Conclusion</h2>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=conclusion>Conclusion</h2>
 <p>I know that I&rsquo;m not covering all the language specifications. All the reasons above are quite subjective to me as a developer, you may find your interests in Golang by referring to the <a class=link rel="noreferrer noopener" target=_blank href=https://golang.org/doc/faq>FAQ page</a> or the <a class=link rel="noreferrer noopener" target=_blank href=https://golang.org/ref/spec>specification page</a>. Also, Golang is on its way to the <a class=link rel="noreferrer noopener" target=_blank href=https://go.googlesource.com/proposal/+/master/design/go2draft.md>2nd version</a> which will support Generic and better error handling.</p>
 <p>Thank you for reading!</p>
 </div>

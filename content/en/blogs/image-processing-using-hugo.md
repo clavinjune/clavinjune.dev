@@ -95,7 +95,7 @@ Then, iterate over it with [Hugo's resize function](https://gohugo.io/content-ma
 
 Now you will get the output similar to this:
 
-```plain {linenos=false}
+```plain
 /img/testing/ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_480x0_resize_box_3.png
 /img/testing/ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_768x0_resize_box_3.png
 /img/testing/ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_1366x0_resize_box_3.png
@@ -218,7 +218,7 @@ Here is the complete source code of `/layouts/shortcodes/img.html`:
 
 Now if you build your Hugo site, you will see your images is auto-generated.
 
-```bash {linenos=false}
+```bash
 $ tree img/
 img/
 └── testing

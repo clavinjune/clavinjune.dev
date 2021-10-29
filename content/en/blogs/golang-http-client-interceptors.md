@@ -37,7 +37,7 @@ First thing first, let's create a simple project called interceptor.
 
 > Please be aware that inside this project, all errors are ignored to simplify the code. You may not want to copy and paste all of this code into a production code. Please take it with a grain of salt.
 
-```bash {linenos=false}
+```bash
 $ tree .
 .
 ├── client
@@ -139,13 +139,13 @@ func main() {
 
 Now, if you run the server:
 
-```bash {linenos=false}
+```bash
 $ go run server/main.go
 ```
 
 And run the client:
 
-```bash {linenos=false}
+```bash
 $ go run client/main.go
 ```
 

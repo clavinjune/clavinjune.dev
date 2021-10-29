@@ -46,7 +46,7 @@
 <span class=middot>&#183;</span>
 <span>Oct 21, 2021</span>
 <span class=middot>&#183;</span>
-<span>~5 min</span>
+<span>~6 min</span>
 </div>
 <div id=content>
 <figure>
@@ -58,7 +58,27 @@
 <p>Besides that, creating tests will help you develop a better code. A testable code is a better code. At least that&rsquo;s what I think. Because it forced you to think about the corner cases, create smaller decoupled functions, Etc. Even though it takes time, it makes your code more readable and gives only a few chances for bugs to have showtime.</p>
 <p>Cobra also has no excuse for no tests. Even though it only helps you to create a CLI app, it needs proper testable code too. In this blog post, you will learn how to implement unit tests for Cobra.</p>
 <h2 id=initialize-cobra-project>Initialize Cobra Project</h2>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ cobra init example --pkg-name example
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ cobra init example --pkg-name example
 Your Cobra application is ready at
 /tmp/example
 $ cd example &amp;&amp; go mod init example
@@ -74,7 +94,9 @@ $ tree .
 └── main.go
 
 1 directory, 4 files
-</code></pre></div><h2 id=modify-root-command>Modify Root Command</h2>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=modify-root-command>Modify Root Command</h2>
 <p>To implement a simple unit test, you can remove all the <code>root.go</code> file content and make it as minimum as possible. For example:</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
@@ -152,10 +174,33 @@ $ tree .
 </div>
 </div><p>Now you have a simple running CLI app. Let&rsquo;s try to run it.</p>
 <p>With toggle</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ go run main.go -t
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ go run main.go -t
 ok
-</code></pre></div><p>Without toggle</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ go run main.go 
+</code></pre></td></tr></table>
+</div>
+</div><p>Without toggle</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ go run main.go 
 Error: not ok
 Usage:
   example [flags]
@@ -166,7 +211,9 @@ Flags:
 
 Error: not ok
 exit status 1
-</code></pre></div><p>Now the code is running, but it doesn&rsquo;t seem like it is a testable code. Let&rsquo;s modify it. To alter the code and make it testable, you have several options.</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>Now the code is running, but it doesn&rsquo;t seem like it is a testable code. Let&rsquo;s modify it. To alter the code and make it testable, you have several options.</p>
 <ol>
 <li>Change the Cobra structure, create a function that returns the rootCmd and pass it to the Execute function so you can execute it from the main file</li>
 <li>Keep the nature of the Cobra code, and work harder on the test</li>

@@ -27,7 +27,7 @@ In this blog post, you will create a simple logs parser using Go as a first step
 
 Let's say there's a single line of log formatted like this:
 
-```plain {linenos=false}
+```plain
 [2021-08-27T07:39:54.173Z] "GET /healthz HTTP/1.1" 200 - 0 61 225 - "111.114.195.106,10.0.0.11" "okhttp/3.12.1" "0557b0bd-4c1c-4c7a-ab7f-2120d67bee2f" "example.com" "172.16.0.1:8080"
 ```
 
@@ -41,13 +41,13 @@ You could extract the data you want from that line, for example:
 
 Then create the log format according to that line. Let's say you want to name the `timestamp` as `$time_stamp`, and the unimportant data as `$_`. Now you will have a formatted string like this:
 
-```plain {linenos=false}
+```plain
 [$time_stamp] "$http_method $request_path $_" $response_code - $_ $_ $_ - "$ips" "$_" "$_" "$_" "$_"
 ```
 
 So you can read your logs data like this:
 
-```plain {linenos=false}
+```plain
   $time_stamp    => 2021-08-27T07:39:54.173Z
   $http_method   => GET
   $request_path  => /healthz
@@ -80,7 +80,7 @@ After define the format, adjust your `logFormat` to a format that regex could re
 
 Now your `regexFormat` looks like this:
 
-```plain {linenos=false}
+```plain
 \[(?P<time_stamp>.*)\] \"(?P<http_method>.*) (?P<request_path>.*) (?P<_>.*)\" (?P<response_code>.*) - (?P<_>.*) (?P<_>.*) (?P<_>.*) - \"(?P<ips>.*)\" \"(?P<_>.*)\" \"(?P<_>.*)\" \"(?P<_>.*)\" \"(?P<_>.*)\"
 ```
 
@@ -114,7 +114,7 @@ Now `matches` should have all your matched data. Let's print it.
 
 The output should be like this:
 
-```plain {linenos=false}
+```plain
 $ go run main.go 
 time_stamp      => 2021-08-27T07:39:54.173Z
 http_method     => GET

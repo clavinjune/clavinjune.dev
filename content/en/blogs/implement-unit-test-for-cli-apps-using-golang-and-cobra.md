@@ -23,7 +23,7 @@ Cobra also has no excuse for no tests. Even though it only helps you to create a
 
 ## Initialize Cobra Project
 
-```bash {linenos=false} {linenos=false}
+```bash
 $ cobra init example --pkg-name example
 Your Cobra application is ready at
 /tmp/example
@@ -87,14 +87,14 @@ Now you have a simple running CLI app. Let's try to run it.
 
 With toggle
 
-```bash {linenos=false}
+```bash
 $ go run main.go -t
 ok
 ```
 
 Without toggle
 
-```bash {linenos=false}
+```bash
 $ go run main.go 
 Error: not ok
 Usage:
