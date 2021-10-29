@@ -96,7 +96,7 @@ main: Mach-O 64-bit x86_64 executable
 You can also create a Web Assembly module:
 
 ```bash
-$ GOOS=js GOARCH=wasm go build -o main.wasm
+$ GOOS=js GOARCH=wasm go build -o main.wasm main.go
 $ file main.wasm
 main.wasm: WebAssembly (wasm) binary module version 0x1 (MVP)
 ```
