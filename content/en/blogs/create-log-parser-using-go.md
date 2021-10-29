@@ -39,7 +39,7 @@ You could extract the data you want from that line, for example:
 4. Response Code
 5. IPs
 
-Then create the log format according to that line. Let's say you want to name the `timestamp` as `$timestamp`, and the unimportant data as `$_`. Now you will have a formatted string like this:
+Then create the log format according to that line. Let's say you want to name the `timestamp` as `$time_stamp`, and the unimportant data as `$_`. Now you will have a formatted string like this:
 
 ```plain
 [$time_stamp] "$http_method $request_path $_" $response_code - $_ $_ $_ - "$ips" "$_" "$_" "$_" "$_"
