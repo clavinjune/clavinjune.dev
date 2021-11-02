@@ -54,10 +54,10 @@
 <figcaption class=font-16>Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target=_blank href=https://unsplash.com/@pascalwhoop>@pascalwhoop</a> on Unsplash</figcaption>
 </figure>
 <h2 id=introduction>Introduction</h2>
-<p>Since I migrated <a class=link rel="noreferrer noopener" target=_blank href=https://clavinjune.dev>this blog</a> from Jekyll to Hugo, I want to try all the features provided by Hugo. One of the features is image processing. It could help me to develop a mobile-friendly blog. An image processing might help you, who read these contents from a smartphone which might have a slow internet connection to load images faster.</p>
+<p>Since I migrated <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://clavinjune.dev>this blog</a> from Jekyll to Hugo, I want to try all the features provided by Hugo. One of the features is image processing. It could help me to develop a mobile-friendly blog. An image processing might help you, who read these contents from a smartphone which might have a slow internet connection to load images faster.</p>
 <p>Though I developed this blog as minimal as possible, processing an image might be a problem. That&rsquo;s where Hugo&rsquo;s feature helps me to create a solution for this problem. In this article, you will learn to implement image processing using Hugo.</p>
 <h2 id=shortcodes>Shortcodes</h2>
-<p>Shortcodes is one of Hugo&rsquo;s feature that could help to reuse the implementation of image processing easily. You may want to read more about shortcodes <a class=link rel="noreferrer noopener" target=_blank href=https://gohugo.io/content-management/shortcodes/>here</a>. Now let&rsquo;s create one.</p>
+<p>Shortcodes is one of Hugo&rsquo;s feature that could help to reuse the implementation of image processing easily. You may want to read more about shortcodes <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://gohugo.io/content-management/shortcodes/>here</a>. Now let&rsquo;s create one.</p>
 <p>You may create your shortcodes in your Hugo project at either one of these paths:</p>
 <ol>
 <li><code>/layouts/shortcodes/&lt;name>.html</code></li>
@@ -92,7 +92,7 @@
 &lt;/figure&gt;
 </code></pre></td></tr></table>
 </div>
-</div><p>Let&rsquo;s say you have put your images in <a class=link rel="noreferrer noopener" target=_blank href=https://gohugo.io/hugo-pipes/introduction/#asset-directory>Hugo&rsquo;s assets directory</a>. For example, you put your image file in <code>/assets/img/testing/ehe.png</code>, and then you can use it at your content like this:</p>
+</div><p>Let&rsquo;s say you have put your images in <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://gohugo.io/hugo-pipes/introduction/#asset-directory>Hugo&rsquo;s assets directory</a>. For example, you put your image file in <code>/assets/img/testing/ehe.png</code>, and then you can use it at your content like this:</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
@@ -149,7 +149,7 @@
 ...
 </code></pre></td></tr></table>
 </div>
-</div><p>Then, iterate over it with <a class=link rel="noreferrer noopener" target=_blank href=https://gohugo.io/content-management/image-processing/#resize>Hugo&rsquo;s resize function</a>.</p>
+</div><p>Then, iterate over it with <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://gohugo.io/content-management/image-processing/#resize>Hugo&rsquo;s resize function</a>.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
@@ -189,7 +189,7 @@
 </div>
 </div><p>Those are your processed image URL with every width which you defined before. Now let&rsquo;s use them inside your image&rsquo;s source sets.</p>
 <h2 id=source-set>Source Set</h2>
-<p>To define <code>srcset attribute</code> on your image, you can use this <a class=link rel="noreferrer noopener" target=_blank href=https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-srcset>format</a>:</p>
+<p>To define <code>srcset attribute</code> on your image, you can use this <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-srcset>format</a>:</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
@@ -293,7 +293,7 @@
 </div>
 </div><p>Lastly, let&rsquo;s make the HTML render the image according to the viewport width.</p>
 <h2 id=sizes>sizes</h2>
-<p>To define <code>sizes attribute</code> on your image, you can use this <a class=link rel="noreferrer noopener" target=_blank href=https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-sizes>format</a>:</p>
+<p>To define <code>sizes attribute</code> on your image, you can use this <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-sizes>format</a>:</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16

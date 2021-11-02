@@ -53,11 +53,11 @@
 <img srcset="https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&w=240 240w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&w=300 300w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&w=360 360w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&w=480 480w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&w=768 768w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&w=800 800w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&w=960 960w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&w=1024 1024w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&w=1080 1080w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&w=1200 1200w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&w=1366 1366w,https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&w=1920 1920w" sizes="(max-width: 480px) 480px, 100vw" src="https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&w=1920" alt="Photo by @borisview on Unsplash" title="Photo by @borisview on Unsplash" width=100% height=auto>
 <figcaption class=font-16>Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target=_blank href=https://unsplash.com/@borisview>@borisview</a> on Unsplash</figcaption>
 </figure>
-<p>I’ve just woke up and somehow I remembered when I created <a class=link rel="noreferrer noopener" target=_blank href=https://clavinjune.dev/blog/creating-taboo-error-handler-for-go-f8e220>taboo</a> to trace the error log. And then I think, would it be better if I pass the logger instead of the error log itself?</p>
+<p>I’ve just woke up and somehow I remembered when I created <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://clavinjune.dev/blog/creating-taboo-error-handler-for-go-f8e220>taboo</a> to trace the error log. And then I think, would it be better if I pass the logger instead of the error log itself?</p>
 <p>As the context passed, it will contain a sub-logger that has <code>x-request-id</code> inside it. It’ll trace all the requested event from HTTP Handler to the most corner of the function.</p>
 <p>I don&rsquo;t know if this gonna be good because I wrote this immediately right after I woke up. This might be not optimized or perhaps an anti-pattern. But at least this could be a reference for you to create a contextual logger.</p>
 <h2 id=logger>Logger</h2>
-<p>First thing first, you need a logger. Might be anything, but I will use <a class=link rel="noreferrer noopener" target=_blank href=https://github.com/rs/zerolog>zerolog</a> in this post. I won&rsquo;t explain about zerolog since you can use anything you want.</p>
+<p>First thing first, you need a logger. Might be anything, but I will use <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://github.com/rs/zerolog>zerolog</a> in this post. I won&rsquo;t explain about zerolog since you can use anything you want.</p>
 <p>Format the base logger to match your logging style.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
@@ -398,7 +398,7 @@
 }
 </code></pre></td></tr></table>
 </div>
-</div><p>Try it by accessing <a class=link rel="noreferrer noopener" target=_blank href=http://localhost:8000>http://localhost:8000</a>. The output looks like this if I accessed it twice.</p>
+</div><p>Try it by accessing <a class=link rel="nofollow noreferrer noopener" target=_blank href=http://localhost:8000>http://localhost:8000</a>. The output looks like this if I accessed it twice.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
