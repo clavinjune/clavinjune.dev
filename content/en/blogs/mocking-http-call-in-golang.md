@@ -7,8 +7,7 @@ isarchived: true
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=1920&q=50"]
 aliases: ["/blog/mocking-http-call-in-golang-92d768"]
-description: >
-  This post contains notes on how to mock HTTP Call in golang.
+description: "This post contains notes on how to mock HTTP Call in golang"
 ---
 
 {{< unsplash user="@kellysikkema" src="photo-1507925921958-8a62f3d1a50d" q="50" >}}

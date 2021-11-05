@@ -7,8 +7,7 @@ isarchived: true
 categories: ["tech"]
 images: []
 aliases: ["/blog/golang-context-cancelled-on-goroutine-40ffb1"]
-description: >
-  This post contains notes about request context behavior on goroutine.
+description: "This post contains notes about request context behavior on goroutine"
 ---
 
 Golang's request context is automatically be done when passed on goroutine, and its parents goroutine is already done.

@@ -7,8 +7,7 @@ isarchived: true
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1542435503-956c469947f6?w=1920&q=50"]
 aliases: ["/blog/i-create-this-blog-using-jekyll-65efbd"]
-description: >
-  This post contains my own experience in building the Jekyll static site from scratch until integrating this post using RSS.
+description: "This post contains my own experience in building the Jekyll static site from scratch until integrating this post using RSS."
 ---
 
 {{< unsplash user="@jessbaileydesigns" src="photo-1542435503-956c469947f6" q="50" >}}

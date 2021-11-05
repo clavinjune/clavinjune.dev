@@ -7,8 +7,7 @@ isarchived: true
 categories: ["tech"]
 images: []
 aliases: ["/blog/execute-date-format-in-cron-2d96c1"]
-description: >
-  This post contains notes on how to execute date formatting in cron
+description: "This post contains notes on how to execute date formatting in cron"
 ---
 
 Escaping `%` in crontab using `\%`

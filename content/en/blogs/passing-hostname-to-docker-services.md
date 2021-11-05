@@ -7,8 +7,7 @@ isarchived: true
 categories: ["tech"]
 images: []
 aliases: ["/blog/passing-hostname-to-docker-services-c7339b"]
-description: >
-  This post contains notes on how to pass host hostname to docker services via environment variable without changing service hostname
+description: "This post contains notes on how to pass host hostname to docker services via environment variable without changing service hostname"
 ---
 
 Passing hostname to docker container won't work

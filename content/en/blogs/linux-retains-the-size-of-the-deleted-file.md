@@ -7,8 +7,7 @@ isarchived: true
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1512317049220-d3c6fcaf6681?w=1920&q=50"]
 aliases: ["/blog/linux-retains-the-size-of-the-deleted-file-4765b9"]
-description: >
-  This post contains notes on how to retrieve back the size that Linux preserves from a deleted file if the file is being used by the process that we can't kill or restart
+description: "This post contains notes on how to retrieve back the size that Linux preserves from a deleted file if the file is being used by the process that we can't kill or restart"
 ---
 
 {{< unsplash user="@ilyapavlov" src="photo-1512317049220-d3c6fcaf6681" q="50" >}}

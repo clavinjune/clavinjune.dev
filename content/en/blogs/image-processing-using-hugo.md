@@ -7,8 +7,7 @@ isarchived: false
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1513434007132-241c9f0ecb56?w=1920&q=50"]
 aliases: []
-description: >
-  Implementing image processing using hugo and shortcodes
+description: "Implementing image processing using hugo and shortcodes"
 ---
 
 {{< unsplash user="@pascalwhoop" src="photo-1513434007132-241c9f0ecb56" q="50" >}}

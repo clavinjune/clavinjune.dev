@@ -7,8 +7,7 @@ isarchived: true
 categories: ["life-style"]
 images: ["https://d3t3ozftmdmh3i.cloudfront.net/production/podcast_uploaded_episode/6959825/6959825-1604216114712-74967a0dc6ae2.jpg"]
 aliases: ["/blog/work-life-balance-e39a65"]
-description: >
-  In this podcast, we discuss how important it is to achieve Work Life Balance. we share our experiences dividing our time between work and personal life, what we do to improve our Work Life Balance, as well as some of our activities outside of working hours.
+description: "In this podcast, we discuss how important it is to achieve Work Life Balance. we share our experiences dividing our time between work and personal life, what we do to improve our Work Life Balance, as well as some of our activities outside of working hours"
 ---
 
 On one of the [episode](https://open.spotify.com/episode/6U5LH5iAZNNDd32N3nKIJl?si=06f11v9nSAWHHf11IwDmRg) of [positif.dev](https://positif.dev), Devin and I discussed about what is work-life balance. I described work-life balance as a happiness that hard to achieve, since we need to separate both our work and life, time and environment where we don’t need to think about work after work-hour.

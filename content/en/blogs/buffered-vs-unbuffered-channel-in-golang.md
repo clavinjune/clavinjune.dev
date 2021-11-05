@@ -7,8 +7,7 @@ isarchived: true
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1499159058454-75067059248a?w=1920&q=50"]
 aliases: ["/blog/buffered-vs-unbuffered-channel-in-golang-dc97bf"]
-description: >
-  This post contains notes about the differences between buffered and unbuffered channel in golang.
+description: "This post contains notes about the differences between buffered and unbuffered channel in golang."
 ---
 
 {{< unsplash user="@quinoal" src="photo-1499159058454-75067059248a" w="1920" q="50" >}}

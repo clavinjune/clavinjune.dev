@@ -7,8 +7,7 @@ isarchived: true
 categories: ["tech"]
 images: []
 aliases: ["/blog/my-custom-http-error-in-golang-9c193b"]
-description: >
-  This post contains notes on how I handle http error in golang
+description: "This post contains notes on how I handle http error in golang"
 ---
 
 This is how I handle error with golang on http server

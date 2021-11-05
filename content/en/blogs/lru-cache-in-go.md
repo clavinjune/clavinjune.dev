@@ -7,8 +7,7 @@ isarchived: true
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=1920&q=50"]
 aliases: ["/blog/lru-cache-in-go-e7351e"]
-description: >
-  This post contains notes on how to implementing least recently used (LRU) cache in Golang that has O(1) Time Complexity.
+description: "This post contains notes on how to implementing least recently used (LRU) cache in Golang that has O(1) Time Complexity"
 ---
 
 {{< unsplash user="@mrthetrain" src="photo-1580188911874-f95af62924ee" q="50" >}}

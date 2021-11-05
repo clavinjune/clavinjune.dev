@@ -7,8 +7,7 @@ isarchived: true
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1920&q=50"]
 aliases: ["/blog/my-mistake-on-converting-slice-to-slice-of-ptr-in-golang-24761b"]
-description: >
-  This post contains notes on my mistake when converting slice of int to slice of int ptr
+description: "This post contains notes on my mistake when converting slice of int to slice of int ptr"
 ---
 
 {{< unsplash user="@iavnt" src="photo-1513104890138-7c749659a591" q="50" >}}

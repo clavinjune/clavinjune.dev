@@ -7,8 +7,7 @@ isarchived: true
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?w=1920&q=50"]
 aliases: ["/blog/avl-tree-in-go-5daf99"]
-description: >
-  This post contains my own experiences in Modifying the BST Code to AVL
+description: "This post contains my own experiences in Modifying the BST Code to AVL"
 ---
 
 {{< unsplash user="@loicleray" src="photo-1561900478-5001f6b4d8ed" q="50" >}}

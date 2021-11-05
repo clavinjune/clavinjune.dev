@@ -7,8 +7,7 @@ isarchived: false
 categories: ["sponsored"]
 images: ["https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=1920&q=50"]
 aliases: []
-description: >
-  Bypassing Google ReCAPTCHA automatically using 2Captcha, Chromedp, and Go
+description: "Bypassing Google ReCAPTCHA automatically using 2Captcha, Chromedp, and Go"
 ---
 
 {{< unsplash user="@agk42" src="photo-1485827404703-89b55fcc595e" q="50" >}}

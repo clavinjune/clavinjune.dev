@@ -7,8 +7,7 @@ isarchived: false
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1592505633903-e77dc19978ac?w=1920&q=50"]
 aliases: []
-description: >
-  Implementing interceptors for Golang HTTP Client
+description: "Implementing interceptors for Golang HTTP Client"
 ---
 
 {{< unsplash user="@flowforfrank" src="photo-1592505633903-e77dc19978ac" q="50" >}}

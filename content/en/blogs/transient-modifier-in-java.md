@@ -7,8 +7,7 @@ isarchived: true
 categories: ["tech"]
 images: []
 aliases: ["/blog/transient-modifier-in-java-05f48e"]
-description: >
-  This post contains notes on how to manage java class attribute exclusion during serialization using transient modifiers
+description: "This post contains notes on how to manage java class attribute exclusion during serialization using transient modifiers"
 ---
 
 Data serialization library in Java could be varied. You can use Jackson, GSON, or anything else. Since there are too many serialization libraries out there, it's quite tricky to manage Java class attribute exclusion during serialization. Each library might have their own way to exclude the Java class attribute. Each Java project should only have 1 serialization library in order to maintain the standardization but, what if somehow in someway you need more than one serialization library?

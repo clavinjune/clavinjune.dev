@@ -7,8 +7,7 @@ isarchived: true
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1920&q=50"]
 aliases: ["/blog/greatest-common-divisor-and-least-common-multiplier-4a0275"]
-description: >
-  This post contains notes about how to create pow function and find greatest common divisor & least common multiplier
+description: "This post contains notes about how to create pow function and find greatest common divisor & least common multiplier"
 ---
 
 {{< unsplash user="@roman_lazygeek" src="photo-1453733190371-0a9bedd82893" q="50" >}}

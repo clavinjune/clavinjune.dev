@@ -46,7 +46,7 @@ theme = 'june'
     languageName = 'English'
     weight = 1
     [languages.en.params]
-    description = 'Clavin June Personal Web'
+    description = 'Clavin June Personal Web that contains public information about Clavin June and his articles'
     locale = "en_US"
 
     [[languages.en.menu.main]]
@@ -74,7 +74,7 @@ theme = 'june'
     languageName = 'Bahasa Indonesia'
     weight = 2
     [languages.id.params]
-      description = 'Clavin June Personal Web'
+      description = 'Clavin June Personal Web that contains public information about Clavin June and his articles'
       locale = "id_ID"
 
     [[languages.id.menu.main]]
@@ -102,7 +102,7 @@ theme = 'june'
     languageName = '日本語'
     weight = 3
     [languages.ja.params]
-      description = 'Clavin June Personal Web'
+      description = 'Clavin June Personal Web that contains public information about Clavin June and his articles'
       locale = "ja_JP"
 
     [[languages.ja.menu.main]]

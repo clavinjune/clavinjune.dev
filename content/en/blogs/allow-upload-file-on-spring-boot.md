@@ -7,8 +7,7 @@ isarchived: true
 categories: ["tech"]
 images: []
 aliases: ["/blog/allow-upload-file-on-spring-boot-4374a8"]
-description: >
-  This post contains notes how to enabling upload file on spring boot.
+description: "This post contains notes how to enabling upload file on spring boot."
 ---
 
 Add this on application configuration:

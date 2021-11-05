@@ -7,8 +7,7 @@ isarchived: true
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1507100403890-47482dcd79e0?w=1920&q=50"]
 aliases: ["/blog/binary-search-tree-in-go-0f34cd"]
-description: >
-  This post contains my own experiences in reviewing my knowledge of BST data structure
+description: "This post contains my own experiences in reviewing my knowledge of BST data structure"
 ---
 
 {{< unsplash user="@danfreemanphoto" src="photo-1507100403890-47482dcd79e0" q="50" >}}
