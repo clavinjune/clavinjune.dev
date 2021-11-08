@@ -4,3 +4,4 @@ https://git.io/cj-11afa => https://clavinjune.github.io/en/blogs/create-log-pars
 https://git.io/cj-92799 => https://clavinjune.github.io/en/blogs/my-custom-http-error-in-golang/
 https://git.io/cj-b41d1 => https://clavinjune.github.io/en/blogs/this-is-why-you-should-learn-golang/
 https://git.io/cj-0f0dc => https://clavinjune.github.io/en/blogs/golang-http-client-interceptors/
+https://git.io/cj-4c124 => https://clavinjune.github.io/en/blogs/bypass-recaptcha-automatically-using-go/
