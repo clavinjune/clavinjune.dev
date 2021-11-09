@@ -40,7 +40,7 @@ $ tree .
 
 ```bash
 $ go mod download
-$ $ API_KEY=XXXXXXXX make run
+$ API_KEY=XXXXXXXX make run
 2021/11/05 08:06:46 Status 200 OK data OK|684...
 2021/11/05 08:06:59 Status 200 OK data CAPCHA_NOT_READY
 2021/11/05 08:07:10 Status 200 OK data CAPCHA_NOT_READY
@@ -159,7 +159,7 @@ Navigate to the `targetURL` and give it a timeout depending on your internet spe
   wait(`[data-sitekey]`),
 ```
 
-Wait for the element that has `[data-sitekey] attribute` which is the Google ReCAPTCHA site key that you will pass as the `solveRecaptcha` function.
+Wait for the element that has `[data-sitekey] attribute` which is the Google ReCAPTCHA site key that you will pass to the `solveRecaptcha` function.
 
 ```go {linenostart=51}
   wait(`#g-recaptcha-response`),
