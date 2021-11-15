@@ -1,5 +1,5 @@
 ---
-title: "Speed Up Golang Test"
+title: "Speed Up Golang Test Execution Time"
 date: 2021-11-15T16:06:19+07:00
 draft: false
 iscjklanguage: false
@@ -7,7 +7,7 @@ isarchived: false
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1517026575980-3e1e2dedeab4?w=1920&q=50"]
 aliases: []
-description: "Speed up golang test using parallel test"
+description: "Speed up golang test execution time using parallel test"
 ---
 
 {{< unsplash user="@chrisliverani" src="photo-1517026575980-3e1e2dedeab4" q="50" >}}
