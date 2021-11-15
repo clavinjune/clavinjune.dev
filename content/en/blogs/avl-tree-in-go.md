@@ -12,7 +12,7 @@ description: "This post contains my own experiences in Modifying the BST Code to
 
 {{< unsplash user="@loicleray" src="photo-1561900478-5001f6b4d8ed" q="50" >}}
 
-After I tried to implement [BST in Go](/blog/binary-search-tree-in-go-0f34cd/), it seems like I want to modify the BST to AVL because BST is not a fairly optimal tree data structure.
+After I tried to implement [BST in Go](/blogs/binary-search-tree-in-go/), it seems like I want to modify the BST to AVL because BST is not a fairly optimal tree data structure.
 
 When I said this:
 
@@ -24,7 +24,7 @@ It's half true because there's a case that BST makes a linear tree like this:
 
 And if you want to find a node with value 6, in the end, you will travel the whole tree. That’s why we need AVL to improve the time complexity. AVL will try to rebalance the tree whenever it becomes imbalance after insertion/deletion.
 
-The whole concept of AVL is much the same with BST besides the rebalancing algorithm. In AVL we need to rebalance the tree by rotating every imbalance sub-tree in every insertion/deletion. So we're gonna use all the code from [here](/blog/binary-search-tree-in-go-0f34cd/) and modified it a bit.
+The whole concept of AVL is much the same with BST besides the rebalancing algorithm. In AVL we need to rebalance the tree by rotating every imbalance sub-tree in every insertion/deletion. So we're gonna use all the code from [here](/blogs/binary-search-tree-in-go/) and modified it a bit.
 
 To see the tree is balanced or not, we need to define the height on each node. We can calculate the height by counting the maximum height of the left and the right node recursively. If the node has no child, it means its height is 1 otherwise we compare the maximum height of the children.
 

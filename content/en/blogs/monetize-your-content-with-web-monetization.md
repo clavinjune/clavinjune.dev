@@ -12,7 +12,7 @@ description: "This post contains my own experience monetizing my blog using Web 
 
 {{< unsplash user="@veato" src="photo-1517232117795-40c9d8212a04" q="50" >}}
 
-In my [first post](/blog/i-create-this-blog-using-jekyll-65efbd), I said that:
+In my [first post](/blogs/i-create-this-blog-using-jekyll/), I said that:
 
 > Perhaps I’m gonna try to integrate this blog using Webmention and Web Monetization after getting a bunch of visitors, but I’m gonna save it for later.
 
