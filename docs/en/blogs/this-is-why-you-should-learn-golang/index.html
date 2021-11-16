@@ -54,137 +54,65 @@
 <p><a class=link rel="nofollow noreferrer noopener" target=_blank href=https://golang.org/>Golang</a> is one of the youngest programming languages. Until this post is published, the current stable Golang version is 1.17.2. Besides that, it is considered a popular programming language amongst developers. It can be built and run on many platforms and environments (Sorry, Java), bundled with solid and supportive built-in packages, and many more.</p>
 <p>I use Golang due to the lack of magic of the language, verbose, structured, and clean. Within this article, you are going to discover reasons why you should consider learning Golang. I&rsquo;m not going to compare Golang with other programming languages because I think that will end in smoke. So let&rsquo;s start with the language structure itself.</p>
 <h2 id=language-structure>Language Structure</h2>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> main
-
-<span style=color:#00f>import</span> (
-  <span style=color:#a31515>&#34;errors&#34;</span>
-  <span style=color:#a31515>&#34;fmt&#34;</span>
-)
-
-<span style=color:#00f>type</span> Numbers []<span style=color:#2b91af>int</span>
-
-<span style=color:#00f>func</span> (n Numbers) Repeat() <span style=color:#2b91af>error</span> {
-  <span style=color:#00f>if</span> n == <span style=color:#00f>nil</span> {
-    <span style=color:#00f>return</span> errors.New(<span style=color:#a31515>&#34;Numbers is nil&#34;</span>)
-  }
-
-  <span style=color:#00f>for</span> i, e := <span style=color:#00f>range</span> n {
-    fmt.Printf(<span style=color:#a31515>&#34;%02d =&gt; %3d\n&#34;</span>, i+1, e)
-  }
-
-  <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
-}
-
-<span style=color:#00f>func</span> main() {
-  <span style=color:#00f>if</span> err := Numbers(<span style=color:#00f>nil</span>).Repeat(); err != <span style=color:#00f>nil</span> {
-    fmt.Println(err)
-  }
-
-  _ = Numbers([]<span style=color:#2b91af>int</span>{1, 99, 100}).Repeat()
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>I will not cover all the language syntax, but the code above is an example of Golang&rsquo;s code. You don&rsquo;t need to understand it right now, but you can learn the structure of the code starts from the <code>package</code> and <code>import</code> as a code scope, <code>func main</code> as an entry point, <code>if-else</code> and <code>for loop</code> as one of the control structure, <code>types</code>, <code>nil</code>, <code>errors</code>, etc.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>package</span> main
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#00f>import</span> (
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  <span style=color:#a31515>&#34;errors&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  <span style=color:#a31515>&#34;fmt&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span><span style=color:#00f>type</span> Numbers []<span style=color:#2b91af>int</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span><span style=color:#00f>func</span> (n Numbers) Repeat() <span style=color:#2b91af>error</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  <span style=color:#00f>if</span> n == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>    <span style=color:#00f>return</span> errors.New(<span style=color:#a31515>&#34;Numbers is nil&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>  <span style=color:#00f>for</span> i, e := <span style=color:#00f>range</span> n {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>    fmt.Printf(<span style=color:#a31515>&#34;%02d =&gt; %3d\n&#34;</span>, i+1, e)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>  <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span><span style=color:#00f>func</span> main() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>  <span style=color:#00f>if</span> err := Numbers(<span style=color:#00f>nil</span>).Repeat(); err != <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>    fmt.Println(err)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>  _ = Numbers([]<span style=color:#2b91af>int</span>{1, 99, 100}).Repeat()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>}
+</code></pre></div><p>I will not cover all the language syntax, but the code above is an example of Golang&rsquo;s code. You don&rsquo;t need to understand it right now, but you can learn the structure of the code starts from the <code>package</code> and <code>import</code> as a code scope, <code>func main</code> as an entry point, <code>if-else</code> and <code>for loop</code> as one of the control structure, <code>types</code>, <code>nil</code>, <code>errors</code>, etc.</p>
 <p>It is <code>strictly typed</code>, using <code>curly braces</code> as scope even though you only write a single line of control structure, using <code>nil</code> instead of <code>null</code> (you save 1 character here), and only using a semicolon to separate statements, not to ends it. All that said, Golang&rsquo;s syntax is beginner-friendly, at least that&rsquo;s what I thought.</p>
 <p>You won&rsquo;t be afraid of writing a dirty code syntax or whatsoever, because not only Golang has its <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://golang.org/doc/effective_go>guide</a> to writing it better, it also has its own <code>linter</code> and <code>formatter</code> that tells you what variable is unused built right in. And that&rsquo;s what you&rsquo;re gonna know about.</p>
 <h2 id=built-in-support>Built-in Support</h2>
 <p>Golang brings its own tools to build a great application. Linter? Formatter? Tester? You <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://pkg.go.dev/cmd/go>named</a> it. It also has a <code>garbage collector</code>, natively support <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://gobyexample.com/goroutines>concurrency</a>, and a <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://play.golang.org/>playground</a>. Besides that, Golang also has supportive built-in packages. You can write a <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://gobyexample.com/http-servers>web application</a>, <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://gobyexample.com/command-line-arguments>command-line interface application</a>, and even a <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://github.com/golang/go/wiki/WebAssembly#getting-started>Web Assembly application</a> without any third-party module. But, what if you want to create a Golang module? Let&rsquo;s talk about it.</p>
 <h2 id=module>Module</h2>
 <p>You can create a Golang module easily both local and remote. Just execute <code>go mod init &lt;module-name></code> and then just code like usual. Golang module support git out of the box, you can just push your Golang module to a git repository, and then import it into your code. For example, if you want to import a Postgres plugin or my database credential rotator module, you can import it just by typing the git repo name.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>import</span> (
-  <span style=color:#a31515>&#34;context&#34;</span>
-  <span style=color:#a31515>&#34;database/sql&#34;</span>
-  <span style=color:#a31515>&#34;log&#34;</span>
-  <span style=color:#a31515>&#34;time&#34;</span>
-
-  <span style=color:#a31515>&#34;github.com/ClavinJune/rotator&#34;</span>
-  <span style=color:#a31515>&#34;github.com/lib/pq&#34;</span>
-)
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=build-result>Build Result</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span style=color:#00f>import</span> (
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>  <span style=color:#a31515>&#34;context&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>  <span style=color:#a31515>&#34;database/sql&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>  <span style=color:#a31515>&#34;log&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>  <span style=color:#a31515>&#34;time&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span>  <span style=color:#a31515>&#34;github.com/ClavinJune/rotator&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8</span>  <span style=color:#a31515>&#34;github.com/lib/pq&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9</span>)
+</code></pre></div><h2 id=build-result>Build Result</h2>
 <p>Binary! Golang builds your code into a binary. If you are on Windows, it will build your code into executable files, if you are on Linux it will build an ELF file, and so on. Also, you can control the build by only using an Environment variable. Let&rsquo;s say you are on a Linux machine, but you want to create an executable file for windows, just tell it so.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ ls
-main.go
-$ GOOS=windows GOARCH=amd64 go build main.go 
-$ file main.exe 
-main.exe: PE32+ executable (console) x86-64 (stripped to external PDB), <span style=color:#00f>for</span> MS Windows
-$ GOOS=darwin GOARCH=amd64 go build main.go 
-$ file main
-main: Mach-O 64-bit x86_64 executable
-</code></pre></td></tr></table>
-</div>
-</div><p>You can also create a Web Assembly module:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ GOOS=js GOARCH=wasm go build -o main.wasm main.go
-$ file main.wasm
-main.wasm: WebAssembly (wasm) binary module version 0x1 (MVP)
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=conclusion>Conclusion</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ ls
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>main.go
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>$ GOOS=windows GOARCH=amd64 go build main.go 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>$ file main.exe 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>main.exe: PE32+ executable (console) x86-64 (stripped to external PDB), <span style=color:#00f>for</span> MS Windows
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span>$ GOOS=darwin GOARCH=amd64 go build main.go 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span>$ file main
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8</span>main: Mach-O 64-bit x86_64 executable
+</code></pre></div><p>You can also create a Web Assembly module:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ GOOS=js GOARCH=wasm go build -o main.wasm main.go
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>$ file main.wasm
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>main.wasm: WebAssembly (wasm) binary module version 0x1 (MVP)
+</code></pre></div><h2 id=conclusion>Conclusion</h2>
 <p>I know that I&rsquo;m not covering all the language specifications. All the reasons above are quite subjective to me as a developer, you may find your interests in Golang by referring to the <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://golang.org/doc/faq>FAQ page</a> or the <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://golang.org/ref/spec>specification page</a>. Also, Golang is on its way to the <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://go.googlesource.com/proposal/+/master/design/go2draft.md>2nd version</a> which will support Generic and better error handling.</p>
 <p>Thank you for reading!</p>
 </div>

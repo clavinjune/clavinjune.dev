@@ -64,158 +64,75 @@
 <p>The whole concept of AVL is much the same with BST besides the rebalancing algorithm. In AVL we need to rebalance the tree by rotating every imbalance sub-tree in every insertion/deletion. So we&rsquo;re gonna use all the code from <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://clavinjune.dev/en/blogs/binary-search-tree-in-go/>here</a> and modified it a bit.</p>
 <p>To see the tree is balanced or not, we need to define the height on each node. We can calculate the height by counting the maximum height of the left and the right node recursively. If the node has no child, it means its height is 1 otherwise we compare the maximum height of the children.</p>
 <p>Update the <code>node struct</code> by adding the <code>height</code> attribute, add the <code>Getter</code> function, and set the value to 1 inside the constructor.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>type</span> node <span style=color:#00f>struct</span> {
-  height, value <span style=color:#2b91af>int</span>
-  left, right   *node
-}
-
-<span style=color:#00f>func</span> (n *node) Height() <span style=color:#2b91af>int</span> {
-  <span style=color:#00f>if</span> n == <span style=color:#00f>nil</span> {
-    <span style=color:#00f>return</span> 0
-  }
-
-  <span style=color:#00f>return</span> n.height
-}
-
-<span style=color:#00f>func</span> newNode(val <span style=color:#2b91af>int</span>) *node {
-  <span style=color:#00f>return</span> &amp;node{
-    height: 1,
-    value:  val,
-    left:   <span style=color:#00f>nil</span>,
-    right:  <span style=color:#00f>nil</span>,
-  }
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>And to keep track of the height and the balance of the tree after insertion/deletion, we need to have a <code>updateHeight</code> and <code>balanceFactor</code> function.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (n *node) balanceFactor() <span style=color:#2b91af>int</span> {
-  <span style=color:#00f>if</span> n == <span style=color:#00f>nil</span> {
-    <span style=color:#00f>return</span> 0
-  }
-
-  <span style=color:#00f>return</span> n.left.Height() - n.right.Height()
-}
-
-<span style=color:#00f>func</span> max(a, b <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
-  <span style=color:#00f>if</span> a &gt; b {
-    <span style=color:#00f>return</span> a
-  }
-  <span style=color:#00f>return</span> b
-}
-
-<span style=color:#00f>func</span> (n *node) updateHeight() {
-  <span style=color:green>// compare the maximum height of the children + its own height
-</span><span style=color:green></span>  n.height = max(n.left.Height(), n.right.Height()) + 1
-}
-</code></pre></td></tr></table>
-</div>
-</div><p><code>balanceFactor</code> function determines whether the tree is heavier on the left or the right side. If it returns an integer below 0, it means it&rsquo;s heavier on the right side and we need to rotate to the left side of the tree. The thresholds for imbalanced tree are -1 and 1, so if the <code>balanceFactor</code> function returns less then -1 or greater than 1, we need to rotate the tree.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>type</span> node <span style=color:#00f>struct</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  height, value <span style=color:#2b91af>int</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>  left, right   *node
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span><span style=color:#00f>func</span> (n *node) Height() <span style=color:#2b91af>int</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>  <span style=color:#00f>if</span> n == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>    <span style=color:#00f>return</span> 0
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  <span style=color:#00f>return</span> n.height
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span><span style=color:#00f>func</span> newNode(val <span style=color:#2b91af>int</span>) *node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>  <span style=color:#00f>return</span> &amp;node{
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>    height: 1,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>    value:  val,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>    left:   <span style=color:#00f>nil</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>    right:  <span style=color:#00f>nil</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>}
+</code></pre></div><p>And to keep track of the height and the balance of the tree after insertion/deletion, we need to have a <code>updateHeight</code> and <code>balanceFactor</code> function.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> (n *node) balanceFactor() <span style=color:#2b91af>int</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  <span style=color:#00f>if</span> n == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>    <span style=color:#00f>return</span> 0
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>  <span style=color:#00f>return</span> n.left.Height() - n.right.Height()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span><span style=color:#00f>func</span> max(a, b <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  <span style=color:#00f>if</span> a &gt; b {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>    <span style=color:#00f>return</span> a
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>  <span style=color:#00f>return</span> b
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span><span style=color:#00f>func</span> (n *node) updateHeight() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>  <span style=color:green>// compare the maximum height of the children + its own height
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span><span style=color:green></span>  n.height = max(n.left.Height(), n.right.Height()) + 1
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>}
+</code></pre></div><p><code>balanceFactor</code> function determines whether the tree is heavier on the left or the right side. If it returns an integer below 0, it means it&rsquo;s heavier on the right side and we need to rotate to the left side of the tree. The thresholds for imbalanced tree are -1 and 1, so if the <code>balanceFactor</code> function returns less then -1 or greater than 1, we need to rotate the tree.</p>
 <p>Now let&rsquo;s create the rotate function. There are 2 types of rotate, <code>rotateLeft</code> and <code>rotateRight</code>. But there are 4 conditions to rotate the tree on insertion and deletion. You can read it and see the picture from <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://www.tutorialspoint.com/data_structures_algorithms/avl_tree_algorithm.htm>here</a>.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> rightRotate(x *node) *node {
-  y := x.left
-  t := y.right
-
-  y.right = x
-  x.left = t
-
-  x.updateHeight()
-  y.updateHeight()
-
-  <span style=color:#00f>return</span> y
-}
-
-<span style=color:#00f>func</span> leftRotate(x *node) *node {
-  y := x.right
-  t := y.left
-
-  y.left = x
-  x.right = t
-
-  x.updateHeight()
-  y.updateHeight()
-
-  <span style=color:#00f>return</span> y
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>The conditions to rotate the tree on insertion are:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> rightRotate(x *node) *node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  y := x.left
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>  t := y.right
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  y.right = x
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>  x.left = t
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  x.updateHeight()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  y.updateHeight()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  <span style=color:#00f>return</span> y
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span><span style=color:#00f>func</span> leftRotate(x *node) *node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>  y := x.right
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>  t := y.left
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>  y.left = x
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>  x.right = t
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>  x.updateHeight()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>  y.updateHeight()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>  <span style=color:#00f>return</span> y
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>}
+</code></pre></div><p>The conditions to rotate the tree on insertion are:</p>
 <ol>
 <li>When the tree <code>linearly to the right</code>, you need to use <code>leftRotate</code> on the <code>current node</code></li>
 <li>When the tree <code>linearly to the left</code>, you need to use <code>rightRotate</code> on the <code>current node</code></li>
@@ -223,977 +140,481 @@
 <li>When the tree creates <code>Greater Than</code> Symbol, you need to <code>rightRotate</code> on the <code>right child</code>, and <code>leftRotate</code> on the <code>current node</code></li>
 </ol>
 <h2 id=insertion>Insertion</h2>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> rotateInsert(node *node, val <span style=color:#2b91af>int</span>) *node {
-  <span style=color:green>// update the height on every insertion
-</span><span style=color:green></span>  node.updateHeight()
-
-  <span style=color:green>// bFactor will tell you which side the weight is on
-</span><span style=color:green></span>  bFactor := node.balanceFactor()
-
-  <span style=color:green>// linearly to the left
-</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &gt; 1 &amp;&amp; val &lt; node.left.value {
-    <span style=color:#00f>return</span> rightRotate(node)
-  }
-
-  <span style=color:green>// linearly to the right
-</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &lt; -1 &amp;&amp; val &gt; node.right.value {
-    <span style=color:#00f>return</span> leftRotate(node)
-  }
-
-  <span style=color:green>// less than symbol
-</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &gt; 1 &amp;&amp; val &gt; node.left.value {
-    node.left = leftRotate(node.left)
-    <span style=color:#00f>return</span> rightRotate(node)
-  }
-
-  <span style=color:green>// greater than symbol
-</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &lt; -1 &amp;&amp; val &lt; node.right.value {
-    node.right = rightRotate(node.right)
-    <span style=color:#00f>return</span> leftRotate(node)
-  }
-
-  <span style=color:#00f>return</span> node
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Lastly, you need to update the return statement of the <code>insertNode</code> function.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> insertNode(node *node, val <span style=color:#2b91af>int</span>) (*node, <span style=color:#2b91af>error</span>) {
-  ...
-  <span style=color:#00f>return</span> rotateInsert(node, val), <span style=color:#00f>nil</span>
-}
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=traverse-operation-and-validation>Traverse Operation and Validation</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> rotateInsert(node *node, val <span style=color:#2b91af>int</span>) *node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  <span style=color:green>// update the height on every insertion
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:green></span>  node.updateHeight()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  <span style=color:green>// bFactor will tell you which side the weight is on
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span><span style=color:green></span>  bFactor := node.balanceFactor()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  <span style=color:green>// linearly to the left
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &gt; 1 &amp;&amp; val &lt; node.left.value {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>    <span style=color:#00f>return</span> rightRotate(node)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>  <span style=color:green>// linearly to the right
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &lt; -1 &amp;&amp; val &gt; node.right.value {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>    <span style=color:#00f>return</span> leftRotate(node)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>  <span style=color:green>// less than symbol
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &gt; 1 &amp;&amp; val &gt; node.left.value {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>    node.left = leftRotate(node.left)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>    <span style=color:#00f>return</span> rightRotate(node)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>  <span style=color:green>// greater than symbol
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &lt; -1 &amp;&amp; val &lt; node.right.value {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>    node.right = rightRotate(node.right)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>    <span style=color:#00f>return</span> leftRotate(node)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30</span>  <span style=color:#00f>return</span> node
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31</span>}
+</code></pre></div><p>Lastly, you need to update the return statement of the <code>insertNode</code> function.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span style=color:#00f>func</span> insertNode(node *node, val <span style=color:#2b91af>int</span>) (*node, <span style=color:#2b91af>error</span>) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>  ...
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>  <span style=color:#00f>return</span> rotateInsert(node, val), <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>}
+</code></pre></div><h2 id=traverse-operation-and-validation>Traverse Operation and Validation</h2>
 <p>So that the results are easy to visualize, you need to change the traverse function becomes <code>pre-order</code> and open <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://www.cs.usfca.edu/~galles/visualization/BST.html>BST Visualization page</a> & <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://www.cs.usfca.edu/~galles/visualization/AVLtree.html>AVL Visualiztion Page</a>.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> traverse(node *node) {
-  <span style=color:green>// exit condition
-</span><span style=color:green></span>  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
-    <span style=color:#00f>return</span>
-  }
-
-  fmt.Println(node.value)
-  traverse(node.left)
-  traverse(node.right)
-}
-
-<span style=color:#00f>func</span> main() {
-  tree := avl.New()
-
-  <span style=color:green>// to check if your implementation is correct
-</span><span style=color:green></span>  <span style=color:green>// First insert this sequentially
-</span><span style=color:green></span>  <span style=color:green>// to the AVL Visualiztion Page
-</span><span style=color:green></span>  tree.Insert(0)
-  tree.Insert(1)
-  tree.Insert(2)
-  tree.Insert(3)
-  tree.Insert(4)
-  tree.Insert(5)
-  tree.Insert(6)
-  tree.Insert(7)
-
-  <span style=color:green>// Second insert Traverse function results sequentially
-</span><span style=color:green></span>  <span style=color:green>// to the BST Visualization page
-</span><span style=color:green></span>  tree.Traverse() <span style=color:green>// 3 1 0 2 5 4 6 7
-</span><span style=color:green></span>}
-</code></pre></td></tr></table>
-</div>
-</div><p>If you find the tree visualizations are the same and balanced, then it’s correct.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> traverse(node *node) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  <span style=color:green>// exit condition
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:green></span>  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>    <span style=color:#00f>return</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>  fmt.Println(node.value)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  traverse(node.left)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  traverse(node.right)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span><span style=color:#00f>func</span> main() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>  tree := avl.New()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>  <span style=color:green>// to check if your implementation is correct
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span><span style=color:green></span>  <span style=color:green>// First insert this sequentially
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span><span style=color:green></span>  <span style=color:green>// to the AVL Visualiztion Page
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span><span style=color:green></span>  tree.Insert(0)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>  tree.Insert(1)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>  tree.Insert(2)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>  tree.Insert(3)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>  tree.Insert(4)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>  tree.Insert(5)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>  tree.Insert(6)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>  tree.Insert(7)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>  <span style=color:green>// Second insert Traverse function results sequentially
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span><span style=color:green></span>  <span style=color:green>// to the BST Visualization page
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29</span><span style=color:green></span>  tree.Traverse() <span style=color:green>// 3 1 0 2 5 4 6 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30</span><span style=color:green></span>}
+</code></pre></div><p>If you find the tree visualizations are the same and balanced, then it’s correct.</p>
 <h2 id=deletion>Deletion</h2>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> rotateDelete(node *node) *node {
-  node.updateHeight()
-  bFactor := node.balanceFactor()
-
-  <span style=color:green>// linearly to the left
-</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &gt; 1 &amp;&amp; node.left.balanceFactor() &gt;= 0 {
-    <span style=color:#00f>return</span> rightRotate(node)
-  }
-  
-  <span style=color:green>// less than symbol
-</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &gt; 1 &amp;&amp; node.left.balanceFactor() &lt; 0 {
-    node.left = leftRotate(node.left)
-    <span style=color:#00f>return</span> rightRotate(node)
-  }
-
-  <span style=color:green>// linearly to the right
-</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &lt; -1 &amp;&amp; node.right.balanceFactor() &lt;= 0 {
-    <span style=color:#00f>return</span> leftRotate(node)
-  }
-
-  <span style=color:green>// greater than symbol
-</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &lt; -1 &amp;&amp; node.right.balanceFactor() &gt; 0 {
-    node.right = rightRotate(node.right)
-    <span style=color:#00f>return</span> leftRotate(node)
-  }
-
-  <span style=color:#00f>return</span> node
-}
-</code></pre></td></tr></table>
-</div>
-</div><p><code>Deletion</code> is not like <code>insertion</code> in that we can compare the entered values, because the node we are looking for is already deleted. That&rsquo;s why we need to compare the current node&rsquo;s balance factor with the balance factor of the child. Now, you need to modify the <code>removeNode</code> function. Remember when removing a node with 2 children, we need to find the <code>successor</code> and there are 2 ways to find the <code>successor</code>.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> rotateDelete(node *node) *node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  node.updateHeight()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>  bFactor := node.balanceFactor()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  <span style=color:green>// linearly to the left
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &gt; 1 &amp;&amp; node.left.balanceFactor() &gt;= 0 {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>    <span style=color:#00f>return</span> rightRotate(node)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  <span style=color:green>// less than symbol
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &gt; 1 &amp;&amp; node.left.balanceFactor() &lt; 0 {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>    node.left = leftRotate(node.left)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>    <span style=color:#00f>return</span> rightRotate(node)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>  <span style=color:green>// linearly to the right
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &lt; -1 &amp;&amp; node.right.balanceFactor() &lt;= 0 {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>    <span style=color:#00f>return</span> leftRotate(node)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>  <span style=color:green>// greater than symbol
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &lt; -1 &amp;&amp; node.right.balanceFactor() &gt; 0 {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>    node.right = rightRotate(node.right)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>    <span style=color:#00f>return</span> leftRotate(node)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>  <span style=color:#00f>return</span> node
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>}
+</code></pre></div><p><code>Deletion</code> is not like <code>insertion</code> in that we can compare the entered values, because the node we are looking for is already deleted. That&rsquo;s why we need to compare the current node&rsquo;s balance factor with the balance factor of the child. Now, you need to modify the <code>removeNode</code> function. Remember when removing a node with 2 children, we need to find the <code>successor</code> and there are 2 ways to find the <code>successor</code>.</p>
 <ol>
 <li>Find the least valueable node from the right child of the node</li>
 <li>Find the greatest valueable node from the left child of the node</li>
 </ol>
 <p>We used the first way while the BST & AVL Visualization Page using the second way. You can also change the code so it&rsquo;s easy to visualize.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">57
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">58
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">59
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">60
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">61
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">62
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">63
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">64
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">65
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">66
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">67
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">68
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">69
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> greatest(node *node) *node {
-  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
-    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
-  }
-
-  <span style=color:#00f>if</span> node.right == <span style=color:#00f>nil</span> {
-    <span style=color:#00f>return</span> node
-  }
-
-  <span style=color:#00f>return</span> greatest(node.right)
-}
-
-<span style=color:#00f>func</span> removeNode(node *node, val <span style=color:#2b91af>int</span>) (*node, <span style=color:#2b91af>error</span>) {
-  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
-    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, ErrNodeNotFound
-  }
-
-  <span style=color:#00f>if</span> val &gt; node.value {
-    right, err := removeNode(node.right, val)
-    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
-      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
-    }
-
-    node.right = right
-  } <span style=color:#00f>else</span> <span style=color:#00f>if</span> val &lt; node.value {
-    left, err := removeNode(node.left, val)
-    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
-      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
-    }
-
-    node.left = left
-  } <span style=color:#00f>else</span> {
-    <span style=color:#00f>if</span> node.left != <span style=color:#00f>nil</span> &amp;&amp; node.right != <span style=color:#00f>nil</span> {
-      <span style=color:green>// has 2 children
-</span><span style=color:green></span>
-      <span style=color:green>// find the successor
-</span><span style=color:green></span>      successor := greatest(node.left)
-      value := successor.value
-
-      <span style=color:green>// remove the successor
-</span><span style=color:green></span>      left, err := removeNode(node.left, value)
-      <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
-        <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
-      }
-      node.left = left
-
-      <span style=color:green>// copy the successor value to the current node
-</span><span style=color:green></span>      node.value = value
-    } <span style=color:#00f>else</span> <span style=color:#00f>if</span> node.left != <span style=color:#00f>nil</span> || node.right != <span style=color:#00f>nil</span> {
-      <span style=color:green>// has 1 child
-</span><span style=color:green></span>      <span style=color:green>// move the child position to the current node
-</span><span style=color:green></span>      <span style=color:#00f>if</span> node.left != <span style=color:#00f>nil</span> {
-        node = node.left
-      } <span style=color:#00f>else</span> {
-        node = node.right
-      }
-    } <span style=color:#00f>else</span> <span style=color:#00f>if</span> node.left == <span style=color:#00f>nil</span> &amp;&amp; node.right == <span style=color:#00f>nil</span> {
-      <span style=color:green>// has no child
-</span><span style=color:green></span>      <span style=color:green>// simply remove the node
-</span><span style=color:green></span>      node = <span style=color:#00f>nil</span>
-    }
-  }
-
-  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
-    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, <span style=color:#00f>nil</span>
-  }
-
-  <span style=color:#00f>return</span> rotateDelete(node), <span style=color:#00f>nil</span>
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>You can validate and recheck your AVL implementation with the BST & AVL visualization page.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> greatest(node *node) *node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>  <span style=color:#00f>if</span> node.right == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>    <span style=color:#00f>return</span> node
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  <span style=color:#00f>return</span> greatest(node.right)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span><span style=color:#00f>func</span> removeNode(node *node, val <span style=color:#2b91af>int</span>) (*node, <span style=color:#2b91af>error</span>) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, ErrNodeNotFound
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>  <span style=color:#00f>if</span> val &gt; node.value {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>    right, err := removeNode(node.right, val)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>    node.right = right
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>  } <span style=color:#00f>else</span> <span style=color:#00f>if</span> val &lt; node.value {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>    left, err := removeNode(node.left, val)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31</span>    node.left = left
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32</span>  } <span style=color:#00f>else</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33</span>    <span style=color:#00f>if</span> node.left != <span style=color:#00f>nil</span> &amp;&amp; node.right != <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34</span>      <span style=color:green>// has 2 children
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35</span><span style=color:green></span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36</span>      <span style=color:green>// find the successor
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37</span><span style=color:green></span>      successor := greatest(node.left)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38</span>      value := successor.value
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40</span>      <span style=color:green>// remove the successor
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41</span><span style=color:green></span>      left, err := removeNode(node.left, value)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42</span>      <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43</span>        <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44</span>      }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45</span>      node.left = left
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47</span>      <span style=color:green>// copy the successor value to the current node
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48</span><span style=color:green></span>      node.value = value
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49</span>    } <span style=color:#00f>else</span> <span style=color:#00f>if</span> node.left != <span style=color:#00f>nil</span> || node.right != <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50</span>      <span style=color:green>// has 1 child
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51</span><span style=color:green></span>      <span style=color:green>// move the child position to the current node
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52</span><span style=color:green></span>      <span style=color:#00f>if</span> node.left != <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53</span>        node = node.left
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54</span>      } <span style=color:#00f>else</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55</span>        node = node.right
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56</span>      }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">57</span>    } <span style=color:#00f>else</span> <span style=color:#00f>if</span> node.left == <span style=color:#00f>nil</span> &amp;&amp; node.right == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">58</span>      <span style=color:green>// has no child
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">59</span><span style=color:green></span>      <span style=color:green>// simply remove the node
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">60</span><span style=color:green></span>      node = <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">61</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">62</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">63</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">64</span>  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">65</span>    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">66</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">67</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">68</span>  <span style=color:#00f>return</span> rotateDelete(node), <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">69</span>}
+</code></pre></div><p>You can validate and recheck your AVL implementation with the BST & AVL visualization page.</p>
 <p>Here is the modifed <code>node.go</code> file.</p>
 <h2 id=nodego>node.go</h2>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 31
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 32
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 33
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 34
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 35
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 36
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 37
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 38
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 39
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 40
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 41
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 42
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 43
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 44
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 45
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 46
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 47
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 48
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 49
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 50
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 51
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 52
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 53
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 54
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 55
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 56
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 57
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 58
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 59
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 60
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 61
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 62
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 63
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 64
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 65
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 66
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 67
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 68
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 69
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 70
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 71
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 72
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 73
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 74
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 75
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 76
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 77
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 78
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 79
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 80
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 81
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 82
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 83
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 84
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 85
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 86
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 87
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 88
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 89
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 90
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 91
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 92
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 93
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 94
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 95
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 96
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 97
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 98
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 99
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">100
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">101
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">102
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">103
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">104
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">105
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">106
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">107
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">108
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">109
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">110
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">111
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">112
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">113
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">114
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">115
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">116
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">117
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">118
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">119
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">120
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">121
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">122
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">123
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">124
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">125
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">126
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">127
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">128
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">129
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">130
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">131
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">132
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">133
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">134
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">135
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">136
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">137
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">138
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">139
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">140
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">141
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">142
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">143
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">144
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">145
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">146
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">147
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">148
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">149
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">150
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">151
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">152
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">153
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">154
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">155
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">156
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">157
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">158
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">159
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">160
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">161
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">162
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">163
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">164
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">165
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">166
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">167
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">168
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">169
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">170
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">171
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">172
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">173
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">174
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">175
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">176
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">177
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">178
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">179
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">180
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">181
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">182
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">183
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">184
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">185
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">186
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">187
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">188
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">189
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">190
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">191
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">192
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">193
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">194
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">195
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">196
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">197
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">198
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">199
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">200
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">201
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">202
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">203
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">204
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">205
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">206
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">207
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">208
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">209
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">210
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">211
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">212
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">213
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">214
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">215
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">216
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">217
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">218
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">219
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">220
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">221
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">222
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">223
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">224
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">225
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">226
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">227
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">228
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">229
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">230
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">231
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">232
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">233
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">234
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">235
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">236
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">237
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">238
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">239
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">240
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">241
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">242
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">243
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">244
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">245
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">246
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">247
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">248
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">249
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">250
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">251
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">252
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">253
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">254
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">255
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">256
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">257
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">258
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">259
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">260
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">261
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">262
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">263
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">264
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">265
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">266
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">267
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">268
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">269
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">270
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">271
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">272
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">273
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">274
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">275
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">276
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">277
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">278
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">279
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">280
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">281
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">282
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">283
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">284
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">285
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">286
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">287
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">288
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">289
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">290
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">291
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">292
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">293
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">294
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">295
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">296
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">297
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">298
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> avl
-
-<span style=color:#00f>import</span> (
-  <span style=color:#a31515>&#34;errors&#34;</span>
-  <span style=color:#a31515>&#34;fmt&#34;</span>
-)
-
-<span style=color:#00f>var</span> (
-  ErrDuplicatedNode <span style=color:#2b91af>error</span> = errors.New(<span style=color:#a31515>&#34;bst: found duplicated value on tree&#34;</span>)
-  ErrNodeNotFound   <span style=color:#2b91af>error</span> = errors.New(<span style=color:#a31515>&#34;bst: node not found&#34;</span>)
-)
-
-<span style=color:#00f>type</span> node <span style=color:#00f>struct</span> {
-  height, value <span style=color:#2b91af>int</span>
-  left, right   *node
-}
-
-<span style=color:#00f>func</span> (n *node) balanceFactor() <span style=color:#2b91af>int</span> {
-  <span style=color:#00f>if</span> n == <span style=color:#00f>nil</span> {
-    <span style=color:#00f>return</span> 0
-  }
-
-  <span style=color:#00f>return</span> n.left.Height() - n.right.Height()
-}
-
-<span style=color:#00f>func</span> (n *node) updateHeight() {
-  max := <span style=color:#00f>func</span> (a, b <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
-    <span style=color:#00f>if</span> a &gt; b {
-      <span style=color:#00f>return</span> a
-    }
-
-    <span style=color:#00f>return</span> b
-  }
-  n.height = max(n.left.Height(), n.right.Height()) + 1
-}
-
-<span style=color:#00f>func</span> (n *node) Height() <span style=color:#2b91af>int</span> {
-  <span style=color:#00f>if</span> n == <span style=color:#00f>nil</span> {
-    <span style=color:#00f>return</span> 0
-  }
-
-  <span style=color:#00f>return</span> n.height
-}
-
-<span style=color:#00f>func</span> (n *node) Value() <span style=color:#2b91af>int</span> {
-  <span style=color:#00f>return</span> n.value
-}
-
-<span style=color:#00f>func</span> (n *node) Left() *node {
-  <span style=color:#00f>return</span> n.left
-}
-
-<span style=color:#00f>func</span> (n *node) Right() *node {
-  <span style=color:#00f>return</span> n.right
-}
-
-<span style=color:#00f>func</span> newNode(val <span style=color:#2b91af>int</span>) *node {
-  <span style=color:#00f>return</span> &amp;node{
-    height: 1,
-    value:  val,
-    left:   <span style=color:#00f>nil</span>,
-    right:  <span style=color:#00f>nil</span>,
-  }
-}
-
-<span style=color:#00f>func</span> insertNode(node *node, val <span style=color:#2b91af>int</span>) (*node, <span style=color:#2b91af>error</span>) {
-  <span style=color:green>// if there&#39;s no node, create one
-</span><span style=color:green></span>  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
-    <span style=color:#00f>return</span> newNode(val), <span style=color:#00f>nil</span>
-  }
-
-  <span style=color:green>// if there&#39;s duplicated node returns error
-</span><span style=color:green></span>  <span style=color:#00f>if</span> node.value == val {
-    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, ErrDuplicatedNode
-  }
-
-  <span style=color:green>// if value is greater than current node&#39;s value, insert to the right
-</span><span style=color:green></span>  <span style=color:#00f>if</span> val &gt; node.value {
-    right, err := insertNode(node.right, val)
-
-    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
-      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
-    }
-
-    node.right = right
-  }
-
-  <span style=color:green>// if value is less than current node&#39;s value, insert to the left
-</span><span style=color:green></span>  <span style=color:#00f>if</span> val &lt; node.value {
-    left, err := insertNode(node.left, val)
-
-    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
-      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
-    }
-
-    node.left = left
-  }
-
-  <span style=color:#00f>return</span> rotateInsert(node, val), <span style=color:#00f>nil</span>
-}
-
-<span style=color:#00f>func</span> removeNode(node *node, val <span style=color:#2b91af>int</span>) (*node, <span style=color:#2b91af>error</span>) {
-  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
-    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, ErrNodeNotFound
-  }
-
-  <span style=color:#00f>if</span> val &gt; node.value {
-    right, err := removeNode(node.right, val)
-    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
-      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
-    }
-
-    node.right = right
-  } <span style=color:#00f>else</span> <span style=color:#00f>if</span> val &lt; node.value {
-    left, err := removeNode(node.left, val)
-    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
-      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
-    }
-
-    node.left = left
-  } <span style=color:#00f>else</span> {
-    <span style=color:#00f>if</span> node.left != <span style=color:#00f>nil</span> &amp;&amp; node.right != <span style=color:#00f>nil</span> {
-      <span style=color:green>// has 2 children
-</span><span style=color:green></span>
-      <span style=color:green>// find the successor
-</span><span style=color:green></span>      successor := greatest(node.left)
-      value := successor.value
-
-      <span style=color:green>// remove the successor
-</span><span style=color:green></span>      left, err := removeNode(node.left, value)
-      <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
-        <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
-      }
-      node.left = left
-
-      <span style=color:green>// copy the successor value to the current node
-</span><span style=color:green></span>      node.value = value
-    } <span style=color:#00f>else</span> <span style=color:#00f>if</span> node.left != <span style=color:#00f>nil</span> || node.right != <span style=color:#00f>nil</span> {
-      <span style=color:green>// has 1 child
-</span><span style=color:green></span>      <span style=color:green>// move the child position to the current node
-</span><span style=color:green></span>      <span style=color:#00f>if</span> node.left != <span style=color:#00f>nil</span> {
-        node = node.left
-      } <span style=color:#00f>else</span> {
-        node = node.right
-      }
-    } <span style=color:#00f>else</span> <span style=color:#00f>if</span> node.left == <span style=color:#00f>nil</span> &amp;&amp; node.right == <span style=color:#00f>nil</span> {
-      <span style=color:green>// has no child
-</span><span style=color:green></span>      <span style=color:green>// simply remove the node
-</span><span style=color:green></span>      node = <span style=color:#00f>nil</span>
-    }
-  }
-
-  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
-    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, <span style=color:#00f>nil</span>
-  }
-
-  <span style=color:#00f>return</span> rotateDelete(node), <span style=color:#00f>nil</span>
-}
-
-<span style=color:#00f>func</span> findNode(node *node, val <span style=color:#2b91af>int</span>) *node {
-  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
-    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
-  }
-
-  <span style=color:green>// if the node is found, return the node
-</span><span style=color:green></span>  <span style=color:#00f>if</span> node.value == val {
-    <span style=color:#00f>return</span> node
-  }
-
-  <span style=color:green>// if value is greater than current node&#39;s value, search recursively to the right
-</span><span style=color:green></span>  <span style=color:#00f>if</span> val &gt; node.value {
-    <span style=color:#00f>return</span> findNode(node.right, val)
-  }
-
-  <span style=color:green>// if value is less than current node&#39;s value, search recursively to the left
-</span><span style=color:green></span>  <span style=color:#00f>if</span> val &lt; node.value {
-    <span style=color:#00f>return</span> findNode(node.left, val)
-  }
-
-  <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
-}
-
-<span style=color:#00f>func</span> rotateInsert(node *node, val <span style=color:#2b91af>int</span>) *node {
-  <span style=color:green>// update the height on every insertion
-</span><span style=color:green></span>  node.updateHeight()
-
-  <span style=color:green>// bFactor will tell you which side the weight is on
-</span><span style=color:green></span>  bFactor := node.balanceFactor()
-
-  <span style=color:green>// linearly to the left
-</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &gt; 1 &amp;&amp; val &lt; node.left.value {
-    <span style=color:#00f>return</span> rightRotate(node)
-  }
-
-  <span style=color:green>// linearly to the right
-</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &lt; -1 &amp;&amp; val &gt; node.right.value {
-    <span style=color:#00f>return</span> leftRotate(node)
-  }
-
-  <span style=color:green>// less than symbol
-</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &gt; 1 &amp;&amp; val &gt; node.left.value {
-    node.left = leftRotate(node.left)
-    <span style=color:#00f>return</span> rightRotate(node)
-  }
-
-  <span style=color:green>// greater than symbol
-</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &lt; -1 &amp;&amp; val &lt; node.right.value {
-    node.right = rightRotate(node.right)
-    <span style=color:#00f>return</span> leftRotate(node)
-  }
-
-  <span style=color:#00f>return</span> node
-}
-
-<span style=color:#00f>func</span> rotateDelete(node *node) *node {
-  node.updateHeight()
-  bFactor := node.balanceFactor()
-
-  <span style=color:green>// linearly to the left
-</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &gt; 1 &amp;&amp; node.left.balanceFactor() &gt;= 0 {
-    <span style=color:#00f>return</span> rightRotate(node)
-  }
-
-  <span style=color:green>// less than symbol
-</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &gt; 1 &amp;&amp; node.left.balanceFactor() &lt; 0 {
-    node.left = leftRotate(node.left)
-    <span style=color:#00f>return</span> rightRotate(node)
-  }
-
-  <span style=color:green>// linearly to the right
-</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &lt; -1 &amp;&amp; node.right.balanceFactor() &lt;= 0 {
-    <span style=color:#00f>return</span> leftRotate(node)
-  }
-
-  <span style=color:green>// greater than symbol
-</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &lt; -1 &amp;&amp; node.right.balanceFactor() &gt; 0 {
-    node.right = rightRotate(node.right)
-    <span style=color:#00f>return</span> leftRotate(node)
-  }
-
-  <span style=color:#00f>return</span> node
-}
-
-<span style=color:#00f>func</span> rightRotate(x *node) *node {
-  y := x.left
-  t := y.right
-
-  y.right = x
-  x.left = t
-
-  x.updateHeight()
-  y.updateHeight()
-
-  <span style=color:#00f>return</span> y
-}
-
-<span style=color:#00f>func</span> leftRotate(x *node) *node {
-  y := x.right
-  t := y.left
-
-  y.left = x
-  x.right = t
-
-  x.updateHeight()
-  y.updateHeight()
-
-  <span style=color:#00f>return</span> y
-}
-
-<span style=color:#00f>func</span> greatest(node *node) *node {
-  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
-    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
-  }
-
-  <span style=color:#00f>if</span> node.right == <span style=color:#00f>nil</span> {
-    <span style=color:#00f>return</span> node
-  }
-
-  <span style=color:#00f>return</span> greatest(node.right)
-}
-
-<span style=color:#00f>func</span> traverse(node *node) {
-  <span style=color:green>// exit condition
-</span><span style=color:green></span>  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
-    <span style=color:#00f>return</span>
-  }
-
-  fmt.Println(node.value)
-  traverse(node.left)
-  traverse(node.right)
-}
-
-<span style=color:#00f>func</span> max(a, b <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
-  <span style=color:#00f>if</span> a &gt; b {
-    <span style=color:#00f>return</span> a
-  }
-  <span style=color:#00f>return</span> b
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Thank you for reading!</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1</span><span style=color:#00f>package</span> avl
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  2</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  3</span><span style=color:#00f>import</span> (
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  4</span>  <span style=color:#a31515>&#34;errors&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  5</span>  <span style=color:#a31515>&#34;fmt&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  6</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  7</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  8</span><span style=color:#00f>var</span> (
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  9</span>  ErrDuplicatedNode <span style=color:#2b91af>error</span> = errors.New(<span style=color:#a31515>&#34;bst: found duplicated value on tree&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 10</span>  ErrNodeNotFound   <span style=color:#2b91af>error</span> = errors.New(<span style=color:#a31515>&#34;bst: node not found&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 11</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 12</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 13</span><span style=color:#00f>type</span> node <span style=color:#00f>struct</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 14</span>  height, value <span style=color:#2b91af>int</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 15</span>  left, right   *node
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 16</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 17</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 18</span><span style=color:#00f>func</span> (n *node) balanceFactor() <span style=color:#2b91af>int</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 19</span>  <span style=color:#00f>if</span> n == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 20</span>    <span style=color:#00f>return</span> 0
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 21</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 22</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 23</span>  <span style=color:#00f>return</span> n.left.Height() - n.right.Height()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 24</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 25</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 26</span><span style=color:#00f>func</span> (n *node) updateHeight() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 27</span>  max := <span style=color:#00f>func</span> (a, b <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 28</span>    <span style=color:#00f>if</span> a &gt; b {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 29</span>      <span style=color:#00f>return</span> a
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 30</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 31</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 32</span>    <span style=color:#00f>return</span> b
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 33</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 34</span>  n.height = max(n.left.Height(), n.right.Height()) + 1
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 35</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 36</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 37</span><span style=color:#00f>func</span> (n *node) Height() <span style=color:#2b91af>int</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 38</span>  <span style=color:#00f>if</span> n == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 39</span>    <span style=color:#00f>return</span> 0
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 40</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 41</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 42</span>  <span style=color:#00f>return</span> n.height
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 43</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 44</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 45</span><span style=color:#00f>func</span> (n *node) Value() <span style=color:#2b91af>int</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 46</span>  <span style=color:#00f>return</span> n.value
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 47</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 48</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 49</span><span style=color:#00f>func</span> (n *node) Left() *node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 50</span>  <span style=color:#00f>return</span> n.left
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 51</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 52</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 53</span><span style=color:#00f>func</span> (n *node) Right() *node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 54</span>  <span style=color:#00f>return</span> n.right
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 55</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 56</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 57</span><span style=color:#00f>func</span> newNode(val <span style=color:#2b91af>int</span>) *node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 58</span>  <span style=color:#00f>return</span> &amp;node{
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 59</span>    height: 1,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 60</span>    value:  val,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 61</span>    left:   <span style=color:#00f>nil</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 62</span>    right:  <span style=color:#00f>nil</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 63</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 64</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 65</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 66</span><span style=color:#00f>func</span> insertNode(node *node, val <span style=color:#2b91af>int</span>) (*node, <span style=color:#2b91af>error</span>) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 67</span>  <span style=color:green>// if there&#39;s no node, create one
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 68</span><span style=color:green></span>  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 69</span>    <span style=color:#00f>return</span> newNode(val), <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 70</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 71</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 72</span>  <span style=color:green>// if there&#39;s duplicated node returns error
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 73</span><span style=color:green></span>  <span style=color:#00f>if</span> node.value == val {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 74</span>    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, ErrDuplicatedNode
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 75</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 76</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 77</span>  <span style=color:green>// if value is greater than current node&#39;s value, insert to the right
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 78</span><span style=color:green></span>  <span style=color:#00f>if</span> val &gt; node.value {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 79</span>    right, err := insertNode(node.right, val)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 80</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 81</span>    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 82</span>      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 83</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 84</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 85</span>    node.right = right
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 86</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 87</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 88</span>  <span style=color:green>// if value is less than current node&#39;s value, insert to the left
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 89</span><span style=color:green></span>  <span style=color:#00f>if</span> val &lt; node.value {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 90</span>    left, err := insertNode(node.left, val)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 91</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 92</span>    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 93</span>      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 94</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 95</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 96</span>    node.left = left
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 97</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 98</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 99</span>  <span style=color:#00f>return</span> rotateInsert(node, val), <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">100</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">101</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">102</span><span style=color:#00f>func</span> removeNode(node *node, val <span style=color:#2b91af>int</span>) (*node, <span style=color:#2b91af>error</span>) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">103</span>  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">104</span>    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, ErrNodeNotFound
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">105</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">106</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">107</span>  <span style=color:#00f>if</span> val &gt; node.value {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">108</span>    right, err := removeNode(node.right, val)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">109</span>    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">110</span>      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">111</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">112</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">113</span>    node.right = right
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">114</span>  } <span style=color:#00f>else</span> <span style=color:#00f>if</span> val &lt; node.value {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">115</span>    left, err := removeNode(node.left, val)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">116</span>    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">117</span>      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">118</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">119</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">120</span>    node.left = left
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">121</span>  } <span style=color:#00f>else</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">122</span>    <span style=color:#00f>if</span> node.left != <span style=color:#00f>nil</span> &amp;&amp; node.right != <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">123</span>      <span style=color:green>// has 2 children
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">124</span><span style=color:green></span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">125</span>      <span style=color:green>// find the successor
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">126</span><span style=color:green></span>      successor := greatest(node.left)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">127</span>      value := successor.value
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">128</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">129</span>      <span style=color:green>// remove the successor
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">130</span><span style=color:green></span>      left, err := removeNode(node.left, value)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">131</span>      <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">132</span>        <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">133</span>      }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">134</span>      node.left = left
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">135</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">136</span>      <span style=color:green>// copy the successor value to the current node
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">137</span><span style=color:green></span>      node.value = value
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">138</span>    } <span style=color:#00f>else</span> <span style=color:#00f>if</span> node.left != <span style=color:#00f>nil</span> || node.right != <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">139</span>      <span style=color:green>// has 1 child
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">140</span><span style=color:green></span>      <span style=color:green>// move the child position to the current node
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">141</span><span style=color:green></span>      <span style=color:#00f>if</span> node.left != <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">142</span>        node = node.left
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">143</span>      } <span style=color:#00f>else</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">144</span>        node = node.right
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">145</span>      }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">146</span>    } <span style=color:#00f>else</span> <span style=color:#00f>if</span> node.left == <span style=color:#00f>nil</span> &amp;&amp; node.right == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">147</span>      <span style=color:green>// has no child
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">148</span><span style=color:green></span>      <span style=color:green>// simply remove the node
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">149</span><span style=color:green></span>      node = <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">150</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">151</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">152</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">153</span>  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">154</span>    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">155</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">156</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">157</span>  <span style=color:#00f>return</span> rotateDelete(node), <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">158</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">159</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">160</span><span style=color:#00f>func</span> findNode(node *node, val <span style=color:#2b91af>int</span>) *node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">161</span>  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">162</span>    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">163</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">164</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">165</span>  <span style=color:green>// if the node is found, return the node
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">166</span><span style=color:green></span>  <span style=color:#00f>if</span> node.value == val {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">167</span>    <span style=color:#00f>return</span> node
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">168</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">169</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">170</span>  <span style=color:green>// if value is greater than current node&#39;s value, search recursively to the right
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">171</span><span style=color:green></span>  <span style=color:#00f>if</span> val &gt; node.value {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">172</span>    <span style=color:#00f>return</span> findNode(node.right, val)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">173</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">174</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">175</span>  <span style=color:green>// if value is less than current node&#39;s value, search recursively to the left
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">176</span><span style=color:green></span>  <span style=color:#00f>if</span> val &lt; node.value {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">177</span>    <span style=color:#00f>return</span> findNode(node.left, val)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">178</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">179</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">180</span>  <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">181</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">182</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">183</span><span style=color:#00f>func</span> rotateInsert(node *node, val <span style=color:#2b91af>int</span>) *node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">184</span>  <span style=color:green>// update the height on every insertion
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">185</span><span style=color:green></span>  node.updateHeight()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">186</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">187</span>  <span style=color:green>// bFactor will tell you which side the weight is on
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">188</span><span style=color:green></span>  bFactor := node.balanceFactor()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">189</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">190</span>  <span style=color:green>// linearly to the left
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">191</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &gt; 1 &amp;&amp; val &lt; node.left.value {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">192</span>    <span style=color:#00f>return</span> rightRotate(node)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">193</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">194</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">195</span>  <span style=color:green>// linearly to the right
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">196</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &lt; -1 &amp;&amp; val &gt; node.right.value {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">197</span>    <span style=color:#00f>return</span> leftRotate(node)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">198</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">199</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">200</span>  <span style=color:green>// less than symbol
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">201</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &gt; 1 &amp;&amp; val &gt; node.left.value {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">202</span>    node.left = leftRotate(node.left)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">203</span>    <span style=color:#00f>return</span> rightRotate(node)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">204</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">205</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">206</span>  <span style=color:green>// greater than symbol
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">207</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &lt; -1 &amp;&amp; val &lt; node.right.value {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">208</span>    node.right = rightRotate(node.right)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">209</span>    <span style=color:#00f>return</span> leftRotate(node)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">210</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">211</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">212</span>  <span style=color:#00f>return</span> node
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">213</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">214</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">215</span><span style=color:#00f>func</span> rotateDelete(node *node) *node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">216</span>  node.updateHeight()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">217</span>  bFactor := node.balanceFactor()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">218</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">219</span>  <span style=color:green>// linearly to the left
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">220</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &gt; 1 &amp;&amp; node.left.balanceFactor() &gt;= 0 {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">221</span>    <span style=color:#00f>return</span> rightRotate(node)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">222</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">223</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">224</span>  <span style=color:green>// less than symbol
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">225</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &gt; 1 &amp;&amp; node.left.balanceFactor() &lt; 0 {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">226</span>    node.left = leftRotate(node.left)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">227</span>    <span style=color:#00f>return</span> rightRotate(node)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">228</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">229</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">230</span>  <span style=color:green>// linearly to the right
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">231</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &lt; -1 &amp;&amp; node.right.balanceFactor() &lt;= 0 {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">232</span>    <span style=color:#00f>return</span> leftRotate(node)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">233</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">234</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">235</span>  <span style=color:green>// greater than symbol
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">236</span><span style=color:green></span>  <span style=color:#00f>if</span> bFactor &lt; -1 &amp;&amp; node.right.balanceFactor() &gt; 0 {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">237</span>    node.right = rightRotate(node.right)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">238</span>    <span style=color:#00f>return</span> leftRotate(node)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">239</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">240</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">241</span>  <span style=color:#00f>return</span> node
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">242</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">243</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">244</span><span style=color:#00f>func</span> rightRotate(x *node) *node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">245</span>  y := x.left
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">246</span>  t := y.right
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">247</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">248</span>  y.right = x
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">249</span>  x.left = t
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">250</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">251</span>  x.updateHeight()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">252</span>  y.updateHeight()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">253</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">254</span>  <span style=color:#00f>return</span> y
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">255</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">256</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">257</span><span style=color:#00f>func</span> leftRotate(x *node) *node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">258</span>  y := x.right
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">259</span>  t := y.left
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">260</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">261</span>  y.left = x
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">262</span>  x.right = t
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">263</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">264</span>  x.updateHeight()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">265</span>  y.updateHeight()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">266</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">267</span>  <span style=color:#00f>return</span> y
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">268</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">269</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">270</span><span style=color:#00f>func</span> greatest(node *node) *node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">271</span>  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">272</span>    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">273</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">274</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">275</span>  <span style=color:#00f>if</span> node.right == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">276</span>    <span style=color:#00f>return</span> node
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">277</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">278</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">279</span>  <span style=color:#00f>return</span> greatest(node.right)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">280</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">281</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">282</span><span style=color:#00f>func</span> traverse(node *node) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">283</span>  <span style=color:green>// exit condition
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">284</span><span style=color:green></span>  <span style=color:#00f>if</span> node == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">285</span>    <span style=color:#00f>return</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">286</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">287</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">288</span>  fmt.Println(node.value)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">289</span>  traverse(node.left)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">290</span>  traverse(node.right)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">291</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">292</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">293</span><span style=color:#00f>func</span> max(a, b <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">294</span>  <span style=color:#00f>if</span> a &gt; b {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">295</span>    <span style=color:#00f>return</span> a
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">296</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">297</span>  <span style=color:#00f>return</span> b
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">298</span>}
+</code></pre></div><p>Thank you for reading!</p>
 </div>
 <div class=separator>
 <span>&#183;</span>

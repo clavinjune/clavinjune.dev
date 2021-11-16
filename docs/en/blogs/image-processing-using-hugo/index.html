@@ -43,7 +43,7 @@
 <span class=middot>&#183;</span>
 <span>Oct 25, 2021</span>
 <span class=middot>&#183;</span>
-<span>~5 min</span>
+<span>~4 min</span>
 </div>
 <div id=content>
 <figure>
@@ -61,353 +61,150 @@
 <li><code>/themes/&lt;theme>/layouts/shortcodes/&lt;name>.html</code></li>
 </ol>
 <p>You can create the shortcodes at <code>/layouts/shortcodes/img.html</code>.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>{{- <span>$</span>src := .Get <span style=color:#a31515>&#34;src&#34;</span> -}}
-{{- <span>$</span>alt := .Get <span style=color:#a31515>&#34;alt&#34;</span> -}}
-
-&lt;figure&gt;
-  &lt;img
-    src=<span style=color:#a31515>&#34;{{ $src }}&#34;</span>
-    alt=<span style=color:#a31515>&#34;{{ $alt }}&#34;</span>
-    width=<span style=color:#a31515>&#34;100%&#34;</span>
-    height=<span style=color:#a31515>&#34;auto&#34;</span>/&gt;
-  &lt;figcaption&gt;{{ <span>$</span>alt }}&lt;/figcaption&gt;
-&lt;/figure&gt;
-</code></pre></td></tr></table>
-</div>
-</div><p>Let&rsquo;s say you have put your images in <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://gohugo.io/hugo-pipes/introduction/#asset-directory>Hugo&rsquo;s assets directory</a>. For example, you put your image file in <code>/assets/img/testing/ehe.png</code>, and then you can use it at your content like this:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>{{&lt; img src=<span style=color:#a31515>&#34;/img/testing/ehe.png&#34;</span> alt=<span style=color:#a31515>&#34;alt&#34;</span> &gt;}}
-</code></pre></td></tr></table>
-</div>
-</div><p>At the moment, Hugo will not render it yet. Let&rsquo;s adjust the shortcode so it will render the image.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>{{- <span>$</span>alt := .Get <span style=color:#a31515>&#34;alt&#34;</span> -}}
-{{- <span>$</span>res := resources.GetMatch (.Get <span style=color:#a31515>&#34;src&#34;</span>) -}}
-
-&lt;figure&gt;
-  &lt;img
-    src=<span style=color:#a31515>&#34;{{ $res.RelPermalink }}&#34;</span>
-    alt=<span style=color:#a31515>&#34;{{ $alt }}&#34;</span>
-    width=<span style=color:#a31515>&#34;100%&#34;</span>
-    height=<span style=color:#a31515>&#34;auto&#34;</span>/&gt;
-  &lt;figcaption&gt;{{ <span>$</span>alt }}&lt;/figcaption&gt;
-&lt;/figure&gt;
-</code></pre></td></tr></table>
-</div>
-</div><p>Now your image is rendered. Let&rsquo;s create multiple versions of it with different widths.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span>{{- <span>$</span>src := .Get <span style=color:#a31515>&#34;src&#34;</span> -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>{{- <span>$</span>alt := .Get <span style=color:#a31515>&#34;alt&#34;</span> -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>&lt;figure&gt;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  &lt;img
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>    src=<span style=color:#a31515>&#34;{{ $src }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>    alt=<span style=color:#a31515>&#34;{{ $alt }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>    width=<span style=color:#a31515>&#34;100%&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>    height=<span style=color:#a31515>&#34;auto&#34;</span>/&gt;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  &lt;figcaption&gt;{{ <span>$</span>alt }}&lt;/figcaption&gt;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>&lt;/figure&gt;
+</code></pre></div><p>Let&rsquo;s say you have put your images in <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://gohugo.io/hugo-pipes/introduction/#asset-directory>Hugo&rsquo;s assets directory</a>. For example, you put your image file in <code>/assets/img/testing/ehe.png</code>, and then you can use it at your content like this:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>{{&lt; img src=<span style=color:#a31515>&#34;/img/testing/ehe.png&#34;</span> alt=<span style=color:#a31515>&#34;alt&#34;</span> &gt;}}
+</code></pre></div><p>At the moment, Hugo will not render it yet. Let&rsquo;s adjust the shortcode so it will render the image.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span>{{- <span>$</span>alt := .Get <span style=color:#a31515>&#34;alt&#34;</span> -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>{{- <span>$</span>res := resources.GetMatch (.Get <span style=color:#a31515>&#34;src&#34;</span>) -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>&lt;figure&gt;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  &lt;img
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>    src=<span style=color:#a31515>&#34;{{ $res.RelPermalink }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>    alt=<span style=color:#a31515>&#34;{{ $alt }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>    width=<span style=color:#a31515>&#34;100%&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>    height=<span style=color:#a31515>&#34;auto&#34;</span>/&gt;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  &lt;figcaption&gt;{{ <span>$</span>alt }}&lt;/figcaption&gt;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>&lt;/figure&gt;
+</code></pre></div><p>Now your image is rendered. Let&rsquo;s create multiple versions of it with different widths.</p>
 <h2 id=widths>Widths</h2>
 <p>Now define the widths you want to render. For example:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>...
-
-{{- <span>$</span>ws := slice 480 768 1366 1920 -}}
-
-...
-</code></pre></td></tr></table>
-</div>
-</div><p>Then, iterate over it with <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://gohugo.io/content-management/image-processing/#resize>Hugo&rsquo;s resize function</a>.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>...
-
-{{- <span style=color:#00f>range</span> <span>$</span>ws -}}
-    {{- <span>$</span>w := printf <span style=color:#a31515>&#34;%dx&#34;</span> . -}}
-    {{- (<span>$</span>res.Resize <span>$</span>w).RelPermalink | safeURL -}}
-{{- end -}}
-
-...
-</code></pre></td></tr></table>
-</div>
-</div><p>Now you will get the output similar to this:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>/img/testing/ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_480x0_resize_box_3.png
-/img/testing/ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_768x0_resize_box_3.png
-/img/testing/ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_1366x0_resize_box_3.png
-/img/testing/ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_1920x0_resize_box_3.png
-</code></pre></td></tr></table>
-</div>
-</div><p>Those are your processed image URL with every width which you defined before. Now let&rsquo;s use them inside your image&rsquo;s source sets.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>...
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>{{- <span>$</span>ws := slice 480 768 1366 1920 -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span>...
+</code></pre></div><p>Then, iterate over it with <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://gohugo.io/content-management/image-processing/#resize>Hugo&rsquo;s resize function</a>.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>...
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>{{- <span style=color:#00f>range</span> <span>$</span>ws -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>    {{- <span>$</span>w := printf <span style=color:#a31515>&#34;%dx&#34;</span> . -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span>    {{- (<span>$</span>res.Resize <span>$</span>w).RelPermalink | safeURL -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span>{{- end -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9</span>...
+</code></pre></div><p>Now you will get the output similar to this:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>/img/testing/ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_480x0_resize_box_3.png
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>/img/testing/ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_768x0_resize_box_3.png
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>/img/testing/ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_1366x0_resize_box_3.png
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>/img/testing/ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_1920x0_resize_box_3.png
+</code></pre></div><p>Those are your processed image URL with every width which you defined before. Now let&rsquo;s use them inside your image&rsquo;s source sets.</p>
 <h2 id=source-set>Source Set</h2>
 <p>To define <code>srcset attribute</code> on your image, you can use this <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-srcset>format</a>:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html>&lt;img srcset=<span style=color:#a31515>&#34;
-</span><span style=color:#a31515>/url/to/480.png 480w,
-</span><span style=color:#a31515>/url/to/768.png 768w,
-</span><span style=color:#a31515>/url/to/1366.png 1366w,
-</span><span style=color:#a31515>/url/to/1920.png 1920w
-</span><span style=color:#a31515>&#34;</span> alt=<span style=color:#a31515>&#34;alt&#34;</span>&gt;
-</code></pre></td></tr></table>
-</div>
-</div><p>Let&rsquo;s generate it inside your shortcodes.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>...
-
-{{- <span>$</span>ws := slice 480 768 1366 1920 -}}
-{{- <span>$</span>srcset := slice -}}
-{{- <span style=color:#00f>range</span> <span>$</span>ws -}}
-    {{<span style=color:green>/* to avoid creating an image that is larger than the source */</span>}}
-    {{- <span style=color:#00f>if</span> (le . <span>$</span>res.Width) -}}
-        {{- <span>$</span>w := printf <span style=color:#a31515>&#34;%dx&#34;</span> . -}}
-        {{- <span>$</span>url := (<span>$</span>res.Resize <span>$</span>w).RelPermalink | safeURL -}}
-        {{- <span>$</span>fmt := printf <span style=color:#a31515>&#34;%s %dw&#34;</span> <span>$</span>url . -}}
-        {{- <span>$</span>srcset = <span>$</span>srcset | append <span>$</span>fmt -}}
-    {{- end -}}
-{{- end -}}
-
-...
-</code></pre></td></tr></table>
-</div>
-</div><p>Now you have your <code>srcset</code> format in a slice. You can join them using <code>Hugo's delimit function</code>.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>...
-
-{{- <span>$</span>set := delimit <span>$</span>srcset <span style=color:#a31515>&#34;,&#34;</span> -}}
-
-...
-</code></pre></td></tr></table>
-</div>
-</div><p>Then, use it as <code>srcset attribute</code>.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html>...
-
-&lt;figure&gt;
-  &lt;img
-    srcset=<span style=color:#a31515>&#34;{{ $set }}&#34;</span>
-    src=<span style=color:#a31515>&#34;{{ $res.RelPermalink }}&#34;</span>
-    alt=<span style=color:#a31515>&#34;{{ $alt }}&#34;</span>
-    width=<span style=color:#a31515>&#34;100%&#34;</span>
-    height=<span style=color:#a31515>&#34;auto&#34;</span>/&gt;
-  &lt;figcaption&gt;{{ $alt }}&lt;/figcaption&gt;
-&lt;/figure&gt;
-</code></pre></td></tr></table>
-</div>
-</div><p>Lastly, let&rsquo;s make the HTML render the image according to the viewport width.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>&lt;img srcset=<span style=color:#a31515>&#34;
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span style=color:#a31515>/url/to/480.png 480w,
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span style=color:#a31515>/url/to/768.png 768w,
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span><span style=color:#a31515>/url/to/1366.png 1366w,
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span><span style=color:#a31515>/url/to/1920.png 1920w
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span><span style=color:#a31515>&#34;</span> alt=<span style=color:#a31515>&#34;alt&#34;</span>&gt;
+</code></pre></div><p>Let&rsquo;s generate it inside your shortcodes.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>...
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>{{- <span>$</span>ws := slice 480 768 1366 1920 -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>{{- <span>$</span>srcset := slice -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>{{- <span style=color:#00f>range</span> <span>$</span>ws -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>    {{<span style=color:green>/* to avoid creating an image that is larger than the source */</span>}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>    {{- <span style=color:#00f>if</span> (le . <span>$</span>res.Width) -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>        {{- <span>$</span>w := printf <span style=color:#a31515>&#34;%dx&#34;</span> . -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>        {{- <span>$</span>url := (<span>$</span>res.Resize <span>$</span>w).RelPermalink | safeURL -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>        {{- <span>$</span>fmt := printf <span style=color:#a31515>&#34;%s %dw&#34;</span> <span>$</span>url . -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>        {{- <span>$</span>srcset = <span>$</span>srcset | append <span>$</span>fmt -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>    {{- end -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>{{- end -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>...
+</code></pre></div><p>Now you have your <code>srcset</code> format in a slice. You can join them using <code>Hugo's delimit function</code>.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>...
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>{{- <span>$</span>set := delimit <span>$</span>srcset <span style=color:#a31515>&#34;,&#34;</span> -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>...
+</code></pre></div><p>Then, use it as <code>srcset attribute</code>.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>...
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>&lt;figure&gt;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>  &lt;img
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>    srcset=<span style=color:#a31515>&#34;{{ $set }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>    src=<span style=color:#a31515>&#34;{{ $res.RelPermalink }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>    alt=<span style=color:#a31515>&#34;{{ $alt }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>    width=<span style=color:#a31515>&#34;100%&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>    height=<span style=color:#a31515>&#34;auto&#34;</span>/&gt;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>  &lt;figcaption&gt;{{ $alt }}&lt;/figcaption&gt;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>&lt;/figure&gt;
+</code></pre></div><p>Lastly, let&rsquo;s make the HTML render the image according to the viewport width.</p>
 <h2 id=sizes>sizes</h2>
 <p>To define <code>sizes attribute</code> on your image, you can use this <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-sizes>format</a>:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html>...
-
-&lt;figure&gt;
-  &lt;img
-    srcset=<span style=color:#a31515>&#34;{{ $set }}&#34;</span>
-    sizes=<span style=color:#a31515>&#34;(max-width: 480px) 480px, 100vw&#34;</span>
-    src=<span style=color:#a31515>&#34;{{ $res.RelPermalink }}&#34;</span>
-    alt=<span style=color:#a31515>&#34;{{ $alt }}&#34;</span>
-    width=<span style=color:#a31515>&#34;100%&#34;</span>
-    height=<span style=color:#a31515>&#34;auto&#34;</span>/&gt;
-  &lt;figcaption&gt;{{ $alt }}&lt;/figcaption&gt;
-&lt;/figure&gt;
-</code></pre></td></tr></table>
-</div>
-</div><p>Here is the complete source code of <code>/layouts/shortcodes/img.html</code>:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>{{- <span>$</span>alt := .Get <span style=color:#a31515>&#34;alt&#34;</span> -}}
-{{- <span>$</span>res := resources.GetMatch (.Get <span style=color:#a31515>&#34;src&#34;</span>) -}}
-
-{{- <span>$</span>ws := slice 480 768 1366 1920 -}}
-{{- <span>$</span>srcset := slice -}}
-{{- <span style=color:#00f>range</span> <span>$</span>ws -}}
-    {{<span style=color:green>/* to avoid creating an image that is larger than the source */</span>}}
-    {{- <span style=color:#00f>if</span> (le . <span>$</span>res.Width) -}}
-        {{- <span>$</span>w := printf <span style=color:#a31515>&#34;%dx&#34;</span> . -}}
-        {{- <span>$</span>url := (<span>$</span>res.Resize <span>$</span>w).RelPermalink | safeURL -}}
-        {{- <span>$</span>fmt := printf <span style=color:#a31515>&#34;%s %dw&#34;</span> <span>$</span>url . -}}
-        {{- <span>$</span>srcset = <span>$</span>srcset | append <span>$</span>fmt -}}
-    {{- end -}}
-{{- end -}}
-
-{{- <span>$</span>set := delimit <span>$</span>srcset <span style=color:#a31515>&#34;,&#34;</span> -}}
-
-&lt;figure&gt;
-  &lt;img
-    srcset=<span style=color:#a31515>&#34;{{ $set }}&#34;</span>
-    sizes=<span style=color:#a31515>&#34;(max-width: 480px) 480px, 100vw&#34;</span>
-    src=<span style=color:#a31515>&#34;{{ $res.RelPermalink }}&#34;</span>
-    alt=<span style=color:#a31515>&#34;{{ $alt }}&#34;</span>
-    width=<span style=color:#a31515>&#34;100%&#34;</span>
-    height=<span style=color:#a31515>&#34;auto&#34;</span>/&gt;
-  &lt;figcaption&gt;{{ <span>$</span>alt }}&lt;/figcaption&gt;
-&lt;/figure&gt;
-</code></pre></td></tr></table>
-</div>
-</div><p>Now if you build your Hugo site, you will see your images is auto-generated.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ tree img/
-img/
-└── testing
-    ├── ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_1366x0_resize_box_3.png
-    ├── ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_480x0_resize_box_3.png
-    ├── ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_768x0_resize_box_3.png
-    └── ehe.png
-
-1 directory, 4 files
-</code></pre></td></tr></table>
-</div>
-</div><p>Thank you for reading!</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>...
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>&lt;figure&gt;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>  &lt;img
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>    srcset=<span style=color:#a31515>&#34;{{ $set }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>    sizes=<span style=color:#a31515>&#34;(max-width: 480px) 480px, 100vw&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>    src=<span style=color:#a31515>&#34;{{ $res.RelPermalink }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>    alt=<span style=color:#a31515>&#34;{{ $alt }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>    width=<span style=color:#a31515>&#34;100%&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>    height=<span style=color:#a31515>&#34;auto&#34;</span>/&gt;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>  &lt;figcaption&gt;{{ $alt }}&lt;/figcaption&gt;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>&lt;/figure&gt;
+</code></pre></div><p>Here is the complete source code of <code>/layouts/shortcodes/img.html</code>:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span>{{- <span>$</span>alt := .Get <span style=color:#a31515>&#34;alt&#34;</span> -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>{{- <span>$</span>res := resources.GetMatch (.Get <span style=color:#a31515>&#34;src&#34;</span>) -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>{{- <span>$</span>ws := slice 480 768 1366 1920 -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>{{- <span>$</span>srcset := slice -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>{{- <span style=color:#00f>range</span> <span>$</span>ws -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>    {{<span style=color:green>/* to avoid creating an image that is larger than the source */</span>}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>    {{- <span style=color:#00f>if</span> (le . <span>$</span>res.Width) -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>        {{- <span>$</span>w := printf <span style=color:#a31515>&#34;%dx&#34;</span> . -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>        {{- <span>$</span>url := (<span>$</span>res.Resize <span>$</span>w).RelPermalink | safeURL -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>        {{- <span>$</span>fmt := printf <span style=color:#a31515>&#34;%s %dw&#34;</span> <span>$</span>url . -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>        {{- <span>$</span>srcset = <span>$</span>srcset | append <span>$</span>fmt -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>    {{- end -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>{{- end -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>{{- <span>$</span>set := delimit <span>$</span>srcset <span style=color:#a31515>&#34;,&#34;</span> -}}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>&lt;figure&gt;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>  &lt;img
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>    srcset=<span style=color:#a31515>&#34;{{ $set }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>    sizes=<span style=color:#a31515>&#34;(max-width: 480px) 480px, 100vw&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>    src=<span style=color:#a31515>&#34;{{ $res.RelPermalink }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>    alt=<span style=color:#a31515>&#34;{{ $alt }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>    width=<span style=color:#a31515>&#34;100%&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>    height=<span style=color:#a31515>&#34;auto&#34;</span>/&gt;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>  &lt;figcaption&gt;{{ <span>$</span>alt }}&lt;/figcaption&gt;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>&lt;/figure&gt;
+</code></pre></div><p>Now if you build your Hugo site, you will see your images is auto-generated.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ tree img/
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>img/
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>└── testing
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>    ├── ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_1366x0_resize_box_3.png
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>    ├── ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_480x0_resize_box_3.png
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span>    ├── ehe_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_768x0_resize_box_3.png
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span>    └── ehe.png
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9</span>1 directory, 4 files
+</code></pre></div><p>Thank you for reading!</p>
 </div>
 <div class=separator>
 <span>&#183;</span>

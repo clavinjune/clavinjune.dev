@@ -22,7 +22,7 @@ theme = 'june'
     codeFences = true
     guessSyntax = true
     lineNos = true
-    lineNumbersInTable = true
+    lineNumbersInTable = false
     style = 'vs'
     tabWidth = 4
 

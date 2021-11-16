@@ -53,351 +53,144 @@
 <p>While interning, I once had an application that logged every request and response to the Linux file system. That app easily fills up our disks due to traffic. I got confused when I tried to delete log files because disk usage didn&rsquo;t decrease even after the log files were deleted. So I restarted the app and finally, the disk usage decreased.</p>
 <p>But it is ineffective because we need to kill the application which is making a downtime at that time. Recently, I learned that it was caused by something called a <code>file descriptor</code>.</p>
 <h2 id=tldr>TL;DR</h2>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ df -h &lt;big file dir&gt; 
-$ rm -f &lt;big file&gt; <span style=color:green># remove the big file</span>
-$ df -h &lt;big file dir&gt; <span style=color:green># it still the same</span>
-$ lsof +L1 | grep &lt;big file&gt; <span style=color:green># get the running app PID</span>
-$ cd /proc/&lt;PID&gt;/fd/ <span style=color:green># go to the running app fd</span>
-$ ls -l | grep &lt;big file&gt; <span style=color:green># get the symlink</span>
-$ &gt; &lt;symlink&gt; <span style=color:green># empty the symlink</span>
-$ df -h &lt;big file dir&gt; <span style=color:green># it backs to normal</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Let&rsquo;s reproduce that incident.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ df -h &lt;big file dir&gt; 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>$ rm -f &lt;big file&gt; <span style=color:green># remove the big file</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>$ df -h &lt;big file dir&gt; <span style=color:green># it still the same</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>$ lsof +L1 | grep &lt;big file&gt; <span style=color:green># get the running app PID</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>$ cd /proc/&lt;PID&gt;/fd/ <span style=color:green># go to the running app fd</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span>$ ls -l | grep &lt;big file&gt; <span style=color:green># get the symlink</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span>$ &gt; &lt;symlink&gt; <span style=color:green># empty the symlink</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8</span>$ df -h &lt;big file dir&gt; <span style=color:green># it backs to normal</span>
+</code></pre></div><p>Let&rsquo;s reproduce that incident.</p>
 <h2 id=creating-a-big-file>Creating a big file</h2>
 <p>We need to create a big file, to fill our disk up. I think 3GB is enough. Well, you don&rsquo;t need to make it big just to reproduce, but more than 1GB could show the difference easily in the <code>df -h</code>.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ yes lorem ipsum dolor sit amet <span style=color:#a31515>\
-</span><span style=color:#a31515></span>  | head -c 3GB &gt;&gt; big-file.txt
-</code></pre></td></tr></table>
-</div>
-</div><p>Yep, now you have a 3GB file contains lorem ipsum called <code>big-file.txt</code></p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ yes lorem ipsum dolor sit amet <span style=color:#a31515>\
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span style=color:#a31515></span>  | head -c 3GB &gt;&gt; big-file.txt
+</code></pre></div><p>Yep, now you have a 3GB file contains lorem ipsum called <code>big-file.txt</code></p>
 <h2 id=create-a-simple-app>Create a simple app</h2>
 <p>Then we need to create an app that simply read <code>big-file.txt</code>. But I want to show you even if the <code>big-file.txt</code> is deleted, our app still writing to it. So I make the app read and append the <code>big-file.txt</code> using Golang, you can do it with whatever you prefer. Let&rsquo;s call it <code>write-to-file.go</code></p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> main
-
-<span style=color:#00f>import</span> (
-  <span style=color:#a31515>&#34;fmt&#34;</span>
-  <span style=color:#a31515>&#34;os&#34;</span>
-)
-
-<span style=color:#00f>func</span> main() {
-  f, err := os.OpenFile(<span style=color:#a31515>&#34;big-file.txt&#34;</span>,
-    os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-
-  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
-    panic(err)
-  }
-
-  <span style=color:#00f>defer</span> f.Close()
-
-  <span style=color:#00f>for</span> i := 0; ; i++ {
-    fmt.Scanln()
-    fmt.Fprintf(f, <span style=color:#a31515>&#34;%d\n&#34;</span>, i)
-    fmt.Println(i, <span style=color:#a31515>&#34;written&#34;</span>)
-  }
-}
-
-</code></pre></td></tr></table>
-</div>
-</div><p>It will wait for our input and loop forever until we terminate the app.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>package</span> main
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#00f>import</span> (
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  <span style=color:#a31515>&#34;fmt&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  <span style=color:#a31515>&#34;os&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span><span style=color:#00f>func</span> main() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  f, err := os.OpenFile(<span style=color:#a31515>&#34;big-file.txt&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>    os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>    panic(err)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>  <span style=color:#00f>defer</span> f.Close()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>  <span style=color:#00f>for</span> i := 0; ; i++ {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>    fmt.Scanln()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>    fmt.Fprintf(f, <span style=color:#a31515>&#34;%d\n&#34;</span>, i)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>    fmt.Println(i, <span style=color:#a31515>&#34;written&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>
+</code></pre></div><p>It will wait for our input and loop forever until we terminate the app.</p>
 <h2 id=check-current-disk-usage>Check current disk usage</h2>
 <p>Well, because I put it in the <code>home dir</code>, I check the size of the <code>/home</code> using <code>df</code>.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ df -h /home
-Filesystem      Size  Used Avail Use% Mounted on
-/dev/sdb1       913G   34G  832G   4% /home
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=tail-the-appended-text-in-the-file>Tail the appended text in the file</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ df -h /home
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>Filesystem      Size  Used Avail Use% Mounted on
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>/dev/sdb1       913G   34G  832G   4% /home
+</code></pre></div><h2 id=tail-the-appended-text-in-the-file>Tail the appended text in the file</h2>
 <p><code>tail -f</code> will follow the last 10 lines in the file and it would show this</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ tail -f big-file.txt 
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lor
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=run-the-app>Run the app</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span>$ tail -f big-file.txt 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>lor
+</code></pre></div><h2 id=run-the-app>Run the app</h2>
 <p>Let&rsquo;s run our <code>write-to-file.go</code></p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ go run write-to-file.go
-</code></pre></td></tr></table>
-</div>
-</div><p>For every <code>Enter</code> you input, it will append the <code>big-file.txt</code> like this</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ tail -f big-file.txt 
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lor0
-1
-2
-3
-</code></pre></td></tr></table>
-</div>
-</div><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ go run write-to-file.go 
-
-0 written
-
-1 written
-
-2 written
-
-3 written
-
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=remove-the-file>Remove the file</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ go run write-to-file.go
+</code></pre></div><p>For every <code>Enter</code> you input, it will append the <code>big-file.txt</code> like this</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span>$ tail -f big-file.txt 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>lor0
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>1
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>2
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>3
+</code></pre></div><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span>$ go run write-to-file.go 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>0 written
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>1 written
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>2 written
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>3 written
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>
+</code></pre></div><h2 id=remove-the-file>Remove the file</h2>
 <p>Now let&rsquo;s stop the <code>tail -f</code> and remove that <code>big-file.txt</code>.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ rm big-file.txt
-</code></pre></td></tr></table>
-</div>
-</div><p>Does your disk usage decreased? Unfortunately, mine is not. It might be karma working there isn&rsquo;t it?</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ df -h /home
-Filesystem      Size  Used Avail Use% Mounted on
-/dev/sdb1       913G   34G  832G   4% /home
-</code></pre></td></tr></table>
-</div>
-</div><p>Now, how to <code>really remove</code> the <code>big-file.txt</code>?</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ rm big-file.txt
+</code></pre></div><p>Does your disk usage decreased? Unfortunately, mine is not. It might be karma working there isn&rsquo;t it?</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ df -h /home
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>Filesystem      Size  Used Avail Use% Mounted on
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>/dev/sdb1       913G   34G  832G   4% /home
+</code></pre></div><p>Now, how to <code>really remove</code> the <code>big-file.txt</code>?</p>
 <p>For doing that we need to check the current running process that still open that <code>big-file.txt</code>.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ lsof +L1 | grep big-file.txt
-write-to- 102333 clavinjune    3w   REG   8,17 3000000008     0  7341204 /home/clavinjune/Public/file-descriptor/big-file.txt (deleted)
-</code></pre></td></tr></table>
-</div>
-</div><p>Now we got the app&rsquo;s name, its PID, and we know that the Linux know the <code>big-file.txt</code> is already <code>deleted</code>.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ lsof +L1 | grep big-file.txt
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>write-to- 102333 clavinjune    3w   REG   8,17 3000000008     0  7341204 /home/clavinjune/Public/file-descriptor/big-file.txt (deleted)
+</code></pre></div><p>Now we got the app&rsquo;s name, its PID, and we know that the Linux know the <code>big-file.txt</code> is already <code>deleted</code>.</p>
 <p>Let&rsquo;s open the <code>file descriptor</code> of the app at <code>/proc/&lt;PID>/fd</code>.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ cd /proc/102333/fd
-$ ls -l | grep big-file.txt
-l-wx------ 1 clavinjune clavinjune 64 Jan 23 01:38 3 -&gt; /home/clavinjune/Public/file-descriptor/big-file.txt (deleted)
-</code></pre></td></tr></table>
-</div>
-</div><p>It seems like, we have a symlink called <code>3</code> that linked to our <code>big-file.txt</code>.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ cd /proc/102333/fd
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>$ ls -l | grep big-file.txt
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>l-wx------ 1 clavinjune clavinjune 64 Jan 23 01:38 3 -&gt; /home/clavinjune/Public/file-descriptor/big-file.txt (deleted)
+</code></pre></div><p>It seems like, we have a symlink called <code>3</code> that linked to our <code>big-file.txt</code>.</p>
 <p>Now if you <code>tail -f</code> to the symlink and input some <code>Enter</code> to the app, it will show something like this</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ tail -f 3
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lorem ipsum dolor sit amet
-lor0
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-</code></pre></td></tr></table>
-</div>
-</div><p>Interesting isn&rsquo;t it? Even if the <code>big-file.txt</code> is deleted, the app still writing into the symlink. That symlink held our disk space, so we need to make that symlink is empty. By simply echoing nothing to the symlink in this case echoing nothing to <code>3</code>.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ &gt; 3
-</code></pre></td></tr></table>
-</div>
-</div><p>Now check the disk usage it will return to normal like we really delete the <code>big-file.txt</code> and the program is still running and still appending to the file.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ df -h /home
-Filesystem      Size  Used Avail Use% Mounted on
-/dev/sdb1       913G   32G  835G   4% /home
-</code></pre></td></tr></table>
-</div>
-</div><p>Let&rsquo;s input some <code>Enter</code> to the app again then the symlink will filled up again by the app.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ tail -f 3 
-11
-12
-13
-14
-15
-16
-</code></pre></td></tr></table>
-</div>
-</div><p>Thank you for reading!</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span>$ tail -f 3
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>lorem ipsum dolor sit amet
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>lor0
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>1
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>2
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>3
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>4
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>5
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>6
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>7
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>8
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>9
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>10
+</code></pre></div><p>Interesting isn&rsquo;t it? Even if the <code>big-file.txt</code> is deleted, the app still writing into the symlink. That symlink held our disk space, so we need to make that symlink is empty. By simply echoing nothing to the symlink in this case echoing nothing to <code>3</code>.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ &gt; 3
+</code></pre></div><p>Now check the disk usage it will return to normal like we really delete the <code>big-file.txt</code> and the program is still running and still appending to the file.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ df -h /home
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>Filesystem      Size  Used Avail Use% Mounted on
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>/dev/sdb1       913G   32G  835G   4% /home
+</code></pre></div><p>Let&rsquo;s input some <code>Enter</code> to the app again then the symlink will filled up again by the app.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ tail -f 3 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>11
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>12
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>13
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>14
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span>15
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span>16
+</code></pre></div><p>Thank you for reading!</p>
 </div>
 <div class=separator>
 <span>&#183;</span>

@@ -45,57 +45,22 @@
 <span>~1 min</span>
 </div>
 <div id=content><p>Enable kv-v2 on secrets <code>secret</code></p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ vault kv enable-versioning secret
-</code></pre></td></tr></table>
-</div>
-</div><p>Put something inside secrets <code>secret</code></p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ vault kv put secret/your-path your-key=your-value
-</code></pre></td></tr></table>
-</div>
-</div><p>Create policy file</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ tee policyfile.hcl <span style=color:#a31515>&lt;&lt;EOF
-</span><span style=color:#a31515>path &#34;secret/*&#34; {
-</span><span style=color:#a31515>  capabilities = [ &#34;list&#34; ]
-</span><span style=color:#a31515>}
-</span><span style=color:#a31515>path &#34;secret/data/your-path&#34; {
-</span><span style=color:#a31515>  capabilities = [ &#34;read&#34; ]
-</span><span style=color:#a31515>}
-</span><span style=color:#a31515>EOF</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Please notify that we add policy rules for <code>secret/data/your-path</code> even though we use <code>secret/your-path</code> as a path. Because KV-V2 add <code>data</code> prefix before your path name</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ vault kv enable-versioning secret
+</code></pre></div><p>Put something inside secrets <code>secret</code></p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ vault kv put secret/your-path your-key=your-value
+</code></pre></div><p>Create policy file</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ tee policyfile.hcl <span style=color:#a31515>&lt;&lt;EOF
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span style=color:#a31515>path &#34;secret/*&#34; {
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span style=color:#a31515>  capabilities = [ &#34;list&#34; ]
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span><span style=color:#a31515>}
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span><span style=color:#a31515>path &#34;secret/data/your-path&#34; {
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span><span style=color:#a31515>  capabilities = [ &#34;read&#34; ]
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span><span style=color:#a31515>}
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8</span><span style=color:#a31515>EOF</span>
+</code></pre></div><p>Please notify that we add policy rules for <code>secret/data/your-path</code> even though we use <code>secret/your-path</code> as a path. Because KV-V2 add <code>data</code> prefix before your path name</p>
 <p>Apply the policy file to your role</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ vault policy write your-role policyfile.hcl
-</code></pre></td></tr></table>
-</div>
-</div><p>Thank you for reading!</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ vault policy write your-role policyfile.hcl
+</code></pre></div><p>Thank you for reading!</p>
 </div>
 <div class=separator>
 <span>&#183;</span>

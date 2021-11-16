@@ -46,119 +46,53 @@
 </div>
 <div id=content><p>Data serialization library in Java could be varied. You can use Jackson, GSON, or anything else. Since there are too many serialization libraries out there, it&rsquo;s quite tricky to manage Java class attribute exclusion during serialization. Each library might have their own way to exclude the Java class attribute. Each Java project should only have 1 serialization library in order to maintain the standardization but, what if somehow in someway you need more than one serialization library?</p>
 <p>Here comes <code>transient modifier</code> that helps you manage the java class attribute exclusion during serialization in language level. There&rsquo;s no need to memorize unique annotation like</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java>@Expose(serialize = <span style=color:#00f>false</span>, deserialize = <span style=color:#00f>true</span>)
-</code></pre></td></tr></table>
-</div>
-</div><p>or</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java>@JsonIgnore
-</code></pre></td></tr></table>
-</div>
-</div><p>You can only use <code>transient</code> keyword as your attribute modifier. Let&rsquo;s try it.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>@Expose(serialize = <span style=color:#00f>false</span>, deserialize = <span style=color:#00f>true</span>)
+</code></pre></div><p>or</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>@JsonIgnore
+</code></pre></div><p>You can only use <code>transient</code> keyword as your attribute modifier. Let&rsquo;s try it.</p>
 <h2 id=sample-class>Sample Class</h2>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:green>// Jackson need this annotation
-</span><span style=color:green>// because it can&#39;t deserialize unknown properties. duh!
-</span><span style=color:green></span>@JsonIgnoreProperties(ignoreUnknown = <span style=color:#00f>true</span>)
-<span style=color:#00f>public</span> <span style=color:#00f>class</span> <span style=color:#2b91af>Sample</span> {
-  <span style=color:green>// using transient modifier on foo
-</span><span style=color:green></span>  <span style=color:#00f>public</span> <span style=color:#00f>transient</span> String foo;
-  <span style=color:#00f>public</span> String bar;
-
-  @Override
-  <span style=color:#00f>public</span> String toString() {
-    <span style=color:#00f>return</span> <span style=color:#a31515>&#34;Sample{&#34;</span> +
-        <span style=color:#a31515>&#34;foo=&#39;&#34;</span> + foo + <span style=color:#a31515>&#39;\&#39;&#39;</span> +
-        <span style=color:#a31515>&#34;, bar=&#39;&#34;</span> + bar + <span style=color:#a31515>&#39;\&#39;&#39;</span> +
-        <span style=color:#a31515>&#39;}&#39;</span>;
-  }
-
-  <span style=color:#00f>public</span> <span style=color:#00f>static</span> <span style=color:#2b91af>void</span> main(String[] args) <span style=color:#00f>throws</span> Exception {
-    String json = <span style=color:#a31515>&#34;{\&#34;foo\&#34;:\&#34;foox\&#34;,\&#34;bar\&#34;:\&#34;barx\&#34;}&#34;</span>;
-
-    <span style=color:green>// by default jackson not reading any attribute,
-</span><span style=color:green></span>    <span style=color:green>// jackson only read public default Getter
-</span><span style=color:green></span>    <span style=color:green>// so jackson need to have this configuration to mark transient attributes
-</span><span style=color:green></span>    ObjectMapper jackson = <span style=color:#00f>new</span> ObjectMapper()
-        .configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, <span style=color:#00f>true</span>);
-    Gson gson = <span style=color:#00f>new</span> Gson();
-
-    Sample byJackson = jackson.readValue(json, Sample.class);
-    Sample byGson = gson.fromJson(json, Sample.class);
-
-    System.out.println(<span style=color:#a31515>&#34;deserialization by jackson: &#34;</span> + byJackson);
-    System.out.println(<span style=color:#a31515>&#34;deserialization by gson: &#34;</span> + byGson);
-
-    System.out.println(<span style=color:#a31515>&#34;serialization by gson: &#34;</span> + gson.toJson(byGson));
-    System.out.println(<span style=color:#a31515>&#34;serialization by jackson: &#34;</span> + jackson.writeValueAsString(byJackson));
-  }
-}
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=output>output</h2>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>deserialization by jackson: Sample{foo=&#39;null&#39;, bar=&#39;barx&#39;}
-deserialization by gson: Sample{foo=&#39;null&#39;, bar=&#39;barx&#39;}
-serialization by gson: {&#34;bar&#34;:&#34;barx&#34;}
-serialization by jackson: {&#34;bar&#34;:&#34;barx&#34;}
-</code></pre></td></tr></table>
-</div>
-</div><p>Yep, as we expect, foo attribute isn&rsquo;t serialized. <code>transient</code> modifier would work just fine as long as the attribute itself has no <code>static</code> or <code>final</code> modifier. Whenever a <code>transient</code> attribute has <code>static</code> or <code>final</code> modifier, the <code>transient</code> modifier has no effect on that attribute.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:green>// Jackson need this annotation
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span><span style=color:green>// because it can&#39;t deserialize unknown properties. duh!
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:green></span>@JsonIgnoreProperties(ignoreUnknown = <span style=color:#00f>true</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span><span style=color:#00f>public</span> <span style=color:#00f>class</span> <span style=color:#2b91af>Sample</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  <span style=color:green>// using transient modifier on foo
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span><span style=color:green></span>  <span style=color:#00f>public</span> <span style=color:#00f>transient</span> String foo;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>  <span style=color:#00f>public</span> String bar;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  @Override
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  <span style=color:#00f>public</span> String toString() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>    <span style=color:#00f>return</span> <span style=color:#a31515>&#34;Sample{&#34;</span> +
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>        <span style=color:#a31515>&#34;foo=&#39;&#34;</span> + foo + <span style=color:#a31515>&#39;\&#39;&#39;</span> +
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>        <span style=color:#a31515>&#34;, bar=&#39;&#34;</span> + bar + <span style=color:#a31515>&#39;\&#39;&#39;</span> +
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>        <span style=color:#a31515>&#39;}&#39;</span>;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>  <span style=color:#00f>public</span> <span style=color:#00f>static</span> <span style=color:#2b91af>void</span> main(String[] args) <span style=color:#00f>throws</span> Exception {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>    String json = <span style=color:#a31515>&#34;{\&#34;foo\&#34;:\&#34;foox\&#34;,\&#34;bar\&#34;:\&#34;barx\&#34;}&#34;</span>;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>    <span style=color:green>// by default jackson not reading any attribute,
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span><span style=color:green></span>    <span style=color:green>// jackson only read public default Getter
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span><span style=color:green></span>    <span style=color:green>// so jackson need to have this configuration to mark transient attributes
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span><span style=color:green></span>    ObjectMapper jackson = <span style=color:#00f>new</span> ObjectMapper()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>        .configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, <span style=color:#00f>true</span>);
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>    Gson gson = <span style=color:#00f>new</span> Gson();
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>    Sample byJackson = jackson.readValue(json, Sample.class);
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>    Sample byGson = gson.fromJson(json, Sample.class);
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30</span>    System.out.println(<span style=color:#a31515>&#34;deserialization by jackson: &#34;</span> + byJackson);
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31</span>    System.out.println(<span style=color:#a31515>&#34;deserialization by gson: &#34;</span> + byGson);
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33</span>    System.out.println(<span style=color:#a31515>&#34;serialization by gson: &#34;</span> + gson.toJson(byGson));
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34</span>    System.out.println(<span style=color:#a31515>&#34;serialization by jackson: &#34;</span> + jackson.writeValueAsString(byJackson));
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36</span>}
+</code></pre></div><h2 id=output>output</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>deserialization by jackson: Sample{foo=&#39;null&#39;, bar=&#39;barx&#39;}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>deserialization by gson: Sample{foo=&#39;null&#39;, bar=&#39;barx&#39;}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>serialization by gson: {&#34;bar&#34;:&#34;barx&#34;}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>serialization by jackson: {&#34;bar&#34;:&#34;barx&#34;}
+</code></pre></div><p>Yep, as we expect, foo attribute isn&rsquo;t serialized. <code>transient</code> modifier would work just fine as long as the attribute itself has no <code>static</code> or <code>final</code> modifier. Whenever a <code>transient</code> attribute has <code>static</code> or <code>final</code> modifier, the <code>transient</code> modifier has no effect on that attribute.</p>
 <p>Thank you for reading!</p>
 </div>
 <div class=separator>

@@ -52,103 +52,44 @@
 </figure>
 <p>I once made a function to convert a slice to slice of ptr and made a mistake.</p>
 <h2 id=my-function>My Function</h2>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> Slice2SliceOfPtr(slice []<span style=color:#2b91af>int</span>) []*<span style=color:#2b91af>int</span> {
-  n := len(slice)
-  r := make([]*<span style=color:#2b91af>int</span>, n, n)
-
-  <span style=color:#00f>for</span> i, s := <span style=color:#00f>range</span> slice {
-    r[i] = &amp;s
-  }
-
-  <span style=color:#00f>return</span> r
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>It seems normal to me until I realize something was wrong.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> Slice2SliceOfPtr(slice []<span style=color:#2b91af>int</span>) []*<span style=color:#2b91af>int</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  n := len(slice)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>  r := make([]*<span style=color:#2b91af>int</span>, n, n)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  <span style=color:#00f>for</span> i, s := <span style=color:#00f>range</span> slice {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>    r[i] = &amp;s
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  <span style=color:#00f>return</span> r
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>}
+</code></pre></div><p>It seems normal to me until I realize something was wrong.</p>
 <h2 id=my-main-func>My Main Func</h2>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> main() {
-  x := []<span style=color:#2b91af>int</span>{1, 2, 3}
-  y := Slice2SliceOfPtr(x)
-
-  fmt.Println(x)
-
-  <span style=color:#00f>for</span> _, yy := <span style=color:#00f>range</span> y {
-    fmt.Printf(<span style=color:#a31515>&#34;%d &#34;</span>, *yy)
-  }
-}
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=result>Result</h2>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ go run main.go 
-[1 2 3]
-3 3 3
-</code></pre></td></tr></table>
-</div>
-</div><p>Why only the last element copied to the result?</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> main() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  x := []<span style=color:#2b91af>int</span>{1, 2, 3}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>  y := Slice2SliceOfPtr(x)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  fmt.Println(x)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>  <span style=color:#00f>for</span> _, yy := <span style=color:#00f>range</span> y {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>    fmt.Printf(<span style=color:#a31515>&#34;%d &#34;</span>, *yy)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>}
+</code></pre></div><h2 id=result>Result</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ go run main.go 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>[1 2 3]
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>3 3 3
+</code></pre></div><p>Why only the last element copied to the result?</p>
 <p>Because the <code>&s</code> I used is mutated every iteration.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>for</span> i, s := <span style=color:#00f>range</span> slice {
-  r[i] = &amp;s
-}
-</code></pre></td></tr></table>
-</div>
-</div><p><code>s</code> never created as a new variable on every iteration, but its value is mutated inside the for loop</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span style=color:#00f>for</span> i, s := <span style=color:#00f>range</span> slice {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>  r[i] = &amp;s
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>}
+</code></pre></div><p><code>s</code> never created as a new variable on every iteration, but its value is mutated inside the for loop</p>
 <p>So I changed the iteration like this:</p>
 <h2 id=better-one>Better One</h2>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>for</span> i := <span style=color:#00f>range</span> slice {
-  r[i] = &amp;slice[i]
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Thank you for reading!</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span style=color:#00f>for</span> i := <span style=color:#00f>range</span> slice {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>  r[i] = &amp;slice[i]
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>}
+</code></pre></div><p>Thank you for reading!</p>
 </div>
 <div class=separator>
 <span>&#183;</span>

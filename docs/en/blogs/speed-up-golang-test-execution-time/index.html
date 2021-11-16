@@ -55,365 +55,161 @@
 <p>To help developers handle this issue, Golang provides a parallelization inside its standard library. You can do a parallel test without any 3rd party libraries or create a goroutine manually. In this article, you will learn how to make a parallel test to speed up the execution of the test.</p>
 <h2 id=function-to-be-tested>Function to be Tested</h2>
 <p>Let&rsquo;s say you have this time-based <code>EvenOrSleep</code> function which you may use on a login failed event to avoid spam or brute-force.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>var</span> ErrNotEven = errors.New(<span style=color:#a31515>&#34;not an even number&#34;</span>)
-
-<span style=color:#00f>func</span> EvenOrSleep(n <span style=color:#2b91af>int</span>) <span style=color:#2b91af>error</span> {
-    <span style=color:#00f>if</span> n%2 == 0 {
-        time.Sleep(time.Duration(n) * time.Second)
-        <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
-    }
-
-    <span style=color:#00f>return</span> ErrNotEven
-}
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=unit-test-function>Unit Test Function</h2>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> TestEvenOrSleep(t *testing.T) {
-    tt := []<span style=color:#00f>struct</span> {
-        n        <span style=color:#2b91af>int</span>
-        expected <span style=color:#2b91af>error</span>
-    }{
-        {1, ErrNotEven},
-        {3, ErrNotEven},
-        {5, ErrNotEven},
-        {2, <span style=color:#00f>nil</span>},
-        {4, <span style=color:#00f>nil</span>},
-    }
-
-    <span style=color:#00f>for</span> _, tc := <span style=color:#00f>range</span> tt {
-        actual := EvenOrSleep(tc.n)
-
-        <span style=color:#00f>if</span> tc.expected != actual {
-            t.Errorf(<span style=color:#a31515>`expected &#34;%v&#34;, actual &#34;%v&#34;`</span>, tc.expected, actual)
-        }
-    }
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>If you run the test, it will take around 6 seconds to execute all the test cases.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash> $ go test -v
-=== RUN   TestEvenOrSleep
---- PASS: TestEvenOrSleep (6.00s)
-PASS
-ok      example 6.004s
-</code></pre></td></tr></table>
-</div>
-</div><p>But, if you make the test cases parallel, It will take around 4 seconds because all the test cases are running at the same time. So let&rsquo;s improve the test using <code>t.Parallel()</code>.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>var</span> ErrNotEven = errors.New(<span style=color:#a31515>&#34;not an even number&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#00f>func</span> EvenOrSleep(n <span style=color:#2b91af>int</span>) <span style=color:#2b91af>error</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>    <span style=color:#00f>if</span> n%2 == 0 {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>        time.Sleep(time.Duration(n) * time.Second)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>        <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>    <span style=color:#00f>return</span> ErrNotEven
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>}
+</code></pre></div><h2 id=unit-test-function>Unit Test Function</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> TestEvenOrSleep(t *testing.T) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>    tt := []<span style=color:#00f>struct</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>        n        <span style=color:#2b91af>int</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>        expected <span style=color:#2b91af>error</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>    }{
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>        {1, ErrNotEven},
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>        {3, ErrNotEven},
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>        {5, ErrNotEven},
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>        {2, <span style=color:#00f>nil</span>},
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>        {4, <span style=color:#00f>nil</span>},
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>    <span style=color:#00f>for</span> _, tc := <span style=color:#00f>range</span> tt {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>        actual := EvenOrSleep(tc.n)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>        <span style=color:#00f>if</span> tc.expected != actual {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>            t.Errorf(<span style=color:#a31515>`expected &#34;%v&#34;, actual &#34;%v&#34;`</span>, tc.expected, actual)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>        }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>}
+</code></pre></div><p>If you run the test, it will take around 6 seconds to execute all the test cases.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ go test -v
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>=== RUN   TestEvenOrSleep
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>--- PASS: TestEvenOrSleep (6.00s)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>PASS
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>ok      example 6.004s
+</code></pre></div><p>But, if you make the test cases parallel, It will take around 4 seconds because all the test cases are running at the same time. So let&rsquo;s improve the test using <code>t.Parallel()</code>.</p>
 <h2 id=modified-unit-test-function>Modified Unit Test Function</h2>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>for</span> _, tc := <span style=color:#00f>range</span> tt {
-    t.Run(fmt.Sprint(tc.n), <span style=color:#00f>func</span>(t *testing.T) {
-        t.Parallel()
-        actual := EvenOrSleep(tc.n)
-
-        <span style=color:#00f>if</span> tc.expected != actual {
-            t.Errorf(<span style=color:#a31515>`expected &#34;%v&#34;, actual &#34;%v&#34;`</span>, tc.expected, actual)
-        }
-    })
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>You only need to change the code inside the iteration. Make all the test cases become subtests using <code>t.Run</code> and name them using their input <code>tc.n</code>. And then, inside the subtest, call the <code>t.Parallel()</code> function so it makes Golang run all the subtests at the same time.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ go test -v
-=== RUN   TestEvenOrSleep
-=== RUN   TestEvenOrSleep/1
-=== PAUSE TestEvenOrSleep/1
-=== RUN   TestEvenOrSleep/3
-=== PAUSE TestEvenOrSleep/3
-=== RUN   TestEvenOrSleep/5
-=== PAUSE TestEvenOrSleep/5
-=== RUN   TestEvenOrSleep/2
-=== PAUSE TestEvenOrSleep/2
-=== RUN   TestEvenOrSleep/4
-=== PAUSE TestEvenOrSleep/4
-=== CONT  TestEvenOrSleep/1
-=== CONT  TestEvenOrSleep/5
-=== CONT  TestEvenOrSleep/3
-=== CONT  TestEvenOrSleep/2
-=== CONT  TestEvenOrSleep/4
---- PASS: TestEvenOrSleep (0.00s)
-    --- PASS: TestEvenOrSleep/2 (4.00s)
-    --- PASS: TestEvenOrSleep/4 (4.00s)
-    --- PASS: TestEvenOrSleep/1 (4.00s)
-    --- PASS: TestEvenOrSleep/5 (4.00s)
-    --- PASS: TestEvenOrSleep/3 (4.00s)
-PASS
-ok      example 4.004s
-</code></pre></td></tr></table>
-</div>
-</div><p>As you see, it takes around 4 seconds to complete the whole test. But there&rsquo;s something wrong. If you see the test output on lines 19-23, you will see that each test was executed for 4 seconds.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>...
-    --- PASS: TestEvenOrSleep/2 (4.00s)
-    --- PASS: TestEvenOrSleep/4 (4.00s)
-    --- PASS: TestEvenOrSleep/1 (4.00s)
-    --- PASS: TestEvenOrSleep/5 (4.00s)
-    --- PASS: TestEvenOrSleep/3 (4.00s)
-...
-</code></pre></td></tr></table>
-</div>
-</div><p>Let&rsquo;s add some log inside the <code>EvenOrSleep</code> function to debug it.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> EvenOrSleep(n <span style=color:#2b91af>int</span>) <span style=color:#2b91af>error</span> {
-    log.Println(<span style=color:#a31515>&#34;input&#34;</span>, n)
-    <span style=color:#00f>if</span> n%2 == 0 {
-        time.Sleep(time.Duration(n) * time.Second)
-        <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
-    }
-
-    <span style=color:#00f>return</span> ErrNotEven
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>And then run the test again without the <code>-v</code> flags to make the output less verbose.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ go test
-2021/11/15 17:22:13 input 4
-2021/11/15 17:22:13 input 4
-2021/11/15 17:22:13 input 4
-2021/11/15 17:22:13 input 4
-2021/11/15 17:22:13 input 4
-PASS
-ok      example 4.006s
-</code></pre></td></tr></table>
-</div>
-</div><p>Why is it always 4? Because the <code>tc</code> is always mutated on each iteration. You can see my other <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://clavinjune.dev/en/blogs/my-mistake-on-converting-slice-to-slice-of-ptr-in-golang/#result>blog post</a> to fix this issue. Or you can use this alternative solution below.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>for</span> _, tc := <span style=color:#00f>range</span> tt {
-    tc := tc
-    t.Run(fmt.Sprint(tc.n), <span style=color:#00f>func</span>(t *testing.T) {
-        t.Parallel()
-        actual := EvenOrSleep(tc.n)
-        
-        <span style=color:#00f>if</span> tc.expected != actual {
-            t.Errorf(<span style=color:#a31515>`expected &#34;%v&#34;, actual &#34;%v&#34;`</span>, tc.expected, actual)
-        }
-    })
-}
-
-<span style=color:green>// or
-</span><span style=color:green></span>
-<span style=color:#00f>for</span> i := <span style=color:#00f>range</span> tt {
-    tc := tt[i]
-    t.Run(fmt.Sprint(tc.n), <span style=color:#00f>func</span>(t *testing.T) {
-        t.Parallel()
-        actual := EvenOrSleep(tc.n)
-        
-        <span style=color:#00f>if</span> tc.expected != actual {
-            t.Errorf(<span style=color:#a31515>`expected &#34;%v&#34;, actual &#34;%v&#34;`</span>, tc.expected, actual)
-        }
-    })
-}
-</code></pre></td></tr></table>
-</div>
-</div><p><code>tc := tc</code> copies the value of <code>tc</code> and makes it a new local variable so it won&rsquo;t be mutated on each iteration. Of course, you can change the <code>tc</code> to the other variable let&rsquo;s say <code>newTc := tc</code>, it doesn&rsquo;t need to be the same, just like creating a variable. Now let&rsquo;s remove the log, and re-run the tests again.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash> $ go test -v
-=== RUN   TestEvenOrSleep
-=== RUN   TestEvenOrSleep/1
-=== PAUSE TestEvenOrSleep/1
-=== RUN   TestEvenOrSleep/3
-=== PAUSE TestEvenOrSleep/3
-=== RUN   TestEvenOrSleep/5
-=== PAUSE TestEvenOrSleep/5
-=== RUN   TestEvenOrSleep/2
-=== PAUSE TestEvenOrSleep/2
-=== RUN   TestEvenOrSleep/4
-=== PAUSE TestEvenOrSleep/4
-=== CONT  TestEvenOrSleep/1
-=== CONT  TestEvenOrSleep/2
-=== CONT  TestEvenOrSleep/3
-=== CONT  TestEvenOrSleep/4
-=== CONT  TestEvenOrSleep/5
---- PASS: TestEvenOrSleep (0.00s)
-    --- PASS: TestEvenOrSleep/1 (0.00s)
-    --- PASS: TestEvenOrSleep/3 (0.00s)
-    --- PASS: TestEvenOrSleep/5 (0.00s)
-    --- PASS: TestEvenOrSleep/2 (2.00s)
-    --- PASS: TestEvenOrSleep/4 (4.00s)
-PASS
-ok      example 4.003s
-</code></pre></td></tr></table>
-</div>
-</div><p>It&rsquo;s fixed!</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>for</span> _, tc := <span style=color:#00f>range</span> tt {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>    t.Run(fmt.Sprint(tc.n), <span style=color:#00f>func</span>(t *testing.T) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>        t.Parallel()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>        actual := EvenOrSleep(tc.n)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>        <span style=color:#00f>if</span> tc.expected != actual {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>            t.Errorf(<span style=color:#a31515>`expected &#34;%v&#34;, actual &#34;%v&#34;`</span>, tc.expected, actual)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>        }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>    })
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>}
+</code></pre></div><p>You only need to change the code inside the iteration. Make all the test cases become subtests using <code>t.Run</code> and name them using their input <code>tc.n</code>. And then, inside the subtest, call the <code>t.Parallel()</code> function so it makes Golang run all the subtests at the same time.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span>$ go test -v
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>=== RUN   TestEvenOrSleep
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>=== RUN   TestEvenOrSleep/1
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>=== PAUSE TestEvenOrSleep/1
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>=== RUN   TestEvenOrSleep/3
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>=== PAUSE TestEvenOrSleep/3
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>=== RUN   TestEvenOrSleep/5
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>=== PAUSE TestEvenOrSleep/5
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>=== RUN   TestEvenOrSleep/2
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>=== PAUSE TestEvenOrSleep/2
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>=== RUN   TestEvenOrSleep/4
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>=== PAUSE TestEvenOrSleep/4
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>=== CONT  TestEvenOrSleep/1
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>=== CONT  TestEvenOrSleep/5
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>=== CONT  TestEvenOrSleep/3
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>=== CONT  TestEvenOrSleep/2
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>=== CONT  TestEvenOrSleep/4
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>--- PASS: TestEvenOrSleep (0.00s)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>    --- PASS: TestEvenOrSleep/2 (4.00s)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>    --- PASS: TestEvenOrSleep/4 (4.00s)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>    --- PASS: TestEvenOrSleep/1 (4.00s)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>    --- PASS: TestEvenOrSleep/5 (4.00s)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>    --- PASS: TestEvenOrSleep/3 (4.00s)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>PASS
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>ok      example 4.004s
+</code></pre></div><p>As you see, it takes around 4 seconds to complete the whole test. But there&rsquo;s something wrong. If you see the test output on lines 19-23, you will see that each test was executed for 4 seconds.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>...
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>    --- PASS: TestEvenOrSleep/2 (4.00s)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>    --- PASS: TestEvenOrSleep/4 (4.00s)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>    --- PASS: TestEvenOrSleep/1 (4.00s)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>    --- PASS: TestEvenOrSleep/5 (4.00s)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>    --- PASS: TestEvenOrSleep/3 (4.00s)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>...
+</code></pre></div><p>Let&rsquo;s add some log inside the <code>EvenOrSleep</code> function to debug it.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span style=color:#00f>func</span> EvenOrSleep(n <span style=color:#2b91af>int</span>) <span style=color:#2b91af>error</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>    log.Println(<span style=color:#a31515>&#34;input&#34;</span>, n)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>    <span style=color:#00f>if</span> n%2 == 0 {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>        time.Sleep(time.Duration(n) * time.Second)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>        <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8</span>    <span style=color:#00f>return</span> ErrNotEven
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9</span>}
+</code></pre></div><p>And then run the test again without the <code>-v</code> flags to make the output less verbose.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ go test
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>2021/11/15 17:22:13 input 4
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>2021/11/15 17:22:13 input 4
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>2021/11/15 17:22:13 input 4
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>2021/11/15 17:22:13 input 4
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span>2021/11/15 17:22:13 input 4
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span>PASS
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8</span>ok      example 4.006s
+</code></pre></div><p>Why is it always 4? Because the <code>tc</code> is always mutated on each iteration. You can see my other <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://clavinjune.dev/en/blogs/my-mistake-on-converting-slice-to-slice-of-ptr-in-golang/#result>blog post</a> to fix this issue. Or you can use this alternative solution below.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>for</span> _, tc := <span style=color:#00f>range</span> tt {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>    tc := tc
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>    t.Run(fmt.Sprint(tc.n), <span style=color:#00f>func</span>(t *testing.T) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>        t.Parallel()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>        actual := EvenOrSleep(tc.n)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>        
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>        <span style=color:#00f>if</span> tc.expected != actual {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>            t.Errorf(<span style=color:#a31515>`expected &#34;%v&#34;, actual &#34;%v&#34;`</span>, tc.expected, actual)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>        }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>    })
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span><span style=color:green>// or
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span><span style=color:green></span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span><span style=color:#00f>for</span> i := <span style=color:#00f>range</span> tt {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>    tc := tt[i]
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>    t.Run(fmt.Sprint(tc.n), <span style=color:#00f>func</span>(t *testing.T) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>        t.Parallel()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>        actual := EvenOrSleep(tc.n)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>        
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>        <span style=color:#00f>if</span> tc.expected != actual {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>            t.Errorf(<span style=color:#a31515>`expected &#34;%v&#34;, actual &#34;%v&#34;`</span>, tc.expected, actual)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>        }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>    })
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>}
+</code></pre></div><p><code>tc := tc</code> copies the value of <code>tc</code> and makes it a new local variable so it won&rsquo;t be mutated on each iteration. Of course, you can change the <code>tc</code> to the other variable let&rsquo;s say <code>newTc := tc</code>, it doesn&rsquo;t need to be the same, just like creating a variable. Now let&rsquo;s remove the log, and re-run the tests again.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span> $ go test -v
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>=== RUN   TestEvenOrSleep
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>=== RUN   TestEvenOrSleep/1
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>=== PAUSE TestEvenOrSleep/1
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>=== RUN   TestEvenOrSleep/3
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>=== PAUSE TestEvenOrSleep/3
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>=== RUN   TestEvenOrSleep/5
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>=== PAUSE TestEvenOrSleep/5
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>=== RUN   TestEvenOrSleep/2
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>=== PAUSE TestEvenOrSleep/2
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>=== RUN   TestEvenOrSleep/4
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>=== PAUSE TestEvenOrSleep/4
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>=== CONT  TestEvenOrSleep/1
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>=== CONT  TestEvenOrSleep/2
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>=== CONT  TestEvenOrSleep/3
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>=== CONT  TestEvenOrSleep/4
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>=== CONT  TestEvenOrSleep/5
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>--- PASS: TestEvenOrSleep (0.00s)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>    --- PASS: TestEvenOrSleep/1 (0.00s)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>    --- PASS: TestEvenOrSleep/3 (0.00s)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>    --- PASS: TestEvenOrSleep/5 (0.00s)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>    --- PASS: TestEvenOrSleep/2 (2.00s)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>    --- PASS: TestEvenOrSleep/4 (4.00s)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>PASS
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>ok      example 4.003s
+</code></pre></div><p>It&rsquo;s fixed!</p>
 <h2 id=conclusion>Conclusion</h2>
 <p>By using a parallel test, you just reduced your test execution time as well as your CI/CD process. The processes are easy, just modify your test into a subtest for each case, and call the <code>t.Parallel()</code> function. That&rsquo;s it!</p>
 <p>Thank you for reading!</p>

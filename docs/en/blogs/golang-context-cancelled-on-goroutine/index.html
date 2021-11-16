@@ -45,69 +45,35 @@
 <span>~1 min</span>
 </div>
 <div id=content><p>Golang&rsquo;s request context is automatically be done when passed on goroutine, and its parents goroutine is already done.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> main
-
-<span style=color:#00f>import</span> (
-  <span style=color:#a31515>&#34;context&#34;</span>
-  <span style=color:#a31515>&#34;log&#34;</span>
-  <span style=color:#a31515>&#34;net/http&#34;</span>
-  <span style=color:#a31515>&#34;time&#34;</span>
-)
-
-<span style=color:#00f>func</span> foo(ctx context.Context) {
-  ctx, cancel := context.WithTimeout(ctx, 60*time.Second)
-  <span style=color:#00f>defer</span> cancel()
-
-  req, _ := http.NewRequestWithContext(ctx,
-    http.MethodGet, <span style=color:#a31515>&#34;https://google.com&#34;</span>, <span style=color:#00f>nil</span>)
-
-  _, err := http.DefaultClient.Do(req)
-
-  log.Println(err) <span style=color:green>// Get &#34;https://google.com&#34;: context canceled
-</span><span style=color:green></span>}
-
-<span style=color:#00f>func</span> main() {
-  http.HandleFunc(<span style=color:#a31515>&#34;/&#34;</span>, <span style=color:#00f>func</span>(w http.ResponseWriter, r *http.Request) {
-    <span style=color:#00f>go</span> foo(r.Context())
-  }) <span style=color:green>// context will be done when it reaches here
-</span><span style=color:green></span>
-  http.ListenAndServe(<span style=color:#a31515>&#34;:8888&#34;</span>, <span style=color:#00f>nil</span>)
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Thank you for reading!</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>package</span> main
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#00f>import</span> (
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  <span style=color:#a31515>&#34;context&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  <span style=color:#a31515>&#34;log&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>  <span style=color:#a31515>&#34;net/http&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>  <span style=color:#a31515>&#34;time&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span><span style=color:#00f>func</span> foo(ctx context.Context) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  ctx, cancel := context.WithTimeout(ctx, 60*time.Second)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>  <span style=color:#00f>defer</span> cancel()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>  req, _ := http.NewRequestWithContext(ctx,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>    http.MethodGet, <span style=color:#a31515>&#34;https://google.com&#34;</span>, <span style=color:#00f>nil</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>  _, err := http.DefaultClient.Do(req)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>  log.Println(err) <span style=color:green>// Get &#34;https://google.com&#34;: context canceled
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span><span style=color:green></span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span><span style=color:#00f>func</span> main() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>  http.HandleFunc(<span style=color:#a31515>&#34;/&#34;</span>, <span style=color:#00f>func</span>(w http.ResponseWriter, r *http.Request) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>    <span style=color:#00f>go</span> foo(r.Context())
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>  }) <span style=color:green>// context will be done when it reaches here
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span><span style=color:green></span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>  http.ListenAndServe(<span style=color:#a31515>&#34;:8888&#34;</span>, <span style=color:#00f>nil</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>}
+</code></pre></div><p>Thank you for reading!</p>
 </div>
 <div class=separator>
 <span>&#183;</span>

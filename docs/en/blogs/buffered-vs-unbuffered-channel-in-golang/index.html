@@ -54,323 +54,151 @@
 <p>If we talk about concurrency in Golang, Golang provides us with a type of concurrency communication called <code>Channel</code>. Channel itself helps us to communicate between goroutines. We can send and receive messages from one goroutine to another. There are two types of channel in golang that we can used and let&rsquo;s talk about them.</p>
 <h2 id=unbuffered-channel>Unbuffered Channel</h2>
 <p><code>Unbuffered channel</code> is a channel that <code>initially has no capacity</code> to store message inside it. <code>Unbuffered channel</code> requires us to fill the message in order to make the goroutine process unblocked by the channel. For example:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> main
-
-<span style=color:#00f>import</span> (
-  <span style=color:#a31515>&#34;fmt&#34;</span>
-  <span style=color:#a31515>&#34;time&#34;</span>
-)
-
-<span style=color:#00f>func</span> access(ch <span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>) {
-  time.Sleep(time.Second)
-  fmt.Println(<span style=color:#a31515>&#34;start accessing channel\n&#34;</span>)
-
-  <span style=color:#00f>for</span> i := <span style=color:#00f>range</span> ch {
-    fmt.Println(i)
-    time.Sleep(time.Second)
-  }
-}
-
-<span style=color:#00f>func</span> main() {
-  ch := make(<span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>)
-  <span style=color:#00f>defer</span> close(ch)
-
-  <span style=color:#00f>go</span> access(ch)
-
-  <span style=color:#00f>for</span> i := 0; i &lt; 9; i++ {
-    ch &lt;- i
-    fmt.Println(<span style=color:#a31515>&#34;Filled&#34;</span>)
-  }
-
-  time.Sleep(3 * time.Second)
-}
-
-</code></pre></td></tr></table>
-</div>
-</div><p>In the example above, our main function blocked when filling <code>ch</code> one by one. And our <code>access function</code> will print the message filled by <code>main function</code> one by one also because of the for loop.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>package</span> main
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#00f>import</span> (
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  <span style=color:#a31515>&#34;fmt&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  <span style=color:#a31515>&#34;time&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span><span style=color:#00f>func</span> access(ch <span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  time.Sleep(time.Second)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  fmt.Println(<span style=color:#a31515>&#34;start accessing channel\n&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>  <span style=color:#00f>for</span> i := <span style=color:#00f>range</span> ch {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>    fmt.Println(i)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>    time.Sleep(time.Second)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span><span style=color:#00f>func</span> main() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>  ch := make(<span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>  <span style=color:#00f>defer</span> close(ch)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>  <span style=color:#00f>go</span> access(ch)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>  <span style=color:#00f>for</span> i := 0; i &lt; 9; i++ {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>    ch &lt;- i
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>    fmt.Println(<span style=color:#a31515>&#34;Filled&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29</span>  time.Sleep(3 * time.Second)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31</span>
+</code></pre></div><p>In the example above, our main function blocked when filling <code>ch</code> one by one. And our <code>access function</code> will print the message filled by <code>main function</code> one by one also because of the for loop.</p>
 <p>Here is the output of the example above:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ go run chan.go 
-start accessing channel
-
-0
-Filled
-1
-Filled
-2
-Filled
-3
-Filled
-4
-Filled
-5
-Filled
-6
-Filled
-7
-Filled
-8
-Filled
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=buffered-channel>Buffered Channel</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span>$ go run chan.go 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>start accessing channel
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>0
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>Filled
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>1
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>Filled
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>2
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>Filled
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>3
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>Filled
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>4
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>Filled
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>5
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>Filled
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>6
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>Filled
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>7
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>Filled
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>8
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>Filled
+</code></pre></div><h2 id=buffered-channel>Buffered Channel</h2>
 <p>Unlike the Unbuffered Channel, <code>Buffered Channel</code> has a capacity to store messages inside it. <code>Buffered Channel</code> could be filled up to its defined capacity, not only one message. For example:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> main
-
-<span style=color:#00f>import</span> (
-  <span style=color:#a31515>&#34;fmt&#34;</span>
-  <span style=color:#a31515>&#34;time&#34;</span>
-)
-
-<span style=color:#00f>func</span> access(ch <span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>) {
-  time.Sleep(time.Second)
-  fmt.Println(<span style=color:#a31515>&#34;start accessing channel\n&#34;</span>)
-
-  <span style=color:#00f>for</span> i := <span style=color:#00f>range</span> ch {
-    fmt.Println(i)
-    time.Sleep(time.Second)
-  }
-}
-
-<span style=color:#00f>func</span> main() {
-  <span style=color:green>// only modify this line to defined the capacity
-</span><span style=color:green></span>  ch := make(<span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>, 3)
-  <span style=color:#00f>defer</span> close(ch)
-
-  <span style=color:#00f>go</span> access(ch)
-
-  <span style=color:#00f>for</span> i := 0; i &lt; 9; i++ {
-    ch &lt;- i
-    fmt.Println(<span style=color:#a31515>&#34;Filled&#34;</span>)
-  }
-
-  time.Sleep(3 * time.Second)
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Here is the output:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ go run chan.go
-Filled
-Filled
-Filled
-start accessing channel
-
-0
-Filled
-1
-Filled
-2
-Filled
-3
-Filled
-4
-Filled
-5
-Filled
-6
-7
-8
-</code></pre></td></tr></table>
-</div>
-</div><p>As you can see, the <code>ch</code> could be filled first until it is full-capacity then the other goroutine could access it one by one.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>package</span> main
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#00f>import</span> (
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  <span style=color:#a31515>&#34;fmt&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  <span style=color:#a31515>&#34;time&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span><span style=color:#00f>func</span> access(ch <span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  time.Sleep(time.Second)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  fmt.Println(<span style=color:#a31515>&#34;start accessing channel\n&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>  <span style=color:#00f>for</span> i := <span style=color:#00f>range</span> ch {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>    fmt.Println(i)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>    time.Sleep(time.Second)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span><span style=color:#00f>func</span> main() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>  <span style=color:green>// only modify this line to defined the capacity
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span><span style=color:green></span>  ch := make(<span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>, 3)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>  <span style=color:#00f>defer</span> close(ch)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>  <span style=color:#00f>go</span> access(ch)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>  <span style=color:#00f>for</span> i := 0; i &lt; 9; i++ {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>    ch &lt;- i
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>    fmt.Println(<span style=color:#a31515>&#34;Filled&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30</span>  time.Sleep(3 * time.Second)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31</span>}
+</code></pre></div><p>Here is the output:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span>$ go run chan.go
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>Filled
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>Filled
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>Filled
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>start accessing channel
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>0
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>Filled
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>1
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>Filled
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>2
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>Filled
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>3
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>Filled
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>4
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>Filled
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>5
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>Filled
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>6
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>7
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>8
+</code></pre></div><p>As you can see, the <code>ch</code> could be filled first until it is full-capacity then the other goroutine could access it one by one.</p>
 <h2 id=differences>Differences</h2>
 <p><code>Unbuffered Channel</code> has no capacity initially, but <code>Buffered Channel</code> has a capacity.</p>
 <p><code>Unbuffered Channel</code> will block the goroutine whenever <code>it is empty and waiting to be filled</code>. But <code>Buffered Channel</code> will also block the goroutine either when <code>it is empty and waiting to be filled</code> or <code>it's on its full-capacity and there's a statement that want to fill the channel</code>.</p>
 <h2 id=capacity>Capacity</h2>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>unbuffered := make(<span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>)
-
-buffered := make(<span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>, 30)
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=empty-and-waiting-to-be-filled>Empty and Waiting to be filled</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>unbuffered := make(<span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>buffered := make(<span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>, 30)
+</code></pre></div><h2 id=empty-and-waiting-to-be-filled>Empty and Waiting to be filled</h2>
 <p><code>Both Buffered and Unbuffered</code> channel blocks the goroutine until it is filled in this case blocks for a second.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> main() {
-  ch := make(<span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>)
-  <span style=color:#00f>defer</span> close(ch)
-
-  <span style=color:#00f>go</span> <span style=color:#00f>func</span>(ch <span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>) {
-    time.Sleep(time.Second)
-    ch &lt;- 1
-  }(ch)
-
-  &lt;-ch
-}
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=full-capacity-and-theres-statement-that-want-to-fill-the-channel>Full Capacity and there&rsquo;s statement that want to fill the channel</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> main() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  ch := make(<span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>  <span style=color:#00f>defer</span> close(ch)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  <span style=color:#00f>go</span> <span style=color:#00f>func</span>(ch <span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>    time.Sleep(time.Second)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>    ch &lt;- 1
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  }(ch)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  &lt;-ch
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>}
+</code></pre></div><h2 id=full-capacity-and-theres-statement-that-want-to-fill-the-channel>Full Capacity and there&rsquo;s statement that want to fill the channel</h2>
 <p>Only <code>Buffered</code> channel blocks on <code>ch &lt;- 2</code> because the <code>ch</code> is on its full capacity and waiting to be released. The <code>Unbuffered Channel</code> will go deadlock this time because there&rsquo;s no goroutine accessing the message <code>2</code> but it is filled.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> main() {
-  ch := make(<span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>, 1)
-  <span style=color:#00f>defer</span> close(ch)
-
-  <span style=color:#00f>go</span> <span style=color:#00f>func</span>(ch <span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>) {
-    time.Sleep(time.Second)
-    &lt;-ch
-  }(ch)
-
-  ch &lt;- 1
-  ch &lt;- 2
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Thank you for reading!</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> main() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  ch := make(<span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>, 1)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>  <span style=color:#00f>defer</span> close(ch)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  <span style=color:#00f>go</span> <span style=color:#00f>func</span>(ch <span style=color:#00f>chan</span> <span style=color:#2b91af>int</span>) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>    time.Sleep(time.Second)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>    &lt;-ch
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  }(ch)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  ch &lt;- 1
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  ch &lt;- 2
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>}
+</code></pre></div><p>Thank you for reading!</p>
 </div>
 <div class=separator>
 <span>&#183;</span>

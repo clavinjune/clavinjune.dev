@@ -63,7 +63,7 @@ func TestEvenOrSleep(t *testing.T) {
 If you run the test, it will take around 6 seconds to execute all the test cases.
 
 ```bash
- $ go test -v
+$ go test -v
 === RUN   TestEvenOrSleep
 --- PASS: TestEvenOrSleep (6.00s)
 PASS

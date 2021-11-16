@@ -56,130 +56,59 @@
 <h2 id=logger>Logger</h2>
 <p>First thing first, you need a logger. Might be anything, but I will use <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://github.com/rs/zerolog>zerolog</a> in this post. I won&rsquo;t explain about zerolog since you can use anything you want.</p>
 <p>Format the base logger to match your logging style.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> configureBaseLogger() {
-  output := zerolog.ConsoleWriter{
-    Out: os.Stdout,
-    FormatTimestamp: <span style=color:#00f>func</span>(i <span style=color:#00f>interface</span>{}) <span style=color:#2b91af>string</span> {
-      parse, _ := time.Parse(time.RFC3339, i.(<span style=color:#2b91af>string</span>))
-      <span style=color:#00f>return</span> parse.Format(<span style=color:#a31515>&#34;2006-01-02 15:04:05&#34;</span>)
-    },
-    FormatLevel: <span style=color:#00f>func</span>(i <span style=color:#00f>interface</span>{}) <span style=color:#2b91af>string</span> {
-      <span style=color:#00f>return</span> strings.ToUpper(fmt.Sprintf(<span style=color:#a31515>&#34; %-6s &#34;</span>, i))
-    },
-  }
-
-  log.Logger = zerolog.New(output).With().
-    Timestamp().CallerWithSkipFrameCount(2).Logger()
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Let&rsquo;s test our base logger</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> main() {
-  configureBaseLogger()
-  log.Info().Msg(<span style=color:#a31515>&#34;testing&#34;</span>)
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Output:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>2020-12-19 01:01:37  INFO    logger/main.go:57 &gt; testing
-</code></pre></td></tr></table>
-</div>
-</div><p>LGTM! Let&rsquo;s continue creating our handler!</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> configureBaseLogger() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  output := zerolog.ConsoleWriter{
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>    Out: os.Stdout,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>    FormatTimestamp: <span style=color:#00f>func</span>(i <span style=color:#00f>interface</span>{}) <span style=color:#2b91af>string</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>      parse, _ := time.Parse(time.RFC3339, i.(<span style=color:#2b91af>string</span>))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>      <span style=color:#00f>return</span> parse.Format(<span style=color:#a31515>&#34;2006-01-02 15:04:05&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>    },
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>    FormatLevel: <span style=color:#00f>func</span>(i <span style=color:#00f>interface</span>{}) <span style=color:#2b91af>string</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>      <span style=color:#00f>return</span> strings.ToUpper(fmt.Sprintf(<span style=color:#a31515>&#34; %-6s &#34;</span>, i))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>    },
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>  log.Logger = zerolog.New(output).With().
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>    Timestamp().CallerWithSkipFrameCount(2).Logger()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>}
+</code></pre></div><p>Let&rsquo;s test our base logger</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span style=color:#00f>func</span> main() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>  configureBaseLogger()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>  log.Info().Msg(<span style=color:#a31515>&#34;testing&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>}
+</code></pre></div><p>Output:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>2020-12-19 01:01:37  INFO    logger/main.go:57 &gt; testing
+</code></pre></div><p>LGTM! Let&rsquo;s continue creating our handler!</p>
 <h2 id=middleware>Middleware</h2>
 <p>Here I&rsquo;ll log the request using the middleware. So I&rsquo;m gonna make a new type of handler to matched my middleware.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>type</span> HandlerFuncWithStatus <span style=color:#00f>func</span>(writer http.ResponseWriter, request *http.Request) <span style=color:#2b91af>int</span>
-
-<span style=color:#00f>const</span> (
-  LoggerCtxKey = <span style=color:#00f>iota</span>
-)
-
-<span style=color:#00f>func</span> middleware(next HandlerFuncWithStatus) http.HandlerFunc {
-  <span style=color:#00f>return</span> <span style=color:#00f>func</span>(writer http.ResponseWriter, request *http.Request) {
-    requestId := request.Header.Get(<span style=color:#a31515>&#34;x-request-id&#34;</span>)
-
-    <span style=color:#00f>if</span> requestId == <span style=color:#a31515>&#34;&#34;</span> {
-      requestId = uuid.New().String()
-    }
-
-    subLogger := log.With().Str(<span style=color:#a31515>&#34;requestId&#34;</span>, requestId).Logger()
-
-    subLogger.Info().
-      Str(<span style=color:#a31515>&#34;path&#34;</span>, request.URL.Path).
-      Str(<span style=color:#a31515>&#34;method&#34;</span>, request.Method).Msg(<span style=color:#a31515>&#34;in&#34;</span>)
-
-    ctx := context.WithValue(context.Background(), LoggerCtxKey, subLogger)
-    statusCode := next(writer, request.WithContext(ctx))
-    writer.WriteHeader(statusCode)
-
-    subLogger.Info().Int(<span style=color:#a31515>&#34;status&#34;</span>, statusCode).Msg(<span style=color:#a31515>&#34;out&#34;</span>)
-  }
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>The main idea is:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>type</span> HandlerFuncWithStatus <span style=color:#00f>func</span>(writer http.ResponseWriter, request *http.Request) <span style=color:#2b91af>int</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#00f>const</span> (
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  LoggerCtxKey = <span style=color:#00f>iota</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span><span style=color:#00f>func</span> middleware(next HandlerFuncWithStatus) http.HandlerFunc {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  <span style=color:#00f>return</span> <span style=color:#00f>func</span>(writer http.ResponseWriter, request *http.Request) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>    requestId := request.Header.Get(<span style=color:#a31515>&#34;x-request-id&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>    <span style=color:#00f>if</span> requestId == <span style=color:#a31515>&#34;&#34;</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>      requestId = uuid.New().String()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>    subLogger := log.With().Str(<span style=color:#a31515>&#34;requestId&#34;</span>, requestId).Logger()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>    subLogger.Info().
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>      Str(<span style=color:#a31515>&#34;path&#34;</span>, request.URL.Path).
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>      Str(<span style=color:#a31515>&#34;method&#34;</span>, request.Method).Msg(<span style=color:#a31515>&#34;in&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>    ctx := context.WithValue(context.Background(), LoggerCtxKey, subLogger)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>    statusCode := next(writer, request.WithContext(ctx))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>    writer.WriteHeader(statusCode)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>    subLogger.Info().Int(<span style=color:#a31515>&#34;status&#34;</span>, statusCode).Msg(<span style=color:#a31515>&#34;out&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>}
+</code></pre></div><p>The main idea is:</p>
 <ol>
 <li>Get <code>x-request-id</code> if exists, otherwise create one with UUIDv4 format</li>
 <li>Create a sub-logger from our base-logger and then initiate it with the <code>request id</code></li>
@@ -189,255 +118,122 @@
 </ol>
 <h2 id=http-handler>HTTP Handler</h2>
 <p>Now we&rsquo;re gonna create the http handler that will use our middleware. It doesn&rsquo;t need to be fancy.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> anotherFunc(ctx context.Context) {
-  logger := ctx.Value(LoggerCtxKey).(zerolog.Logger)
-  logger.Info().Msg(<span style=color:#a31515>&#34;inside anotherFunc&#34;</span>)
-}
-
-<span style=color:#00f>func</span> handler (writer http.ResponseWriter, request *http.Request) <span style=color:#2b91af>int</span> {
-  logger := request.Context().Value(LoggerCtxKey).(zerolog.Logger)
-  logger.Info().Msg(<span style=color:#a31515>&#34;inside handler&#34;</span>)
-  
-  anotherFunc(request.Context())
-
-  <span style=color:#00f>return</span> 204
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>So now all the function that has the context passed from the middleware can access the logger by the context key.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> anotherFunc(ctx context.Context) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  logger := ctx.Value(LoggerCtxKey).(zerolog.Logger)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>  logger.Info().Msg(<span style=color:#a31515>&#34;inside anotherFunc&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span><span style=color:#00f>func</span> handler (writer http.ResponseWriter, request *http.Request) <span style=color:#2b91af>int</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>  logger := request.Context().Value(LoggerCtxKey).(zerolog.Logger)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  logger.Info().Msg(<span style=color:#a31515>&#34;inside handler&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  anotherFunc(request.Context())
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>  <span style=color:#00f>return</span> 204
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>}
+</code></pre></div><p>So now all the function that has the context passed from the middleware can access the logger by the context key.</p>
 <p>Let&rsquo;s assemble all the codes.</p>
 <h2 id=final>Final</h2>
 <p>This will be the final look of our code.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">57
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">58
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">59
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">60
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">61
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">62
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">63
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">64
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">65
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">66
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">67
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">68
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">69
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">70
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">71
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">72
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">73
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">74
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">75
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">76
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">77
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">78
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">79
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">80
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">81
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">82
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> main
-
-<span style=color:#00f>import</span> (
-  <span style=color:#a31515>&#34;context&#34;</span>
-  <span style=color:#a31515>&#34;fmt&#34;</span>
-  <span style=color:#a31515>&#34;github.com/google/uuid&#34;</span>
-  <span style=color:#a31515>&#34;github.com/rs/zerolog&#34;</span>
-  <span style=color:#a31515>&#34;github.com/rs/zerolog/log&#34;</span>
-  <span style=color:#a31515>&#34;net/http&#34;</span>
-  <span style=color:#a31515>&#34;os&#34;</span>
-  <span style=color:#a31515>&#34;strings&#34;</span>
-  <span style=color:#a31515>&#34;time&#34;</span>
-)
-
-<span style=color:#00f>type</span> HandlerFuncWithStatus <span style=color:#00f>func</span>(writer http.ResponseWriter, request *http.Request) <span style=color:#2b91af>int</span>
-
-<span style=color:#00f>const</span> (
-  LoggerCtxKey = <span style=color:#00f>iota</span>
-)
-
-<span style=color:#00f>func</span> middleware(next HandlerFuncWithStatus) http.HandlerFunc {
-  <span style=color:#00f>return</span> <span style=color:#00f>func</span>(writer http.ResponseWriter, request *http.Request) {
-    requestId := request.Header.Get(<span style=color:#a31515>&#34;x-request-id&#34;</span>)
-
-    <span style=color:#00f>if</span> requestId == <span style=color:#a31515>&#34;&#34;</span> {
-      requestId = uuid.New().String()
-    }
-
-    subLogger := log.With().Str(<span style=color:#a31515>&#34;requestId&#34;</span>, requestId).Logger()
-
-    subLogger.Info().
-      Str(<span style=color:#a31515>&#34;path&#34;</span>, request.URL.Path).
-      Str(<span style=color:#a31515>&#34;method&#34;</span>, request.Method).Msg(<span style=color:#a31515>&#34;in&#34;</span>)
-
-    ctx := context.WithValue(context.Background(), LoggerCtxKey, subLogger)
-    statusCode := next(writer, request.WithContext(ctx))
-    writer.WriteHeader(statusCode)
-
-    subLogger.Info().Int(<span style=color:#a31515>&#34;status&#34;</span>, statusCode).Msg(<span style=color:#a31515>&#34;out&#34;</span>)
-  }
-}
-
-<span style=color:#00f>func</span> anotherFunc(ctx context.Context) {
-  logger := ctx.Value(LoggerCtxKey).(zerolog.Logger)
-  logger.Info().Msg(<span style=color:#a31515>&#34;inside anotherFunc&#34;</span>)
-}
-
-<span style=color:#00f>func</span> handler (writer http.ResponseWriter, request *http.Request) <span style=color:#2b91af>int</span> {
-  logger := request.Context().Value(LoggerCtxKey).(zerolog.Logger)
-  logger.Info().Msg(<span style=color:#a31515>&#34;inside handler&#34;</span>)
-
-  anotherFunc(request.Context())
-
-  <span style=color:#00f>return</span> 204
-}
-
-<span style=color:#00f>func</span> configureBaseLogger() {
-  output := zerolog.ConsoleWriter{
-    Out: os.Stdout,
-    FormatTimestamp: <span style=color:#00f>func</span>(i <span style=color:#00f>interface</span>{}) <span style=color:#2b91af>string</span> {
-      parse, _ := time.Parse(time.RFC3339, i.(<span style=color:#2b91af>string</span>))
-      <span style=color:#00f>return</span> parse.Format(<span style=color:#a31515>&#34;2006-01-02 15:04:05&#34;</span>)
-    },
-    FormatLevel: <span style=color:#00f>func</span>(i <span style=color:#00f>interface</span>{}) <span style=color:#2b91af>string</span> {
-      <span style=color:#00f>return</span> strings.ToUpper(fmt.Sprintf(<span style=color:#a31515>&#34; %-6s &#34;</span>, i))
-    },
-  }
-
-  log.Logger = zerolog.New(output).With().
-    Timestamp().CallerWithSkipFrameCount(2).Logger()
-}
-
-<span style=color:#00f>func</span> main() {
-  configureBaseLogger()
-  log.Info().Msg(<span style=color:#a31515>&#34;testing&#34;</span>)
-
-  http.Handle(<span style=color:#a31515>&#34;/&#34;</span>, middleware(handler))
-
-  <span style=color:#00f>if</span> err := http.ListenAndServe(<span style=color:#a31515>&#34;:8000&#34;</span>, <span style=color:#00f>nil</span>) ; err != <span style=color:#00f>nil</span> {
-    log.Error().Msg(err.Error())
-  }
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Try it by accessing <a class=link rel="nofollow noreferrer noopener" target=_blank href=http://localhost:8000>http://localhost:8000</a>. The output looks like this if I accessed it twice.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>2020-12-19 01:25:16  INFO    logger/main.go:75 &gt; testing
-2020-12-19 01:25:20  INFO    logger/main.go:33 &gt; in method=GET path=/ requestId=6eb1f209-dac9-42b2-8ba4-883efffcbd9e
-2020-12-19 01:25:20  INFO    logger/main.go:50 &gt; inside handler requestId=6eb1f209-dac9-42b2-8ba4-883efffcbd9e
-2020-12-19 01:25:20  INFO    logger/main.go:45 &gt; inside anotherFunc requestId=6eb1f209-dac9-42b2-8ba4-883efffcbd9e
-2020-12-19 01:25:20  INFO    logger/main.go:39 &gt; out requestId=6eb1f209-dac9-42b2-8ba4-883efffcbd9e status=204
-2020-12-19 01:25:31  INFO    logger/main.go:33 &gt; in method=GET path=/ requestId=88a140b8-2aed-4d82-bf56-0ab9a1c7cce0
-2020-12-19 01:25:31  INFO    logger/main.go:50 &gt; inside handler requestId=88a140b8-2aed-4d82-bf56-0ab9a1c7cce0
-2020-12-19 01:25:31  INFO    logger/main.go:45 &gt; inside anotherFunc requestId=88a140b8-2aed-4d82-bf56-0ab9a1c7cce0
-2020-12-19 01:25:31  INFO    logger/main.go:39 &gt; out requestId=88a140b8-2aed-4d82-bf56-0ab9a1c7cce0 status=204
-</code></pre></td></tr></table>
-</div>
-</div><p>Now if you want to trace all the event you can log it to the file and grep the request id.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ grep 88a140b8-2aed-4d82-bf56-0ab9a1c7cce0 /tmp/log
-2020-12-19 01:25:31  INFO    logger/main.go:33 &gt; in method=GET path=/ requestId=88a140b8-2aed-4d82-bf56-0ab9a1c7cce0
-2020-12-19 01:25:31  INFO    logger/main.go:50 &gt; inside handler requestId=88a140b8-2aed-4d82-bf56-0ab9a1c7cce0
-2020-12-19 01:25:31  INFO    logger/main.go:45 &gt; inside anotherFunc requestId=88a140b8-2aed-4d82-bf56-0ab9a1c7cce0
-2020-12-19 01:25:31  INFO    logger/main.go:39 &gt; out requestId=88a140b8-2aed-4d82-bf56-0ab9a1c7cce0 status=204
-</code></pre></td></tr></table>
-</div>
-</div><p>That should be enough for the reference. Please modify the code according to your usage. I didn&rsquo;t test for the performance nor benchmarking it so take it with a grain of salt.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>package</span> main
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#00f>import</span> (
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  <span style=color:#a31515>&#34;context&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  <span style=color:#a31515>&#34;fmt&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>  <span style=color:#a31515>&#34;github.com/google/uuid&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>  <span style=color:#a31515>&#34;github.com/rs/zerolog&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  <span style=color:#a31515>&#34;github.com/rs/zerolog/log&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  <span style=color:#a31515>&#34;net/http&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  <span style=color:#a31515>&#34;os&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  <span style=color:#a31515>&#34;strings&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>  <span style=color:#a31515>&#34;time&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span><span style=color:#00f>type</span> HandlerFuncWithStatus <span style=color:#00f>func</span>(writer http.ResponseWriter, request *http.Request) <span style=color:#2b91af>int</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span><span style=color:#00f>const</span> (
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>  LoggerCtxKey = <span style=color:#00f>iota</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span><span style=color:#00f>func</span> middleware(next HandlerFuncWithStatus) http.HandlerFunc {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>  <span style=color:#00f>return</span> <span style=color:#00f>func</span>(writer http.ResponseWriter, request *http.Request) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>    requestId := request.Header.Get(<span style=color:#a31515>&#34;x-request-id&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>    <span style=color:#00f>if</span> requestId == <span style=color:#a31515>&#34;&#34;</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>      requestId = uuid.New().String()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29</span>    subLogger := log.With().Str(<span style=color:#a31515>&#34;requestId&#34;</span>, requestId).Logger()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31</span>    subLogger.Info().
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32</span>      Str(<span style=color:#a31515>&#34;path&#34;</span>, request.URL.Path).
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33</span>      Str(<span style=color:#a31515>&#34;method&#34;</span>, request.Method).Msg(<span style=color:#a31515>&#34;in&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35</span>    ctx := context.WithValue(context.Background(), LoggerCtxKey, subLogger)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36</span>    statusCode := next(writer, request.WithContext(ctx))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37</span>    writer.WriteHeader(statusCode)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39</span>    subLogger.Info().Int(<span style=color:#a31515>&#34;status&#34;</span>, statusCode).Msg(<span style=color:#a31515>&#34;out&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43</span><span style=color:#00f>func</span> anotherFunc(ctx context.Context) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44</span>  logger := ctx.Value(LoggerCtxKey).(zerolog.Logger)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45</span>  logger.Info().Msg(<span style=color:#a31515>&#34;inside anotherFunc&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48</span><span style=color:#00f>func</span> handler (writer http.ResponseWriter, request *http.Request) <span style=color:#2b91af>int</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49</span>  logger := request.Context().Value(LoggerCtxKey).(zerolog.Logger)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50</span>  logger.Info().Msg(<span style=color:#a31515>&#34;inside handler&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52</span>  anotherFunc(request.Context())
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54</span>  <span style=color:#00f>return</span> 204
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">57</span><span style=color:#00f>func</span> configureBaseLogger() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">58</span>  output := zerolog.ConsoleWriter{
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">59</span>    Out: os.Stdout,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">60</span>    FormatTimestamp: <span style=color:#00f>func</span>(i <span style=color:#00f>interface</span>{}) <span style=color:#2b91af>string</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">61</span>      parse, _ := time.Parse(time.RFC3339, i.(<span style=color:#2b91af>string</span>))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">62</span>      <span style=color:#00f>return</span> parse.Format(<span style=color:#a31515>&#34;2006-01-02 15:04:05&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">63</span>    },
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">64</span>    FormatLevel: <span style=color:#00f>func</span>(i <span style=color:#00f>interface</span>{}) <span style=color:#2b91af>string</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">65</span>      <span style=color:#00f>return</span> strings.ToUpper(fmt.Sprintf(<span style=color:#a31515>&#34; %-6s &#34;</span>, i))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">66</span>    },
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">67</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">68</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">69</span>  log.Logger = zerolog.New(output).With().
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">70</span>    Timestamp().CallerWithSkipFrameCount(2).Logger()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">71</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">72</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">73</span><span style=color:#00f>func</span> main() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">74</span>  configureBaseLogger()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">75</span>  log.Info().Msg(<span style=color:#a31515>&#34;testing&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">76</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">77</span>  http.Handle(<span style=color:#a31515>&#34;/&#34;</span>, middleware(handler))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">78</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">79</span>  <span style=color:#00f>if</span> err := http.ListenAndServe(<span style=color:#a31515>&#34;:8000&#34;</span>, <span style=color:#00f>nil</span>) ; err != <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">80</span>    log.Error().Msg(err.Error())
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">81</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">82</span>}
+</code></pre></div><p>Try it by accessing <a class=link rel="nofollow noreferrer noopener" target=_blank href=http://localhost:8000>http://localhost:8000</a>. The output looks like this if I accessed it twice.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>2020-12-19 01:25:16  INFO    logger/main.go:75 &gt; testing
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>2020-12-19 01:25:20  INFO    logger/main.go:33 &gt; in method=GET path=/ requestId=6eb1f209-dac9-42b2-8ba4-883efffcbd9e
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>2020-12-19 01:25:20  INFO    logger/main.go:50 &gt; inside handler requestId=6eb1f209-dac9-42b2-8ba4-883efffcbd9e
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>2020-12-19 01:25:20  INFO    logger/main.go:45 &gt; inside anotherFunc requestId=6eb1f209-dac9-42b2-8ba4-883efffcbd9e
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>2020-12-19 01:25:20  INFO    logger/main.go:39 &gt; out requestId=6eb1f209-dac9-42b2-8ba4-883efffcbd9e status=204
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span>2020-12-19 01:25:31  INFO    logger/main.go:33 &gt; in method=GET path=/ requestId=88a140b8-2aed-4d82-bf56-0ab9a1c7cce0
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span>2020-12-19 01:25:31  INFO    logger/main.go:50 &gt; inside handler requestId=88a140b8-2aed-4d82-bf56-0ab9a1c7cce0
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8</span>2020-12-19 01:25:31  INFO    logger/main.go:45 &gt; inside anotherFunc requestId=88a140b8-2aed-4d82-bf56-0ab9a1c7cce0
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9</span>2020-12-19 01:25:31  INFO    logger/main.go:39 &gt; out requestId=88a140b8-2aed-4d82-bf56-0ab9a1c7cce0 status=204
+</code></pre></div><p>Now if you want to trace all the event you can log it to the file and grep the request id.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ grep 88a140b8-2aed-4d82-bf56-0ab9a1c7cce0 /tmp/log
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>2020-12-19 01:25:31  INFO    logger/main.go:33 &gt; in method=GET path=/ requestId=88a140b8-2aed-4d82-bf56-0ab9a1c7cce0
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>2020-12-19 01:25:31  INFO    logger/main.go:50 &gt; inside handler requestId=88a140b8-2aed-4d82-bf56-0ab9a1c7cce0
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>2020-12-19 01:25:31  INFO    logger/main.go:45 &gt; inside anotherFunc requestId=88a140b8-2aed-4d82-bf56-0ab9a1c7cce0
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>2020-12-19 01:25:31  INFO    logger/main.go:39 &gt; out requestId=88a140b8-2aed-4d82-bf56-0ab9a1c7cce0 status=204
+</code></pre></div><p>That should be enough for the reference. Please modify the code according to your usage. I didn&rsquo;t test for the performance nor benchmarking it so take it with a grain of salt.</p>
 <p>Thank you for reading!</p>
 </div>
 <div class=separator>

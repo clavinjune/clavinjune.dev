@@ -62,206 +62,94 @@
 </ol>
 <h2 id=node-structure>Node Structure</h2>
 <p>Node structure will store the key, value, and its previous & next nodes (doubly linked list).</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>type</span> Node <span style=color:#00f>struct</span> {
-  Key   <span style=color:#2b91af>int</span>
-  Value <span style=color:#2b91af>int</span>
-  Prev  *Node
-  Next  *Node
-}
-
-<span style=color:#00f>func</span> NewNode(key, value <span style=color:#2b91af>int</span>) *Node {
-  <span style=color:#00f>return</span> &amp;Node{
-    Key:   key,
-    Value: value,
-  }
-}
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=lru-structure>LRU Structure</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>type</span> Node <span style=color:#00f>struct</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  Key   <span style=color:#2b91af>int</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>  Value <span style=color:#2b91af>int</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  Prev  *Node
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  Next  *Node
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span><span style=color:#00f>func</span> NewNode(key, value <span style=color:#2b91af>int</span>) *Node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  <span style=color:#00f>return</span> &amp;Node{
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>    Key:   key,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>    Value: value,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>}
+</code></pre></div><h2 id=lru-structure>LRU Structure</h2>
 <p>LRU will store the capacity, size (optional), the stored data, and it will track the most and the least recently used using tail and head pointer. Size is optional since you can use <code>len(v Type)</code> method.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>type</span> LRU <span style=color:#00f>struct</span> {
-  capacity <span style=color:#2b91af>int</span>
-  size     <span style=color:#2b91af>int</span>
-  data     <span style=color:#00f>map</span>[<span style=color:#2b91af>int</span>]*Node
-  tail     *Node
-  head     *Node
-}
-
-<span style=color:#00f>func</span> NewLRU(capacity <span style=color:#2b91af>int</span>) *LRU {
-  <span style=color:#00f>return</span> &amp;LRU{
-    capacity: capacity,
-    size:     0,
-    data:     make(<span style=color:#00f>map</span>[<span style=color:#2b91af>int</span>]*Node),
-  }
-}
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=queue-operation>Queue Operation</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>type</span> LRU <span style=color:#00f>struct</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  capacity <span style=color:#2b91af>int</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>  size     <span style=color:#2b91af>int</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  data     <span style=color:#00f>map</span>[<span style=color:#2b91af>int</span>]*Node
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  tail     *Node
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>  head     *Node
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span><span style=color:#00f>func</span> NewLRU(capacity <span style=color:#2b91af>int</span>) *LRU {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  <span style=color:#00f>return</span> &amp;LRU{
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>    capacity: capacity,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>    size:     0,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>    data:     make(<span style=color:#00f>map</span>[<span style=color:#2b91af>int</span>]*Node),
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>}
+</code></pre></div><h2 id=queue-operation>Queue Operation</h2>
 <h3 id=push-tail>Push Tail</h3>
 <p>Push tail will append the given node to the queue.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (l *LRU) pushTail(n *Node) {
-  <span style=color:#00f>if</span> l.head == <span style=color:#00f>nil</span> {
-    l.head = n
-    l.tail = n
-    <span style=color:#00f>return</span>
-  }
-
-  l.tail.Next = n
-  n.Prev = l.tail
-  l.tail = n
-  l.tail.Next = <span style=color:#00f>nil</span>
-}
-</code></pre></td></tr></table>
-</div>
-</div><h3 id=pop-head>Pop Head</h3>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> (l *LRU) pushTail(n *Node) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  <span style=color:#00f>if</span> l.head == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>    l.head = n
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>    l.tail = n
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>    <span style=color:#00f>return</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  l.tail.Next = n
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  n.Prev = l.tail
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  l.tail = n
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  l.tail.Next = <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>}
+</code></pre></div><h3 id=pop-head>Pop Head</h3>
 <p>Pop head will remove the head (least recently used) node.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (l *LRU) popHead() *Node {
-  ret := l.head
-
-  <span style=color:#00f>if</span> l.head == l.tail {
-    l.head = <span style=color:#00f>nil</span>
-  } <span style=color:#00f>else</span> {
-    l.head = l.head.Next
-    l.head.Prev = <span style=color:#00f>nil</span>
-  }
-
-  <span style=color:#00f>return</span> ret
-}
-</code></pre></td></tr></table>
-</div>
-</div><h3 id=pop-tail>Pop Tail</h3>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> (l *LRU) popHead() *Node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  ret := l.head
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  <span style=color:#00f>if</span> l.head == l.tail {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>    l.head = <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>  } <span style=color:#00f>else</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>    l.head = l.head.Next
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>    l.head.Prev = <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  <span style=color:#00f>return</span> ret
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>}
+</code></pre></div><h3 id=pop-tail>Pop Tail</h3>
 <p>Pop tail will remove the tail (most recently used) node. We will not use this method directly, but it will be used later whenever user reset the tail value.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (l *LRU) popTail() *Node {
-  ret := l.tail
-
-  <span style=color:#00f>if</span> l.head == l.tail {
-    l.head = <span style=color:#00f>nil</span>
-  } <span style=color:#00f>else</span> {
-    l.tail = l.tail.Prev
-    l.tail.Next = <span style=color:#00f>nil</span>
-  }
-
-  <span style=color:#00f>return</span> ret
-}
-</code></pre></td></tr></table>
-</div>
-</div><h3 id=pop>Pop</h3>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> (l *LRU) popTail() *Node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  ret := l.tail
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  <span style=color:#00f>if</span> l.head == l.tail {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>    l.head = <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>  } <span style=color:#00f>else</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>    l.tail = l.tail.Prev
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>    l.tail.Next = <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  <span style=color:#00f>return</span> ret
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>}
+</code></pre></div><h3 id=pop>Pop</h3>
 <p>This Pop method will receive node that we want to pop.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (l *LRU) pop(n *Node) *Node {
-  <span style=color:#00f>switch</span> n {
-  <span style=color:#00f>case</span> l.head:
-    <span style=color:#00f>return</span> l.popHead()
-  <span style=color:#00f>case</span> l.tail:
-    <span style=color:#00f>return</span> l.popTail()
-  }
-
-  n.Next.Prev = n.Prev
-  n.Prev.Next = n.Next
-  <span style=color:#00f>return</span> n
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Now all the queue operations has defined, let&rsquo;s implement the main operation of the LRU.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> (l *LRU) pop(n *Node) *Node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  <span style=color:#00f>switch</span> n {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>  <span style=color:#00f>case</span> l.head:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>    <span style=color:#00f>return</span> l.popHead()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  <span style=color:#00f>case</span> l.tail:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>    <span style=color:#00f>return</span> l.popTail()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  n.Next.Prev = n.Prev
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  n.Prev.Next = n.Next
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  <span style=color:#00f>return</span> n
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>}
+</code></pre></div><p>Now all the queue operations has defined, let&rsquo;s implement the main operation of the LRU.</p>
 <h2 id=set>Set</h2>
 <p>Set method will store the given value identified by the given key. Remember the 3rd and 4th rules.</p>
 <blockquote>
@@ -270,497 +158,242 @@
 <li>Accessed (get/set) the data means we use the data so mark it as the most recently used data</li>
 </ul>
 </blockquote>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (l *LRU) Set(key, value <span style=color:#2b91af>int</span>) {
-  <span style=color:green>// check if the key exists
-</span><span style=color:green></span>  <span style=color:green>// if it exists, we need to remove it
-</span><span style=color:green></span>  <span style=color:green>// then we append it to the queue
-</span><span style=color:green></span>  <span style=color:green>// 4th rule (mark it as the most recently used)
-</span><span style=color:green></span>  <span style=color:#00f>if</span> val, isOk := l.data[key]; isOk {
-    <span style=color:green>// this is the reason why we need to use popTail
-</span><span style=color:green></span>    l.pop(val)
-    l.size--
-  }
-
-  <span style=color:green>// 3rd rule
-</span><span style=color:green></span>  <span style=color:#00f>if</span> l.size &gt;= l.capacity {
-    n := l.popHead()
-    delete(l.data, n.Key)
-    l.size--
-  }
-
-  <span style=color:green>// push new data
-</span><span style=color:green></span>  n := NewNode(key, value)
-  l.data[key] = n
-  l.pushTail(n)
-  l.size++
-}
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=get>Get</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> (l *LRU) Set(key, value <span style=color:#2b91af>int</span>) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  <span style=color:green>// check if the key exists
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:green></span>  <span style=color:green>// if it exists, we need to remove it
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span><span style=color:green></span>  <span style=color:green>// then we append it to the queue
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span><span style=color:green></span>  <span style=color:green>// 4th rule (mark it as the most recently used)
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span><span style=color:green></span>  <span style=color:#00f>if</span> val, isOk := l.data[key]; isOk {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>    <span style=color:green>// this is the reason why we need to use popTail
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span><span style=color:green></span>    l.pop(val)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>    l.size--
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>  <span style=color:green>// 3rd rule
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span><span style=color:green></span>  <span style=color:#00f>if</span> l.size &gt;= l.capacity {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>    n := l.popHead()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>    delete(l.data, n.Key)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>    l.size--
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>  <span style=color:green>// push new data
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span><span style=color:green></span>  n := NewNode(key, value)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>  l.data[key] = n
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>  l.pushTail(n)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>  l.size++
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>}
+</code></pre></div><h2 id=get>Get</h2>
 <p>Get method will return the stored value depends on the given key. Remember the 4th rule.</p>
 <blockquote>
 <ul>
 <li>Accessed (get/set) the data means we use the data so mark it as the most recently used data</li>
 </ul>
 </blockquote>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (l *LRU) Get(key <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
-  val, isOk := l.data[key]
-
-  <span style=color:#00f>if</span> !isOk {
-    <span style=color:#00f>return</span> -1
-  }
-
-  <span style=color:green>// remove it
-</span><span style=color:green></span>  l.pop(val)
-  <span style=color:green>// then mark it as the most recently used
-</span><span style=color:green></span>  l.pushTail(val)
-
-  <span style=color:#00f>return</span> val.Value
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Lastly, to ensure our queue rotation is correct, let&rsquo;s implement the showQueue method.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (l *LRU) ShowQueue() {
-  fmt.Printf(<span style=color:#a31515>&#34;Least &#34;</span>)
-  <span style=color:#00f>for</span> n := l.head ; n != l.tail ; n = n.Next {
-    fmt.Printf(<span style=color:#a31515>&#34;%v -&gt; &#34;</span>, n.Key)
-  }
-
-  fmt.Println(l.tail.Key, <span style=color:#a31515>&#34;Most&#34;</span>)
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Let&rsquo;s test it</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> main() {
-  lru := NewLRU(3)
-  lru.Set(1, 1)
-  lru.Set(2, 2)
-  lru.Set(3, 3)
-
-  <span style=color:green>// Least 1 -&gt; 2 -&gt; 3 Most
-</span><span style=color:green></span>  lru.ShowQueue()
-
-  <span style=color:green>// 2
-</span><span style=color:green></span>  fmt.Println(lru.Get(2))
-  <span style=color:green>// Least 1 -&gt; 3 -&gt; 2 Most
-</span><span style=color:green></span>  lru.ShowQueue()
-
-  lru.Set(1, 100)
-  <span style=color:green>// Least 3 -&gt; 2 -&gt; 1 Most
-</span><span style=color:green></span>  lru.ShowQueue()
-
-  lru.Set(4, 4)
-  <span style=color:green>// Least 2 -&gt; 1 -&gt; 4 Most
-</span><span style=color:green></span>  lru.ShowQueue()
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>The whole code should be like this:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 31
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 32
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 33
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 34
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 35
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 36
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 37
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 38
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 39
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 40
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 41
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 42
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 43
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 44
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 45
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 46
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 47
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 48
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 49
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 50
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 51
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 52
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 53
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 54
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 55
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 56
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 57
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 58
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 59
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 60
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 61
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 62
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 63
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 64
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 65
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 66
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 67
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 68
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 69
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 70
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 71
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 72
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 73
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 74
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 75
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 76
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 77
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 78
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 79
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 80
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 81
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 82
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 83
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 84
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 85
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 86
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 87
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 88
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 89
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 90
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 91
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 92
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 93
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 94
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 95
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 96
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 97
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 98
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 99
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">100
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">101
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">102
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">103
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">104
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">105
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">106
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">107
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">108
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">109
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">110
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">111
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">112
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">113
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">114
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">115
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">116
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">117
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">118
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">119
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">120
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">121
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">122
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">123
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">124
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">125
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">126
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">127
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">128
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">129
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">130
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">131
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">132
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">133
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">134
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">135
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">136
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">137
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">138
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">139
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">140
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">141
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">142
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">143
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">144
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">145
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">146
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">147
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">148
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">149
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">150
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">151
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">152
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">153
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">154
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">155
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">156
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">157
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> main
-
-<span style=color:#00f>import</span> <span style=color:#a31515>&#34;fmt&#34;</span>
-
-<span style=color:#00f>type</span> Node <span style=color:#00f>struct</span> {
-  Key   <span style=color:#2b91af>int</span>
-  Value <span style=color:#2b91af>int</span>
-  Prev  *Node
-  Next  *Node
-}
-
-<span style=color:#00f>func</span> NewNode(key, value <span style=color:#2b91af>int</span>) *Node {
-  <span style=color:#00f>return</span> &amp;Node{
-    Key:   key,
-    Value: value,
-  }
-}
-
-<span style=color:#00f>type</span> LRU <span style=color:#00f>struct</span> {
-  capacity <span style=color:#2b91af>int</span>
-  size     <span style=color:#2b91af>int</span>
-  data     <span style=color:#00f>map</span>[<span style=color:#2b91af>int</span>]*Node
-  tail     *Node
-  head     *Node
-}
-
-<span style=color:#00f>func</span> NewLRU(capacity <span style=color:#2b91af>int</span>) *LRU {
-  <span style=color:#00f>return</span> &amp;LRU{
-    capacity: capacity,
-    size:     0,
-    data:     make(<span style=color:#00f>map</span>[<span style=color:#2b91af>int</span>]*Node),
-  }
-}
-
-<span style=color:#00f>func</span> (l *LRU) pushTail(n *Node) {
-  <span style=color:#00f>if</span> l.head == <span style=color:#00f>nil</span> {
-    l.head = n
-    l.tail = n
-    <span style=color:#00f>return</span>
-  }
-
-  l.tail.Next = n
-  n.Prev = l.tail
-  l.tail = n
-  l.tail.Next = <span style=color:#00f>nil</span>
-}
-
-<span style=color:#00f>func</span> (l *LRU) popHead() *Node {
-  ret := l.head
-
-  <span style=color:#00f>if</span> l.head == l.tail {
-    l.head = <span style=color:#00f>nil</span>
-  } <span style=color:#00f>else</span> {
-    l.head = l.head.Next
-    l.head.Prev = <span style=color:#00f>nil</span>
-  }
-
-  <span style=color:#00f>return</span> ret
-}
-
-<span style=color:#00f>func</span> (l *LRU) popTail() *Node {
-  ret := l.tail
-
-  <span style=color:#00f>if</span> l.head == l.tail {
-    l.head = <span style=color:#00f>nil</span>
-  } <span style=color:#00f>else</span> {
-    l.tail = l.tail.Prev
-    l.tail.Next = <span style=color:#00f>nil</span>
-  }
-
-  <span style=color:#00f>return</span> ret
-}
-
-<span style=color:#00f>func</span> (l *LRU) pop(n *Node) *Node {
-  <span style=color:#00f>switch</span> n {
-  <span style=color:#00f>case</span> l.head:
-    <span style=color:#00f>return</span> l.popHead()
-  <span style=color:#00f>case</span> l.tail:
-    <span style=color:#00f>return</span> l.popTail()
-  }
-
-  n.Next.Prev = n.Prev
-  n.Prev.Next = n.Next
-  <span style=color:#00f>return</span> n
-}
-
-<span style=color:#00f>func</span> (l *LRU) Set(key, value <span style=color:#2b91af>int</span>) {
-  <span style=color:green>// check if the key exists
-</span><span style=color:green></span>  <span style=color:green>// if it exists, we need to remove it
-</span><span style=color:green></span>  <span style=color:green>// then we append it to the queue
-</span><span style=color:green></span>  <span style=color:green>// 4th rule (mark it as the most recently used)
-</span><span style=color:green></span>  <span style=color:#00f>if</span> val, isOk := l.data[key]; isOk {
-    <span style=color:green>// this is the reason why we need to use popTail
-</span><span style=color:green></span>    l.pop(val)
-    l.size--
-  }
-
-  <span style=color:green>// 3rd rule
-</span><span style=color:green></span>  <span style=color:#00f>if</span> l.size &gt;= l.capacity {
-    n := l.popHead()
-    delete(l.data, n.Key)
-    l.size--
-  }
-
-  <span style=color:green>// push new data
-</span><span style=color:green></span>  n := NewNode(key, value)
-  l.data[key] = n
-  l.pushTail(n)
-  l.size++
-}
-
-<span style=color:#00f>func</span> (l *LRU) Get(key <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
-  val, isOk := l.data[key]
-
-  <span style=color:#00f>if</span> !isOk {
-    <span style=color:#00f>return</span> -1
-  }
-
-  <span style=color:green>// remove it
-</span><span style=color:green></span>  l.pop(val)
-  <span style=color:green>// then mark it as the most recently used
-</span><span style=color:green></span>  l.pushTail(val)
-
-  <span style=color:#00f>return</span> val.Value
-}
-
-<span style=color:#00f>func</span> (l *LRU) ShowQueue() {
-  fmt.Printf(<span style=color:#a31515>&#34;Least &#34;</span>)
-  <span style=color:#00f>for</span> n := l.head; n != l.tail; n = n.Next {
-    fmt.Printf(<span style=color:#a31515>&#34;%v -&gt; &#34;</span>, n.Key)
-  }
-
-  fmt.Println(l.tail.Key, <span style=color:#a31515>&#34;Most&#34;</span>)
-}
-
-<span style=color:#00f>func</span> main() {
-  lru := NewLRU(3)
-  lru.Set(1, 1)
-  lru.Set(2, 2)
-  lru.Set(3, 3)
-
-  <span style=color:green>// Least 1 -&gt; 2 -&gt; 3 Most
-</span><span style=color:green></span>  lru.ShowQueue()
-
-  <span style=color:green>// 2
-</span><span style=color:green></span>  fmt.Println(lru.Get(2))
-  <span style=color:green>// Least 1 -&gt; 3 -&gt; 2 Most
-</span><span style=color:green></span>  lru.ShowQueue()
-
-  lru.Set(1, 100)
-  <span style=color:green>// Least 3 -&gt; 2 -&gt; 1 Most
-</span><span style=color:green></span>  lru.ShowQueue()
-
-  lru.Set(4, 4)
-  <span style=color:green>// Least 2 -&gt; 1 -&gt; 4 Most
-</span><span style=color:green></span>  lru.ShowQueue()
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Thank you for reading!</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> (l *LRU) Get(key <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  val, isOk := l.data[key]
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  <span style=color:#00f>if</span> !isOk {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>    <span style=color:#00f>return</span> -1
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  <span style=color:green>// remove it
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span><span style=color:green></span>  l.pop(val)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  <span style=color:green>// then mark it as the most recently used
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span><span style=color:green></span>  l.pushTail(val)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>  <span style=color:#00f>return</span> val.Value
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>}
+</code></pre></div><p>Lastly, to ensure our queue rotation is correct, let&rsquo;s implement the showQueue method.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span style=color:#00f>func</span> (l *LRU) ShowQueue() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>  fmt.Printf(<span style=color:#a31515>&#34;Least &#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>  <span style=color:#00f>for</span> n := l.head ; n != l.tail ; n = n.Next {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>    fmt.Printf(<span style=color:#a31515>&#34;%v -&gt; &#34;</span>, n.Key)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span>  fmt.Println(l.tail.Key, <span style=color:#a31515>&#34;Most&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8</span>}
+</code></pre></div><p>Let&rsquo;s test it</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> main() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  lru := NewLRU(3)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>  lru.Set(1, 1)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  lru.Set(2, 2)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  lru.Set(3, 3)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>  <span style=color:green>// Least 1 -&gt; 2 -&gt; 3 Most
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span><span style=color:green></span>  lru.ShowQueue()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  <span style=color:green>// 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span><span style=color:green></span>  fmt.Println(lru.Get(2))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>  <span style=color:green>// Least 1 -&gt; 3 -&gt; 2 Most
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span><span style=color:green></span>  lru.ShowQueue()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>  lru.Set(1, 100)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>  <span style=color:green>// Least 3 -&gt; 2 -&gt; 1 Most
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span><span style=color:green></span>  lru.ShowQueue()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>  lru.Set(4, 4)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>  <span style=color:green>// Least 2 -&gt; 1 -&gt; 4 Most
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span><span style=color:green></span>  lru.ShowQueue()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>}
+</code></pre></div><p>The whole code should be like this:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1</span><span style=color:#00f>package</span> main
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  2</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  3</span><span style=color:#00f>import</span> <span style=color:#a31515>&#34;fmt&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  4</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  5</span><span style=color:#00f>type</span> Node <span style=color:#00f>struct</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  6</span>  Key   <span style=color:#2b91af>int</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  7</span>  Value <span style=color:#2b91af>int</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  8</span>  Prev  *Node
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  9</span>  Next  *Node
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 10</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 11</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 12</span><span style=color:#00f>func</span> NewNode(key, value <span style=color:#2b91af>int</span>) *Node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 13</span>  <span style=color:#00f>return</span> &amp;Node{
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 14</span>    Key:   key,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 15</span>    Value: value,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 16</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 17</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 18</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 19</span><span style=color:#00f>type</span> LRU <span style=color:#00f>struct</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 20</span>  capacity <span style=color:#2b91af>int</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 21</span>  size     <span style=color:#2b91af>int</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 22</span>  data     <span style=color:#00f>map</span>[<span style=color:#2b91af>int</span>]*Node
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 23</span>  tail     *Node
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 24</span>  head     *Node
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 25</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 26</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 27</span><span style=color:#00f>func</span> NewLRU(capacity <span style=color:#2b91af>int</span>) *LRU {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 28</span>  <span style=color:#00f>return</span> &amp;LRU{
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 29</span>    capacity: capacity,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 30</span>    size:     0,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 31</span>    data:     make(<span style=color:#00f>map</span>[<span style=color:#2b91af>int</span>]*Node),
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 32</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 33</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 34</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 35</span><span style=color:#00f>func</span> (l *LRU) pushTail(n *Node) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 36</span>  <span style=color:#00f>if</span> l.head == <span style=color:#00f>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 37</span>    l.head = n
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 38</span>    l.tail = n
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 39</span>    <span style=color:#00f>return</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 40</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 41</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 42</span>  l.tail.Next = n
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 43</span>  n.Prev = l.tail
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 44</span>  l.tail = n
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 45</span>  l.tail.Next = <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 46</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 47</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 48</span><span style=color:#00f>func</span> (l *LRU) popHead() *Node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 49</span>  ret := l.head
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 50</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 51</span>  <span style=color:#00f>if</span> l.head == l.tail {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 52</span>    l.head = <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 53</span>  } <span style=color:#00f>else</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 54</span>    l.head = l.head.Next
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 55</span>    l.head.Prev = <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 56</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 57</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 58</span>  <span style=color:#00f>return</span> ret
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 59</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 60</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 61</span><span style=color:#00f>func</span> (l *LRU) popTail() *Node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 62</span>  ret := l.tail
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 63</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 64</span>  <span style=color:#00f>if</span> l.head == l.tail {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 65</span>    l.head = <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 66</span>  } <span style=color:#00f>else</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 67</span>    l.tail = l.tail.Prev
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 68</span>    l.tail.Next = <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 69</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 70</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 71</span>  <span style=color:#00f>return</span> ret
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 72</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 73</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 74</span><span style=color:#00f>func</span> (l *LRU) pop(n *Node) *Node {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 75</span>  <span style=color:#00f>switch</span> n {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 76</span>  <span style=color:#00f>case</span> l.head:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 77</span>    <span style=color:#00f>return</span> l.popHead()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 78</span>  <span style=color:#00f>case</span> l.tail:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 79</span>    <span style=color:#00f>return</span> l.popTail()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 80</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 81</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 82</span>  n.Next.Prev = n.Prev
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 83</span>  n.Prev.Next = n.Next
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 84</span>  <span style=color:#00f>return</span> n
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 85</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 86</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 87</span><span style=color:#00f>func</span> (l *LRU) Set(key, value <span style=color:#2b91af>int</span>) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 88</span>  <span style=color:green>// check if the key exists
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 89</span><span style=color:green></span>  <span style=color:green>// if it exists, we need to remove it
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 90</span><span style=color:green></span>  <span style=color:green>// then we append it to the queue
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 91</span><span style=color:green></span>  <span style=color:green>// 4th rule (mark it as the most recently used)
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 92</span><span style=color:green></span>  <span style=color:#00f>if</span> val, isOk := l.data[key]; isOk {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 93</span>    <span style=color:green>// this is the reason why we need to use popTail
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 94</span><span style=color:green></span>    l.pop(val)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 95</span>    l.size--
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 96</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 97</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 98</span>  <span style=color:green>// 3rd rule
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 99</span><span style=color:green></span>  <span style=color:#00f>if</span> l.size &gt;= l.capacity {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">100</span>    n := l.popHead()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">101</span>    delete(l.data, n.Key)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">102</span>    l.size--
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">103</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">104</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">105</span>  <span style=color:green>// push new data
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">106</span><span style=color:green></span>  n := NewNode(key, value)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">107</span>  l.data[key] = n
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">108</span>  l.pushTail(n)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">109</span>  l.size++
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">110</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">111</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">112</span><span style=color:#00f>func</span> (l *LRU) Get(key <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">113</span>  val, isOk := l.data[key]
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">114</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">115</span>  <span style=color:#00f>if</span> !isOk {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">116</span>    <span style=color:#00f>return</span> -1
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">117</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">118</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">119</span>  <span style=color:green>// remove it
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">120</span><span style=color:green></span>  l.pop(val)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">121</span>  <span style=color:green>// then mark it as the most recently used
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">122</span><span style=color:green></span>  l.pushTail(val)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">123</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">124</span>  <span style=color:#00f>return</span> val.Value
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">125</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">126</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">127</span><span style=color:#00f>func</span> (l *LRU) ShowQueue() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">128</span>  fmt.Printf(<span style=color:#a31515>&#34;Least &#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">129</span>  <span style=color:#00f>for</span> n := l.head; n != l.tail; n = n.Next {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">130</span>    fmt.Printf(<span style=color:#a31515>&#34;%v -&gt; &#34;</span>, n.Key)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">131</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">132</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">133</span>  fmt.Println(l.tail.Key, <span style=color:#a31515>&#34;Most&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">134</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">135</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">136</span><span style=color:#00f>func</span> main() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">137</span>  lru := NewLRU(3)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">138</span>  lru.Set(1, 1)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">139</span>  lru.Set(2, 2)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">140</span>  lru.Set(3, 3)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">141</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">142</span>  <span style=color:green>// Least 1 -&gt; 2 -&gt; 3 Most
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">143</span><span style=color:green></span>  lru.ShowQueue()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">144</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">145</span>  <span style=color:green>// 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">146</span><span style=color:green></span>  fmt.Println(lru.Get(2))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">147</span>  <span style=color:green>// Least 1 -&gt; 3 -&gt; 2 Most
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">148</span><span style=color:green></span>  lru.ShowQueue()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">149</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">150</span>  lru.Set(1, 100)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">151</span>  <span style=color:green>// Least 3 -&gt; 2 -&gt; 1 Most
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">152</span><span style=color:green></span>  lru.ShowQueue()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">153</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">154</span>  lru.Set(4, 4)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">155</span>  <span style=color:green>// Least 2 -&gt; 1 -&gt; 4 Most
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">156</span><span style=color:green></span>  lru.ShowQueue()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">157</span>}
+</code></pre></div><p>Thank you for reading!</p>
 </div>
 <div class=separator>
 <span>&#183;</span>

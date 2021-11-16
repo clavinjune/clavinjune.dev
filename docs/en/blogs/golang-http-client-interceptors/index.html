@@ -43,7 +43,7 @@
 <span class=middot>&#183;</span>
 <span>Oct 29, 2021</span>
 <span class=middot>&#183;</span>
-<span>~6 min</span>
+<span>~5 min</span>
 </div>
 <div id=content>
 <figure>
@@ -53,485 +53,217 @@
 <h2 id=introduction>Introduction</h2>
 <p>Golang supports developers to create a great application with its solid and handful of built-in packages. One of them is HTTP Client. HTTP Client, just like its name, helps developers to create an HTTP Client that can make HTTP requests to other services. Golang even provides developers with its default client so, you don&rsquo;t need to create one. But sometimes, you need to create one that fits your usage.</p>
 <p>For Example, you have a Golang application that needs to make requests to one service. That service has a defined standard of the HTTP request body. Let&rsquo;s say like this:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript>{
-  <span style=color:#a31515>&#34;aStandardWrapperRequired&#34;</span>: {
-    <span style=color:green>// your real request here
-</span><span style=color:green></span>  }
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Let&rsquo;s say you need to wrap all your hundreds of request bodies to fits the requirement. Usually, you may make a higher-order function that adjusts your body request to that requirement. But in this article, you will learn another way to handle that using an HTTP Interceptor.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>{
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>  <span style=color:#a31515>&#34;aStandardWrapperRequired&#34;</span>: {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>    <span style=color:green>// your real request here
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span><span style=color:green></span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>}
+</code></pre></div><p>Let&rsquo;s say you need to wrap all your hundreds of request bodies to fits the requirement. Usually, you may make a higher-order function that adjusts your body request to that requirement. But in this article, you will learn another way to handle that using an HTTP Interceptor.</p>
 <p>Now let&rsquo;s simulate and create the server and client. All the codes below will require you to use at least Golang version 1.16.</p>
 <h2 id=initiate-the-project>Initiate the Project</h2>
 <p>First thing first, let&rsquo;s create a simple project called interceptor.</p>
 <blockquote>
 <p>Please be aware that inside this project, all errors are ignored to simplify the code. You may not want to copy and paste all of this code into a production code. Please take it with a grain of salt.</p>
 </blockquote>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ tree .
-.
-├── client
-│   └── main.go
-├── go.mod
-├── json
-│   └── json.go
-└── server
-    └── main.go
-
-3 directories, 4 files
-</code></pre></td></tr></table>
-</div>
-</div><ul>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span>$ tree .
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>.
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>├── client
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>│   └── main.go
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>├── go.mod
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>├── json
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>│   └── json.go
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>└── server
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>    └── main.go
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>3 directories, 4 files
+</code></pre></div><ul>
 <li><code>client</code> package is the main package that runs an HTTP client</li>
 <li><code>json</code> package is a helper package</li>
 <li><code>server</code> package is the main package that runs an HTTP server</li>
 </ul>
 <h2 id=create-helper-function>Create Helper Function</h2>
 <p>Inside the <code>json/json.go</code>, create a function that helps you read the request/response body and transform it to a readable string.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> json
-
-<span style=color:#00f>import</span> (
-  <span style=color:#a31515>&#34;encoding/json&#34;</span>
-  <span style=color:#a31515>&#34;io&#34;</span>
-)
-
-<span style=color:#00f>func</span> MustHumanize(r io.Reader) <span style=color:#2b91af>string</span> {
-  <span style=color:#00f>var</span> m <span style=color:#00f>map</span>[<span style=color:#2b91af>string</span>]<span style=color:#00f>interface</span>{}
-  _ = json.NewDecoder(r).Decode(&amp;m)
-  b, _ := json.MarshalIndent(m, <span style=color:#a31515>&#34;&#34;</span>, <span style=color:#a31515>&#34;  &#34;</span>)
-  <span style=color:#00f>return</span> string(b)
-}
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=create-the-server>Create the Server</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>package</span> json
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#00f>import</span> (
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  <span style=color:#a31515>&#34;encoding/json&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  <span style=color:#a31515>&#34;io&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span><span style=color:#00f>func</span> MustHumanize(r io.Reader) <span style=color:#2b91af>string</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  <span style=color:#00f>var</span> m <span style=color:#00f>map</span>[<span style=color:#2b91af>string</span>]<span style=color:#00f>interface</span>{}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  _ = json.NewDecoder(r).Decode(&amp;m)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  b, _ := json.MarshalIndent(m, <span style=color:#a31515>&#34;&#34;</span>, <span style=color:#a31515>&#34;  &#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>  <span style=color:#00f>return</span> string(b)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>}
+</code></pre></div><h2 id=create-the-server>Create the Server</h2>
 <p>Inside the <code>server/main.go</code>, create an HTTP Server that simply reflects the request of the client, and then send it back to them.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> main
-
-<span style=color:#00f>import</span> (
-  <span style=color:#a31515>&#34;fmt&#34;</span>
-  <span style=color:#a31515>&#34;net/http&#34;</span>
-
-  <span style=color:#a31515>&#34;interceptor/json&#34;</span>
-)
-
-<span style=color:#00f>func</span> main() {
-  _ = http.ListenAndServe(<span style=color:#a31515>&#34;:8000&#34;</span>, http.HandlerFunc(<span style=color:#00f>func</span>(w http.ResponseWriter, r *http.Request) {
-    <span style=color:#00f>defer</span> <span style=color:#00f>func</span>() {
-      _ = r.Body.Close()
-    }()
-
-    b := json.MustHumanize(r.Body)
-    fmt.Println(b)
-
-    w.WriteHeader(http.StatusOK)
-    _, _ = fmt.Fprint(w, b)
-  }))
-}
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=create-the-client>Create the Client</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>package</span> main
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#00f>import</span> (
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  <span style=color:#a31515>&#34;fmt&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  <span style=color:#a31515>&#34;net/http&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>  <span style=color:#a31515>&#34;interceptor/json&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span><span style=color:#00f>func</span> main() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  _ = http.ListenAndServe(<span style=color:#a31515>&#34;:8000&#34;</span>, http.HandlerFunc(<span style=color:#00f>func</span>(w http.ResponseWriter, r *http.Request) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>    <span style=color:#00f>defer</span> <span style=color:#00f>func</span>() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>      _ = r.Body.Close()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>    }()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>    b := json.MustHumanize(r.Body)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>    fmt.Println(b)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>    w.WriteHeader(http.StatusOK)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>    _, _ = fmt.Fprint(w, b)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>  }))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>}
+</code></pre></div><h2 id=create-the-client>Create the Client</h2>
 <p>Now inside the <code>client/main.go</code>, let&rsquo;s make a request to the server using the default Golang HTTP client first.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> main
-
-<span style=color:#00f>import</span> (
-  <span style=color:#a31515>&#34;fmt&#34;</span>
-  <span style=color:#a31515>&#34;net/http&#34;</span>
-  <span style=color:#a31515>&#34;strings&#34;</span>
-
-  <span style=color:#a31515>&#34;interceptor/json&#34;</span>
-)
-
-<span style=color:#00f>func</span> main() {
-  req, _ := http.NewRequest(
-    http.MethodPost,
-    <span style=color:#a31515>&#34;http://127.0.0.1:8000/&#34;</span>,
-    strings.NewReader(<span style=color:#a31515>`{&#34;data&#34;: &#34;json&#34;}`</span>))
-
-  c := http.DefaultClient
-
-  resp, _ := c.Do(req)
-  <span style=color:#00f>defer</span> <span style=color:#00f>func</span>() {
-    _ = resp.Body.Close()
-  }()
-
-  b := json.MustHumanize(resp.Body)
-  fmt.Println(b)
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Now, if you run the server:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ go run server/main.go
-</code></pre></td></tr></table>
-</div>
-</div><p>And run the client:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ go run client/main.go
-</code></pre></td></tr></table>
-</div>
-</div><p>Both the server and the client will reflect this into the terminal:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript>{
-  <span style=color:#a31515>&#34;data&#34;</span>: <span style=color:#a31515>&#34;json&#34;</span>
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Now let&rsquo;s create the custom HTTP Client that will intercept our request to the server.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>package</span> main
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#00f>import</span> (
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  <span style=color:#a31515>&#34;fmt&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  <span style=color:#a31515>&#34;net/http&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>  <span style=color:#a31515>&#34;strings&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  <span style=color:#a31515>&#34;interceptor/json&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span><span style=color:#00f>func</span> main() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>  req, _ := http.NewRequest(
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>    http.MethodPost,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>    <span style=color:#a31515>&#34;http://127.0.0.1:8000/&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>    strings.NewReader(<span style=color:#a31515>`{&#34;data&#34;: &#34;json&#34;}`</span>))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>  c := http.DefaultClient
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>  resp, _ := c.Do(req)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>  <span style=color:#00f>defer</span> <span style=color:#00f>func</span>() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>    _ = resp.Body.Close()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>  }()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>  b := json.MustHumanize(resp.Body)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>  fmt.Println(b)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>}
+</code></pre></div><p>Now, if you run the server:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ go run server/main.go
+</code></pre></div><p>And run the client:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ go run client/main.go
+</code></pre></div><p>Both the server and the client will reflect this into the terminal:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>{
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>  <span style=color:#a31515>&#34;data&#34;</span>: <span style=color:#a31515>&#34;json&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>}
+</code></pre></div><p>Now let&rsquo;s create the custom HTTP Client that will intercept our request to the server.</p>
 <h2 id=intercept-the-client-request>Intercept the Client Request</h2>
 <p>Golang has this one interface called RoundTripper that is implemented by Golang as a DefaultTransport, which is called every time you make an HTTP Request using the DefaultClient. I advise you to <strong>really</strong> read the <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://pkg.go.dev/net/http#RoundTripper>docs</a> before implementing this RoundTripper.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>...
-
-<span style=color:#00f>type</span> Interceptor <span style=color:#00f>struct</span> {
-  core http.RoundTripper
-}
-
-<span style=color:#00f>func</span> (Interceptor) modifyRequest(r *http.Request) *http.Request {
-  reqBody := json.MustHumanize(r.Body)
-
-  modReqBody := []byte(fmt.Sprintf(<span style=color:#a31515>`{&#34;req&#34;: %s}`</span>, reqBody))
-  ModReqBodyLen := len(modReqBody)
-
-  req := r.Clone(context.Background())
-  req.Body = io.NopCloser(bytes.NewReader(modReqBody))
-  req.ContentLength = int64(ModReqBodyLen)
-  req.Header.Set(<span style=color:#a31515>&#34;Content-Length&#34;</span>, fmt.Sprintf(<span style=color:#a31515>&#34;%d&#34;</span>, ModReqBodyLen))
-
-  <span style=color:#00f>return</span> req
-}
-
-<span style=color:#00f>func</span> (i Interceptor) RoundTrip(r *http.Request) (*http.Response, <span style=color:#2b91af>error</span>) {
-  <span style=color:#00f>defer</span> <span style=color:#00f>func</span>() {
-    _ = r.Body.Close()
-  }()
-
-  <span style=color:green>// modify before the request is sent
-</span><span style=color:green></span>  newReq := i.modifyRequest(r)
-
-  <span style=color:green>// send the request using the DefaultTransport
-</span><span style=color:green></span>  <span style=color:#00f>return</span> i.core.RoundTrip(newReq)
-}
-
-...
-</code></pre></td></tr></table>
-</div>
-</div><p>Now let&rsquo;s use the Interceptor inside the HTTP client.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>...
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span><span style=color:#00f>type</span> Interceptor <span style=color:#00f>struct</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>  core http.RoundTripper
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span><span style=color:#00f>func</span> (Interceptor) modifyRequest(r *http.Request) *http.Request {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>  reqBody := json.MustHumanize(r.Body)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>  modReqBody := []byte(fmt.Sprintf(<span style=color:#a31515>`{&#34;req&#34;: %s}`</span>, reqBody))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>  ModReqBodyLen := len(modReqBody)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>  req := r.Clone(context.Background())
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>  req.Body = io.NopCloser(bytes.NewReader(modReqBody))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>  req.ContentLength = int64(ModReqBodyLen)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>  req.Header.Set(<span style=color:#a31515>&#34;Content-Length&#34;</span>, fmt.Sprintf(<span style=color:#a31515>&#34;%d&#34;</span>, ModReqBodyLen))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29</span>  <span style=color:#00f>return</span> req
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32</span><span style=color:#00f>func</span> (i Interceptor) RoundTrip(r *http.Request) (*http.Response, <span style=color:#2b91af>error</span>) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33</span>  <span style=color:#00f>defer</span> <span style=color:#00f>func</span>() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34</span>    _ = r.Body.Close()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35</span>  }()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37</span>  <span style=color:green>// modify before the request is sent
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38</span><span style=color:green></span>  newReq := i.modifyRequest(r)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40</span>  <span style=color:green>// send the request using the DefaultTransport
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41</span><span style=color:green></span>  <span style=color:#00f>return</span> i.core.RoundTrip(newReq)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44</span>...
+</code></pre></div><p>Now let&rsquo;s use the Interceptor inside the HTTP client.</p>
 <p>Change this line inside <code>client/main.go</code></p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>...
-
-c := http.DefaultClient
-
-...
-</code></pre></td></tr></table>
-</div>
-</div><p>into this:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>...
-
-c := &amp;http.Client{
-  Transport: Interceptor{http.DefaultTransport},
-}
-
-...
-</code></pre></td></tr></table>
-</div>
-</div><p>Now if you try to re-run the client, the output should be like this:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript>{
-  <span style=color:#a31515>&#34;req&#34;</span>: {
-    <span style=color:#a31515>&#34;data&#34;</span>: <span style=color:#a31515>&#34;json&#34;</span>
-  }
-}
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=intercept-the-server-response>Intercept the Server Response</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48</span>...
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50</span>c := http.DefaultClient
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52</span>...
+</code></pre></div><p>into this:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48</span>...
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50</span>c := &amp;http.Client{
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51</span>  Transport: Interceptor{http.DefaultTransport},
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54</span>...
+</code></pre></div><p>Now if you try to re-run the client, the output should be like this:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>{
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>  <span style=color:#a31515>&#34;req&#34;</span>: {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>    <span style=color:#a31515>&#34;data&#34;</span>: <span style=color:#a31515>&#34;json&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>}
+</code></pre></div><h2 id=intercept-the-server-response>Intercept the Server Response</h2>
 <p>In the same way, you can also intercept the server&rsquo;s response.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">57
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">58
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">59
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">60
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">61
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">62
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">63
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>...
-
-<span style=color:#00f>func</span> (Interceptor) modifyResponse(r *http.Response) *http.Response {
-  respBody := json.MustHumanize(r.Body)
-  
-  modRespBody := []byte(fmt.Sprintf(<span style=color:#a31515>`{&#34;resp&#34;: %s}`</span>, respBody))
-  ModRespBodyLen := len(modRespBody)
-
-  r.Body = io.NopCloser(bytes.NewReader(modRespBody))
-  r.ContentLength = int64(ModRespBodyLen)
-  r.Header.Set(<span style=color:#a31515>&#34;Content-Length&#34;</span>, fmt.Sprintf(<span style=color:#a31515>&#34;%d&#34;</span>, ModRespBodyLen))
-
-  <span style=color:#00f>return</span> r
-}
-
-<span style=color:#00f>func</span> (i Interceptor) RoundTrip(r *http.Request) (*http.Response, <span style=color:#2b91af>error</span>) {
-  <span style=color:#00f>defer</span> <span style=color:#00f>func</span>() {
-    _ = r.Body.Close()
-  }()
-
-  <span style=color:green>// modify before the request is sent
-</span><span style=color:green></span>  newReq := i.modifyRequest(r)
-
-  <span style=color:green>// send the request using the DefaultTransport
-</span><span style=color:green></span>  resp, _ := i.core.RoundTrip(newReq)
-  <span style=color:#00f>defer</span> <span style=color:#00f>func</span>() {
-    _ = resp.Body.Close()
-  }()
-
-  <span style=color:green>// modify after the response is received
-</span><span style=color:green></span>  newResp := i.modifyResponse(resp)
-
-  <span style=color:#00f>return</span> newResp, <span style=color:#00f>nil</span>
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Now, if you re-run the client, the output of the server should be the same as before:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript>{
-  <span style=color:#a31515>&#34;req&#34;</span>: {
-    <span style=color:#a31515>&#34;data&#34;</span>: <span style=color:#a31515>&#34;json&#34;</span>
-  }
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>But the client output has been altered to this:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript>{
-  <span style=color:#a31515>&#34;resp&#34;</span>: {
-    <span style=color:#a31515>&#34;req&#34;</span>: {
-      <span style=color:#a31515>&#34;data&#34;</span>: <span style=color:#a31515>&#34;json&#34;</span>
-    }
-  }
-}
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=conclusion>Conclusion</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30</span>...
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32</span><span style=color:#00f>func</span> (Interceptor) modifyResponse(r *http.Response) *http.Response {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33</span>  respBody := json.MustHumanize(r.Body)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34</span>  
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35</span>  modRespBody := []byte(fmt.Sprintf(<span style=color:#a31515>`{&#34;resp&#34;: %s}`</span>, respBody))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36</span>  ModRespBodyLen := len(modRespBody)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38</span>  r.Body = io.NopCloser(bytes.NewReader(modRespBody))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39</span>  r.ContentLength = int64(ModRespBodyLen)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40</span>  r.Header.Set(<span style=color:#a31515>&#34;Content-Length&#34;</span>, fmt.Sprintf(<span style=color:#a31515>&#34;%d&#34;</span>, ModRespBodyLen))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42</span>  <span style=color:#00f>return</span> r
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45</span><span style=color:#00f>func</span> (i Interceptor) RoundTrip(r *http.Request) (*http.Response, <span style=color:#2b91af>error</span>) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46</span>  <span style=color:#00f>defer</span> <span style=color:#00f>func</span>() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47</span>    _ = r.Body.Close()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48</span>  }()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50</span>  <span style=color:green>// modify before the request is sent
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51</span><span style=color:green></span>  newReq := i.modifyRequest(r)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53</span>  <span style=color:green>// send the request using the DefaultTransport
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54</span><span style=color:green></span>  resp, _ := i.core.RoundTrip(newReq)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55</span>  <span style=color:#00f>defer</span> <span style=color:#00f>func</span>() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56</span>    _ = resp.Body.Close()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">57</span>  }()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">58</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">59</span>  <span style=color:green>// modify after the response is received
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">60</span><span style=color:green></span>  newResp := i.modifyResponse(resp)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">61</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">62</span>  <span style=color:#00f>return</span> newResp, <span style=color:#00f>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">63</span>}
+</code></pre></div><p>Now, if you re-run the client, the output of the server should be the same as before:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>{
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>  <span style=color:#a31515>&#34;req&#34;</span>: {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>    <span style=color:#a31515>&#34;data&#34;</span>: <span style=color:#a31515>&#34;json&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>}
+</code></pre></div><p>But the client output has been altered to this:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>{
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>  <span style=color:#a31515>&#34;resp&#34;</span>: {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>    <span style=color:#a31515>&#34;req&#34;</span>: {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>      <span style=color:#a31515>&#34;data&#34;</span>: <span style=color:#a31515>&#34;json&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span>  }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span>}
+</code></pre></div><h2 id=conclusion>Conclusion</h2>
 <p>You may find a better solution for the case above. All those experiments are only for learning purposes, that you may find them interesting. Once again, I&rsquo;m not recommending you to copy-paste the codes above unless you know what you&rsquo;re doing. Working with the RoundTripper is not that hard, but it is quite tricky since you may coincidentally violate and create bugs inside the interceptor.</p>
 <p>Thank you for reading!</p>
 </div>
