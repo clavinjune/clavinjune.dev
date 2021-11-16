@@ -6,7 +6,7 @@ iscjklanguage: false
 isarchived: true
 categories: ["tech"]
 images: []
-aliases: ["/blog/transient-modifier-in-java-05f48e"]
+aliases: []
 description: "This post contains notes on how to manage java class attribute exclusion during serialization using transient modifiers"
 ---
 

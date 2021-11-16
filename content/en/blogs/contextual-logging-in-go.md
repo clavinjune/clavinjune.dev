@@ -6,7 +6,7 @@ iscjklanguage: false
 isarchived: true
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1580245492316-d542d595001b?w=1920&q=50"]
-aliases: ["/blog/contextual-logging-in-go-bfeb94"]
+aliases: []
 description: "This post contains a reference for creating a contextual logging in golang"
 ---
 
