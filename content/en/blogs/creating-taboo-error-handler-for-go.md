@@ -6,7 +6,7 @@ iscjklanguage: false
 isarchived: true
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=1920&q=50"]
-aliases: ["/blog/creating-taboo-error-handler-for-go-f8e220"]
+aliases: []
 description: "This post contains my own experience in creating try-catch-like error handler for golang"
 ---
 

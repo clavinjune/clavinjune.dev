@@ -6,7 +6,7 @@ iscjklanguage: false
 isarchived: true
 categories: ["tech"]
 images: []
-aliases: ["/blog/force-set-character-encoding-on-spring-boot-682449"]
+aliases: []
 description: "This post contains notes how to forcing set character encoding on spring boot"
 ---
 

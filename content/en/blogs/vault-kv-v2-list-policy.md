@@ -6,7 +6,7 @@ iscjklanguage: false
 isarchived: true
 categories: ["tech"]
 images: []
-aliases: ["/blog/vault-kv-v2-list-policy-f4bf36"]
+aliases: []
 description: "This post contains notes on how to create vault policy to show KV-V2 secrets config in Vault UI"
 ---
 
