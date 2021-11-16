@@ -6,7 +6,7 @@ iscjklanguage: false
 isarchived: true
 categories: ["life-style"]
 images: ["https://d3t3ozftmdmh3i.cloudfront.net/production/podcast_uploaded_episode/6959825/6959825-1604216114712-74967a0dc6ae2.jpg"]
-aliases: ["/blog/work-life-balance-e39a65"]
+aliases: []
 description: "In this podcast, we discuss how important it is to achieve Work Life Balance. we share our experiences dividing our time between work and personal life, what we do to improve our Work Life Balance, as well as some of our activities outside of working hours"
 ---
 

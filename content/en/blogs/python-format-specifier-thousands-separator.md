@@ -6,7 +6,7 @@ iscjklanguage: false
 isarchived: true
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1457904375453-3e1fc2fc76f4?w=1920&q=50"]
-aliases: ["/blog/python-format-specifier-thousands-separator-ed92cc"]
+aliases: []
 description: "This post contains notes how to formatting python using thousands separator"
 ---
 
