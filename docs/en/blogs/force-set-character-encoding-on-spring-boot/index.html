@@ -45,19 +45,37 @@
 <span>~1 min</span>
 </div>
 <div id=content><p>Add this on your spring boot project:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span>@Bean
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>@Order(Ordered.HIGHEST_PRECEDENCE)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#00f>public</span> FilterRegistrationBean&lt;CharacterEncodingFilter&gt; characterEncodingFilterRegistration() {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  CharacterEncodingFilter filter = <span style=color:#00f>new</span> CharacterEncodingFilter();
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  filter.setEncoding(<span style=color:#a31515>&#34;UTF-8&#34;</span>); <span style=color:green>// use your preferred encoding
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span><span style=color:green></span>  filter.setForceEncoding(<span style=color:#00f>true</span>); <span style=color:green>// force the encoding
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span><span style=color:green></span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  FilterRegistrationBean&lt;CharacterEncodingFilter&gt; registrationBean =
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>    <span style=color:#00f>new</span> FilterRegistrationBean&lt;&gt;(filter); <span style=color:green>// register the filter
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span><span style=color:green></span>  registrationBean.addUrlPatterns(<span style=color:#a31515>&#34;/*&#34;</span>); <span style=color:green>// set preferred url
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span><span style=color:green></span>  <span style=color:#00f>return</span> registrationBean;
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>}
-</code></pre></div><p><a class=link rel="nofollow noreferrer noopener" target=_blank href=https://www.baeldung.com/spring-boot-characterencodingfilter>reference</a></p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java>@Bean
+@Order(Ordered.HIGHEST_PRECEDENCE)
+<span style=color:#00f>public</span> FilterRegistrationBean&lt;CharacterEncodingFilter&gt; characterEncodingFilterRegistration() {
+  CharacterEncodingFilter filter = <span style=color:#00f>new</span> CharacterEncodingFilter();
+  filter.setEncoding(<span style=color:#a31515>&#34;UTF-8&#34;</span>); <span style=color:green>// use your preferred encoding
+</span><span style=color:green></span>  filter.setForceEncoding(<span style=color:#00f>true</span>); <span style=color:green>// force the encoding
+</span><span style=color:green></span>
+  FilterRegistrationBean&lt;CharacterEncodingFilter&gt; registrationBean =
+    <span style=color:#00f>new</span> FilterRegistrationBean&lt;&gt;(filter); <span style=color:green>// register the filter
+</span><span style=color:green></span>  registrationBean.addUrlPatterns(<span style=color:#a31515>&#34;/*&#34;</span>); <span style=color:green>// set preferred url
+</span><span style=color:green></span>  <span style=color:#00f>return</span> registrationBean;
+}
+</code></pre></td></tr></table>
+</div>
+</div><p><a class=link rel="nofollow noreferrer noopener" target=_blank href=https://www.baeldung.com/spring-boot-characterencodingfilter>reference</a></p>
 <p>Thank you for reading!</p>
 </div>
 <div class=separator>

@@ -43,7 +43,7 @@
 <span class=middot>&#183;</span>
 <span>Oct 29, 2020</span>
 <span class=middot>&#183;</span>
-<span>~2 min</span>
+<span>~3 min</span>
 </div>
 <div id=content>
 <figure>
@@ -61,24 +61,47 @@
 </ul>
 <p>That&rsquo;s why I came up with <code>Redis sets</code> but <code>sets members</code> can&rsquo;t have its own expiration time. Then I was googling around until I found <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://github.com/redis/redis/issues/135#issuecomment-2361996>this issue comment</a> by <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://github.com/pietern>@pietern</a>. This is quite a hacky move, but at least it is doable. That&rsquo;s why I tried to implement it. Once again comments on Github saved my job.</p>
 <p>The idea is quite simple, using the score on sorted-sets as an expiration millis. Fetch the valid members that have a score between <code>current millis</code> and <code>current millis + Y minutes</code> and remove the expired members that have a score between zero and <code>current millis</code>. So the minimum pseudocode would be like this:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span># define variables
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>timeLimit := Y
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>requestLimit := X
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>key := +6212312341234
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>otp := randomString(6)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>now := currentMillis()
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>exp := now + timeLimit
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span># get total of generated phone number in key
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>validOTPs := redisQuery(&#34;ZRANGEBYSCORE $key $now $exp&#34;)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span># Limitting request
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>if count(validOTPs) &gt;= requestLimit
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>then exit
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span># Add members to key
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>redisQuery(&#34;ZADD $key $exp $otp&#34;)
-</code></pre></div><p>I think this method is good enough and the simplest one to implement. You can add optional operations like, <code>adding expiration to the key</code>, or <code>removing members that are no longer valid</code>. But this operation is enough to adding expiration to the <code>sets member</code>. You can also use this method to limiting the OTP verification to avoid brute-force.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain># define variables
+timeLimit := Y
+requestLimit := X
+key := +6212312341234
+otp := randomString(6)
+now := currentMillis()
+exp := now + timeLimit
+
+# get total of generated phone number in key
+validOTPs := redisQuery(&#34;ZRANGEBYSCORE $key $now $exp&#34;)
+
+# Limitting request
+if count(validOTPs) &gt;= requestLimit
+then exit
+
+# Add members to key
+redisQuery(&#34;ZADD $key $exp $otp&#34;)
+</code></pre></td></tr></table>
+</div>
+</div><p>I think this method is good enough and the simplest one to implement. You can add optional operations like, <code>adding expiration to the key</code>, or <code>removing members that are no longer valid</code>. But this operation is enough to adding expiration to the <code>sets member</code>. You can also use this method to limiting the OTP verification to avoid brute-force.</p>
 <p>Thank you for reading!</p>
 </div>
 <div class=separator>

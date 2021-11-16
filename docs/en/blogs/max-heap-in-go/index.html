@@ -61,303 +61,641 @@
 <p>For example, Node with value <code>15</code>, has 2 children which are <code>10</code> and <code>5</code>. You can see the index of <code>15</code> which is <code>3</code>. Its left child is <code>10</code> which has index <code>3 * 2 = 6</code>, and its right children is <code>5</code> which has index <code>3 * 2 + 1 = 7</code>.</p>
 <p>Enough with the theory, you can read it from your book. I only want to write the implementation here using Go. I only implement <code>Push</code>, <code>Pop</code>, and <code>Peek</code> operation. It&rsquo;s hard to decide the name of the operation, but as long as it describes the operation please don&rsquo;t mind.</p>
 <h2 id=define-maxheap-struct>Define MaxHeap Struct</h2>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span style=color:#00f>type</span> MaxHeap <span style=color:#00f>struct</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>  heap     []<span style=color:#2b91af>int</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>  capacity <span style=color:#2b91af>int</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>  size     <span style=color:#2b91af>int</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>  root     <span style=color:#2b91af>int</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span>}
-</code></pre></div><p>MaxHeap will have at least size, capacity, and heap itself. <code>root</code> attribute will be <code>constant</code> since its root should always be <code>1</code>. <code>size</code> will define the current size of the heap, <code>capacity</code> will define how much the heap can store data, and the <code>heap</code> itself is an array that we stored the data into.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>type</span> MaxHeap <span style=color:#00f>struct</span> {
+  heap     []<span style=color:#2b91af>int</span>
+  capacity <span style=color:#2b91af>int</span>
+  size     <span style=color:#2b91af>int</span>
+  root     <span style=color:#2b91af>int</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>MaxHeap will have at least size, capacity, and heap itself. <code>root</code> attribute will be <code>constant</code> since its root should always be <code>1</code>. <code>size</code> will define the current size of the heap, <code>capacity</code> will define how much the heap can store data, and the <code>heap</code> itself is an array that we stored the data into.</p>
 <h2 id=constructor>Constructor</h2>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> NewMaxHeap(capacity <span style=color:#2b91af>int</span>) *MaxHeap {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  <span style=color:green>// because we used the 0 index
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:green></span>  <span style=color:green>// we need to increase the capacity defined by user
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span><span style=color:green></span>  c := capacity + 1
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  h := make([]<span style=color:#2b91af>int</span>, c, c)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>  <span style=color:green>// just to mark that it is the minimum one,
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span><span style=color:green></span>  <span style=color:green>// you can ignore this
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span><span style=color:green></span>  h[0] = (1 &lt;&lt; 31) - 1
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  <span style=color:#00f>return</span> &amp;MaxHeap{
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>    root:     1, <span style=color:green>// always 1, you can omit this attribute
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span><span style=color:green></span>    size:     0,
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>    capacity: c,
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>    heap:     h,
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>}
-</code></pre></div><h2 id=helper-method>Helper Method</h2>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> (MaxHeap) getParent(idx <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  <span style=color:#00f>return</span> idx / 2
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span><span style=color:#00f>func</span> (MaxHeap) getLeft(idx <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>  <span style=color:#00f>return</span> idx * 2
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span><span style=color:#00f>func</span> (MaxHeap) getRight(idx <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  <span style=color:#00f>return</span> idx*2 + 1
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span><span style=color:#00f>func</span> (m *MaxHeap) swap(idx1, idx2 <span style=color:#2b91af>int</span>) {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>  m.heap[idx1], m.heap[idx2] = m.heap[idx2], m.heap[idx1]
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span><span style=color:#00f>func</span> (m MaxHeap) String() <span style=color:#2b91af>string</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>  <span style=color:#00f>return</span> fmt.Sprintf(<span style=color:#a31515>`size:     %v
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span><span style=color:#a31515>capacity: %v
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span><span style=color:#a31515>heap:     %v`</span>,
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>    m.size, m.capacity-1, m.heap[1:])
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>}
-</code></pre></div><h2 id=push>Push</h2>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> NewMaxHeap(capacity <span style=color:#2b91af>int</span>) *MaxHeap {
+  <span style=color:green>// because we used the 0 index
+</span><span style=color:green></span>  <span style=color:green>// we need to increase the capacity defined by user
+</span><span style=color:green></span>  c := capacity + 1
+  h := make([]<span style=color:#2b91af>int</span>, c, c)
+
+  <span style=color:green>// just to mark that it is the minimum one,
+</span><span style=color:green></span>  <span style=color:green>// you can ignore this
+</span><span style=color:green></span>  h[0] = (1 &lt;&lt; 31) - 1
+
+  <span style=color:#00f>return</span> &amp;MaxHeap{
+    root:     1, <span style=color:green>// always 1, you can omit this attribute
+</span><span style=color:green></span>    size:     0,
+    capacity: c,
+    heap:     h,
+  }
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=helper-method>Helper Method</h2>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (MaxHeap) getParent(idx <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
+  <span style=color:#00f>return</span> idx / 2
+}
+
+<span style=color:#00f>func</span> (MaxHeap) getLeft(idx <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
+  <span style=color:#00f>return</span> idx * 2
+}
+
+<span style=color:#00f>func</span> (MaxHeap) getRight(idx <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
+  <span style=color:#00f>return</span> idx*2 + 1
+}
+
+<span style=color:#00f>func</span> (m *MaxHeap) swap(idx1, idx2 <span style=color:#2b91af>int</span>) {
+  m.heap[idx1], m.heap[idx2] = m.heap[idx2], m.heap[idx1]
+}
+
+<span style=color:#00f>func</span> (m MaxHeap) String() <span style=color:#2b91af>string</span> {
+  <span style=color:#00f>return</span> fmt.Sprintf(<span style=color:#a31515>`size:     %v
+</span><span style=color:#a31515>capacity: %v
+</span><span style=color:#a31515>heap:     %v`</span>,
+    m.size, m.capacity-1, m.heap[1:])
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=push>Push</h2>
 <p>Push into max / min heap should be easy, just put the element where it belongs according to the index, and check if its value is greater / lesser than its parent, if you&rsquo;re implementing max heap, check whether its value is greater than its parent, if so swap its value with its parent value.</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> (m *MaxHeap) Push(element <span style=color:#2b91af>int</span>) {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  <span style=color:green>// check whether it can store the element
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:green></span>  <span style=color:#00f>if</span> m.size &gt;= m.capacity-1 {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>    <span style=color:#00f>return</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>  m.size++
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  idx := m.size
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  <span style=color:green>// put it according to the index
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span><span style=color:green></span>  m.heap[idx] = element
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>  parent := m.getParent(idx)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>  
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>  <span style=color:green>// check if its value is greater than its parent
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span><span style=color:green></span>  <span style=color:#00f>for</span> m.heap[idx] &gt; m.heap[parent] {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>    <span style=color:green>// then swap
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span><span style=color:green></span>    m.swap(idx, parent)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>    <span style=color:green>// repeat the process until
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span><span style=color:green></span>    <span style=color:green>// the greatest value is on the top
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span><span style=color:green></span>    idx = parent
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>    parent = m.getParent(idx)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>}
-</code></pre></div><h2 id=peek>Peek</h2>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (m *MaxHeap) Push(element <span style=color:#2b91af>int</span>) {
+  <span style=color:green>// check whether it can store the element
+</span><span style=color:green></span>  <span style=color:#00f>if</span> m.size &gt;= m.capacity-1 {
+    <span style=color:#00f>return</span>
+  }
+
+  m.size++
+  idx := m.size
+
+  <span style=color:green>// put it according to the index
+</span><span style=color:green></span>  m.heap[idx] = element
+
+  parent := m.getParent(idx)
+  
+  <span style=color:green>// check if its value is greater than its parent
+</span><span style=color:green></span>  <span style=color:#00f>for</span> m.heap[idx] &gt; m.heap[parent] {
+    <span style=color:green>// then swap
+</span><span style=color:green></span>    m.swap(idx, parent)
+
+    <span style=color:green>// repeat the process until
+</span><span style=color:green></span>    <span style=color:green>// the greatest value is on the top
+</span><span style=color:green></span>    idx = parent
+    parent = m.getParent(idx)
+  }
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=peek>Peek</h2>
 <p>Peek operation will return the greatest / least value which is the root.</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span style=color:#00f>func</span> (m MaxHeap) Peek() (<span style=color:#2b91af>int</span>, <span style=color:#2b91af>error</span>) {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>  <span style=color:#00f>if</span> m.size &lt;= 0 {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>    <span style=color:#00f>return</span> (1 &lt;&lt; 31) - 1, fmt.Errorf(<span style=color:#a31515>&#34;max-heap: heap is empty&#34;</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span>  <span style=color:#00f>return</span> m.heap[m.root], <span style=color:#00f>nil</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span>}
-</code></pre></div><p>Let&rsquo;s check our heap</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> main() {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  h := NewMaxHeap(15)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>  h.Push(1)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  h.Push(4)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  h.Push(2)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>  h.Push(5)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  fmt.Println(h)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  g, _ := h.Peek()
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  fmt.Println(<span style=color:#a31515>&#34;greatest:&#34;</span>, g)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>}
-</code></pre></div><p>The output should be like this:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>size:     4
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>capacity: 15
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>heap:     [5 4 2 1 0 0 0 0 0 0 0 0 0 0 0]
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>greatest: 5
-</code></pre></div><h2 id=pop>Pop</h2>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (m MaxHeap) Peek() (<span style=color:#2b91af>int</span>, <span style=color:#2b91af>error</span>) {
+  <span style=color:#00f>if</span> m.size &lt;= 0 {
+    <span style=color:#00f>return</span> (1 &lt;&lt; 31) - 1, fmt.Errorf(<span style=color:#a31515>&#34;max-heap: heap is empty&#34;</span>)
+  }
+
+  <span style=color:#00f>return</span> m.heap[m.root], <span style=color:#00f>nil</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>Let&rsquo;s check our heap</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> main() {
+  h := NewMaxHeap(15)
+  h.Push(1)
+  h.Push(4)
+  h.Push(2)
+  h.Push(5)
+
+  fmt.Println(h)
+  g, _ := h.Peek()
+  fmt.Println(<span style=color:#a31515>&#34;greatest:&#34;</span>, g)
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>The output should be like this:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>size:     4
+capacity: 15
+heap:     [5 4 2 1 0 0 0 0 0 0 0 0 0 0 0]
+greatest: 5
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=pop>Pop</h2>
 <p>Now let&rsquo;s pop something. Popping operation will return value of the greatest / least value and delete it from the heap. We need to rebalance the heap So the greatest / least value will be the root again.</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>func</span> (m *MaxHeap) rebalance(idx <span style=color:#2b91af>int</span>) {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>  <span style=color:green>// don&#39;t rebalance if node index
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:green></span>  <span style=color:green>// is greater than heap size
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span><span style=color:green></span>  <span style=color:#00f>if</span> idx &gt;= m.size {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>    <span style=color:#00f>return</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  <span style=color:green>// fetch the left child index
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span><span style=color:green></span>  left := m.getLeft(idx)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  <span style=color:green>// fetch the right child index
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span><span style=color:green></span>  right := m.getRight(idx)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>  <span style=color:green>// only swap if children position is wrong
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span><span style=color:green></span>  <span style=color:green>// and only the children index is less than heap size
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span><span style=color:green></span>  <span style=color:green>// and then rebalance it
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span><span style=color:green></span>  <span style=color:#00f>if</span> left &lt;= m.size {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>    <span style=color:#00f>if</span> m.heap[idx] &lt; m.heap[left] {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>      m.swap(idx, left)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>      m.rebalance(left)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>    }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>  <span style=color:#00f>if</span> right &lt;= m.size {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>    <span style=color:#00f>if</span> m.heap[idx] &lt; m.heap[right] {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>      m.swap(idx, right)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>      m.rebalance(right)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>    }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32</span><span style=color:#00f>func</span> (m *MaxHeap) Pop() (<span style=color:#2b91af>int</span>, <span style=color:#2b91af>error</span>) {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33</span>  <span style=color:#00f>if</span> m.size &lt;= 0 {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34</span>    <span style=color:#00f>return</span> (1 &lt;&lt; 31) - 1, fmt.Errorf(<span style=color:#a31515>&#34;max-heap: heap is empty&#34;</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37</span>  <span style=color:green>// fetch the root
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38</span><span style=color:green></span>  max := m.heap[m.root]
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39</span>  <span style=color:green>// make the route is the last element in the heap
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40</span><span style=color:green></span>  m.heap[m.root] = m.heap[m.size]
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41</span>  <span style=color:green>// make it zero value
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42</span><span style=color:green></span>  m.heap[m.size] = 0
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43</span>  <span style=color:green>// decrease the size so the zero value won&#39;t be counted
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44</span><span style=color:green></span>  m.size--
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46</span>  <span style=color:green>// rebalance the heap
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47</span><span style=color:green></span>  m.rebalance(m.root)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49</span>  <span style=color:green>// return the greatest
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50</span><span style=color:green></span>  <span style=color:#00f>return</span> max, <span style=color:#00f>nil</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51</span>}
-</code></pre></div><p>So whenever Pop operation is called, the heap will rebalance it from the top until its leaf. The whole code should be look like this:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1</span><span style=color:#00f>package</span> main
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  2</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  3</span><span style=color:#00f>import</span> <span style=color:#a31515>&#34;fmt&#34;</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  4</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  5</span><span style=color:#00f>type</span> MaxHeap <span style=color:#00f>struct</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  6</span>  heap     []<span style=color:#2b91af>int</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  7</span>  capacity <span style=color:#2b91af>int</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  8</span>  size     <span style=color:#2b91af>int</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  9</span>  root     <span style=color:#2b91af>int</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 10</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 11</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 12</span><span style=color:#00f>func</span> (MaxHeap) getParent(idx <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 13</span>  <span style=color:#00f>return</span> idx / 2
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 14</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 15</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 16</span><span style=color:#00f>func</span> (MaxHeap) getLeft(idx <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 17</span>  <span style=color:#00f>return</span> idx * 2
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 18</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 19</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 20</span><span style=color:#00f>func</span> (MaxHeap) getRight(idx <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 21</span>  <span style=color:#00f>return</span> idx*2 + 1
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 22</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 23</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 24</span><span style=color:#00f>func</span> (m *MaxHeap) swap(idx1, idx2 <span style=color:#2b91af>int</span>) {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 25</span>  m.heap[idx1], m.heap[idx2] = m.heap[idx2], m.heap[idx1]
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 26</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 27</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 28</span><span style=color:#00f>func</span> (m MaxHeap) String() <span style=color:#2b91af>string</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 29</span>  <span style=color:#00f>return</span> fmt.Sprintf(<span style=color:#a31515>`size:     %v
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 30</span><span style=color:#a31515>capacity: %v
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 31</span><span style=color:#a31515>heap:     %v`</span>,
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 32</span>    m.size, m.capacity-1, m.heap[1:])
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 33</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 34</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 35</span><span style=color:#00f>func</span> (m *MaxHeap) rebalance(idx <span style=color:#2b91af>int</span>) {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 36</span>  <span style=color:#00f>if</span> idx &gt;= m.size {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 37</span>    <span style=color:#00f>return</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 38</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 39</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 40</span>  left := m.getLeft(idx)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 41</span>  right := m.getRight(idx)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 42</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 43</span>  <span style=color:#00f>if</span> left &lt;= m.size {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 44</span>    <span style=color:#00f>if</span> m.heap[idx] &lt; m.heap[left] {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 45</span>      m.swap(idx, left)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 46</span>      m.rebalance(left)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 47</span>    }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 48</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 49</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 50</span>  <span style=color:#00f>if</span> right &lt;= m.size {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 51</span>    <span style=color:#00f>if</span> m.heap[idx] &lt; m.heap[right] {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 52</span>      m.swap(idx, right)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 53</span>      m.rebalance(right)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 54</span>    }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 55</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 56</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 57</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 58</span><span style=color:#00f>func</span> (m *MaxHeap) Pop() (<span style=color:#2b91af>int</span>, <span style=color:#2b91af>error</span>) {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 59</span>  <span style=color:#00f>if</span> m.size &lt;= 0 {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 60</span>    <span style=color:#00f>return</span> (1 &lt;&lt; 31) - 1, fmt.Errorf(<span style=color:#a31515>&#34;max-heap: heap is empty&#34;</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 61</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 62</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 63</span>  <span style=color:green>// fetch the root
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 64</span><span style=color:green></span>  max := m.heap[m.root]
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 65</span>  <span style=color:green>// make the route is the last element in the heap
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 66</span><span style=color:green></span>  m.heap[m.root] = m.heap[m.size]
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 67</span>  <span style=color:green>// make it zero value
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 68</span><span style=color:green></span>  m.heap[m.size] = 0
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 69</span>  <span style=color:green>// decrease the size so the zero value won&#39;t be counted
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 70</span><span style=color:green></span>  m.size--
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 71</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 72</span>  <span style=color:green>// rebalance the heap
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 73</span><span style=color:green></span>  m.rebalance(m.root)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 74</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 75</span>  <span style=color:green>// return the greatest
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 76</span><span style=color:green></span>  <span style=color:#00f>return</span> max, <span style=color:#00f>nil</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 77</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 78</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 79</span><span style=color:#00f>func</span> (m MaxHeap) Peek() (<span style=color:#2b91af>int</span>, <span style=color:#2b91af>error</span>) {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 80</span>  <span style=color:#00f>if</span> m.size &lt;= 0 {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 81</span>    <span style=color:#00f>return</span> (1 &lt;&lt; 31) - 1, fmt.Errorf(<span style=color:#a31515>&#34;max-heap: heap is empty&#34;</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 82</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 83</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 84</span>  <span style=color:#00f>return</span> m.heap[m.root], <span style=color:#00f>nil</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 85</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 86</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 87</span><span style=color:#00f>func</span> (m *MaxHeap) Push(element <span style=color:#2b91af>int</span>) {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 88</span>  <span style=color:green>// exceed the limit
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 89</span><span style=color:green></span>  <span style=color:#00f>if</span> m.size &gt;= m.capacity-1 {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 90</span>    <span style=color:#00f>return</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 91</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 92</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 93</span>  m.size++
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 94</span>  idx := m.size
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 95</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 96</span>  m.heap[idx] = element
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 97</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 98</span>  parent := m.getParent(idx)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 99</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">100</span>  <span style=color:#00f>for</span> m.heap[idx] &gt; m.heap[parent] {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">101</span>    m.swap(idx, parent)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">102</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">103</span>    idx = parent
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">104</span>    parent = m.getParent(idx)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">105</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">106</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">107</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">108</span><span style=color:#00f>func</span> NewMaxHeap(capacity <span style=color:#2b91af>int</span>) *MaxHeap {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">109</span>  <span style=color:green>// because we used the 0 index
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">110</span><span style=color:green></span>  <span style=color:green>// we need to increase the capacity defined by user
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">111</span><span style=color:green></span>  c := capacity + 1
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">112</span>  h := make([]<span style=color:#2b91af>int</span>, c, c)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">113</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">114</span>  <span style=color:green>// just to mark that it is the minimum one,
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">115</span><span style=color:green></span>  <span style=color:green>// you can ignore this
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">116</span><span style=color:green></span>  h[0] = (1 &lt;&lt; 31) - 1
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">117</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">118</span>  <span style=color:#00f>return</span> &amp;MaxHeap{
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">119</span>    root:     1, <span style=color:green>// always 1, you can omit this attribute
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">120</span><span style=color:green></span>    size:     0,
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">121</span>    capacity: c,
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">122</span>    heap:     h,
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">123</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">124</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">125</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">126</span><span style=color:#00f>func</span> main() {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">127</span>  h := NewMaxHeap(15)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">128</span>  h.Push(1)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">129</span>  h.Push(4)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">130</span>  h.Push(2)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">131</span>  h.Push(5)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">132</span>  h.Push(3)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">133</span>  h.Push(10)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">134</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">135</span>  fmt.Println(h.Pop())
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">136</span>  fmt.Println(h.Pop())
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">137</span>  fmt.Println(h.Pop())
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">138</span>  h.Push(11)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">139</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">140</span>  fmt.Println(h)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">141</span>}
-</code></pre></div><p>Thank you for reading!</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (m *MaxHeap) rebalance(idx <span style=color:#2b91af>int</span>) {
+  <span style=color:green>// don&#39;t rebalance if node index
+</span><span style=color:green></span>  <span style=color:green>// is greater than heap size
+</span><span style=color:green></span>  <span style=color:#00f>if</span> idx &gt;= m.size {
+    <span style=color:#00f>return</span>
+  }
+
+  <span style=color:green>// fetch the left child index
+</span><span style=color:green></span>  left := m.getLeft(idx)
+
+  <span style=color:green>// fetch the right child index
+</span><span style=color:green></span>  right := m.getRight(idx)
+
+  <span style=color:green>// only swap if children position is wrong
+</span><span style=color:green></span>  <span style=color:green>// and only the children index is less than heap size
+</span><span style=color:green></span>  <span style=color:green>// and then rebalance it
+</span><span style=color:green></span>  <span style=color:#00f>if</span> left &lt;= m.size {
+    <span style=color:#00f>if</span> m.heap[idx] &lt; m.heap[left] {
+      m.swap(idx, left)
+      m.rebalance(left)
+    }
+  }
+
+  <span style=color:#00f>if</span> right &lt;= m.size {
+    <span style=color:#00f>if</span> m.heap[idx] &lt; m.heap[right] {
+      m.swap(idx, right)
+      m.rebalance(right)
+    }
+  }
+}
+
+<span style=color:#00f>func</span> (m *MaxHeap) Pop() (<span style=color:#2b91af>int</span>, <span style=color:#2b91af>error</span>) {
+  <span style=color:#00f>if</span> m.size &lt;= 0 {
+    <span style=color:#00f>return</span> (1 &lt;&lt; 31) - 1, fmt.Errorf(<span style=color:#a31515>&#34;max-heap: heap is empty&#34;</span>)
+  }
+
+  <span style=color:green>// fetch the root
+</span><span style=color:green></span>  max := m.heap[m.root]
+  <span style=color:green>// make the route is the last element in the heap
+</span><span style=color:green></span>  m.heap[m.root] = m.heap[m.size]
+  <span style=color:green>// make it zero value
+</span><span style=color:green></span>  m.heap[m.size] = 0
+  <span style=color:green>// decrease the size so the zero value won&#39;t be counted
+</span><span style=color:green></span>  m.size--
+
+  <span style=color:green>// rebalance the heap
+</span><span style=color:green></span>  m.rebalance(m.root)
+
+  <span style=color:green>// return the greatest
+</span><span style=color:green></span>  <span style=color:#00f>return</span> max, <span style=color:#00f>nil</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>So whenever Pop operation is called, the heap will rebalance it from the top until its leaf. The whole code should be look like this:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 51
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 52
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 53
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 54
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 55
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 56
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 57
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 58
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 59
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 60
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 61
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 62
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 63
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 64
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 65
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 66
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 67
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 68
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 69
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 70
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 71
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 72
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 73
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 74
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 75
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 76
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 77
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 78
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 79
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 80
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 81
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 82
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 83
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 84
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 85
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 86
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 87
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 88
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 89
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 90
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 91
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 92
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 93
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 94
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 95
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 96
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 97
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 98
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 99
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">100
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">101
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">102
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">103
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">104
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">105
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">106
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">107
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">108
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">109
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">110
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">111
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">112
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">113
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">114
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">115
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">116
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">117
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">118
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">119
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">120
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">121
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">122
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">123
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">124
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">125
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">126
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">127
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">128
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">129
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">130
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">131
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">132
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">133
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">134
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">135
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">136
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">137
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">138
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">139
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">140
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">141
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> main
+
+<span style=color:#00f>import</span> <span style=color:#a31515>&#34;fmt&#34;</span>
+
+<span style=color:#00f>type</span> MaxHeap <span style=color:#00f>struct</span> {
+  heap     []<span style=color:#2b91af>int</span>
+  capacity <span style=color:#2b91af>int</span>
+  size     <span style=color:#2b91af>int</span>
+  root     <span style=color:#2b91af>int</span>
+}
+
+<span style=color:#00f>func</span> (MaxHeap) getParent(idx <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
+  <span style=color:#00f>return</span> idx / 2
+}
+
+<span style=color:#00f>func</span> (MaxHeap) getLeft(idx <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
+  <span style=color:#00f>return</span> idx * 2
+}
+
+<span style=color:#00f>func</span> (MaxHeap) getRight(idx <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
+  <span style=color:#00f>return</span> idx*2 + 1
+}
+
+<span style=color:#00f>func</span> (m *MaxHeap) swap(idx1, idx2 <span style=color:#2b91af>int</span>) {
+  m.heap[idx1], m.heap[idx2] = m.heap[idx2], m.heap[idx1]
+}
+
+<span style=color:#00f>func</span> (m MaxHeap) String() <span style=color:#2b91af>string</span> {
+  <span style=color:#00f>return</span> fmt.Sprintf(<span style=color:#a31515>`size:     %v
+</span><span style=color:#a31515>capacity: %v
+</span><span style=color:#a31515>heap:     %v`</span>,
+    m.size, m.capacity-1, m.heap[1:])
+}
+
+<span style=color:#00f>func</span> (m *MaxHeap) rebalance(idx <span style=color:#2b91af>int</span>) {
+  <span style=color:#00f>if</span> idx &gt;= m.size {
+    <span style=color:#00f>return</span>
+  }
+
+  left := m.getLeft(idx)
+  right := m.getRight(idx)
+
+  <span style=color:#00f>if</span> left &lt;= m.size {
+    <span style=color:#00f>if</span> m.heap[idx] &lt; m.heap[left] {
+      m.swap(idx, left)
+      m.rebalance(left)
+    }
+  }
+
+  <span style=color:#00f>if</span> right &lt;= m.size {
+    <span style=color:#00f>if</span> m.heap[idx] &lt; m.heap[right] {
+      m.swap(idx, right)
+      m.rebalance(right)
+    }
+  }
+}
+
+<span style=color:#00f>func</span> (m *MaxHeap) Pop() (<span style=color:#2b91af>int</span>, <span style=color:#2b91af>error</span>) {
+  <span style=color:#00f>if</span> m.size &lt;= 0 {
+    <span style=color:#00f>return</span> (1 &lt;&lt; 31) - 1, fmt.Errorf(<span style=color:#a31515>&#34;max-heap: heap is empty&#34;</span>)
+  }
+
+  <span style=color:green>// fetch the root
+</span><span style=color:green></span>  max := m.heap[m.root]
+  <span style=color:green>// make the route is the last element in the heap
+</span><span style=color:green></span>  m.heap[m.root] = m.heap[m.size]
+  <span style=color:green>// make it zero value
+</span><span style=color:green></span>  m.heap[m.size] = 0
+  <span style=color:green>// decrease the size so the zero value won&#39;t be counted
+</span><span style=color:green></span>  m.size--
+
+  <span style=color:green>// rebalance the heap
+</span><span style=color:green></span>  m.rebalance(m.root)
+
+  <span style=color:green>// return the greatest
+</span><span style=color:green></span>  <span style=color:#00f>return</span> max, <span style=color:#00f>nil</span>
+}
+
+<span style=color:#00f>func</span> (m MaxHeap) Peek() (<span style=color:#2b91af>int</span>, <span style=color:#2b91af>error</span>) {
+  <span style=color:#00f>if</span> m.size &lt;= 0 {
+    <span style=color:#00f>return</span> (1 &lt;&lt; 31) - 1, fmt.Errorf(<span style=color:#a31515>&#34;max-heap: heap is empty&#34;</span>)
+  }
+
+  <span style=color:#00f>return</span> m.heap[m.root], <span style=color:#00f>nil</span>
+}
+
+<span style=color:#00f>func</span> (m *MaxHeap) Push(element <span style=color:#2b91af>int</span>) {
+  <span style=color:green>// exceed the limit
+</span><span style=color:green></span>  <span style=color:#00f>if</span> m.size &gt;= m.capacity-1 {
+    <span style=color:#00f>return</span>
+  }
+
+  m.size++
+  idx := m.size
+
+  m.heap[idx] = element
+
+  parent := m.getParent(idx)
+
+  <span style=color:#00f>for</span> m.heap[idx] &gt; m.heap[parent] {
+    m.swap(idx, parent)
+
+    idx = parent
+    parent = m.getParent(idx)
+  }
+}
+
+<span style=color:#00f>func</span> NewMaxHeap(capacity <span style=color:#2b91af>int</span>) *MaxHeap {
+  <span style=color:green>// because we used the 0 index
+</span><span style=color:green></span>  <span style=color:green>// we need to increase the capacity defined by user
+</span><span style=color:green></span>  c := capacity + 1
+  h := make([]<span style=color:#2b91af>int</span>, c, c)
+
+  <span style=color:green>// just to mark that it is the minimum one,
+</span><span style=color:green></span>  <span style=color:green>// you can ignore this
+</span><span style=color:green></span>  h[0] = (1 &lt;&lt; 31) - 1
+
+  <span style=color:#00f>return</span> &amp;MaxHeap{
+    root:     1, <span style=color:green>// always 1, you can omit this attribute
+</span><span style=color:green></span>    size:     0,
+    capacity: c,
+    heap:     h,
+  }
+}
+
+<span style=color:#00f>func</span> main() {
+  h := NewMaxHeap(15)
+  h.Push(1)
+  h.Push(4)
+  h.Push(2)
+  h.Push(5)
+  h.Push(3)
+  h.Push(10)
+
+  fmt.Println(h.Pop())
+  fmt.Println(h.Pop())
+  fmt.Println(h.Pop())
+  h.Push(11)
+
+  fmt.Println(h)
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>Thank you for reading!</p>
 </div>
 <div class=separator>
 <span>&#183;</span>

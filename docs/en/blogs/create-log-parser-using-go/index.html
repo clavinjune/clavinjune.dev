@@ -57,8 +57,15 @@
 <p>In this blog post, you will create a simple logs parser using Go as a first step to understand the logs file better.</p>
 <h2 id=define-the-log-format>Define the Log Format</h2>
 <p>Let&rsquo;s say there&rsquo;s a single line of log formatted like this:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>[2021-08-27T07:39:54.173Z] &#34;GET /healthz HTTP/1.1&#34; 200 - 0 61 225 - &#34;111.114.195.106,10.0.0.11&#34; &#34;okhttp/3.12.1&#34; &#34;0557b0bd-4c1c-4c7a-ab7f-2120d67bee2f&#34; &#34;example.com&#34; &#34;172.16.0.1:8080&#34;
-</code></pre></div><p>You could extract the data you want from that line, for example:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>[2021-08-27T07:39:54.173Z] &#34;GET /healthz HTTP/1.1&#34; 200 - 0 61 225 - &#34;111.114.195.106,10.0.0.11&#34; &#34;okhttp/3.12.1&#34; &#34;0557b0bd-4c1c-4c7a-ab7f-2120d67bee2f&#34; &#34;example.com&#34; &#34;172.16.0.1:8080&#34;
+</code></pre></td></tr></table>
+</div>
+</div><p>You could extract the data you want from that line, for example:</p>
 <ol>
 <li>Timestamp</li>
 <li>HTTP Method</li>
@@ -67,92 +74,221 @@
 <li>IPs</li>
 </ol>
 <p>Then create the log format according to that line. Let&rsquo;s say you want to name the <code>timestamp</code> as <code>$time_stamp</code>, and the unimportant data as <code>$_</code>. Now you will have a formatted string like this:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>[$time_stamp] &#34;$http_method $request_path $_&#34; $response_code - $_ $_ $_ - &#34;$ips&#34; &#34;$_&#34; &#34;$_&#34; &#34;$_&#34; &#34;$_&#34;
-</code></pre></div><p>So you can read your logs data like this:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>  $time_stamp    =&gt; 2021-08-27T07:39:54.173Z
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>  $http_method   =&gt; GET
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>  $request_path  =&gt; /healthz
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>  $response_code =&gt; 200
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>  $ips           =&gt; 111.114.195.106,10.0.0.11
-</code></pre></div><h2 id=create-the-parser>Create the parser</h2>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>[$time_stamp] &#34;$http_method $request_path $_&#34; $response_code - $_ $_ $_ - &#34;$ips&#34; &#34;$_&#34; &#34;$_&#34; &#34;$_&#34; &#34;$_&#34;
+</code></pre></td></tr></table>
+</div>
+</div><p>So you can read your logs data like this:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>  $time_stamp    =&gt; 2021-08-27T07:39:54.173Z
+  $http_method   =&gt; GET
+  $request_path  =&gt; /healthz
+  $response_code =&gt; 200
+  $ips           =&gt; 111.114.195.106,10.0.0.11
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=create-the-parser>Create the parser</h2>
 <p>Let&rsquo;s create a <code>main.go</code> file with the logs data and the format. To be easily used by the regex, you should escape the special symbol in your format using <code>\</code>.</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>...
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span><span style=color:#00f>func</span> main() {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span>  logsExample := <span style=color:#a31515>`[2021-08-27T07:39:54.173Z] &#34;GET /healthz HTTP/1.1&#34; 200 - 0 61 225 - &#34;111.114.195.106,10.0.0.11&#34; &#34;okhttp/3.12.1&#34; &#34;0557b0bd-4c1c-4c7a-ab7f-2120d67bee2f&#34; &#34;example.com&#34; &#34;172.16.0.1:8080&#34;`</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span>  logsFormat := <span style=color:#a31515>`\[$time_stamp\] \&#34;$http_method $request_path $_\&#34; $response_code - $_ $_ $_ - \&#34;$ips\&#34; \&#34;$_\&#34; \&#34;$_\&#34; \&#34;$_\&#34; \&#34;$_\&#34;`</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8</span>}
-</code></pre></div><p>After define the format, adjust your <code>logFormat</code> to a format that regex could read. Because your variable starts with <code>$</code> and only contains <code>alphanumeric</code> and <code>underscore</code>. You can match the variable using this regex <code>\$([\w_]*)</code> then change all of the variables into a <code>named capturing group</code> in regex. Which is <code>(?P&lt;name>re)</code>. Because you want to <code>replace</code> the <code>&lt;name></code> to your defined variable name, you can modify the <code>named capturing group</code> to <code>(?P&lt;$1>.*)</code>. So if you put that in the code, it should be like this:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>  ...
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  regexFormat := regexp.MustCompile(<span style=color:#a31515>`\$([\w_]*)`</span>).ReplaceAllString(logsFormat, <span style=color:#a31515>`(?P&lt;$1&gt;.*)`</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  ...
-</code></pre></div><p>Now your <code>regexFormat</code> looks like this:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>\[(?P&lt;time_stamp&gt;.*)\] \&#34;(?P&lt;http_method&gt;.*) (?P&lt;request_path&gt;.*) (?P&lt;_&gt;.*)\&#34; (?P&lt;response_code&gt;.*) - (?P&lt;_&gt;.*) (?P&lt;_&gt;.*) (?P&lt;_&gt;.*) - \&#34;(?P&lt;ips&gt;.*)\&#34; \&#34;(?P&lt;_&gt;.*)\&#34; \&#34;(?P&lt;_&gt;.*)\&#34; \&#34;(?P&lt;_&gt;.*)\&#34; \&#34;(?P&lt;_&gt;.*)\&#34;
-</code></pre></div><p>Then compile your <code>regexFormat</code> to find all data in the logs line.</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>  ...
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  re := regexp.MustCompile(regexFormat)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  matches := re.FindStringSubmatch(logsExample)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>  ...
-</code></pre></div><p>Now <code>matches</code> should have all your matched data. Let&rsquo;s print it.</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  ...
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>  <span style=color:#00f>for</span> i, k := <span style=color:#00f>range</span> re.SubexpNames() {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>    <span style=color:green>// ignore the first and the $_
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span><span style=color:green></span>    <span style=color:#00f>if</span> i == 0 || k == <span style=color:#a31515>&#34;_&#34;</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>      <span style=color:#00f>continue</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>    }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>    fmt.Printf(<span style=color:#a31515>&#34;%-15s =&gt; %s\n&#34;</span>, k, matches[i])
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>  ...
-</code></pre></div><p>The output should be like this:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ go run main.go 
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>time_stamp      =&gt; 2021-08-27T07:39:54.173Z
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>http_method     =&gt; GET
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>request_path    =&gt; /healthz
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>response_code   =&gt; 200
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span>ips             =&gt; 111.114.195.106,10.0.0.11
-</code></pre></div><p>After parsing a single logs line, you should be able to parse all your logs files. The only thing you need to do is define your logs file format. And then transform it into a human-readable format like the <a class=link rel="nofollow noreferrer noopener" href=https://clavinjune.dev/en/#define-the-log-format>previous step</a>.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>...
+
+<span style=color:#00f>func</span> main() {
+  logsExample := <span style=color:#a31515>`[2021-08-27T07:39:54.173Z] &#34;GET /healthz HTTP/1.1&#34; 200 - 0 61 225 - &#34;111.114.195.106,10.0.0.11&#34; &#34;okhttp/3.12.1&#34; &#34;0557b0bd-4c1c-4c7a-ab7f-2120d67bee2f&#34; &#34;example.com&#34; &#34;172.16.0.1:8080&#34;`</span>
+  logsFormat := <span style=color:#a31515>`\[$time_stamp\] \&#34;$http_method $request_path $_\&#34; $response_code - $_ $_ $_ - \&#34;$ips\&#34; \&#34;$_\&#34; \&#34;$_\&#34; \&#34;$_\&#34; \&#34;$_\&#34;`</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>After define the format, adjust your <code>logFormat</code> to a format that regex could read. Because your variable starts with <code>$</code> and only contains <code>alphanumeric</code> and <code>underscore</code>. You can match the variable using this regex <code>\$([\w_]*)</code> then change all of the variables into a <code>named capturing group</code> in regex. Which is <code>(?P&lt;name>re)</code>. Because you want to <code>replace</code> the <code>&lt;name></code> to your defined variable name, you can modify the <code>named capturing group</code> to <code>(?P&lt;$1>.*)</code>. So if you put that in the code, it should be like this:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>  ...
+
+  regexFormat := regexp.MustCompile(<span style=color:#a31515>`\$([\w_]*)`</span>).ReplaceAllString(logsFormat, <span style=color:#a31515>`(?P&lt;$1&gt;.*)`</span>)
+
+  ...
+</code></pre></td></tr></table>
+</div>
+</div><p>Now your <code>regexFormat</code> looks like this:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>\[(?P&lt;time_stamp&gt;.*)\] \&#34;(?P&lt;http_method&gt;.*) (?P&lt;request_path&gt;.*) (?P&lt;_&gt;.*)\&#34; (?P&lt;response_code&gt;.*) - (?P&lt;_&gt;.*) (?P&lt;_&gt;.*) (?P&lt;_&gt;.*) - \&#34;(?P&lt;ips&gt;.*)\&#34; \&#34;(?P&lt;_&gt;.*)\&#34; \&#34;(?P&lt;_&gt;.*)\&#34; \&#34;(?P&lt;_&gt;.*)\&#34; \&#34;(?P&lt;_&gt;.*)\&#34;
+</code></pre></td></tr></table>
+</div>
+</div><p>Then compile your <code>regexFormat</code> to find all data in the logs line.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>  ...
+
+  re := regexp.MustCompile(regexFormat)
+  matches := re.FindStringSubmatch(logsExample)
+
+  ...
+</code></pre></td></tr></table>
+</div>
+</div><p>Now <code>matches</code> should have all your matched data. Let&rsquo;s print it.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>  ...
+
+  <span style=color:#00f>for</span> i, k := <span style=color:#00f>range</span> re.SubexpNames() {
+    <span style=color:green>// ignore the first and the $_
+</span><span style=color:green></span>    <span style=color:#00f>if</span> i == 0 || k == <span style=color:#a31515>&#34;_&#34;</span> {
+      <span style=color:#00f>continue</span>
+    }
+
+    fmt.Printf(<span style=color:#a31515>&#34;%-15s =&gt; %s\n&#34;</span>, k, matches[i])
+  }
+
+  ...
+</code></pre></td></tr></table>
+</div>
+</div><p>The output should be like this:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>$ go run main.go 
+time_stamp      =&gt; 2021-08-27T07:39:54.173Z
+http_method     =&gt; GET
+request_path    =&gt; /healthz
+response_code   =&gt; 200
+ips             =&gt; 111.114.195.106,10.0.0.11
+</code></pre></td></tr></table>
+</div>
+</div><p>After parsing a single logs line, you should be able to parse all your logs files. The only thing you need to do is define your logs file format. And then transform it into a human-readable format like the <a class=link rel="nofollow noreferrer noopener" href=https://clavinjune.dev/en/#define-the-log-format>previous step</a>.</p>
 <p>Here is the complete code:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>package</span> main
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#00f>import</span> (
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  <span style=color:#a31515>&#34;fmt&#34;</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  <span style=color:#a31515>&#34;regexp&#34;</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span><span style=color:#00f>func</span> main() {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  <span style=color:green>// a line of log
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span><span style=color:green></span>  logsExample := <span style=color:#a31515>`[2021-08-27T07:39:54.173Z] &#34;GET /healthz HTTP/1.1&#34; 200 - 0 61 225 - &#34;111.114.195.106,10.0.0.11&#34; &#34;okhttp/3.12.1&#34; &#34;0557b0bd-4c1c-4c7a-ab7f-2120d67bee2f&#34; &#34;example.com&#34; &#34;172.16.0.1:8080&#34;`</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>  <span style=color:green>// your defined log format
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span><span style=color:green></span>  logsFormat := <span style=color:#a31515>`\[$time_stamp\] \&#34;$http_method $request_path $_\&#34; $response_code - $_ $_ $_ - \&#34;$ips\&#34; \&#34;$_\&#34; \&#34;$_\&#34; \&#34;$_\&#34; \&#34;$_\&#34;`</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>  <span style=color:green>// transform all the defined variable into a regex-readable named format
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span><span style=color:green></span>  regexFormat := regexp.MustCompile(<span style=color:#a31515>`\$([\w_]*)`</span>).ReplaceAllString(logsFormat, <span style=color:#a31515>`(?P&lt;$1&gt;.*)`</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>  <span style=color:green>// compile the result
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span><span style=color:green></span>  re := regexp.MustCompile(regexFormat)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>  <span style=color:green>// find all the matched data from the logsExample
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span><span style=color:green></span>  matches := re.FindStringSubmatch(logsExample)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>  <span style=color:#00f>for</span> i, k := <span style=color:#00f>range</span> re.SubexpNames() {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>    <span style=color:green>// ignore the first and the $_
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span><span style=color:green></span>    <span style=color:#00f>if</span> i == 0 || k == <span style=color:#a31515>&#34;_&#34;</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>      <span style=color:#00f>continue</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>    }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30</span>    <span style=color:green>// print the defined variable
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31</span><span style=color:green></span>    fmt.Printf(<span style=color:#a31515>&#34;%-15s =&gt; %s\n&#34;</span>, k, matches[i])
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33</span>}
-</code></pre></div><p>Thank you for reading!</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> main
+
+<span style=color:#00f>import</span> (
+  <span style=color:#a31515>&#34;fmt&#34;</span>
+  <span style=color:#a31515>&#34;regexp&#34;</span>
+)
+
+<span style=color:#00f>func</span> main() {
+  <span style=color:green>// a line of log
+</span><span style=color:green></span>  logsExample := <span style=color:#a31515>`[2021-08-27T07:39:54.173Z] &#34;GET /healthz HTTP/1.1&#34; 200 - 0 61 225 - &#34;111.114.195.106,10.0.0.11&#34; &#34;okhttp/3.12.1&#34; &#34;0557b0bd-4c1c-4c7a-ab7f-2120d67bee2f&#34; &#34;example.com&#34; &#34;172.16.0.1:8080&#34;`</span>
+
+  <span style=color:green>// your defined log format
+</span><span style=color:green></span>  logsFormat := <span style=color:#a31515>`\[$time_stamp\] \&#34;$http_method $request_path $_\&#34; $response_code - $_ $_ $_ - \&#34;$ips\&#34; \&#34;$_\&#34; \&#34;$_\&#34; \&#34;$_\&#34; \&#34;$_\&#34;`</span>
+
+  <span style=color:green>// transform all the defined variable into a regex-readable named format
+</span><span style=color:green></span>  regexFormat := regexp.MustCompile(<span style=color:#a31515>`\$([\w_]*)`</span>).ReplaceAllString(logsFormat, <span style=color:#a31515>`(?P&lt;$1&gt;.*)`</span>)
+
+  <span style=color:green>// compile the result
+</span><span style=color:green></span>  re := regexp.MustCompile(regexFormat)
+
+  <span style=color:green>// find all the matched data from the logsExample
+</span><span style=color:green></span>  matches := re.FindStringSubmatch(logsExample)
+
+  <span style=color:#00f>for</span> i, k := <span style=color:#00f>range</span> re.SubexpNames() {
+    <span style=color:green>// ignore the first and the $_
+</span><span style=color:green></span>    <span style=color:#00f>if</span> i == 0 || k == <span style=color:#a31515>&#34;_&#34;</span> {
+      <span style=color:#00f>continue</span>
+    }
+
+    <span style=color:green>// print the defined variable
+</span><span style=color:green></span>    fmt.Printf(<span style=color:#a31515>&#34;%-15s =&gt; %s\n&#34;</span>, k, matches[i])
+  }
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>Thank you for reading!</p>
 </div>
 <div class=separator>
 <span>&#183;</span>

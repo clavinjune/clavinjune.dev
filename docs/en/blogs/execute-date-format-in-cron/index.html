@@ -46,10 +46,19 @@
 </div>
 <div id=content><p>Escaping <code>%</code> in crontab using <code>\%</code></p>
 <p>example</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>0 0 * * 5 cat ~/log &gt;&gt; <span style=color:#a31515>\
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span style=color:#a31515></span>~/log-<span style=color:#a31515>`</span>date +<span style=color:#a31515>&#34;\%Y-\%m-\%d&#34;</span><span style=color:#a31515>`</span> &amp;&amp; <span style=color:#a31515>\
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span style=color:#a31515></span>&gt; ~/log
-</code></pre></div><p>Thank you for reading!</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>0 0 * * 5 cat ~/log &gt;&gt; <span style=color:#a31515>\
+</span><span style=color:#a31515></span>~/log-<span style=color:#a31515>`</span>date +<span style=color:#a31515>&#34;\%Y-\%m-\%d&#34;</span><span style=color:#a31515>`</span> &amp;&amp; <span style=color:#a31515>\
+</span><span style=color:#a31515></span>&gt; ~/log
+</code></pre></td></tr></table>
+</div>
+</div><p>Thank you for reading!</p>
 </div>
 <div class=separator>
 <span>&#183;</span>

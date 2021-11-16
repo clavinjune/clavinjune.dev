@@ -43,7 +43,7 @@
 <span class=middot>&#183;</span>
 <span>Oct 21, 2021</span>
 <span class=middot>&#183;</span>
-<span>~5 min</span>
+<span>~6 min</span>
 </div>
 <div id=content>
 <figure>
@@ -55,252 +55,537 @@
 <p>Besides that, creating tests will help you develop a better code. A testable code is a better code. At least that&rsquo;s what I think. Because it forced you to think about the corner cases, create smaller decoupled functions, Etc. Even though it takes time, it makes your code more readable and gives only a few chances for bugs to have showtime.</p>
 <p>Cobra also has no excuse for no tests. Even though it only helps you to create a CLI app, it needs proper testable code too. In this blog post, you will learn how to implement unit tests for Cobra.</p>
 <h2 id=initialize-cobra-project>Initialize Cobra Project</h2>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span>$ cobra init example --pkg-name example
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>Your Cobra application is ready at
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>/tmp/example
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>$ cd example &amp;&amp; go mod init example
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>go: creating new go.mod: module example
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>go: to add module requirements and sums:
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>  go mod tidy
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>$ tree .
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>.
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>├── cmd
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>│   └── root.go
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>├── go.mod
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>├── LICENSE
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>└── main.go
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>1 directory, 4 files
-</code></pre></div><h2 id=modify-root-command>Modify Root Command</h2>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ cobra init example --pkg-name example
+Your Cobra application is ready at
+/tmp/example
+$ cd example &amp;&amp; go mod init example
+go: creating new go.mod: module example
+go: to add module requirements and sums:
+  go mod tidy
+$ tree .
+.
+├── cmd
+│   └── root.go
+├── go.mod
+├── LICENSE
+└── main.go
+
+1 directory, 4 files
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=modify-root-command>Modify Root Command</h2>
 <p>To implement a simple unit test, you can remove all the <code>root.go</code> file content and make it as minimum as possible. For example:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>package</span> cmd
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#00f>import</span> (
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  <span style=color:#a31515>&#34;errors&#34;</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>  <span style=color:#a31515>&#34;github.com/spf13/cobra&#34;</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span><span style=color:#00f>var</span> rootCmd = &amp;cobra.Command{
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  Use:  <span style=color:#a31515>&#34;example&#34;</span>,
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  RunE: <span style=color:#00f>func</span>(cmd *cobra.Command, args []<span style=color:#2b91af>string</span>) <span style=color:#2b91af>error</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>    t, err := cmd.Flags().GetBool(<span style=color:#a31515>&#34;toggle&#34;</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>      <span style=color:#00f>return</span> err
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>    }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>    <span style=color:#00f>if</span> t {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>      cmd.Println(<span style=color:#a31515>&#34;ok&#34;</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>    }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>    <span style=color:#00f>return</span> errors.New(<span style=color:#a31515>&#34;not ok&#34;</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>  },
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span><span style=color:#00f>func</span> Execute() {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>  cobra.CheckErr(rootCmd.Execute())
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31</span><span style=color:#00f>func</span> init() {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32</span>  rootCmd.Flags().BoolP(<span style=color:#a31515>&#34;toggle&#34;</span>, <span style=color:#a31515>&#34;t&#34;</span>, <span style=color:#00f>false</span>, <span style=color:#a31515>&#34;Help message for toggle&#34;</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34</span>
-</code></pre></div><p>Now you have a simple running CLI app. Let&rsquo;s try to run it.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> cmd
+
+<span style=color:#00f>import</span> (
+  <span style=color:#a31515>&#34;errors&#34;</span>
+
+  <span style=color:#a31515>&#34;github.com/spf13/cobra&#34;</span>
+)
+
+<span style=color:#00f>var</span> rootCmd = &amp;cobra.Command{
+  Use:  <span style=color:#a31515>&#34;example&#34;</span>,
+  RunE: <span style=color:#00f>func</span>(cmd *cobra.Command, args []<span style=color:#2b91af>string</span>) <span style=color:#2b91af>error</span> {
+    t, err := cmd.Flags().GetBool(<span style=color:#a31515>&#34;toggle&#34;</span>)
+
+    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+      <span style=color:#00f>return</span> err
+    }
+
+    <span style=color:#00f>if</span> t {
+      cmd.Println(<span style=color:#a31515>&#34;ok&#34;</span>)
+      <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
+    }
+
+    <span style=color:#00f>return</span> errors.New(<span style=color:#a31515>&#34;not ok&#34;</span>)
+  },
+}
+
+<span style=color:#00f>func</span> Execute() {
+  cobra.CheckErr(rootCmd.Execute())
+}
+
+<span style=color:#00f>func</span> init() {
+  rootCmd.Flags().BoolP(<span style=color:#a31515>&#34;toggle&#34;</span>, <span style=color:#a31515>&#34;t&#34;</span>, <span style=color:#00f>false</span>, <span style=color:#a31515>&#34;Help message for toggle&#34;</span>)
+}
+
+</code></pre></td></tr></table>
+</div>
+</div><p>Now you have a simple running CLI app. Let&rsquo;s try to run it.</p>
 <p>With toggle</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>$ go run main.go -t
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>ok
-</code></pre></div><p>Without toggle</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span>$ go run main.go 
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>Error: not ok
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>Usage:
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  example [flags]
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>Flags:
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>  -h, --help     help <span style=color:#00f>for</span> example
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  -t, --toggle   Help message <span style=color:#00f>for</span> toggle
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>Error: not ok
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>exit status 1
-</code></pre></div><p>Now the code is running, but it doesn&rsquo;t seem like it is a testable code. Let&rsquo;s modify it. To alter the code and make it testable, you have several options.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ go run main.go -t
+ok
+</code></pre></td></tr></table>
+</div>
+</div><p>Without toggle</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ go run main.go 
+Error: not ok
+Usage:
+  example [flags]
+
+Flags:
+  -h, --help     help <span style=color:#00f>for</span> example
+  -t, --toggle   Help message <span style=color:#00f>for</span> toggle
+
+Error: not ok
+exit status 1
+</code></pre></td></tr></table>
+</div>
+</div><p>Now the code is running, but it doesn&rsquo;t seem like it is a testable code. Let&rsquo;s modify it. To alter the code and make it testable, you have several options.</p>
 <ol>
 <li>Change the Cobra structure, create a function that returns the rootCmd and pass it to the Execute function so you can execute it from the main file</li>
 <li>Keep the nature of the Cobra code, and work harder on the test</li>
 </ol>
 <h3 id=option-1>Option 1</h3>
 <p>This is the <code>root.go</code>:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>package</span> cmd
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#00f>import</span> (
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  <span style=color:#a31515>&#34;errors&#34;</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>  <span style=color:#a31515>&#34;github.com/spf13/cobra&#34;</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span><span style=color:#00f>func</span> RootCmd() *cobra.Command {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  <span style=color:#00f>return</span> &amp;cobra.Command{
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>    Use: <span style=color:#a31515>&#34;example&#34;</span>,
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>    RunE: <span style=color:#00f>func</span>(cmd *cobra.Command, args []<span style=color:#2b91af>string</span>) <span style=color:#2b91af>error</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>      t, err := cmd.Flags().GetBool(<span style=color:#a31515>&#34;toggle&#34;</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>      <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>        <span style=color:#00f>return</span> err
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>      }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>      <span style=color:#00f>if</span> t {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>        cmd.Println(<span style=color:#a31515>&#34;ok&#34;</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>        <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>      }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>      <span style=color:#00f>return</span> errors.New(<span style=color:#a31515>&#34;not ok&#34;</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>    },
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29</span><span style=color:#00f>func</span> Execute(cmd *cobra.Command) <span style=color:#2b91af>error</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30</span>  cmd.Flags().BoolP(<span style=color:#a31515>&#34;toggle&#34;</span>, <span style=color:#a31515>&#34;t&#34;</span>, <span style=color:#00f>false</span>, <span style=color:#a31515>&#34;Help message for toggle&#34;</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31</span>  <span style=color:#00f>return</span> cmd.Execute()
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32</span>}
-</code></pre></div><p>This is the <code>root_cmd_test.go</code>:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>package</span> cmd_test
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#00f>import</span> (
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  <span style=color:#a31515>&#34;example/cmd&#34;</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  <span style=color:#a31515>&#34;testing&#34;</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>  <span style=color:#a31515>&#34;github.com/matryer/is&#34;</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span><span style=color:#00f>func</span> Test(t *testing.T) {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  is := is.New(t)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>  root := cmd.RootCmd()
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>  err := cmd.Execute(root)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>  is.NoErr(err)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>}
-</code></pre></div><h3 id=option-2>Option 2</h3>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> cmd
+
+<span style=color:#00f>import</span> (
+  <span style=color:#a31515>&#34;errors&#34;</span>
+
+  <span style=color:#a31515>&#34;github.com/spf13/cobra&#34;</span>
+)
+
+<span style=color:#00f>func</span> RootCmd() *cobra.Command {
+  <span style=color:#00f>return</span> &amp;cobra.Command{
+    Use: <span style=color:#a31515>&#34;example&#34;</span>,
+    RunE: <span style=color:#00f>func</span>(cmd *cobra.Command, args []<span style=color:#2b91af>string</span>) <span style=color:#2b91af>error</span> {
+      t, err := cmd.Flags().GetBool(<span style=color:#a31515>&#34;toggle&#34;</span>)
+
+      <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+        <span style=color:#00f>return</span> err
+      }
+
+      <span style=color:#00f>if</span> t {
+        cmd.Println(<span style=color:#a31515>&#34;ok&#34;</span>)
+        <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
+      }
+
+      <span style=color:#00f>return</span> errors.New(<span style=color:#a31515>&#34;not ok&#34;</span>)
+    },
+  }
+}
+
+<span style=color:#00f>func</span> Execute(cmd *cobra.Command) <span style=color:#2b91af>error</span> {
+  cmd.Flags().BoolP(<span style=color:#a31515>&#34;toggle&#34;</span>, <span style=color:#a31515>&#34;t&#34;</span>, <span style=color:#00f>false</span>, <span style=color:#a31515>&#34;Help message for toggle&#34;</span>)
+  <span style=color:#00f>return</span> cmd.Execute()
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>This is the <code>root_cmd_test.go</code>:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> cmd_test
+
+<span style=color:#00f>import</span> (
+  <span style=color:#a31515>&#34;example/cmd&#34;</span>
+  <span style=color:#a31515>&#34;testing&#34;</span>
+
+  <span style=color:#a31515>&#34;github.com/matryer/is&#34;</span>
+)
+
+<span style=color:#00f>func</span> Test(t *testing.T) {
+  is := is.New(t)
+  root := cmd.RootCmd()
+
+  err := cmd.Execute(root)
+
+  is.NoErr(err)
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=option-2>Option 2</h3>
 <p>This is the <code>root.go</code>:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>package</span> cmd
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#00f>import</span> (
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  <span style=color:#a31515>&#34;errors&#34;</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>  <span style=color:#a31515>&#34;github.com/spf13/cobra&#34;</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span><span style=color:#00f>var</span> rootCmd = &amp;cobra.Command{
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  Use:  <span style=color:#a31515>&#34;example&#34;</span>,
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  RunE: RootCmdRunE,
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span><span style=color:#00f>func</span> RootCmdRunE(cmd *cobra.Command, args []<span style=color:#2b91af>string</span>) <span style=color:#2b91af>error</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>  t, err := cmd.Flags().GetBool(<span style=color:#a31515>&#34;toggle&#34;</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>    <span style=color:#00f>return</span> err
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>  <span style=color:#00f>if</span> t {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>    cmd.Println(<span style=color:#a31515>&#34;ok&#34;</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>  <span style=color:#00f>return</span> errors.New(<span style=color:#a31515>&#34;not ok&#34;</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29</span><span style=color:#00f>func</span> RootCmdFlags(cmd *cobra.Command) {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30</span>  cmd.Flags().BoolP(<span style=color:#a31515>&#34;toggle&#34;</span>, <span style=color:#a31515>&#34;t&#34;</span>, <span style=color:#00f>false</span>, <span style=color:#a31515>&#34;Help message for toggle&#34;</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33</span><span style=color:#00f>func</span> Execute() {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34</span>  cobra.CheckErr(rootCmd.Execute())
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37</span><span style=color:#00f>func</span> init() {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38</span>  RootCmdFlags(rootCmd)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39</span>}
-</code></pre></div><p>This is the <code>root_cmd_test.go</code>:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#00f>package</span> cmd_test
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#00f>import</span> (
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>  <span style=color:#a31515>&#34;example/cmd&#34;</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>  <span style=color:#a31515>&#34;testing&#34;</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>  <span style=color:#a31515>&#34;github.com/matryer/is&#34;</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  <span style=color:#a31515>&#34;github.com/spf13/cobra&#34;</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span><span style=color:#00f>func</span> TestRootCmd(t *testing.T) {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>  is := is.New(t)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>  root := &amp;cobra.Command{Use: <span style=color:#a31515>&#34;root&#34;</span>, RunE: cmd.RootCmdRunE}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>  cmd.RootCmdFlags(root)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>  err := root.Execute()
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>  is.NoErr(err)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>}
-</code></pre></div><p>It&rsquo;s up to you to choose either option <a class=link rel="nofollow noreferrer noopener" href=https://clavinjune.dev/en/#option-1>1</a> or <a class=link rel="nofollow noreferrer noopener" href=https://clavinjune.dev/en/#option-2>2</a>. You can adjust it with your project. But if you want to keep the nature of the Cobra code that exposes the cmd as a variable, you can stick to <code>option 2</code>.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> cmd
+
+<span style=color:#00f>import</span> (
+  <span style=color:#a31515>&#34;errors&#34;</span>
+
+  <span style=color:#a31515>&#34;github.com/spf13/cobra&#34;</span>
+)
+
+<span style=color:#00f>var</span> rootCmd = &amp;cobra.Command{
+  Use:  <span style=color:#a31515>&#34;example&#34;</span>,
+  RunE: RootCmdRunE,
+}
+
+<span style=color:#00f>func</span> RootCmdRunE(cmd *cobra.Command, args []<span style=color:#2b91af>string</span>) <span style=color:#2b91af>error</span> {
+  t, err := cmd.Flags().GetBool(<span style=color:#a31515>&#34;toggle&#34;</span>)
+
+  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+    <span style=color:#00f>return</span> err
+  }
+
+  <span style=color:#00f>if</span> t {
+    cmd.Println(<span style=color:#a31515>&#34;ok&#34;</span>)
+    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>
+  }
+
+  <span style=color:#00f>return</span> errors.New(<span style=color:#a31515>&#34;not ok&#34;</span>)
+}
+
+<span style=color:#00f>func</span> RootCmdFlags(cmd *cobra.Command) {
+  cmd.Flags().BoolP(<span style=color:#a31515>&#34;toggle&#34;</span>, <span style=color:#a31515>&#34;t&#34;</span>, <span style=color:#00f>false</span>, <span style=color:#a31515>&#34;Help message for toggle&#34;</span>)
+}
+
+<span style=color:#00f>func</span> Execute() {
+  cobra.CheckErr(rootCmd.Execute())
+}
+
+<span style=color:#00f>func</span> init() {
+  RootCmdFlags(rootCmd)
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>This is the <code>root_cmd_test.go</code>:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> cmd_test
+
+<span style=color:#00f>import</span> (
+  <span style=color:#a31515>&#34;example/cmd&#34;</span>
+  <span style=color:#a31515>&#34;testing&#34;</span>
+
+  <span style=color:#a31515>&#34;github.com/matryer/is&#34;</span>
+  <span style=color:#a31515>&#34;github.com/spf13/cobra&#34;</span>
+)
+
+<span style=color:#00f>func</span> TestRootCmd(t *testing.T) {
+  is := is.New(t)
+
+  root := &amp;cobra.Command{Use: <span style=color:#a31515>&#34;root&#34;</span>, RunE: cmd.RootCmdRunE}
+  cmd.RootCmdFlags(root)
+
+  err := root.Execute()
+
+  is.NoErr(err)
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>It&rsquo;s up to you to choose either option <a class=link rel="nofollow noreferrer noopener" href=https://clavinjune.dev/en/#option-1>1</a> or <a class=link rel="nofollow noreferrer noopener" href=https://clavinjune.dev/en/#option-2>2</a>. You can adjust it with your project. But if you want to keep the nature of the Cobra code that exposes the cmd as a variable, you can stick to <code>option 2</code>.</p>
 <h2 id=create-the-test-cases>Create the Test Cases</h2>
 <p>Let&rsquo;s say you stick with <code>option 2</code>. Now you need to create the test cases. In this case, the test cases will be either <code>with the toggle flag</code> or <code>without</code>. But first, let&rsquo;s make a helper function that will execute the root command and store the output to a variable. By storing the command output to a variable, you can compare the command output with your expectations.</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>...
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span><span style=color:#00f>func</span> execute(t *testing.T, c *cobra.Command, args ...<span style=color:#2b91af>string</span>) (<span style=color:#2b91af>string</span>, <span style=color:#2b91af>error</span>) {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>  t.Helper()
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>  buf := new(bytes.Buffer)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>  c.SetOut(buf)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>  c.SetErr(buf)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>  c.SetArgs(args)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>  err := c.Execute()
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>  <span style=color:#00f>return</span> strings.TrimSpace(buf.String()), err
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>...
-</code></pre></div><p>After creating the helper function, let&rsquo;s make the test cases.</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>...
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span><span style=color:#00f>func</span> TestRootCmd(t *testing.T) {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>  is := is.New(t)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>  tt := []<span style=color:#00f>struct</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>    args []<span style=color:#2b91af>string</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>    err  <span style=color:#2b91af>error</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29</span>    out  <span style=color:#2b91af>string</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30</span>  }{
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31</span>    {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32</span>      args: <span style=color:#00f>nil</span>,
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33</span>      err:  errors.New(<span style=color:#a31515>&#34;not ok&#34;</span>),
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34</span>    },
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35</span>    {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36</span>      args: []<span style=color:#2b91af>string</span>{<span style=color:#a31515>&#34;-t&#34;</span>},
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37</span>      err:  <span style=color:#00f>nil</span>,
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38</span>      out:  <span style=color:#a31515>&#34;ok&#34;</span>,
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39</span>    },
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40</span>    {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41</span>      args: []<span style=color:#2b91af>string</span>{<span style=color:#a31515>&#34;--toggle&#34;</span>},
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42</span>      err:  <span style=color:#00f>nil</span>,
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43</span>      out:  <span style=color:#a31515>&#34;ok&#34;</span>,
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44</span>    },
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47</span>  root := &amp;cobra.Command{Use: <span style=color:#a31515>&#34;root&#34;</span>, RunE: cmd.RootCmdRunE}
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48</span>  cmd.RootCmdFlags(root)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50</span>  <span style=color:#00f>for</span> _, tc := <span style=color:#00f>range</span> tt {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51</span>    out, err := execute(t, root, tc.args...)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53</span>    is.Equal(tc.err, err)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54</span>
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55</span>    <span style=color:#00f>if</span> tc.err == <span style=color:#00f>nil</span> {
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56</span>      is.Equal(tc.out, out)
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">57</span>    }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">58</span>  }
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">59</span>}
-</code></pre></div><p>And that&rsquo;s how you implement unit test for Cobra apps.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>...
+
+<span style=color:#00f>func</span> execute(t *testing.T, c *cobra.Command, args ...<span style=color:#2b91af>string</span>) (<span style=color:#2b91af>string</span>, <span style=color:#2b91af>error</span>) {
+  t.Helper()
+
+  buf := new(bytes.Buffer)
+  c.SetOut(buf)
+  c.SetErr(buf)
+  c.SetArgs(args)
+
+  err := c.Execute()
+  <span style=color:#00f>return</span> strings.TrimSpace(buf.String()), err
+}
+
+...
+</code></pre></td></tr></table>
+</div>
+</div><p>After creating the helper function, let&rsquo;s make the test cases.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">57
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">58
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">59
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>...
+
+<span style=color:#00f>func</span> TestRootCmd(t *testing.T) {
+  is := is.New(t)
+
+  tt := []<span style=color:#00f>struct</span> {
+    args []<span style=color:#2b91af>string</span>
+    err  <span style=color:#2b91af>error</span>
+    out  <span style=color:#2b91af>string</span>
+  }{
+    {
+      args: <span style=color:#00f>nil</span>,
+      err:  errors.New(<span style=color:#a31515>&#34;not ok&#34;</span>),
+    },
+    {
+      args: []<span style=color:#2b91af>string</span>{<span style=color:#a31515>&#34;-t&#34;</span>},
+      err:  <span style=color:#00f>nil</span>,
+      out:  <span style=color:#a31515>&#34;ok&#34;</span>,
+    },
+    {
+      args: []<span style=color:#2b91af>string</span>{<span style=color:#a31515>&#34;--toggle&#34;</span>},
+      err:  <span style=color:#00f>nil</span>,
+      out:  <span style=color:#a31515>&#34;ok&#34;</span>,
+    },
+  }
+
+  root := &amp;cobra.Command{Use: <span style=color:#a31515>&#34;root&#34;</span>, RunE: cmd.RootCmdRunE}
+  cmd.RootCmdFlags(root)
+
+  <span style=color:#00f>for</span> _, tc := <span style=color:#00f>range</span> tt {
+    out, err := execute(t, root, tc.args...)
+
+    is.Equal(tc.err, err)
+
+    <span style=color:#00f>if</span> tc.err == <span style=color:#00f>nil</span> {
+      is.Equal(tc.out, out)
+    }
+  }
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>And that&rsquo;s how you implement unit test for Cobra apps.</p>
 <p>Thank you for reading!</p>
 </div>
 <div class=separator>

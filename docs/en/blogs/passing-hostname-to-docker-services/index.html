@@ -45,12 +45,28 @@
 <span>~1 min</span>
 </div>
 <div id=content><p>Passing hostname to docker container won&rsquo;t work</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>environment:
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>  - <span style=color:#a31515>&#34;HOST_HOSTNAME=$HOSTNAME&#34;</span>
-</code></pre></div><p>Do this instead</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>environment:
-<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>  - <span style=color:#a31515>&#34;HOST_HOSTNAME={{ .Node.Hostname }}&#34;</span>
-</code></pre></div><p>It will fetch the hostname from docker placeholder</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml>environment:
+  - <span style=color:#a31515>&#34;HOST_HOSTNAME=$HOSTNAME&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Do this instead</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml>environment:
+  - <span style=color:#a31515>&#34;HOST_HOSTNAME={{ .Node.Hostname }}&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>It will fetch the hostname from docker placeholder</p>
 <p><a class=link rel="nofollow noreferrer noopener" target=_blank href=https://docs.docker.com/engine/reference/commandline/service_create/#create-services-using-templates>Reference</a></p>
 <p>Thank you for reading!</p>
 </div>
