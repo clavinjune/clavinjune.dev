@@ -7,7 +7,7 @@ isarchived: false
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1543966888-7c1dc482a810?w=1920&q=50"]
 aliases: []
-description: "how to fix NPM login not working"
+description: "how to fix NPM login not working on Node v16.13.0 and NPM v8.1.3"
 ---
 
 {{< unsplash user="@pinjasaur" src="photo-1543966888-7c1dc482a810" q="50" >}}
