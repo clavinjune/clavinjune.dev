@@ -6,3 +6,4 @@ https://git.io/cj-b41d1 => https://clavinjune.github.io/en/blogs/this-is-why-you
 https://git.io/cj-0f0dc => https://clavinjune.github.io/en/blogs/golang-http-client-interceptors/
 https://git.io/cj-4c124 => https://clavinjune.github.io/en/blogs/bypass-recaptcha-automatically-using-go/
 https://git.io/cj-e213d => https://clavinjune.github.io/en/blogs/speed-up-golang-test-execution-time/
+https://git.io/cj-d55bc => https://clavinjune.github.io/en/blogs/npm-login-not-working/
