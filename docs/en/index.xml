@@ -1,4 +1,206 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Mon, 15 Nov 2021 16:06:19 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Speed Up Golang Test Execution Time</title><link>https://clavinjune.dev/en/blogs/speed-up-golang-test-execution-time/</link><pubDate>Mon, 15 Nov 2021 16:06:19 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/speed-up-golang-test-execution-time/</guid><description><![CDATA[
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Thu, 18 Nov 2021 13:18:24 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>NPM Login Not Working</title><link>https://clavinjune.dev/en/blogs/npm-login-not-working/</link><pubDate>Thu, 18 Nov 2021 13:18:24 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/npm-login-not-working/</guid><description><![CDATA[
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+<figure>
+  <img
+    srcset="https://images.unsplash.com/photo-1543966888-7c1dc482a810?q=50&amp;w=240 240w,https://images.unsplash.com/photo-1543966888-7c1dc482a810?q=50&amp;w=300 300w,https://images.unsplash.com/photo-1543966888-7c1dc482a810?q=50&amp;w=360 360w,https://images.unsplash.com/photo-1543966888-7c1dc482a810?q=50&amp;w=480 480w,https://images.unsplash.com/photo-1543966888-7c1dc482a810?q=50&amp;w=768 768w,https://images.unsplash.com/photo-1543966888-7c1dc482a810?q=50&amp;w=800 800w,https://images.unsplash.com/photo-1543966888-7c1dc482a810?q=50&amp;w=960 960w,https://images.unsplash.com/photo-1543966888-7c1dc482a810?q=50&amp;w=1024 1024w,https://images.unsplash.com/photo-1543966888-7c1dc482a810?q=50&amp;w=1080 1080w,https://images.unsplash.com/photo-1543966888-7c1dc482a810?q=50&amp;w=1200 1200w,https://images.unsplash.com/photo-1543966888-7c1dc482a810?q=50&amp;w=1366 1366w,https://images.unsplash.com/photo-1543966888-7c1dc482a810?q=50&amp;w=1920 1920w"
+    sizes="(max-width: 480px) 480px, 100vw"
+    src="https://images.unsplash.com/photo-1543966888-7c1dc482a810?q=50&amp;w=1920" alt="Photo by @pinjasaur on Unsplash" title="Photo by @pinjasaur on Unsplash" width="100%" height="auto"/>
+  <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@pinjasaur">@pinjasaur</a> on Unsplash</figcaption>
+</figure>
+<h2 id="tldr">TL;DR</h2>
+<p><a class="link" rel="nofollow noreferrer noopener"  href="#the-solution"   >This solution</a> works for <code>Node v16.13.0</code> and <code>NPM v8.1.3</code></p>
+<h2 id="introduction">Introduction</h2>
+<p>I don&rsquo;t always hate working using NPM unless it starts downloading tons of node_modules and giving not so verbose logs. Today, my colleague and I found an NPM login bug that&rsquo;s not so interesting and hard to debug. It takes me about an hour to find out what is the root cause.</p>
+<p>In this article, I will write the solution just in case you meet the same issue.</p>
+<h2 id="current-condition">Current Condition</h2>
+<p>In my current company, we use <code>Nexus3</code> as our private repository for the NPM module. I also use <code>Node v12.22.4</code> and <code>NPM v8.1.3</code> for working on my local machine. To login into our Nexus repository, I use <code>.npmrc</code> with this format:</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">@myorg:registry=https://repo.myorg.com/repository/npm-private
+always-auth=true
+_auth={{ base64 of username:password redacted here }}
+</code></pre></td></tr></table>
+</div>
+</div><p>And we&rsquo;re happy with it. No issue.</p>
+<h2 id="the-issue">The Issue</h2>
+<p>The issue comes when my colleague wants to try using <code>Node v16.13.0</code>. When the <code>npm i @myorg/utils</code> command is executed, it starts saying <code>401</code>.</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm ERR! code E401
+npm ERR! Unable to authenticate, need: BASIC realm=<span style="color:#a31515">&#34;Sonatype Nexus Repository Manager&#34;</span>
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/user/.npm/_logs/2021-11-18T06_37_02_136Z-debug.log
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="finding-a-solution">Finding a Solution</h2>
+<p>I wonder if it&rsquo;s the <code>Nexus 3</code> is not compatible with the <code>Node v16</code> or what. So I tried to re-login to the Nexus repository.</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ npm login --registry=https://repo.myorg.com/repository/npm-private/ --scope=@myorg/
+npm notice Log in on https://repo.myorg.com/repository/npm-private/
+Username: {{ username }}
+Password: 
+Email: (this IS public) {{ email@myorg.com }}
+Logged in as {{ username }} on https://repo.myorg.com/repository/npm-private/.
+</code></pre></td></tr></table>
+</div>
+</div><p>Okay, now we&rsquo;re logged in. But as soon as I check using <code>npm whoami</code>, it said <code>401</code> again.</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ npm whoami --registry=https://repo.myorg.com/repository/npm-private/ 
+npm ERR! code E401
+npm ERR! Unable to authenticate, need: BASIC realm=<span style="color:#a31515">&#34;Sonatype Nexus Repository Manager&#34;</span>
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/user/.npm/_logs/2021-11-18T06_49_38_788Z-debug.log
+</code></pre></td></tr></table>
+</div>
+</div><p>Then I check my <code>.npmrc</code> file content, turns out Node v16 has a different format of <code>.npmrc</code>. Here is my current <code>.npmrc</code> file content:</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">//repo.myorg.com/repository/npm-private/:_authToken=NpmToken.{{ uuid redacted here }}
+</code></pre></td></tr></table>
+</div>
+</div><p>What a strange format. It doesn&rsquo;t reflect the scope, also I am still confused with the <code>_authToken</code> format itself. Of course, as a good developer, we need a fast hand for searching every keyword on google for our bugs. And then, I found <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://github.com/npm/cli/issues/3284#issuecomment-846057616"   >this comment</a> by <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://github.com/apottere"   >@apottere</a>. So, I tried to rewrite my <code>.npmrc</code> file content manually. This is my current <code>.npmrc</code> file content:</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">//repo.myorg.com/repository/npm-private/:always-auth=true
+//repo.myorg.com/repository/npm-private/:_auth={{ base64 of username:password redacted here }}
+</code></pre></td></tr></table>
+</div>
+</div><p>Seems promising, so I tried again to execute <code>npm i @myorg/utils</code> again. And it failed.</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ npm install @myorg/utils
+npm ERR! code E404
+npm ERR! 404 Not Found - GET https://registry.npmjs.org/@myorg%2futils - Not found
+npm ERR! 404 
+npm ERR! 404  <span style="color:#a31515">&#39;@myorg/utils@^0.2.0&#39;</span> is not in this registry.
+npm ERR! 404 You should bug the author to publish it (or use the name yourself!)
+npm ERR! 404 
+npm ERR! 404 Note that you can also install from a
+npm ERR! 404 tarball, folder, http url, or git url.
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/user/.npm/_logs/2021-11-18T07_04_32_033Z-debug.log
+</code></pre></td></tr></table>
+</div>
+</div><p>Yep, not found. I thought it was because the scope isn&rsquo;t reflected in the <code>.npmrc</code> file.</p>
+<h2 id="the-solution">The Solution</h2>
+<p>So I tried using the old way, rewriting the content manually. This is my current and final <code>.npmrc</code> file content:</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">@myorg:registry=https://repo.myorg.com/repository/npm-private
+//repo.myorg.com/repository/npm-private/:always-auth=true
+//repo.myorg.com/repository/npm-private/:_auth={{ base64 of username:password redacted here }}
+</code></pre></td></tr></table>
+</div>
+</div><p>Lastly, I tried again the <code>npm i @myorg/utils</code> command and it worked.</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ npm install @myorg/utils
+
+added 1 package, and audited 2 packages in 2s
+
+found 0 vulnerabilities
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="conclusion">Conclusion</h2>
+<p>So, It was the <code>npm login</code> command all along. I still can&rsquo;t find the whole documentation about the new <code>.npmrc</code> format, I might miss the docs, or maybe there isn&rsquo;t one. If you have the same issue, I hope you find this article and can fix the issue.</p>
+<p>Thank you for reading!</p>
+]]></description></item><item><title>Speed Up Golang Test Execution Time</title><link>https://clavinjune.dev/en/blogs/speed-up-golang-test-execution-time/</link><pubDate>Mon, 15 Nov 2021 16:06:19 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/speed-up-golang-test-execution-time/</guid><description><![CDATA[
   
 
   
@@ -286,7 +488,7 @@ PASS
 ok      example 4.006s
 </code></pre></td></tr></table>
 </div>
-</div><p>Why is it always 4? Because the <code>tc</code> is always mutated on each iteration. You can see my other <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="/en/blogs/my-mistake-on-converting-slice-to-slice-of-ptr-in-golang/#result" >blog post</a> to fix this issue. Or you can use this alternative solution below.</p>
+</div><p>Why is it always 4? Because the <code>tc</code> is always mutated on each iteration. You can see my other <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="/en/blogs/my-mistake-on-converting-slice-to-slice-of-ptr-in-golang/#result"   >blog post</a> to fix this issue. Or you can use this alternative solution below.</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
@@ -445,8 +647,8 @@ ok      example 4.003s
 </figure>
 <h2 id="introduction">Introduction</h2>
 <p>A captcha sometimes could be annoying. It is even more annoying when you are working on automation software. A captcha, from a simple calculation, a slider captcha, HCpatcha, and ReCaptcha are not easy to be solved using automation. You may create a deep/machine learning model to solve the captcha. But, how about the training datasets? It will be bulky to work with the training datasets, or else, it will be hard. That&rsquo;s why many sites use captcha to prevent automation/bot.</p>
-<p>But, what if you have someone that would solve the captcha for you? Wouldn&rsquo;t it be easier? You don&rsquo;t need to think about solving the captcha and start focusing on the real problem. That&rsquo;s where <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://2captcha.com/" >2Captcha</a> comes as a captcha solver. <code>2Captcha</code> is a captcha solving software that may help you with solving captchas. <code>2Captcha</code> has a varied library to work with various programming languages. So whatever languages you use, 2Captcha&rsquo;s API is there for you.</p>
-<p>In this sponsored article, you will learn how to bypass Google ReCaptcha using 2Captcha and Golang. You will also use Chromedp to automate the job. <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://github.com/ClavinJune/2captcha-example" >Here</a>, I already have created a Github repository that you may want to clone.</p>
+<p>But, what if you have someone that would solve the captcha for you? Wouldn&rsquo;t it be easier? You don&rsquo;t need to think about solving the captcha and start focusing on the real problem. That&rsquo;s where <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://2captcha.com/"   >2Captcha</a> comes as a captcha solver. <code>2Captcha</code> is a captcha solving software that may help you with solving captchas. <code>2Captcha</code> has a varied library to work with various programming languages. So whatever languages you use, 2Captcha&rsquo;s API is there for you.</p>
+<p>In this sponsored article, you will learn how to bypass Google ReCaptcha using 2Captcha and Golang. You will also use Chromedp to automate the job. <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://github.com/ClavinJune/2captcha-example"   >Here</a>, I already have created a Github repository that you may want to clone.</p>
 <h2 id="clone-the-repository">Clone the Repository</h2>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
@@ -593,7 +795,7 @@ $ API_KEY=XXXXXXXX make run
 ...
 </code></pre></td></tr></table>
 </div>
-</div><p><code>solveRecaptcha</code> solves your Google ReCAPTCHA using the 2Captcha Golang library which you can see the code and documentation <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://github.com/2captcha/2captcha-go#recaptcha-v2" >here</a>.</p>
+</div><p><code>solveRecaptcha</code> solves your Google ReCAPTCHA using the 2Captcha Golang library which you can see the code and documentation <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://github.com/2captcha/2captcha-go#recaptcha-v2"   >here</a>.</p>
 <h3 id="chromedp-actions">Chromedp Actions</h3>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
@@ -667,7 +869,7 @@ $ API_KEY=XXXXXXXX make run
 ...
 </code></pre></td></tr></table>
 </div>
-</div><p>Inside the <code>recaptchaDemoActions</code>, you can define your <code>targetURL</code> as for this example is <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://www.google.com/recaptcha/api2/demo" >Google ReCAPTCHA demo page</a>.</p>
+</div><p>Inside the <code>recaptchaDemoActions</code>, you can define your <code>targetURL</code> as for this example is <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://www.google.com/recaptcha/api2/demo"   >Google ReCAPTCHA demo page</a>.</p>
 <h3 id="actions-explanation">Actions Explanation</h3>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
@@ -832,8 +1034,8 @@ $ API_KEY=XXXXXXXX make run
 ...
 </code></pre></td></tr></table>
 </div>
-</div><p>To Use the 2Captcha&rsquo;s services, you may need to provide the API Key. You can get the API Key by registering to the 2Captcha&rsquo;s service <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://2captcha.com?from=12928628" >here</a> by using my referral link.</p>
-<p>After you have set the 2Captcha&rsquo;s client, pass it to the <code>recaptchaDemoActions</code> function to get your Chromedp actions. Optionally, You may set the <code>opts</code> on line 77 to configure your Chromedp flags. You can refer to the docs to see other options. Then,  create the Chromedp context and run it. You may see the code&rsquo;s output just like in the <a class="link" rel="nofollow noreferrer noopener"  href="/en/#usage" >usage</a> section.</p>
+</div><p>To Use the 2Captcha&rsquo;s services, you may need to provide the API Key. You can get the API Key by registering to the 2Captcha&rsquo;s service <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://2captcha.com?from=12928628"   >here</a> by using my referral link.</p>
+<p>After you have set the 2Captcha&rsquo;s client, pass it to the <code>recaptchaDemoActions</code> function to get your Chromedp actions. Optionally, You may set the <code>opts</code> on line 77 to configure your Chromedp flags. You can refer to the docs to see other options. Then,  create the Chromedp context and run it. You may see the code&rsquo;s output just like in the <a class="link" rel="nofollow noreferrer noopener"  href="#usage"   >usage</a> section.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>After all the journey, you may find it interesting to solve the Google ReCAPTCHA automatically. You may want to use 2Captcha&rsquo;s services to solve other captchas besides Google Recaptcha by referring to the docs. It is straightforward and super easy to use.</p>
 <p>Thank you for reading!</p>
@@ -1114,7 +1316,7 @@ $ API_KEY=XXXXXXXX make run
 </div>
 </div><p>Now let&rsquo;s create the custom HTTP Client that will intercept our request to the server.</p>
 <h2 id="intercept-the-client-request">Intercept the Client Request</h2>
-<p>Golang has this one interface called RoundTripper that is implemented by Golang as a DefaultTransport, which is called every time you make an HTTP Request using the DefaultClient. I advise you to <strong>really</strong> read the <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://pkg.go.dev/net/http#RoundTripper" >docs</a> before implementing this RoundTripper.</p>
+<p>Golang has this one interface called RoundTripper that is implemented by Golang as a DefaultTransport, which is called every time you make an HTTP Request using the DefaultClient. I advise you to <strong>really</strong> read the <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://pkg.go.dev/net/http#RoundTripper"   >docs</a> before implementing this RoundTripper.</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
@@ -1430,7 +1632,7 @@ c := &amp;http.Client{
   <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://www.kindpng.com/userpngs/469/">Dun Liu</a> on KindPNG</figcaption>
 </figure>
 <h2 id="introduction">Introduction</h2>
-<p><a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://golang.org/" >Golang</a> is one of the youngest programming languages. Until this post is published, the current stable Golang version is 1.17.2. Besides that, it is considered a popular programming language amongst developers. It can be built and run on many platforms and environments (Sorry, Java), bundled with solid and supportive built-in packages, and many more.</p>
+<p><a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://golang.org/"   >Golang</a> is one of the youngest programming languages. Until this post is published, the current stable Golang version is 1.17.2. Besides that, it is considered a popular programming language amongst developers. It can be built and run on many platforms and environments (Sorry, Java), bundled with solid and supportive built-in packages, and many more.</p>
 <p>I use Golang due to the lack of magic of the language, verbose, structured, and clean. Within this article, you are going to discover reasons why you should consider learning Golang. I&rsquo;m not going to compare Golang with other programming languages because I think that will end in smoke. So let&rsquo;s start with the language structure itself.</p>
 <h2 id="language-structure">Language Structure</h2>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
@@ -1497,9 +1699,9 @@ c := &amp;http.Client{
 </div>
 </div><p>I will not cover all the language syntax, but the code above is an example of Golang&rsquo;s code. You don&rsquo;t need to understand it right now, but you can learn the structure of the code starts from the <code>package</code> and <code>import</code> as a code scope, <code>func main</code> as an entry point, <code>if-else</code> and <code>for loop</code> as one of the control structure, <code>types</code>, <code>nil</code>, <code>errors</code>, etc.</p>
 <p>It is <code>strictly typed</code>, using <code>curly braces</code> as scope even though you only write a single line of control structure, using <code>nil</code> instead of <code>null</code> (you save 1 character here), and only using a semicolon to separate statements, not to ends it. All that said, Golang&rsquo;s syntax is beginner-friendly, at least that&rsquo;s what I thought.</p>
-<p>You won&rsquo;t be afraid of writing a dirty code syntax or whatsoever, because not only Golang has its <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://golang.org/doc/effective_go" >guide</a> to writing it better, it also has its own <code>linter</code> and <code>formatter</code> that tells you what variable is unused built right in. And that&rsquo;s what you&rsquo;re gonna know about.</p>
+<p>You won&rsquo;t be afraid of writing a dirty code syntax or whatsoever, because not only Golang has its <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://golang.org/doc/effective_go"   >guide</a> to writing it better, it also has its own <code>linter</code> and <code>formatter</code> that tells you what variable is unused built right in. And that&rsquo;s what you&rsquo;re gonna know about.</p>
 <h2 id="built-in-support">Built-in Support</h2>
-<p>Golang brings its own tools to build a great application. Linter? Formatter? Tester? You <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://pkg.go.dev/cmd/go" >named</a> it. It also has a <code>garbage collector</code>, natively support <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://gobyexample.com/goroutines" >concurrency</a>, and a <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://play.golang.org/" >playground</a>. Besides that, Golang also has supportive built-in packages. You can write a <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://gobyexample.com/http-servers" >web application</a>, <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://gobyexample.com/command-line-arguments" >command-line interface application</a>, and even a <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://github.com/golang/go/wiki/WebAssembly#getting-started" >Web Assembly application</a> without any third-party module. But, what if you want to create a Golang module? Let&rsquo;s talk about it.</p>
+<p>Golang brings its own tools to build a great application. Linter? Formatter? Tester? You <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://pkg.go.dev/cmd/go"   >named</a> it. It also has a <code>garbage collector</code>, natively support <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://gobyexample.com/goroutines"   >concurrency</a>, and a <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://play.golang.org/"   >playground</a>. Besides that, Golang also has supportive built-in packages. You can write a <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://gobyexample.com/http-servers"   >web application</a>, <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://gobyexample.com/command-line-arguments"   >command-line interface application</a>, and even a <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://github.com/golang/go/wiki/WebAssembly#getting-started"   >Web Assembly application</a> without any third-party module. But, what if you want to create a Golang module? Let&rsquo;s talk about it.</p>
 <h2 id="module">Module</h2>
 <p>You can create a Golang module easily both local and remote. Just execute <code>go mod init &lt;module-name&gt;</code> and then just code like usual. Golang module support git out of the box, you can just push your Golang module to a git repository, and then import it into your code. For example, if you want to import a Postgres plugin or my database credential rotator module, you can import it just by typing the git repo name.</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
@@ -1564,7 +1766,7 @@ main.wasm: WebAssembly (wasm) binary module version 0x1 (MVP)
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="conclusion">Conclusion</h2>
-<p>I know that I&rsquo;m not covering all the language specifications. All the reasons above are quite subjective to me as a developer, you may find your interests in Golang by referring to the <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://golang.org/doc/faq" >FAQ page</a> or the <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://golang.org/ref/spec" >specification page</a>. Also, Golang is on its way to the <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://go.googlesource.com/proposal/&#43;/master/design/go2draft.md" >2nd version</a> which will support Generic and better error handling.</p>
+<p>I know that I&rsquo;m not covering all the language specifications. All the reasons above are quite subjective to me as a developer, you may find your interests in Golang by referring to the <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://golang.org/doc/faq"   >FAQ page</a> or the <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://golang.org/ref/spec"   >specification page</a>. Also, Golang is on its way to the <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://go.googlesource.com/proposal/&#43;/master/design/go2draft.md"   >2nd version</a> which will support Generic and better error handling.</p>
 <p>Thank you for reading!</p>
 ]]></description></item><item><title>Image Processing Using Hugo</title><link>https://clavinjune.dev/en/blogs/image-processing-using-hugo/</link><pubDate>Mon, 25 Oct 2021 15:34:44 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/image-processing-using-hugo/</guid><description><![CDATA[
   
@@ -1606,10 +1808,10 @@ main.wasm: WebAssembly (wasm) binary module version 0x1 (MVP)
   <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@pascalwhoop">@pascalwhoop</a> on Unsplash</figcaption>
 </figure>
 <h2 id="introduction">Introduction</h2>
-<p>Since I migrated <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="/en" >this blog</a> from Jekyll to Hugo, I want to try all the features provided by Hugo. One of the features is image processing. It could help me to develop a mobile-friendly blog. An image processing might help you, who read these contents from a smartphone which might have a slow internet connection to load images faster.</p>
+<p>Since I migrated <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="/en"   >this blog</a> from Jekyll to Hugo, I want to try all the features provided by Hugo. One of the features is image processing. It could help me to develop a mobile-friendly blog. An image processing might help you, who read these contents from a smartphone which might have a slow internet connection to load images faster.</p>
 <p>Though I developed this blog as minimal as possible, processing an image might be a problem. That&rsquo;s where Hugo&rsquo;s feature helps me to create a solution for this problem. In this article, you will learn to implement image processing using Hugo.</p>
 <h2 id="shortcodes">Shortcodes</h2>
-<p>Shortcodes is one of Hugo&rsquo;s feature that could help to reuse the implementation of image processing easily. You may want to read more about shortcodes <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://gohugo.io/content-management/shortcodes/" >here</a>. Now let&rsquo;s create one.</p>
+<p>Shortcodes is one of Hugo&rsquo;s feature that could help to reuse the implementation of image processing easily. You may want to read more about shortcodes <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://gohugo.io/content-management/shortcodes/"   >here</a>. Now let&rsquo;s create one.</p>
 <p>You may create your shortcodes in your Hugo project at either one of these paths:</p>
 <ol>
 <li><code>/layouts/shortcodes/&lt;name&gt;.html</code></li>
@@ -1644,7 +1846,7 @@ main.wasm: WebAssembly (wasm) binary module version 0x1 (MVP)
 &lt;/figure&gt;
 </code></pre></td></tr></table>
 </div>
-</div><p>Let&rsquo;s say you have put your images in <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://gohugo.io/hugo-pipes/introduction/#asset-directory" >Hugo&rsquo;s assets directory</a>. For example, you put your image file in <code>/assets/img/testing/ehe.png</code>, and then you can use it at your content like this:</p>
+</div><p>Let&rsquo;s say you have put your images in <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://gohugo.io/hugo-pipes/introduction/#asset-directory"   >Hugo&rsquo;s assets directory</a>. For example, you put your image file in <code>/assets/img/testing/ehe.png</code>, and then you can use it at your content like this:</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
@@ -1701,7 +1903,7 @@ main.wasm: WebAssembly (wasm) binary module version 0x1 (MVP)
 ...
 </code></pre></td></tr></table>
 </div>
-</div><p>Then, iterate over it with <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://gohugo.io/content-management/image-processing/#resize" >Hugo&rsquo;s resize function</a>.</p>
+</div><p>Then, iterate over it with <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://gohugo.io/content-management/image-processing/#resize"   >Hugo&rsquo;s resize function</a>.</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
@@ -1741,7 +1943,7 @@ main.wasm: WebAssembly (wasm) binary module version 0x1 (MVP)
 </div>
 </div><p>Those are your processed image URL with every width which you defined before. Now let&rsquo;s use them inside your image&rsquo;s source sets.</p>
 <h2 id="source-set">Source Set</h2>
-<p>To define <code>srcset attribute</code> on your image, you can use this <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-srcset" >format</a>:</p>
+<p>To define <code>srcset attribute</code> on your image, you can use this <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-srcset"   >format</a>:</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
@@ -1845,7 +2047,7 @@ main.wasm: WebAssembly (wasm) binary module version 0x1 (MVP)
 </div>
 </div><p>Lastly, let&rsquo;s make the HTML render the image according to the viewport width.</p>
 <h2 id="sizes">sizes</h2>
-<p>To define <code>sizes attribute</code> on your image, you can use this <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-sizes" >format</a>:</p>
+<p>To define <code>sizes attribute</code> on your image, you can use this <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-sizes"   >format</a>:</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
@@ -2413,7 +2615,7 @@ exit status 1
 }
 </code></pre></td></tr></table>
 </div>
-</div><p>It&rsquo;s up to you to choose either option <a class="link" rel="nofollow noreferrer noopener"  href="/en/#option-1" >1</a> or <a class="link" rel="nofollow noreferrer noopener"  href="/en/#option-2" >2</a>. You can adjust it with your project. But if you want to keep the nature of the Cobra code that exposes the cmd as a variable, you can stick to <code>option 2</code>.</p>
+</div><p>It&rsquo;s up to you to choose either option <a class="link" rel="nofollow noreferrer noopener"  href="#option-1"   >1</a> or <a class="link" rel="nofollow noreferrer noopener"  href="#option-2"   >2</a>. You can adjust it with your project. But if you want to keep the nature of the Cobra code that exposes the cmd as a variable, you can stick to <code>option 2</code>.</p>
 <h2 id="create-the-test-cases">Create the Test Cases</h2>
 <p>Let&rsquo;s say you stick with <code>option 2</code>. Now you need to create the test cases. In this case, the test cases will be either <code>with the toggle flag</code> or <code>without</code>. But first, let&rsquo;s make a helper function that will execute the root command and store the output to a variable. By storing the command output to a variable, you can compare the command output with your expectations.</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
@@ -2579,8 +2781,8 @@ exit status 1
   <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@iammrcup">@iammrcup</a> on Unsplash</figcaption>
 </figure>
 <h2 id="introduction">Introduction</h2>
-<p>Log File is a file that contains all events that happened in the system. By simply reading the log file, Developers can understand what happened, who did something to the system, and many more. Some systems have their standard way to write logs like <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://httpd.apache.org/docs/2.4/logs.html" >Apache</a>, <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://nginx.org/en/docs/http/ngx_http_log_module.html" >Nginx</a>, <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage" >Envoy</a>, Etc. But how about the custom one? Of course, developers need to write the log file as descriptive as possible to read it easily.</p>
-<p>Perhaps writing logs is not an issue, but reading it? Do developers review and read their logs? Do they can easily understand the logs? Do they know what happened to the system right now? Perhaps not. That&rsquo;s where monitoring apps like <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://www.elastic.co/" >Elastic</a> or <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://grafana.com/" >Grafana</a> come to help parse and monitor the logs file.</p>
+<p>Log File is a file that contains all events that happened in the system. By simply reading the log file, Developers can understand what happened, who did something to the system, and many more. Some systems have their standard way to write logs like <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://httpd.apache.org/docs/2.4/logs.html"   >Apache</a>, <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://nginx.org/en/docs/http/ngx_http_log_module.html"   >Nginx</a>, <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage"   >Envoy</a>, Etc. But how about the custom one? Of course, developers need to write the log file as descriptive as possible to read it easily.</p>
+<p>Perhaps writing logs is not an issue, but reading it? Do developers review and read their logs? Do they can easily understand the logs? Do they know what happened to the system right now? Perhaps not. That&rsquo;s where monitoring apps like <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://www.elastic.co/"   >Elastic</a> or <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://grafana.com/"   >Grafana</a> come to help parse and monitor the logs file.</p>
 <p>Monitoring apps could help developers read the system logs, creating an alert if something went wrong. But they don&rsquo;t understand what happened to the system. They only follow the rules created by the developers. What if the developers want to put a little <code>brain</code> to the monitoring system so the monitoring apps could understand what happened? Sure by creating a <code>deep learning model</code> to analyze the logs is more than a help. But before that, developers should make sure they can parse the logs.</p>
 <p>In this blog post, you will create a simple logs parser using Go as a first step to understand the logs file better.</p>
 <h2 id="define-the-log-format">Define the Log Format</h2>
@@ -2742,7 +2944,7 @@ response_code   =&gt; 200
 ips             =&gt; 111.114.195.106,10.0.0.11
 </code></pre></td></tr></table>
 </div>
-</div><p>After parsing a single logs line, you should be able to parse all your logs files. The only thing you need to do is define your logs file format. And then transform it into a human-readable format like the <a class="link" rel="nofollow noreferrer noopener"  href="/en/#define-the-log-format" >previous step</a>.</p>
+</div><p>After parsing a single logs line, you should be able to parse all your logs files. The only thing you need to do is define your logs file format. And then transform it into a human-readable format like the <a class="link" rel="nofollow noreferrer noopener"  href="#define-the-log-format"   >previous step</a>.</p>
 <p>Here is the complete code:</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
@@ -3124,7 +3326,7 @@ true
 </code></pre></td></tr></table>
 </div>
 </div><p>It will fetch the hostname from docker placeholder</p>
-<p><a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://docs.docker.com/engine/reference/commandline/service_create/#create-services-using-templates" >Reference</a></p>
+<p><a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://docs.docker.com/engine/reference/commandline/service_create/#create-services-using-templates"   >Reference</a></p>
 <p>Thank you for reading!</p>
 ]]></description></item><item><title>My Mistake on Converting Slice to Slice of Ptr in Golang</title><link>https://clavinjune.dev/en/blogs/my-mistake-on-converting-slice-to-slice-of-ptr-in-golang/</link><pubDate>Thu, 22 Apr 2021 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/my-mistake-on-converting-slice-to-slice-of-ptr-in-golang/</guid><description><![CDATA[
   
@@ -3854,7 +4056,7 @@ true
     src="https://images.unsplash.com/photo-1580188911874-f95af62924ee?q=50&amp;w=1920" alt="Photo by @mrthetrain on Unsplash" title="Photo by @mrthetrain on Unsplash" width="100%" height="auto"/>
   <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@mrthetrain">@mrthetrain</a> on Unsplash</figcaption>
 </figure>
-<p>Two days ago, I failed to implement the optimized LRU cache in coding interview due to panic and stopped by the interviewer. Yes, I suck at coding interviews. I have implemented LRU cache before, so I know how it works and of course know how to implement it. But if you never heard of it, I think <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_recently_used_%28LRU%29" >this explanation</a> is enough.</p>
+<p>Two days ago, I failed to implement the optimized LRU cache in coding interview due to panic and stopped by the interviewer. Yes, I suck at coding interviews. I have implemented LRU cache before, so I know how it works and of course know how to implement it. But if you never heard of it, I think <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_recently_used_%28LRU%29"   >this explanation</a> is enough.</p>
 <h2 id="brief-definition">Brief definition</h2>
 <p>LRU Cache is a combination of hash map and queue. Hash map will store the elements by keys and values while the queue keeps track the least recently used keys. We will implement the queue using doubly linked list.</p>
 <h2 id="rules">Rules</h2>
@@ -5351,7 +5553,7 @@ Filesystem      Size  Used Avail Use% Mounted on
     src="https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?q=50&amp;w=1920" alt="Photo by @freestocks on Unsplash" title="Photo by @freestocks on Unsplash" width="100%" height="auto"/>
   <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@freestocks">@freestocks</a> on Unsplash</figcaption>
 </figure>
-<p>Same as the case <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="/en/blogs/binary-search-tree-in-go/" >here</a>, I just wanted to revisit another data structure. Well, Max Heap (also Min Heap) is a data structure that commonly used to create a priority queue which also a complete binary tree that has nodes which value is greater (or lesser) than its children value.</p>
+<p>Same as the case <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="/en/blogs/binary-search-tree-in-go/"   >here</a>, I just wanted to revisit another data structure. Well, Max Heap (also Min Heap) is a data structure that commonly used to create a priority queue which also a complete binary tree that has nodes which value is greater (or lesser) than its children value.</p>
 <p>Not like BST that I implemented before, Max Heap commonly implemented using array in order to make it easier (I think) to access its children. To accessing each nodes parent or children you can visualize the whole array as a tree. I have no image for it, so I pick Max Heap image from another website. The concept is the same with Min Heap tho.</p>
 <p><figure>
   <img src="https://iq.opengenus.org/content/images/2019/06/Max-Heap.png" alt="Photo by opengenus.org" title="Photo by opengenus.org" width="100%" height="auto" />
@@ -6087,7 +6289,7 @@ print(format(-1234567890)) <span style="color:#008000"># -1,234,567,890</span>
     src="https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;w=1920" alt="Photo by @roman_lazygeek on Unsplash" title="Photo by @roman_lazygeek on Unsplash" width="100%" height="auto"/>
   <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@roman_lazygeek">@roman_lazygeek</a> on Unsplash</figcaption>
 </figure>
-<p>I only rewrite what was written on my <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://pastebin.com/eDNgaM7F" >pastebin</a></p>
+<p>I only rewrite what was written on my <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://pastebin.com/eDNgaM7F"   >pastebin</a></p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
@@ -6174,7 +6376,7 @@ print(format(-1234567890)) <span style="color:#008000"># -1,234,567,890</span>
     src="https://images.unsplash.com/photo-1453733190371-0a9bedd82893?q=50&amp;w=1920" alt="Photo by @roman_lazygeek on Unsplash" title="Photo by @roman_lazygeek on Unsplash" width="100%" height="auto"/>
   <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@roman_lazygeek">@roman_lazygeek</a> on Unsplash</figcaption>
 </figure>
-<p>I don&rsquo;t do anything except converting the pseudocode from <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes#Pseudocode" >wiki</a> into Golang code</p>
+<p>I don&rsquo;t do anything except converting the pseudocode from <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes#Pseudocode"   >wiki</a> into Golang code</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
@@ -6325,11 +6527,11 @@ print(format(-1234567890)) <span style="color:#008000"># -1,234,567,890</span>
     src="https://images.unsplash.com/photo-1580245492316-d542d595001b?q=50&amp;w=1920" alt="Photo by @borisview on Unsplash" title="Photo by @borisview on Unsplash" width="100%" height="auto"/>
   <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@borisview">@borisview</a> on Unsplash</figcaption>
 </figure>
-<p>I’ve just woke up and somehow I remembered when I created <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="/en/blogs/creating-taboo-error-handler-for-go/" >taboo</a> to trace the error log. And then I think, would it be better if I pass the logger instead of the error log itself?</p>
+<p>I’ve just woke up and somehow I remembered when I created <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="/en/blogs/creating-taboo-error-handler-for-go/"   >taboo</a> to trace the error log. And then I think, would it be better if I pass the logger instead of the error log itself?</p>
 <p>As the context passed, it will contain a sub-logger that has <code>x-request-id</code> inside it. It’ll trace all the requested event from HTTP Handler to the most corner of the function.</p>
 <p>I don&rsquo;t know if this gonna be good because I wrote this immediately right after I woke up. This might be not optimized or perhaps an anti-pattern. But at least this could be a reference for you to create a contextual logger.</p>
 <h2 id="logger">Logger</h2>
-<p>First thing first, you need a logger. Might be anything, but I will use <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://github.com/rs/zerolog" >zerolog</a> in this post. I won&rsquo;t explain about zerolog since you can use anything you want.</p>
+<p>First thing first, you need a logger. Might be anything, but I will use <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://github.com/rs/zerolog"   >zerolog</a> in this post. I won&rsquo;t explain about zerolog since you can use anything you want.</p>
 <p>Format the base logger to match your logging style.</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
@@ -6670,7 +6872,7 @@ print(format(-1234567890)) <span style="color:#008000"># -1,234,567,890</span>
 }
 </code></pre></td></tr></table>
 </div>
-</div><p>Try it by accessing <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="http://localhost:8000" >http://localhost:8000</a>. The output looks like this if I accessed it twice.</p>
+</div><p>Try it by accessing <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="http://localhost:8000"   >http://localhost:8000</a>. The output looks like this if I accessed it twice.</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
@@ -7353,7 +7555,7 @@ serialization by jackson: {&#34;bar&#34;:&#34;barx&#34;}
     src="https://images.unsplash.com/photo-1561900478-5001f6b4d8ed?q=50&amp;w=1920" alt="Photo by @loicleray on Unsplash" title="Photo by @loicleray on Unsplash" width="100%" height="auto"/>
   <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@loicleray">@loicleray</a> on Unsplash</figcaption>
 </figure>
-<p>After I tried to implement <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="/en/blogs/binary-search-tree-in-go/" >BST in Go</a>, it seems like I want to modify the BST to AVL because BST is not a fairly optimal tree data structure.</p>
+<p>After I tried to implement <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="/en/blogs/binary-search-tree-in-go/"   >BST in Go</a>, it seems like I want to modify the BST to AVL because BST is not a fairly optimal tree data structure.</p>
 <p>When I said this:</p>
 <blockquote>
 <p>To find a specific node you don&rsquo;t have to go around the whole tree, you need to know that BST can route to a specific node by checking the node value</p>
@@ -7364,7 +7566,7 @@ serialization by jackson: {&#34;bar&#34;:&#34;barx&#34;}
   <figcaption>linear tree</figcaption>
 </figure></p>
 <p>And if you want to find a node with value 6, in the end, you will travel the whole tree. That’s why we need AVL to improve the time complexity. AVL will try to rebalance the tree whenever it becomes imbalance after insertion/deletion.</p>
-<p>The whole concept of AVL is much the same with BST besides the rebalancing algorithm. In AVL we need to rebalance the tree by rotating every imbalance sub-tree in every insertion/deletion. So we&rsquo;re gonna use all the code from <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="/en/blogs/binary-search-tree-in-go/" >here</a> and modified it a bit.</p>
+<p>The whole concept of AVL is much the same with BST besides the rebalancing algorithm. In AVL we need to rebalance the tree by rotating every imbalance sub-tree in every insertion/deletion. So we&rsquo;re gonna use all the code from <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="/en/blogs/binary-search-tree-in-go/"   >here</a> and modified it a bit.</p>
 <p>To see the tree is balanced or not, we need to define the height on each node. We can calculate the height by counting the maximum height of the left and the right node recursively. If the node has no child, it means its height is 1 otherwise we compare the maximum height of the children.</p>
 <p>Update the <code>node struct</code> by adding the <code>height</code> attribute, add the <code>Getter</code> function, and set the value to 1 inside the constructor.</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
@@ -7461,7 +7663,7 @@ serialization by jackson: {&#34;bar&#34;:&#34;barx&#34;}
 </code></pre></td></tr></table>
 </div>
 </div><p><code>balanceFactor</code> function determines whether the tree is heavier on the left or the right side. If it returns an integer below 0, it means it&rsquo;s heavier on the right side and we need to rotate to the left side of the tree. The thresholds for imbalanced tree are -1 and 1, so if the <code>balanceFactor</code> function returns less then -1 or greater than 1, we need to rotate the tree.</p>
-<p>Now let&rsquo;s create the rotate function. There are 2 types of rotate, <code>rotateLeft</code> and <code>rotateRight</code>. But there are 4 conditions to rotate the tree on insertion and deletion. You can read it and see the picture from <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://www.tutorialspoint.com/data_structures_algorithms/avl_tree_algorithm.htm" >here</a>.</p>
+<p>Now let&rsquo;s create the rotate function. There are 2 types of rotate, <code>rotateLeft</code> and <code>rotateRight</code>. But there are 4 conditions to rotate the tree on insertion and deletion. You can read it and see the picture from <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://www.tutorialspoint.com/data_structures_algorithms/avl_tree_algorithm.htm"   >here</a>.</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
@@ -7610,7 +7812,7 @@ serialization by jackson: {&#34;bar&#34;:&#34;barx&#34;}
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="traverse-operation-and-validation">Traverse Operation and Validation</h2>
-<p>So that the results are easy to visualize, you need to change the traverse function becomes <code>pre-order</code> and open <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://www.cs.usfca.edu/~galles/visualization/BST.html" >BST Visualization page</a> &amp; <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://www.cs.usfca.edu/~galles/visualization/AVLtree.html" >AVL Visualiztion Page</a>.</p>
+<p>So that the results are easy to visualize, you need to change the traverse function becomes <code>pre-order</code> and open <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://www.cs.usfca.edu/~galles/visualization/BST.html"   >BST Visualization page</a> &amp; <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://www.cs.usfca.edu/~galles/visualization/AVLtree.html"   >AVL Visualiztion Page</a>.</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
@@ -9625,9 +9827,9 @@ Find the greatest valueable node from the left child of the node
 }
 </code></pre></td></tr></table>
 </div>
-</div><p><a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://www.baeldung.com/spring-boot-characterencodingfilter" >reference</a></p>
+</div><p><a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://www.baeldung.com/spring-boot-characterencodingfilter"   >reference</a></p>
 <p>Thank you for reading!</p>
-]]></description></item><item><title>Work Life Balance</title><link>https://clavinjune.dev/en/blogs/work-life-balance/</link><pubDate>Sun, 01 Nov 2020 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/work-life-balance/</guid><description><![CDATA[<p>On one of the <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://open.spotify.com/episode/6U5LH5iAZNNDd32N3nKIJl?si=06f11v9nSAWHHf11IwDmRg" >episode</a> of <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://positif.dev" >positif.dev</a>, Devin and I discussed about what is work-life balance. I described work-life balance as a happiness that hard to achieve, since we need to separate both our work and life, time and environment where we don’t need to think about work after work-hour.</p>
+]]></description></item><item><title>Work Life Balance</title><link>https://clavinjune.dev/en/blogs/work-life-balance/</link><pubDate>Sun, 01 Nov 2020 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/work-life-balance/</guid><description><![CDATA[<p>On one of the <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://open.spotify.com/episode/6U5LH5iAZNNDd32N3nKIJl?si=06f11v9nSAWHHf11IwDmRg"   >episode</a> of <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://positif.dev"   >positif.dev</a>, Devin and I discussed about what is work-life balance. I described work-life balance as a happiness that hard to achieve, since we need to separate both our work and life, time and environment where we don’t need to think about work after work-hour.</p>
 <p>So far I have had a work-life balance in terms of work, but personally I sometimes have problems with my habit of working outside working hours when I’m in the zone. Devin said it is quite difficult not to think about work outside of working hours when the work itself is almost done because there are factors such as the urgency of the job and curiosity. And because of curiosity itself, we forget to take a break, then because we forget to take a break, we can’t finish things that make us curious. Ironic right?</p>
 <p><figure>
   <img src="https://i.kym-cdn.com/entries/icons/original/000/030/338/New.jpg" alt="Photo From Know Your Meme" title="Photo From Know Your Meme" width="100%" height="auto" />
@@ -9677,27 +9879,27 @@ Find the greatest valueable node from the left child of the node
     src="https://images.unsplash.com/photo-1517232117795-40c9d8212a04?q=50&amp;w=1920" alt="Photo by @veato on Unsplash" title="Photo by @veato on Unsplash" width="100%" height="auto"/>
   <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@veato">@veato</a> on Unsplash</figcaption>
 </figure>
-<p>In my <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="/en/blogs/i-create-this-blog-using-jekyll/" >first post</a>, I said that:</p>
+<p>In my <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="/en/blogs/i-create-this-blog-using-jekyll/"   >first post</a>, I said that:</p>
 <blockquote>
 <p>Perhaps I’m gonna try to integrate this blog using Webmention and Web Monetization after getting a bunch of visitors, but I’m gonna save it for later.</p>
 </blockquote>
 <p>Though my blog visitors still not that much, I integrated <code>Webmention</code> and <code>Web Monetization</code> yesterday. I&rsquo;m still exploring <code>Webmention</code> due to a lack of resources, so I&rsquo;m going to make another post featuring Webmention. So for now, let&rsquo;s talk about <code>Web Monetization</code>.</p>
-<p>The first time I heard about &lsquo;Web Monetization&rsquo; was from <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://dev.to/devteam/announcing-the-grant-for-the-web-hackathon-on-dev-3kd1" >this Hackathon</a> held by <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://dev.to/" >DEV</a>. But yeah, I only implemented yesterday. I read <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://dev.to/hacksultan/web-monetization-like-i-m-5-1418" >this post</a> posted by <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://dev.to/hacksultan" >@hacksultan</a> and really helps me to learn about the concept behind <code>Web Monetization</code> itself.</p>
-<p>The implementation was so easy, you just need to have a digital wallet account. Currently, <code>Web Monetization</code> only supports digital wallet like <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://webmonetization.org/docs/gatehub" >Gatehub</a>,  <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://webmonetization.org/docs/uphold" >Uphold</a>, and <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://webmonetization.org/docs/xrptipbot" >XRP Tipbot</a>. I personally use uphold because it has many withdrawal currencies. You can follow the registration steps by clicking the link that I referred on each wallet, find your <code>Interledger payment pointer</code> (<strong>ILP</strong>) which has this format <code>$wallet.example.com/alice</code>, and finally put it on your blog&rsquo;s <code>meta tag</code>. <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://webmonetization.org/docs/getting-started" >This docs</a> is to the point and clear.</p>
+<p>The first time I heard about &lsquo;Web Monetization&rsquo; was from <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://dev.to/devteam/announcing-the-grant-for-the-web-hackathon-on-dev-3kd1"   >this Hackathon</a> held by <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://dev.to/"   >DEV</a>. But yeah, I only implemented yesterday. I read <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://dev.to/hacksultan/web-monetization-like-i-m-5-1418"   >this post</a> posted by <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://dev.to/hacksultan"   >@hacksultan</a> and really helps me to learn about the concept behind <code>Web Monetization</code> itself.</p>
+<p>The implementation was so easy, you just need to have a digital wallet account. Currently, <code>Web Monetization</code> only supports digital wallet like <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://webmonetization.org/docs/gatehub"   >Gatehub</a>,  <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://webmonetization.org/docs/uphold"   >Uphold</a>, and <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://webmonetization.org/docs/xrptipbot"   >XRP Tipbot</a>. I personally use uphold because it has many withdrawal currencies. You can follow the registration steps by clicking the link that I referred on each wallet, find your <code>Interledger payment pointer</code> (<strong>ILP</strong>) which has this format <code>$wallet.example.com/alice</code>, and finally put it on your blog&rsquo;s <code>meta tag</code>. <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://webmonetization.org/docs/getting-started"   >This docs</a> is to the point and clear.</p>
 <h2 id="where-the-money-comes-from">Where the money comes from?</h2>
-<p>Currently, <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://webmonetization.org" >Web Monetization</a> only provider is <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://coil.com" >Coil</a>. For every Coil paid members that visit your monetized content will stream a micro amount of money to your ILP automatically. <code>Coil</code> will pay you per second for about <code>$0.36/hour</code> according to <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://help.coil.com/accounts/creator-accounts#faqs" >this FAQ</a> which you should read to learn how Coil works. As the paid members of Coil, you can enjoy exclusive contents from <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://coil.com/explore" >these websites</a>. This is my content income after integrated with <code>Web Monetization</code>.</p>
+<p>Currently, <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://webmonetization.org"   >Web Monetization</a> only provider is <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://coil.com"   >Coil</a>. For every Coil paid members that visit your monetized content will stream a micro amount of money to your ILP automatically. <code>Coil</code> will pay you per second for about <code>$0.36/hour</code> according to <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://help.coil.com/accounts/creator-accounts#faqs"   >this FAQ</a> which you should read to learn how Coil works. As the paid members of Coil, you can enjoy exclusive contents from <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://coil.com/explore"   >these websites</a>. This is my content income after integrated with <code>Web Monetization</code>.</p>
 <p><figure>
   <img src="https://clavinjune.dev/img/monetize-your-content-with-web-monetization/uphold.png" alt="Moneeeeeeyyy" title="Moneeeeeeyyy" width="100%" height="auto" />
   <figcaption>Moneeeeeeyyy</figcaption>
 </figure></p>
-<p>To make your “premium” visitors feel more valued when visiting your content, you can give them exclusive content that free member can’t access, or perhaps removing ads. Then, the next question is how can you differentiate premium visitors from free visitors? The answer is in <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://webmonetization.org/docs/api" >this documentation</a> along with the examples. Besides your personal web, you can also monetize your <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://help.coil.com/for-creators/youtube-channels" >Youtube</a>, <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://help.coil.com/for-creators/twitch-stream" >Twitch</a> contents, and <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://dev.to/devteam/you-can-now-web-monetize-your-dev-posts-but-don-t-get-your-hopes-up-too-quickly-goc" >DEV</a> posts.</p>
+<p>To make your “premium” visitors feel more valued when visiting your content, you can give them exclusive content that free member can’t access, or perhaps removing ads. Then, the next question is how can you differentiate premium visitors from free visitors? The answer is in <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://webmonetization.org/docs/api"   >this documentation</a> along with the examples. Besides your personal web, you can also monetize your <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://help.coil.com/for-creators/youtube-channels"   >Youtube</a>, <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://help.coil.com/for-creators/twitch-stream"   >Twitch</a> contents, and <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://dev.to/devteam/you-can-now-web-monetize-your-dev-posts-but-don-t-get-your-hopes-up-too-quickly-goc"   >DEV</a> posts.</p>
 <p>Even though this post is like sponsoring some companies (which I hope so), they didn&rsquo;t sponsor me to write this. The whole content of this post is to encourage you to try Web Monetization because I think this is the new future for monetizing digital contents. I really hate it when I only need to read one or two articles from a web then I meet paywall.</p>
 <p><figure>
   <img src="https://clavinjune.dev/img/monetize-your-content-with-web-monetization/paywall.png" alt="Paywall" title="Paywall" width="100%" height="auto" />
   <figcaption>Paywall</figcaption>
 </figure></p>
 <p>I like the concept behind this <code>Web Monetization</code> to only subscribe to one provider, then you can consume exclusive contents from many websites instead of subscribing to a lot of websites which perhaps you wouldn&rsquo;t consume their contents daily. Despite the costs, it&rsquo;s hard to manage this kind of subscription model.</p>
-<p>Though <code>Web Monetization</code> is not a standard yet for monetizing digital content, it is currently being proposed as a <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://discourse.wicg.io/t/proposal-web-monetization-a-new-revenue-model-for-the-web/3785" >W3C standard</a>. I hope it become one and implemented everywhere ASAP.</p>
+<p>Though <code>Web Monetization</code> is not a standard yet for monetizing digital content, it is currently being proposed as a <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://discourse.wicg.io/t/proposal-web-monetization-a-new-revenue-model-for-the-web/3785"   >W3C standard</a>. I hope it become one and implemented everywhere ASAP.</p>
 <p>Thank you for reading!</p>
 ]]></description></item><item><title>Create Redis Sets With Member Expiration</title><link>https://clavinjune.dev/en/blogs/create-redis-sets-with-member-expiration/</link><pubDate>Thu, 29 Oct 2020 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/create-redis-sets-with-member-expiration/</guid><description><![CDATA[
   
@@ -9738,16 +9940,16 @@ Find the greatest valueable node from the left child of the node
     src="https://images.unsplash.com/photo-1501139083538-0139583c060f?q=50&amp;w=1920" alt="Photo by @aronvisuals on Unsplash" title="Photo by @aronvisuals on Unsplash" width="100%" height="auto"/>
   <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@aronvisuals">@aronvisuals</a> on Unsplash</figcaption>
 </figure>
-<p><a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://redis.io" >Redis</a> is a good in-memory key-value data store that supports many types of value. <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://redis.io/topics/data-types-intro#sorted-sets" >Sorted Sets</a> is one of them. According to the docs <code>sorted sets</code> is:</p>
+<p><a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://redis.io"   >Redis</a> is a good in-memory key-value data store that supports many types of value. <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://redis.io/topics/data-types-intro#sorted-sets"   >Sorted Sets</a> is one of them. According to the docs <code>sorted sets</code> is:</p>
 <blockquote>
 <p>Sorted sets, similar to Sets but where every string element is associated to a floating number value, called score. The elements are always taken sorted by their score, so unlike Sets it is possible to retrieve a range of elements (for example you may ask: give me the top 10, or the bottom 10).</p>
 </blockquote>
 <p>What they didn&rsquo;t say about <code>sorted sets</code> is the expiration of <code>sets members</code> can&rsquo;t be defined, at least until this blog post is created. Why do we need to define <code>sets members</code> expiration?</p>
-<p>Well, in my case I&rsquo;ve required to create a phone service that could generate and verify OTP that sent to the users with a specific limit. The prior design is using <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://godoc.org/golang.org/x/time/rate" >Golang Rate Limit</a> that I thought it couldn&rsquo;t be horizontally scalable. That&rsquo;s why I thought that I would use Redis for this case. The requirement for generating OTP is only like this:</p>
+<p>Well, in my case I&rsquo;ve required to create a phone service that could generate and verify OTP that sent to the users with a specific limit. The prior design is using <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://godoc.org/golang.org/x/time/rate"   >Golang Rate Limit</a> that I thought it couldn&rsquo;t be horizontally scalable. That&rsquo;s why I thought that I would use Redis for this case. The requirement for generating OTP is only like this:</p>
 <ul>
 <li>Each phone number can request OTP up to <code>X times</code> per <code>Y minutes</code></li>
 </ul>
-<p>That&rsquo;s why I came up with <code>Redis sets</code> but <code>sets members</code> can&rsquo;t have its own expiration time. Then I was googling around until I found <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://github.com/redis/redis/issues/135#issuecomment-2361996" >this issue comment</a> by <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://github.com/pietern" >@pietern</a>. This is quite a hacky move, but at least it is doable. That&rsquo;s why I tried to implement it. Once again comments on Github saved my job.</p>
+<p>That&rsquo;s why I came up with <code>Redis sets</code> but <code>sets members</code> can&rsquo;t have its own expiration time. Then I was googling around until I found <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://github.com/redis/redis/issues/135#issuecomment-2361996"   >this issue comment</a> by <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://github.com/pietern"   >@pietern</a>. This is quite a hacky move, but at least it is doable. That&rsquo;s why I tried to implement it. Once again comments on Github saved my job.</p>
 <p>The idea is quite simple, using the score on sorted-sets as an expiration millis. Fetch the valid members that have a score between <code>current millis</code> and <code>current millis + Y minutes</code> and remove the expired members that have a score between zero and <code>current millis</code>. So the minimum pseudocode would be like this:</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
@@ -9830,12 +10032,12 @@ redisQuery(&#34;ZADD $key $exp $otp&#34;)
     src="https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?q=50&amp;w=1920" alt="Photo by @hhh13 on Unsplash" title="Photo by @hhh13 on Unsplash" width="100%" height="auto"/>
   <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@hhh13">@hhh13</a> on Unsplash</figcaption>
 </figure>
-<p>I created <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://github.com/anon-org/taboo" >this module</a> for Golang to help me with error handling. This idea showed when a colleague of mine was thinking to pass <code>context</code> from handler to service, to repository to trace the error log more verbose. I disagreed with him because I thought that&rsquo;s not what <code>context</code> is for. Perhaps I was wrong or he was wrong, or maybe both of us wrong because this is our first Golang project that deployed on production.</p>
+<p>I created <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://github.com/anon-org/taboo"   >this module</a> for Golang to help me with error handling. This idea showed when a colleague of mine was thinking to pass <code>context</code> from handler to service, to repository to trace the error log more verbose. I disagreed with him because I thought that&rsquo;s not what <code>context</code> is for. Perhaps I was wrong or he was wrong, or maybe both of us wrong because this is our first Golang project that deployed on production.</p>
 <p>Despite our opinion about <code>context</code>, we both agreed that Golang&rsquo;s error handling is too verbose and bulky. It makes us read more error handling more than read the system flow itself. Then I remember when I was coding using Java/Kotlin that I always use <code>throws</code>, <code>throw</code>, and <code>try-catch block</code> to handle any errors.</p>
 <p>Hmm&hellip;</p>
 <p>Why don&rsquo;t I create it for Golang?</p>
 <p>Then I create this <code>try-catch block</code> module for Golang called <code>taboo</code>. Because I know this thing creates polemic among Golang developer but, then I thought why don&rsquo;t I give it a try?</p>
-<p>For the design itself, I was inspired by <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://hackthology.com/exceptions-for-go-as-a-library.html" >this article</a> but the whole implementation is all adjusted with my current needs. Instead of <code>error</code>, this module is based on <code>panic</code> and <code>recover</code> so it is quite dangerous whenever used in the wrong condition.</p>
+<p>For the design itself, I was inspired by <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://hackthology.com/exceptions-for-go-as-a-library.html"   >this article</a> but the whole implementation is all adjusted with my current needs. Instead of <code>error</code>, this module is based on <code>panic</code> and <code>recover</code> so it is quite dangerous whenever used in the wrong condition.</p>
 <p>Let&rsquo;s take an example:</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
@@ -10052,7 +10254,7 @@ Process finished with exit code 0
        enabled: <span style="color:#00f">true</span>
 </code></pre></td></tr></table>
 </div>
-</div><p><a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://github.com/spring-projects/spring-boot/issues/18644" >reference</a></p>
+</div><p><a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://github.com/spring-projects/spring-boot/issues/18644"   >reference</a></p>
 <p>Thank you for reading!</p>
 ]]></description></item><item><title>I Create This Blog Using Jekyll</title><link>https://clavinjune.dev/en/blogs/i-create-this-blog-using-jekyll/</link><pubDate>Sat, 24 Oct 2020 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/i-create-this-blog-using-jekyll/</guid><description><![CDATA[
   
@@ -10093,10 +10295,10 @@ Process finished with exit code 0
     src="https://images.unsplash.com/photo-1542435503-956c469947f6?q=50&amp;w=1920" alt="Photo by @jessbaileydesigns on Unsplash" title="Photo by @jessbaileydesigns on Unsplash" width="100%" height="auto"/>
   <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@jessbaileydesigns">@jessbaileydesigns</a> on Unsplash</figcaption>
 </figure>
-<p><a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="/en/" >This blog</a> is the result of my learning journey about a static-site generator made on top of <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://jekyllrb.com/" >Jekyll</a>. The design is kinda bad due to my lacked sense of design. To avoid creating a whole trash blog, I tried to ask my friends to give me feedback about the design a bit.</p>
-<p>I have tried using the provided theme like <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://github.com/jekyll/minima" >Minima</a> but, I just don&rsquo;t like it after all. That&rsquo;s why I think it&rsquo;s better to create my own. I tried to create the simplest design as long as it is easy to be read. I used <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://coolors.co/" >Coolors</a>, <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://fonts.google.com/" >Google Font</a>, <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="http://rouge.jneen.net/" >Rogue</a>, <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://github.com/sverrirs/jekyll-paginate-v2" >Jekyll Paginate</a>, <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://github.com/jekyll/jekyll-feed" >Jekyll Feed</a>, and write a bit of Ruby, CSS, and JS for creating the theme itself. I didn&rsquo;t think creating this simple blog costs me 2 Saturdays, even though it only consists of as many as 3 pages.</p>
-<p>After I think the whole template is ready to be published, I create <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://github.com/anon-org/jekyll-blog" >this template repository</a> just in case there&rsquo;s someone who wants to try Jekyll using my template. It is ready to be deployed, just adjust <code>_config.yaml</code> a bit and a whole blog is ready with it&rsquo;s auto-generated RSS feeds.</p>
-<p>Integrating blog posts to <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://dev.to" >DEV</a> using RSS is not a new thing. But this is a new experience for me since I only write two posts on DEV before. Despite this is a new blog, I have written my thoughts at <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://medium.com/@ClavinJune" >Medium</a>. I was looking for a way to publish to Medium via RSS feeds, but I didn&rsquo;t find any. Luckily DEV supports this kind of thing with simple configuration, perhaps I need to adjust the post a bit before publishing it.</p>
-<p>Perhaps I&rsquo;m gonna try to integrate this blog using <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://webmention.io/" >Webmention</a> and <a class="link" rel="nofollow noreferrer noopener"  target="_blank"  href="https://webmonetization.org/" >Web Monetization</a> after getting a bunch of visitors, but I&rsquo;m gonna save it for later.</p>
+<p><a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="/en/"   >This blog</a> is the result of my learning journey about a static-site generator made on top of <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://jekyllrb.com/"   >Jekyll</a>. The design is kinda bad due to my lacked sense of design. To avoid creating a whole trash blog, I tried to ask my friends to give me feedback about the design a bit.</p>
+<p>I have tried using the provided theme like <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://github.com/jekyll/minima"   >Minima</a> but, I just don&rsquo;t like it after all. That&rsquo;s why I think it&rsquo;s better to create my own. I tried to create the simplest design as long as it is easy to be read. I used <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://coolors.co/"   >Coolors</a>, <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://fonts.google.com/"   >Google Font</a>, <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="http://rouge.jneen.net/"   >Rogue</a>, <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://github.com/sverrirs/jekyll-paginate-v2"   >Jekyll Paginate</a>, <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://github.com/jekyll/jekyll-feed"   >Jekyll Feed</a>, and write a bit of Ruby, CSS, and JS for creating the theme itself. I didn&rsquo;t think creating this simple blog costs me 2 Saturdays, even though it only consists of as many as 3 pages.</p>
+<p>After I think the whole template is ready to be published, I create <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://github.com/anon-org/jekyll-blog"   >this template repository</a> just in case there&rsquo;s someone who wants to try Jekyll using my template. It is ready to be deployed, just adjust <code>_config.yaml</code> a bit and a whole blog is ready with it&rsquo;s auto-generated RSS feeds.</p>
+<p>Integrating blog posts to <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://dev.to"   >DEV</a> using RSS is not a new thing. But this is a new experience for me since I only write two posts on DEV before. Despite this is a new blog, I have written my thoughts at <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://medium.com/@ClavinJune"   >Medium</a>. I was looking for a way to publish to Medium via RSS feeds, but I didn&rsquo;t find any. Luckily DEV supports this kind of thing with simple configuration, perhaps I need to adjust the post a bit before publishing it.</p>
+<p>Perhaps I&rsquo;m gonna try to integrate this blog using <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://webmention.io/"   >Webmention</a> and <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://webmonetization.org/"   >Web Monetization</a> after getting a bunch of visitors, but I&rsquo;m gonna save it for later.</p>
 <p>Thank you for reading!</p>
 ]]></description></item></channel></rss>
