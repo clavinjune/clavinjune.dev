@@ -6,7 +6,7 @@ iscjklanguage: false
 isarchived: true
 categories: ["tech"]
 images: []
-aliases: ["/blog/my-custom-http-error-in-golang-9c193b"]
+aliases: []
 description: "This post contains notes on how I handle http error in golang"
 ---
 

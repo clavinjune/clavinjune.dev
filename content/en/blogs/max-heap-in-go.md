@@ -6,7 +6,7 @@ iscjklanguage: false
 isarchived: true
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?w=1920&q=50"]
-aliases: ["/blog/max-heap-in-go-102912"]
+aliases: []
 description: "This post contains my own experiences in reviewing my knowledge of Max / Min Heap data structure"
 ---
 

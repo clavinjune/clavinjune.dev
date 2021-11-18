@@ -6,7 +6,7 @@ iscjklanguage: false
 isarchived: true
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=1920&q=50"]
-aliases: ["/blog/sieve-of-eratosthenes-a2a24c"]
+aliases: []
 description: "This post contains notes about how to find first N prime numbers in Go using Sieve of Eratosthenes"
 ---
 

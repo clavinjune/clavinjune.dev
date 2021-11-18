@@ -6,7 +6,7 @@ iscjklanguage: false
 isarchived: true
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1517232117795-40c9d8212a04?w=1920&q=50"]
-aliases: ["/blog/monetize-your-content-with-web-monetization-e3ee66"]
+aliases: []
 description: "This post contains my own experience monetizing my blog using Web Monetization"
 ---
 

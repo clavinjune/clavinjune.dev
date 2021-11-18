@@ -6,7 +6,7 @@ iscjklanguage: false
 isarchived: true
 categories: ["tech"]
 images: []
-aliases: ["/blog/golang-context-cancelled-on-goroutine-40ffb1"]
+aliases: []
 description: "This post contains notes about request context behavior on goroutine"
 ---
 
