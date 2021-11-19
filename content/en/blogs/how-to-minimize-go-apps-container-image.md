@@ -51,7 +51,7 @@ func main() {
 }
 ```
 
-Import the `github.com/julienschmidt/httprouter` to help simulate the `go mod download` command inside the `Dockerfile`/`Containerfile`.
+Import the [httprouter](github.com/julienschmidt/httprouter) to help simulate the `go mod download` command inside the `Dockerfile`/`Containerfile`.
 
 ## Initial Dockerfile
 
