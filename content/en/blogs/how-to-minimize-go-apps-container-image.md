@@ -4,7 +4,7 @@ date: 2021-11-19T18:46:59+07:00
 draft: false
 iscjklanguage: false
 isarchived: false
-categories: ["other"]
+categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1613690399151-65ea69478674?w=1920&q=50"]
 aliases: []
 description: "how to reduce your Golang apps container image size"
