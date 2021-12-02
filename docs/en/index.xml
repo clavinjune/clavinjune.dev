@@ -1,4 +1,154 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Fri, 19 Nov 2021 18:46:59 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>How to Minimize Go Apps Container Image</title><link>https://clavinjune.dev/en/blogs/how-to-minimize-go-apps-container-image/</link><pubDate>Fri, 19 Nov 2021 18:46:59 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/how-to-minimize-go-apps-container-image/</guid><description><![CDATA[
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Thu, 02 Dec 2021 15:36:25 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Working With Remote Docker Using Docker Context</title><link>https://clavinjune.dev/en/blogs/working-with-remote-docker-using-docker-context/</link><pubDate>Thu, 02 Dec 2021 15:36:25 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/working-with-remote-docker-using-docker-context/</guid><description><![CDATA[
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+<figure>
+  <img
+    srcset="https://images.unsplash.com/photo-1605745341112-85968b19335b?q=50&amp;w=240 240w,https://images.unsplash.com/photo-1605745341112-85968b19335b?q=50&amp;w=300 300w,https://images.unsplash.com/photo-1605745341112-85968b19335b?q=50&amp;w=360 360w,https://images.unsplash.com/photo-1605745341112-85968b19335b?q=50&amp;w=480 480w,https://images.unsplash.com/photo-1605745341112-85968b19335b?q=50&amp;w=768 768w,https://images.unsplash.com/photo-1605745341112-85968b19335b?q=50&amp;w=800 800w,https://images.unsplash.com/photo-1605745341112-85968b19335b?q=50&amp;w=960 960w,https://images.unsplash.com/photo-1605745341112-85968b19335b?q=50&amp;w=1024 1024w,https://images.unsplash.com/photo-1605745341112-85968b19335b?q=50&amp;w=1080 1080w,https://images.unsplash.com/photo-1605745341112-85968b19335b?q=50&amp;w=1200 1200w,https://images.unsplash.com/photo-1605745341112-85968b19335b?q=50&amp;w=1366 1366w,https://images.unsplash.com/photo-1605745341112-85968b19335b?q=50&amp;w=1920 1920w"
+    sizes="(max-width: 480px) 480px, 100vw"
+    src="https://images.unsplash.com/photo-1605745341112-85968b19335b?q=50&amp;w=1920" alt="Photo by @carrier_lost on Unsplash" title="Photo by @carrier_lost on Unsplash" width="100%" height="auto"/>
+  <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@carrier_lost">@carrier_lost</a> on Unsplash</figcaption>
+</figure>
+<h2 id="introduction">Introduction</h2>
+<p>This is a cheatsheet for working with docker context to connect remote docker locally. Might help you to work with remote docker without manually SSH to the remote server.</p>
+<h2 id="add-context">Add Context</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ docker context create my-remote-docker-machine --docker <span style="color:#a31515">&#34;host=ssh://username@host&#34;</span>
+my-remote-docker-machine
+Successfully created context <span style="color:#a31515">&#34;my-remote-docker-machine&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>You can also utilize <code>SSH Config</code> file to connect to the remote docker. Especially when you need to define your <code>private key</code> or <code>password</code>.</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cat ~/.ssh/config 
+Host my-remote-docker-machine
+  Hostname host
+  User username
+$ docker context create my-remote-docker-machine --docker <span style="color:#a31515">&#34;host=ssh://my-remote-docker-machine&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Besides <code>ssh</code>, you can also add your context using <code>tcp</code> protocol if you enable the <code>Docker API</code>.</p>
+<h2 id="list-all-context">List All Context</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ docker context ls
+NAME                       DESCRIPTION                               DOCKER ENDPOINT               KUBERNETES ENDPOINT   ORCHESTRATOR
+default *                  Current DOCKER_HOST based configuration   unix:///var/run/docker.sock                         swarm
+my-remote-docker-machine                                             ssh://username@host
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="use-context">Use Context</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ docker --context my-remote-docker-machine images -q
+65dadc9c7fe7
+f814fce55133
+7a9b6da4328e
+33655f17f093
+d120da10b040
+6d6859d1a42a
+c19ae228f069
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="set-new-context-as-default">Set New Context as Default</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ docker context use my-remote-docker-machine 
+my-remote-docker-machine
+Current context is now <span style="color:#a31515">&#34;my-remote-docker-machine&#34;</span>
+$ docker context ls
+NAME                         DESCRIPTION                               DOCKER ENDPOINT               KUBERNETES ENDPOINT   ORCHESTRATOR
+default                      Current DOCKER_HOST based configuration   unix:///var/run/docker.sock                         swarm
+my-remote-docker-machine *                                             ssh://username@host
+
+</code></pre></td></tr></table>
+</div>
+</div><p>See the <code>*</code> is moved from <code>default</code> to <code>my-remote-docker-machine</code>. Now you can use your docker command without <code>--context</code> flag.</p>
+<h2 id="remove-context">Remove Context</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ docker context use default <span style="color:#008000"># back to default</span>
+$ docker context rm my-remote-docker-machine 
+my-remote-docker-machine
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="conclusion">Conclusion</h2>
+<p>Using docker context might help to avoid SSH manually to the remote server. But, when it comes to build an image using a remote docker locally, you need to consider how much docker context that will be uploaded/downloaded.</p>
+<p>Thank you for reading!</p>
+]]></description></item><item><title>How to Minimize Go Apps Container Image</title><link>https://clavinjune.dev/en/blogs/how-to-minimize-go-apps-container-image/</link><pubDate>Fri, 19 Nov 2021 18:46:59 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/how-to-minimize-go-apps-container-image/</guid><description><![CDATA[
   
 
   

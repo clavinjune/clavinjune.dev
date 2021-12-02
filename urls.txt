@@ -8,3 +8,4 @@ https://git.io/cj-4c124 => https://clavinjune.github.io/en/blogs/bypass-recaptch
 https://git.io/cj-e213d => https://clavinjune.github.io/en/blogs/speed-up-golang-test-execution-time/
 https://git.io/cj-d55bc => https://clavinjune.github.io/en/blogs/npm-login-not-working/
 https://git.io/cj-5f4c4 => https://clavinjune.github.io/en/blogs/how-to-minimize-go-apps-container-image/
+https://git.io/cj-0c8ca => https://clavinjune.github.io/en/blogs/working-with-remote-docker-using-docker-context/
