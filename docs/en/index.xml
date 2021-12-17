@@ -1,4 +1,484 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Thu, 02 Dec 2021 15:36:25 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Working With Remote Docker Using Docker Context</title><link>https://clavinjune.dev/en/blogs/working-with-remote-docker-using-docker-context/</link><pubDate>Thu, 02 Dec 2021 15:36:25 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/working-with-remote-docker-using-docker-context/</guid><description><![CDATA[
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Fri, 17 Dec 2021 11:02:44 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Mocking HTTP Call in Golang a Better Way</title><link>https://clavinjune.dev/en/blogs/mocking-http-call-in-golang-a-better-way/</link><pubDate>Fri, 17 Dec 2021 11:02:44 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/mocking-http-call-in-golang-a-better-way/</guid><description><![CDATA[
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+<figure>
+  <img
+    srcset="https://images.unsplash.com/photo-1532726635173-491f83dcce3c?q=50&amp;w=240 240w,https://images.unsplash.com/photo-1532726635173-491f83dcce3c?q=50&amp;w=300 300w,https://images.unsplash.com/photo-1532726635173-491f83dcce3c?q=50&amp;w=360 360w,https://images.unsplash.com/photo-1532726635173-491f83dcce3c?q=50&amp;w=480 480w,https://images.unsplash.com/photo-1532726635173-491f83dcce3c?q=50&amp;w=768 768w,https://images.unsplash.com/photo-1532726635173-491f83dcce3c?q=50&amp;w=800 800w,https://images.unsplash.com/photo-1532726635173-491f83dcce3c?q=50&amp;w=960 960w,https://images.unsplash.com/photo-1532726635173-491f83dcce3c?q=50&amp;w=1024 1024w,https://images.unsplash.com/photo-1532726635173-491f83dcce3c?q=50&amp;w=1080 1080w,https://images.unsplash.com/photo-1532726635173-491f83dcce3c?q=50&amp;w=1200 1200w,https://images.unsplash.com/photo-1532726635173-491f83dcce3c?q=50&amp;w=1366 1366w,https://images.unsplash.com/photo-1532726635173-491f83dcce3c?q=50&amp;w=1920 1920w"
+    sizes="(max-width: 480px) 480px, 100vw"
+    src="https://images.unsplash.com/photo-1532726635173-491f83dcce3c?q=50&amp;w=1920" alt="Photo by @jim_reardan on Unsplash" title="Photo by @jim_reardan on Unsplash" width="100%" height="auto"/>
+  <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@jim_reardan">@jim_reardan</a> on Unsplash</figcaption>
+</figure>
+<h2 id="introduction">Introduction</h2>
+<p>As a software engineer, you need to learn every day to keep your knowledge up-to-date. Any improvement in any aspect would help you write a better code. After writing more and more Golang code, I realized that I could improve <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="/en/blogs/mocking-http-call-in-golang/"   >this blog post</a>.</p>
+<p>As you see in that post, you need to <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="/en/blogs/mocking-http-call-in-golang/#http-client-mock"   >mock the HTTP Client</a> to make the HTTP call simulated correctly. Also, you are required to change your <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="/en/blogs/mocking-http-call-in-golang/#api-implementation-struct"   >API implementation</a> to use the HTTPClient interface. That&rsquo;s quite a problem in the long run because you don&rsquo;t know what improvement will the HTTP Client got in the next version of the Golang code base. That&rsquo;s the problem you got if you mock the HTTP client. Instead, you can change the perspective and start to mock the HTTP Server.</p>
+<p>In this blog post, you will learn how to mock the HTTP server using a built-in testing library. There&rsquo;s no need to create your own interfaces because it is all provided by the Golang standard library called <code>httptest</code>.</p>
+<h2 id="directory-structure">Directory Structure</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ go mod init example
+go: creating new go.mod: module example
+$ mkdir -p external
+$ touch external/{external.go,external_test.go}
+$ tree .
+.
+├── external
+│   ├── external.go
+│   └── external_test.go
+└── go.mod
+
+1 directory, 3 files
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="implementation-file-content">Implementation File Content</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#008000">// external.go
+</span><span style="color:#008000"></span><span style="color:#00f">package</span> external
+
+<span style="color:#00f">import</span> (
+    <span style="color:#a31515">&#34;context&#34;</span>
+    <span style="color:#a31515">&#34;encoding/json&#34;</span>
+    <span style="color:#a31515">&#34;errors&#34;</span>
+    <span style="color:#a31515">&#34;fmt&#34;</span>
+    <span style="color:#a31515">&#34;net/http&#34;</span>
+    <span style="color:#a31515">&#34;time&#34;</span>
+)
+
+<span style="color:#00f">var</span> (
+    ErrResponseNotOK <span style="color:#2b91af">error</span> = errors.New(<span style="color:#a31515">&#34;response not ok&#34;</span>)
+)
+
+<span style="color:#00f">type</span> (
+    Data <span style="color:#00f">struct</span> {
+        ID   <span style="color:#2b91af">string</span> <span style="color:#a31515">`json:&#34;id&#34;`</span>
+        Name <span style="color:#2b91af">string</span> <span style="color:#a31515">`json:&#34;name&#34;`</span>
+    }
+
+    External <span style="color:#00f">interface</span> {
+        FetchData(ctx context.Context, id <span style="color:#2b91af">string</span>) (*Data, <span style="color:#2b91af">error</span>)
+    }
+
+    v1 <span style="color:#00f">struct</span> {
+        baseURL <span style="color:#2b91af">string</span>
+        client  *http.Client
+        timeout time.Duration
+    }
+)
+
+<span style="color:#00f">func</span> New(baseURL <span style="color:#2b91af">string</span>, client *http.Client, timeout time.Duration) *v1 {
+    <span style="color:#00f">return</span> &amp;v1{
+        baseURL: baseURL,
+        client:  client,
+        timeout: timeout,
+    }
+}
+
+<span style="color:#00f">func</span> (v *v1) FetchData(ctx context.Context, id <span style="color:#2b91af">string</span>) (*Data, <span style="color:#2b91af">error</span>) {
+    url := fmt.Sprintf(<span style="color:#a31515">&#34;%s/?id=%s&#34;</span>, v.baseURL, id)
+
+    ctx, cancel := context.WithTimeout(ctx, v.timeout)
+    <span style="color:#00f">defer</span> cancel()
+
+    req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, <span style="color:#00f">nil</span>)
+    <span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+        <span style="color:#00f">return</span> <span style="color:#00f">nil</span>, err
+    }
+
+    resp, err := v.client.Do(req)
+    <span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+        <span style="color:#00f">return</span> <span style="color:#00f">nil</span>, err
+    }
+    <span style="color:#00f">defer</span> resp.Body.Close()
+
+    <span style="color:#00f">if</span> resp.StatusCode != http.StatusOK {
+        <span style="color:#00f">return</span> <span style="color:#00f">nil</span>, fmt.Errorf(<span style="color:#a31515">&#34;%w. %s&#34;</span>, ErrResponseNotOK, http.StatusText(resp.StatusCode))
+    }
+
+    <span style="color:#00f">var</span> d *Data
+    <span style="color:#00f">return</span> d, json.NewDecoder(resp.Body).Decode(&amp;d)
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>It is a little bit different to the one you implemented before, but the goal remains the same is to make an HTTP call to the external service. Let&rsquo;s focus on the <code>External interface</code> that you need to mock.</p>
+<h2 id="test-file-content">Test File Content</h2>
+<p>First, you need to mock the HTTP server and the <code>External object</code>.</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#00f">package</span> external_test
+
+<span style="color:#00f">import</span> (
+    <span style="color:#a31515">&#34;example/external&#34;</span>
+    <span style="color:#a31515">&#34;fmt&#34;</span>
+    <span style="color:#a31515">&#34;net/http&#34;</span>
+    <span style="color:#a31515">&#34;net/http/httptest&#34;</span>
+    <span style="color:#a31515">&#34;testing&#34;</span>
+    <span style="color:#a31515">&#34;time&#34;</span>
+)
+
+<span style="color:#00f">var</span> (
+    server *httptest.Server
+    ext    external.External
+)
+
+<span style="color:#00f">func</span> TestMain(m *testing.M) {
+    fmt.Println(<span style="color:#a31515">&#34;mocking server&#34;</span>)
+    server = httptest.NewServer(http.HandlerFunc(<span style="color:#00f">func</span>(w http.ResponseWriter, r *http.Request) {
+        <span style="color:#008000">// mock here
+</span><span style="color:#008000"></span>    }))
+
+    fmt.Println(<span style="color:#a31515">&#34;mocking external&#34;</span>)
+    ext = external.New(server.URL, http.DefaultClient, time.Second)
+
+    fmt.Println(<span style="color:#a31515">&#34;run tests&#34;</span>)
+    m.Run()
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>As you see on line 24:</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">...
+ext = external.New(server.URL, http.DefaultClient, time.Second)
+...
+</code></pre></td></tr></table>
+</div>
+</div><p>You can use the <code>server.URL</code> as the <code>baseURL</code> so all the HTTP Call to the <code>baseURL</code> will be handled by the <code>httptest.Server</code>. That&rsquo;s how you mock the HTTP server instead of the HTTP call.</p>
+<p>After creating the mock server, you need to mock the endpoint also. For example:</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">...
+
+<span style="color:#00f">func</span> mockFetchDataEndpoint(w http.ResponseWriter, r *http.Request) {
+    ids, ok := r.URL.Query()[<span style="color:#a31515">&#34;id&#34;</span>]
+
+    sc := http.StatusOK
+    m := make(<span style="color:#00f">map</span>[<span style="color:#2b91af">string</span>]<span style="color:#00f">interface</span>{})
+
+    <span style="color:#00f">if</span> !ok || len(ids[0]) == 0 {
+        sc = http.StatusBadRequest
+    } <span style="color:#00f">else</span> {
+        m[<span style="color:#a31515">&#34;id&#34;</span>] = <span style="color:#a31515">&#34;mock&#34;</span>
+        m[<span style="color:#a31515">&#34;name&#34;</span>] = <span style="color:#a31515">&#34;mock&#34;</span>
+    }
+
+    w.Header().Set(<span style="color:#a31515">&#34;Content-Type&#34;</span>, <span style="color:#a31515">&#34;application/json&#34;</span>)
+    w.WriteHeader(sc)
+    json.NewEncoder(w).Encode(m)
+}
+
+...
+</code></pre></td></tr></table>
+</div>
+</div><p>Then, put the endpoint inside your mock server.</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">...
+
+server = httptest.NewServer(http.HandlerFunc(<span style="color:#00f">func</span>(w http.ResponseWriter, r *http.Request) {
+    <span style="color:#00f">switch</span> strings.TrimSpace(r.URL.Path) {
+    <span style="color:#00f">case</span> <span style="color:#a31515">&#34;/&#34;</span>:
+        mockFetchDataEndpoint(w, r)
+    <span style="color:#00f">default</span>:
+        http.NotFoundHandler().ServeHTTP(w, r)
+    }
+}))
+
+...
+</code></pre></td></tr></table>
+</div>
+</div><p>The advantage of mocking the HTTP server that way is, you can put all the endpoints needed on one server only. It will be created once, before the <code>m.Run()</code> and then used by all your tests in the same package.</p>
+<h2 id="create-the-unit-test">Create the Unit Test</h2>
+<p>Now you have mocked the HTTP Server, there&rsquo;s nothing special on the unit test itself. You can start writing your unit test as usual. For example:</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">...
+
+<span style="color:#00f">func</span> fatal(t *testing.T, want, got <span style="color:#00f">interface</span>{}) {
+    t.Helper()
+    t.Fatalf(<span style="color:#a31515">`want: %v, got: %v`</span>, want, got)
+}
+
+<span style="color:#00f">func</span> TestExternal_FetchData(t *testing.T) {
+    tt := []<span style="color:#00f">struct</span> {
+        name     <span style="color:#2b91af">string</span>
+        id       <span style="color:#2b91af">string</span>
+        wantData *external.Data
+        wantErr  <span style="color:#2b91af">error</span>
+    }{
+        {
+            name:     <span style="color:#a31515">&#34;response not ok&#34;</span>,
+            id:       <span style="color:#a31515">&#34;&#34;</span>,
+            wantData: <span style="color:#00f">nil</span>,
+            wantErr:  external.ErrResponseNotOK,
+        },
+        {
+            name: <span style="color:#a31515">&#34;data found&#34;</span>,
+            id:   <span style="color:#a31515">&#34;mock&#34;</span>,
+            wantData: &amp;external.Data{
+                ID:   <span style="color:#a31515">&#34;mock&#34;</span>,
+                Name: <span style="color:#a31515">&#34;mock&#34;</span>,
+            },
+            wantErr: <span style="color:#00f">nil</span>,
+        },
+    }
+
+    <span style="color:#00f">for</span> i := <span style="color:#00f">range</span> tt {
+        tc := tt[i]
+
+        t.Run(tc.name, <span style="color:#00f">func</span>(t *testing.T) {
+            t.Parallel()
+
+            gotData, gotErr := ext.FetchData(context.Background(), tc.id)
+
+            <span style="color:#00f">if</span> !errors.Is(gotErr, tc.wantErr) {
+                fatal(t, tc.wantErr, gotErr)
+            }
+
+            <span style="color:#00f">if</span> !reflect.DeepEqual(gotData, tc.wantData) {
+                fatal(t, tc.wantData, gotData)
+            }
+        })
+    }
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="conclusion">Conclusion</h2>
+<p>By changing the perspective, you have improved the unit test a lot. Instead of mocking the HTTP Call, mocking the HTTP server is way more readable and proper. You don&rsquo;t need to create interfaces of the HTTP client and start using the standard way to mock the call by using the <code>httptest</code>.</p>
+<p>Thank you for reading!</p>
+]]></description></item><item><title>Working With Remote Docker Using Docker Context</title><link>https://clavinjune.dev/en/blogs/working-with-remote-docker-using-docker-context/</link><pubDate>Thu, 02 Dec 2021 15:36:25 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/working-with-remote-docker-using-docker-context/</guid><description><![CDATA[
   
 
   
