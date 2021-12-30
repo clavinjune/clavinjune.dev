@@ -1,4 +1,220 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Fri, 17 Dec 2021 11:02:44 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Mocking HTTP Call in Golang a Better Way</title><link>https://clavinjune.dev/en/blogs/mocking-http-call-in-golang-a-better-way/</link><pubDate>Fri, 17 Dec 2021 11:02:44 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/mocking-http-call-in-golang-a-better-way/</guid><description><![CDATA[
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Thu, 30 Dec 2021 11:59:30 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Serving Embedded Static File Inside Subdirectory Using Go</title><link>https://clavinjune.dev/en/blogs/serving-embedded-static-file-inside-subdirectory-using-go/</link><pubDate>Thu, 30 Dec 2021 11:59:30 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/serving-embedded-static-file-inside-subdirectory-using-go/</guid><description><![CDATA[
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+<figure>
+  <img
+    srcset="https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;w=240 240w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;w=300 300w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;w=360 360w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;w=480 480w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;w=768 768w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;w=800 800w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;w=960 960w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;w=1024 1024w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;w=1080 1080w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;w=1200 1200w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;w=1366 1366w,https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;w=1920 1920w"
+    sizes="(max-width: 480px) 480px, 100vw"
+    src="https://images.unsplash.com/photo-1461360228754-6e81c478b882?q=50&amp;w=1920" alt="Photo by @iammrcup on Unsplash" title="Photo by @iammrcup on Unsplash" width="100%" height="auto"/>
+  <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@iammrcup">@iammrcup</a> on Unsplash</figcaption>
+</figure>
+<h2 id="introduction">Introduction</h2>
+<p>As <code>embed</code> package released on Golang v1.16, now you can include any of your files into your golang binary. You can also serve the embedded file as a static site. But when it comes to subdirectory, you need to handle it a bit different.</p>
+<p>In this article, you will learn how to serve embedded files as a static site that stored inside a subdirectory.</p>
+<h2 id="directory-structure">Directory Structure</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ tree .
+.
+├── frontend
+│   └── public
+│       ├── assets
+│       │   ├── css
+│       │   │   └── style.css
+│       │   └── js
+│       │       └── index.js
+│       └── index.html
+├── go.mod
+└── main.go
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="html-content">HTML Content</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="color:#00f">&lt;!DOCTYPE html&gt;</span>
+&lt;html lang=<span style="color:#a31515">&#34;en&#34;</span>&gt;
+&lt;head&gt;
+    &lt;meta charset=<span style="color:#a31515">&#34;UTF-8&#34;</span>&gt;
+    &lt;meta http-equiv=<span style="color:#a31515">&#34;X-UA-Compatible&#34;</span> content=<span style="color:#a31515">&#34;IE=edge&#34;</span>&gt;
+    &lt;meta name=<span style="color:#a31515">&#34;viewport&#34;</span> content=<span style="color:#a31515">&#34;width=device-width, initial-scale=1.0&#34;</span>&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+    &lt;link rel=<span style="color:#a31515">&#34;stylesheet&#34;</span> href=<span style="color:#a31515">&#34;assets/css/style.css&#34;</span>&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;script src=<span style="color:#a31515">&#34;/assets/js/index.js&#34;</span>&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>To test if the <code>assets</code> can be imported using <code>absolute</code> and <code>relative</code> URL, you can write the <code>link rel</code> and <code>script src</code> like the snippet above. You can put anything inside your <code>style.css</code> and <code>index.js</code> just to make sure it is loaded.</p>
+<h2 id="the-problem">The Problem</h2>
+<p>Before <code>embed</code> package is released, you used to use <code>http.Dir</code> to serve a static site using Go like below:</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#00f">package</span> main
+
+<span style="color:#00f">import</span> (
+    <span style="color:#a31515">&#34;net/http&#34;</span>
+)
+
+<span style="color:#00f">func</span> dirHandler() http.Handler {
+    <span style="color:#00f">return</span> http.FileServer(http.Dir(<span style="color:#a31515">&#34;frontend/public&#34;</span>))
+}
+
+<span style="color:#00f">func</span> main() {
+    http.ListenAndServe(<span style="color:#a31515">&#34;:8000&#34;</span>, dirHandler())
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>And yes, it works like a charm. But, when it comes to <code>embed</code>:</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#00f">package</span> main
+
+<span style="color:#00f">import</span> (
+    <span style="color:#a31515">&#34;embed&#34;</span>
+    <span style="color:#a31515">&#34;net/http&#34;</span>
+)
+
+<span style="color:#008000">//go:embed frontend/public
+</span><span style="color:#008000"></span><span style="color:#00f">var</span> public embed.FS
+
+<span style="color:#00f">func</span> fsHandler() http.Handler {
+    <span style="color:#00f">return</span> http.FileServer(http.FS(public))
+}
+
+<span style="color:#00f">func</span> main() {
+    http.ListenAndServe(<span style="color:#a31515">&#34;:8000&#34;</span>, fsHandler())
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>It doesn&rsquo;t work because you didn&rsquo;t specified which subdirectory will be served. <code>http.FS</code> will serve the embedded files from <code>root</code>, that&rsquo;s why instead of <code>http://localhost:8000/</code>, you need to access it using <code>http://localhost:8000/frontend/public/</code>.</p>
+<p>But the other problem is, it makes your <code>absolute</code> import not working. <code>/assets/js/index.js</code> will not work because it accesses the file from the <code>root</code>.</p>
+<h2 id="the-solution">The Solution</h2>
+<p>To solve those problems, you can use <code>fs.Sub</code> to get the subtree of the <code>embedded</code> files. So you can start get the <code>frontend/public</code> directory as a root.</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#008000">//go:embed frontend/public
+</span><span style="color:#008000"></span><span style="color:#00f">var</span> public embed.FS
+
+<span style="color:#00f">func</span> fsHandler() http.Handler {
+    sub, err := fs.Sub(public, <span style="color:#a31515">&#34;frontend/public&#34;</span>)
+    <span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+        panic(err)
+    }
+
+    <span style="color:#00f">return</span> http.FileServer(http.FS(sub))
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>Now, you can access the site using <code>http://localhost:8000/</code> and both your <code>relative</code> and <code>absolute</code> import works again!</p>
+<p>Thank you for reading!</p>
+]]></description></item><item><title>Mocking HTTP Call in Golang a Better Way</title><link>https://clavinjune.dev/en/blogs/mocking-http-call-in-golang-a-better-way/</link><pubDate>Fri, 17 Dec 2021 11:02:44 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/mocking-http-call-in-golang-a-better-way/</guid><description><![CDATA[
   
 
   
