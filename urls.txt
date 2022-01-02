@@ -10,3 +10,4 @@ https://git.io/cj-d55bc => https://clavinjune.github.io/en/blogs/npm-login-not-w
 https://git.io/cj-5f4c4 => https://clavinjune.github.io/en/blogs/how-to-minimize-go-apps-container-image/
 https://git.io/cj-0c8ca => https://clavinjune.github.io/en/blogs/working-with-remote-docker-using-docker-context/
 https://git.io/cj-a343a => https://clavinjune.github.io/en/blogs/mocking-http-call-in-golang-a-better-way/
+https://git.io/cj-6b7fe => https://clavinjune.github.io/en/blogs/serving-embedded-static-file-inside-subdirectory-using-go/

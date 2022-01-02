@@ -164,6 +164,10 @@ theme = 'june'
     [[params.june.contact]]
       Name = "LinkedIn"
       URL  = "https://linkedin.com/in/juneardoc"
+
+    [[params.june.contact]]
+      Name = "Twitter"
+      URL  = "https://twitter.com/clavinjune"
       
     [params.june.giscus]
       Repo =  "ClavinJune/ClavinJune.github.io"
