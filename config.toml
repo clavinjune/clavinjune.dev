@@ -138,7 +138,7 @@ theme = 'june'
     # canonicalURL = 'https://another-page.com'
     csp = "default-src 'self' 'unsafe-inline' https:; object-src 'none'; style-src 'self' 'unsafe-inline' fonts.googleapis.com github.githubassets.com; font-src fonts.gstatic.com; script-src 'self' 'unsafe-inline' www.googletagmanager.com gist.github.com giscus.app; base-uri 'none'; img-src 'self' images.unsplash.com i.kym-cdn.com iq.opengenus.org;"
     googleSiteVerification = 'n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE'
-    indieLoginURL = 'https://github.com/clavinjune'
+    indieLoginURL = 'mailto:juneardoc@gmail.com'
     monetization = '$ilp.uphold.com/RYNmdxrFrPJB'
     superfeedrURL = 'https://clavinjune.superfeedr.com/'
 
