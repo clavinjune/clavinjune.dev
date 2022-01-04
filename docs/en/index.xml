@@ -1,4 +1,136 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Thu, 30 Dec 2021 11:59:30 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Serving Embedded Static File Inside Subdirectory Using Go</title><link>https://clavinjune.dev/en/blogs/serving-embedded-static-file-inside-subdirectory-using-go/</link><pubDate>Thu, 30 Dec 2021 11:59:30 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/serving-embedded-static-file-inside-subdirectory-using-go/</guid><description><![CDATA[
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Tue, 04 Jan 2022 17:09:11 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Listening to Random Available Port in Go</title><link>https://clavinjune.dev/en/blogs/listening-to-random-available-port-in-go/</link><pubDate>Tue, 04 Jan 2022 17:09:11 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/listening-to-random-available-port-in-go/</guid><description><![CDATA[
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+<figure>
+  <img
+    srcset="https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&amp;w=240 240w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&amp;w=300 300w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&amp;w=360 360w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&amp;w=480 480w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&amp;w=768 768w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&amp;w=800 800w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&amp;w=960 960w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&amp;w=1024 1024w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&amp;w=1080 1080w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&amp;w=1200 1200w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&amp;w=1366 1366w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&amp;w=1920 1920w"
+    sizes="(max-width: 480px) 480px, 100vw"
+    src="https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&amp;w=1920" alt="Photo by @mbaumi on Unsplash" title="Photo by @mbaumi on Unsplash" width="100%" height="auto"/>
+  <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@mbaumi">@mbaumi</a> on Unsplash</figcaption>
+</figure>
+<p>To use a random available port in Golang, you can use <code>:0</code>. I believe the port <code>0</code> would works for another language as well as I tried in python.</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ python -m SimpleHTTPServer 0
+Serving HTTP on 0.0.0.0 port 43481 ...
+</code></pre></td></tr></table>
+</div>
+</div><p>According to <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://www.lifewire.com/port-0-in-tcp-and-udp-818145"   >lifewire</a>, port <code>0</code> is a <code>non-ephemeral port</code> that works as a wildcard that tells the system <strong>to find any available ports particularly in the Unix OS</strong>.</p>
+<h2 id="the-go-code">The Go Code</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#00f">package</span> main
+
+<span style="color:#00f">import</span> (
+    <span style="color:#a31515">&#34;log&#34;</span>
+    <span style="color:#a31515">&#34;net&#34;</span>
+    <span style="color:#a31515">&#34;net/http&#34;</span>
+)
+
+<span style="color:#00f">func</span> createListener() (l net.Listener, close <span style="color:#00f">func</span>()) {
+    l, err := net.Listen(<span style="color:#a31515">&#34;tcp&#34;</span>, <span style="color:#a31515">&#34;:0&#34;</span>)
+    <span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+        panic(err)
+    }
+
+    <span style="color:#00f">return</span> l, <span style="color:#00f">func</span>() {
+        _ = l.Close()
+    }
+}
+
+<span style="color:#00f">func</span> main() {
+    l, close := createListener()
+    <span style="color:#00f">defer</span> close()
+
+    http.Handle(<span style="color:#a31515">&#34;/&#34;</span>, http.HandlerFunc(<span style="color:#00f">func</span>(rw http.ResponseWriter, r *http.Request) {
+        <span style="color:#008000">// handle like normal
+</span><span style="color:#008000"></span>    }))
+
+    log.Println(<span style="color:#a31515">&#34;listening at&#34;</span>, l.Addr().(*net.TCPAddr).Port)
+    http.Serve(l, <span style="color:#00f">nil</span>)
+}
+
+</code></pre></td></tr></table>
+</div>
+</div><p>Execute it:</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ go run main.go 
+2022/01/04 17:40:16 listening at 33845
+</code></pre></td></tr></table>
+</div>
+</div><p>Thank you for reading!</p>
+]]></description></item><item><title>Serving Embedded Static File Inside Subdirectory Using Go</title><link>https://clavinjune.dev/en/blogs/serving-embedded-static-file-inside-subdirectory-using-go/</link><pubDate>Thu, 30 Dec 2021 11:59:30 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/serving-embedded-static-file-inside-subdirectory-using-go/</guid><description><![CDATA[
   
 
   

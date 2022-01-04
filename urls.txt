@@ -11,3 +11,4 @@ https://git.io/cj-5f4c4 => https://clavinjune.github.io/en/blogs/how-to-minimize
 https://git.io/cj-0c8ca => https://clavinjune.github.io/en/blogs/working-with-remote-docker-using-docker-context/
 https://git.io/cj-a343a => https://clavinjune.github.io/en/blogs/mocking-http-call-in-golang-a-better-way/
 https://git.io/cj-6b7fe => https://clavinjune.github.io/en/blogs/serving-embedded-static-file-inside-subdirectory-using-go/
+https://git.io/cj-7e91b => https://clavinjune.github.io/en/blogs/listening-to-random-available-port-in-go/

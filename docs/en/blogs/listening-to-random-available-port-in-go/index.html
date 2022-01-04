@@ -1,0 +1,167 @@
+<!doctype html><html lang=en>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatbile content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=author content="Clavin June">
+<meta http-equiv=content-security-policy content="default-src 'self' 'unsafe-inline' https:; object-src 'none'; style-src 'self' 'unsafe-inline' fonts.googleapis.com github.githubassets.com; font-src fonts.gstatic.com; script-src 'self' 'unsafe-inline' www.googletagmanager.com gist.github.com giscus.app; base-uri 'none'; img-src 'self' images.unsplash.com i.kym-cdn.com iq.opengenus.org;">
+<meta name=google-site-verification content="n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE">
+<meta name=monetization content="$ilp.uphold.com/RYNmdxrFrPJB">
+<link rel=me href=mailto:juneardoc@gmail.com>
+<link rel=pingback href=https://webmention.io/clavinjune.dev_en_/xmlrpc>
+<link rel=webmention href=https://webmention.io/clavinjune.dev_en_/webmention>
+<meta name=description content="Listening to random available port in Go">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="June Personal Web">
+<meta property="og:title" content="Listening to Random Available Port in Go">
+<meta property="og:description" content="Listening to random available port in Go">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://clavinjune.dev/en/blogs/listening-to-random-available-port-in-go/"><meta property="og:image" content="https://images.unsplash.com/photo-1529078155058-5d716f45d604?w=1920&q=50"><meta property="article:section" content="blogs">
+<meta property="article:published_time" content="2022-01-04T17:09:11+07:00">
+<meta property="article:modified_time" content="2022-01-04T17:09:11+07:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://images.unsplash.com/photo-1529078155058-5d716f45d604?w=1920&q=50">
+<meta name=twitter:title content="Listening to Random Available Port in Go">
+<meta name=twitter:description content="Listening to random available port in Go">
+<title>June Personal Web - Listening to Random Available Port in Go</title>
+<link rel=stylesheet href="/css/style.min.caf3859664f2f17538a5252c2da2fafd55c3c16af6cf7edc370e96f06f065494.css" integrity="sha256-yvOFlmTy8XU4pSUsLaL6/VXDwWr2z37cNw6W8G8GVJQ=">
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin>
+<link rel=preload href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap" as=style onload="this.onload=null,this.rel='stylesheet'">
+<noscript>
+<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap">
+</noscript>
+<link rel=preload href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" as=style onload="this.onload=null,this.rel='stylesheet'">
+<noscript>
+<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap">
+</noscript>
+<link rel=stylesheet href="/css/single.min.64240b89963babc78945279025eab5a935a4038b0c75d1113d3a42e920ae59b4.css" integrity="sha256-ZCQLiZY7q8eJRSeQJeq1qTWkA4sMddERPTpC6SCuWbQ=">
+</head>
+<body><nav class=fg-bold>
+<a id=skip-to-content href=#content>Skip to content</a>
+<ul id=menu><li><a href=https://clavinjune.dev/en/>HOME</a></li><li><a class=active href=https://clavinjune.dev/en/blogs/>BLOG</a></li></ul>
+</nav>
+<main class=single>
+<h1 class=title>Listening to Random Available Port in Go</h1>
+<div class="metadata font-16">
+<a class=category href=https://clavinjune.dev/en/categories/tech>tech</a>
+<span class=middot>&#183;</span>
+<span>Jan 4, 2022</span>
+<span class=middot>&#183;</span>
+<span>~1 min</span>
+</div>
+<div id=content>
+<figure>
+<img srcset="https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&w=240 240w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&w=300 300w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&w=360 360w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&w=480 480w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&w=768 768w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&w=800 800w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&w=960 960w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&w=1024 1024w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&w=1080 1080w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&w=1200 1200w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&w=1366 1366w,https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&w=1920 1920w" sizes="(max-width: 480px) 480px, 100vw" src="https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=50&w=1920" alt="Photo by @mbaumi on Unsplash" title="Photo by @mbaumi on Unsplash" width=100% height=auto>
+<figcaption class=font-16>Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target=_blank href=https://unsplash.com/@mbaumi>@mbaumi</a> on Unsplash</figcaption>
+</figure>
+<p>To use a random available port in Golang, you can use <code>:0</code>. I believe the port <code>0</code> would works for another language as well as I tried in python.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ python -m SimpleHTTPServer 0
+Serving HTTP on 0.0.0.0 port 43481 ...
+</code></pre></td></tr></table>
+</div>
+</div><p>According to <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://www.lifewire.com/port-0-in-tcp-and-udp-818145>lifewire</a>, port <code>0</code> is a <code>non-ephemeral port</code> that works as a wildcard that tells the system <strong>to find any available ports particularly in the Unix OS</strong>.</p>
+<h2 id=the-go-code>The Go Code</h2>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> main
+
+<span style=color:#00f>import</span> (
+    <span style=color:#a31515>&#34;log&#34;</span>
+    <span style=color:#a31515>&#34;net&#34;</span>
+    <span style=color:#a31515>&#34;net/http&#34;</span>
+)
+
+<span style=color:#00f>func</span> createListener() (l net.Listener, close <span style=color:#00f>func</span>()) {
+    l, err := net.Listen(<span style=color:#a31515>&#34;tcp&#34;</span>, <span style=color:#a31515>&#34;:0&#34;</span>)
+    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+        panic(err)
+    }
+
+    <span style=color:#00f>return</span> l, <span style=color:#00f>func</span>() {
+        _ = l.Close()
+    }
+}
+
+<span style=color:#00f>func</span> main() {
+    l, close := createListener()
+    <span style=color:#00f>defer</span> close()
+
+    http.Handle(<span style=color:#a31515>&#34;/&#34;</span>, http.HandlerFunc(<span style=color:#00f>func</span>(rw http.ResponseWriter, r *http.Request) {
+        <span style=color:green>// handle like normal
+</span><span style=color:green></span>    }))
+
+    log.Println(<span style=color:#a31515>&#34;listening at&#34;</span>, l.Addr().(*net.TCPAddr).Port)
+    http.Serve(l, <span style=color:#00f>nil</span>)
+}
+
+</code></pre></td></tr></table>
+</div>
+</div><p>Execute it:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ go run main.go 
+2022/01/04 17:40:16 listening at 33845
+</code></pre></td></tr></table>
+</div>
+</div><p>Thank you for reading!</p>
+</div>
+<div class=separator>
+<span>&#183;</span>
+<span>&#183;</span>
+<span>&#183;</span>
+</div>
+<h2 class=subtitle>Love This Content?</h2>
+<div class="fg-light support-me">Any kind of supports is greatly appreciated! Kindly support me via <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://www.blockchain.com/btc/address/17Afj6o7xm3ZxQ38adnvSFHSBKhHiCDiev>Bitcoin</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://ko-fi.com/clavinjune>Ko-fi</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://trakteer.id/clavinjune>Trakteer</a>, or just continue to read another content. You can write a response via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://webmention.io/ target=_blank>Webmention</a> and let me know the URL via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://telegraph.p3k.io/send-a-webmention target=_blank>Telegraph</a>.</div><div id=webmentions></div>
+<script defer type=text/javascript src=https://clavinjune.dev/js/webmention.js></script>
+<h2 class=subtitle>Drop Your Comment Below</h2>
+<script defer src=https://giscus.app/client.js data-repo=ClavinJune/ClavinJune.github.io data-repo-id="MDEwOlJlcG9zaXRvcnkxNTUyMjU5NTU=" data-category=General data-category-id=DIC_kwDOCUCPY84B_g1a data-mapping=title data-reactions-enabled=1 data-emit-metadata=0 data-theme=light crossorigin=anonymous async></script>
+</main>
+<script type=text/javascript src=https://clavinjune.dev/js/ga.js defer></script>
+<script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script><footer>
+Copyright &copy; 2022 &#183; Clavin June
+</footer>
+<script defer type=text/javascript src=https://clavinjune.dev/js/copy.js></script>
+</body>
+</html>
