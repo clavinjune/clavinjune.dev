@@ -1,4 +1,74 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Tue, 04 Jan 2022 17:09:11 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Listening to Random Available Port in Go</title><link>https://clavinjune.dev/en/blogs/listening-to-random-available-port-in-go/</link><pubDate>Tue, 04 Jan 2022 17:09:11 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/listening-to-random-available-port-in-go/</guid><description><![CDATA[
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Wed, 05 Jan 2022 04:19:48 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Vim Save Changes With Sudo</title><link>https://clavinjune.dev/en/blogs/vim-save-changes-with-sudo/</link><pubDate>Wed, 05 Jan 2022 04:19:48 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/vim-save-changes-with-sudo/</guid><description><![CDATA[
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+<figure>
+  <img
+    srcset="https://images.unsplash.com/photo-1629654297299-c8506221ca97?q=50&amp;w=240 240w,https://images.unsplash.com/photo-1629654297299-c8506221ca97?q=50&amp;w=300 300w,https://images.unsplash.com/photo-1629654297299-c8506221ca97?q=50&amp;w=360 360w,https://images.unsplash.com/photo-1629654297299-c8506221ca97?q=50&amp;w=480 480w,https://images.unsplash.com/photo-1629654297299-c8506221ca97?q=50&amp;w=768 768w,https://images.unsplash.com/photo-1629654297299-c8506221ca97?q=50&amp;w=800 800w,https://images.unsplash.com/photo-1629654297299-c8506221ca97?q=50&amp;w=960 960w,https://images.unsplash.com/photo-1629654297299-c8506221ca97?q=50&amp;w=1024 1024w,https://images.unsplash.com/photo-1629654297299-c8506221ca97?q=50&amp;w=1080 1080w,https://images.unsplash.com/photo-1629654297299-c8506221ca97?q=50&amp;w=1200 1200w,https://images.unsplash.com/photo-1629654297299-c8506221ca97?q=50&amp;w=1366 1366w,https://images.unsplash.com/photo-1629654297299-c8506221ca97?q=50&amp;w=1920 1920w"
+    sizes="(max-width: 480px) 480px, 100vw"
+    src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?q=50&amp;w=1920" alt="Photo by @6heinz3r on Unsplash" title="Photo by @6heinz3r on Unsplash" width="100%" height="auto"/>
+  <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@6heinz3r">@6heinz3r</a> on Unsplash</figcaption>
+</figure>
+<h2 id="introduction">Introduction</h2>
+<p>Sometimes, when you need to modify a file that needs root permission, you forgot to use sudo before open it using vim. This is quite annoying when you have changed a lot of lines, but you can&rsquo;t save the modification.</p>
+<p>Even though Vim has already warned us before editing using this line:</p>
+<blockquote>
+<p>&ldquo;W10: Warning: Changing a readonly file&rdquo; &ndash; Vim</p>
+</blockquote>
+<p>That doesn&rsquo;t sounds like a warning, more like a <code>not-so-threatening statement</code>.</p>
+<p>To avoid this problem, there are 2 ways that I know that may save your works too.</p>
+<h2 id="you-dont-have-root-access-way">You Don&rsquo;t Have Root Access Way</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">:w /tmp/my-modifications
+</code></pre></td></tr></table>
+</div>
+</div><p>You can save it to another file using <code>:w &lt;accessible-path&gt;</code>. Vim will write the current buffer to any path that you define there.</p>
+<h2 id="you-have-root-access-way">You Have Root Access Way</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">:w !sudo tee %
+</code></pre></td></tr></table>
+</div>
+</div><p>Then you will be prompted to type your password and the modification will be saved. <code>:w !sudo tee %</code> will pass the current buffer to <code>sudo tee %</code> command, where <code>%</code> is your current filename.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>I believe this problem is annoying to you as well, I hope this article will find you.</p>
+<p>Thank you for reading!</p>
+]]></description></item><item><title>Listening to Random Available Port in Go</title><link>https://clavinjune.dev/en/blogs/listening-to-random-available-port-in-go/</link><pubDate>Tue, 04 Jan 2022 17:09:11 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/listening-to-random-available-port-in-go/</guid><description><![CDATA[
   
 
   

@@ -12,3 +12,4 @@ https://git.io/cj-0c8ca => https://clavinjune.github.io/en/blogs/working-with-re
 https://git.io/cj-a343a => https://clavinjune.github.io/en/blogs/mocking-http-call-in-golang-a-better-way/
 https://git.io/cj-6b7fe => https://clavinjune.github.io/en/blogs/serving-embedded-static-file-inside-subdirectory-using-go/
 https://git.io/cj-7e91b => https://clavinjune.github.io/en/blogs/listening-to-random-available-port-in-go/
+https://git.io/cj-5c715 => https://clavinjune.github.io/en/blogs/vim-save-changes-with-sudo/
