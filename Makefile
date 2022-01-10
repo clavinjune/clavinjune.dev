@@ -2,6 +2,7 @@ IP = http://$(shell ip -4 addr show wlp4s0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}'
 build:
 	@rm -rf docs/ && hugo --minify --i18n-warnings && \
 	cp CNAME docs/CNAME && \
+	touch docs/.nojekyll && \
 	cp docs/en/404.html docs/404.html
 serve:
 	hugo server -D \
