@@ -12,9 +12,7 @@ description: "This post contains notes on how to mock HTTP Call in golang"
 
 {{< unsplash user="@kellysikkema" src="photo-1507925921958-8a62f3d1a50d" q="50" >}}
 
-## Update
-
-> See [this article](/blogs/mocking-http-call-in-golang-a-better-way/) for the update
+> This article has been updated. I recommend you to read the [updated article](/blogs/mocking-http-call-in-golang-a-better-way/).
 
 This blog post code is running on go1.16.2
 
