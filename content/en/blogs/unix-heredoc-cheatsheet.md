@@ -6,7 +6,7 @@ iscjklanguage: false
 isarchived: false
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1520004434532-668416a08753?w=1920&q=50"]
-aliases: ["/4cd05"]
+aliases: []
 description: "This post contains unix heredoc (cat EOF) cheatsheets and examples"
 ---
 
