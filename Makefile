@@ -1,4 +1,4 @@
-IP = http://$(shell ip -4 addr show wlp4s0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+IP = http://$(shell ipconfig getifaddr en0) 
 build:
 	@rm -rf docs/ && hugo --minify --i18n-warnings && \
 	cp CNAME docs/CNAME && \

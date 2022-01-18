@@ -1357,7 +1357,7 @@ my-remote-docker-machine
 }
 </code></pre></td></tr></table>
 </div>
-</div><p>Import the <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="/en/github.com/julienschmidt/httprouter"   >httprouter</a> to help simulate the <code>go mod download</code> command inside the <code>Dockerfile</code>/<code>Containerfile</code>.</p>
+</div><p>Import the <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://github.com/julienschmidt/httprouter"   >httprouter</a> to help simulate the <code>go mod download</code> command inside the <code>Dockerfile</code>/<code>Containerfile</code>.</p>
 <h2 id="initial-dockerfile">Initial Dockerfile</h2>
 <p>Let&rsquo;s say here is your initial Dockerfile content:</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
