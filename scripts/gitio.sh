@@ -17,7 +17,8 @@ case "$url" in
     ;;
 esac
 
-hash=$(echo "$url" | md5sum | cut -c1-5)
+# hash=$(echo "$url" | md5sum | cut -c1-5)
+hash=$(echo "$url" | md5 -r | cut -c1-5)
 result="/tmp/response.txt"
 
 code=$(curl https://git.io/ \
