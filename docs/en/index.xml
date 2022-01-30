@@ -1,4 +1,134 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Sun, 23 Jan 2022 20:07:24 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Simple HTTP Server Using Python</title><link>https://clavinjune.dev/en/blogs/simple-http-server-using-python/</link><pubDate>Sun, 23 Jan 2022 20:07:24 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/simple-http-server-using-python/</guid><description><![CDATA[
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Sun, 30 Jan 2022 10:54:55 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Go Get Golang Private Module</title><link>https://clavinjune.dev/en/blogs/go-get-golang-private-module/</link><pubDate>Sun, 30 Jan 2022 10:54:55 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/go-get-golang-private-module/</guid><description><![CDATA[
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+
+
+
+
+
+
+
+<figure>
+  <img
+    srcset="https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_240x0_resize_q50_h2_box_3.webp 240w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_300x0_resize_q50_h2_box_3.webp 300w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_360x0_resize_q50_h2_box_3.webp 360w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_480x0_resize_q50_h2_box_3.webp 480w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_768x0_resize_q50_h2_box_3.webp 768w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_800x0_resize_q50_h2_box_3.webp 800w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_960x0_resize_q50_h2_box_3.webp 960w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1024x0_resize_q50_h2_box_3.webp 1024w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1080x0_resize_q50_h2_box_3.webp 1080w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1200x0_resize_q50_h2_box_3.webp 1200w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1366x0_resize_q50_h2_box_3.webp 1366w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1920x0_resize_q50_h2_box_3.webp 1920w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_3840x0_resize_q50_h2_box_3.webp 3840w"
+    sizes="(max-width: 480px) 480px, 100vw"
+    src="https://clavinjune.dev/img/sunday-snippet/image.png" alt="Sunday Snippet #2 go get golang private module" title="Sunday Snippet #2 go get golang private module" width="100%" height="auto"/>
+  <figcaption class="font-16">Sunday Snippet #2 go get golang private module</figcaption>
+</figure>
+<p>I assume before fetching golang private module, you already have put your public SSH key on your git repository.</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ mkdir example &amp;&amp; cd example
+$ go mod init example
+go: creating new go.mod: module example
+<span style="color:#008000"># this is my private repo, this attempt will produce error</span>
+$ go get github.com/clavinjune/testing@latest
+go get github.com/clavinjune/testing@latest: module github.com/clavinjune/testing: git ls-remote -q origin in [redacted]: exit status 128:
+	fatal: could not read Username <span style="color:#00f">for</span> <span style="color:#a31515">&#39;https://github.com&#39;</span>: terminal prompts disabled
+Confirm the import path was entered correctly.
+If this is a private repository, see https://golang.org/doc/faq#git_https <span style="color:#00f">for</span> additional information.
+
+<span style="color:#008000"># change the https to ssh, go get will try fetching your private module using your SSH key</span>
+$ git config --global --add url.<span style="color:#a31515">&#34;git@github.com:&#34;</span>.insteadOf <span style="color:#a31515">&#34;https://github.com/&#34;</span>
+$ go get github.com/clavinjune/testing@latest
+go get: added github.com/clavinjune/testing v1.0.0
+<span style="color:#008000"># success!</span>
+</code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>Simple HTTP Server Using Python</title><link>https://clavinjune.dev/en/blogs/simple-http-server-using-python/</link><pubDate>Sun, 23 Jan 2022 20:07:24 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/simple-http-server-using-python/</guid><description><![CDATA[
   
     
     

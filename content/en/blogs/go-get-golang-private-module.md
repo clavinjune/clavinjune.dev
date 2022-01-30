@@ -1,7 +1,7 @@
 ---
 title: "Go Get Golang Private Module"
-date: 2022-01-30T12:30:55+07:00
-draft: true
+date: 2022-01-30T10:54:55+07:00
+draft: false
 iscjklanguage: false
 isarchived: false
 categories: ["sunday-snippet"]
