@@ -10,7 +10,7 @@ aliases: []
 description: "sunday snippet #3 golang panic handler middleware"
 ---
 
-{{< img src="/img/sunday-snippet/image.png" alt="Sunday Snippet #2 go get golang private module" >}}
+{{< img src="/img/sunday-snippet/image.png" alt="Sunday Snippet #3 golang panic handler middleware" >}}
 
 Handling panic elegantly:
 
