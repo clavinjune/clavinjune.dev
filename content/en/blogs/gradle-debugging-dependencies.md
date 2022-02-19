@@ -12,7 +12,6 @@ description: "sunday snippet #4 gradle debugging dependencies"
 
 {{< img src="/img/sunday-snippet/image.png" alt="Sunday Snippet #4 gradle debugging dependencies" >}}
 
-
 ```shell
 # gradle <module-name>:dependencies --configuration <configuration>
 $ gradle :payment:payment-service:dependencies \
