@@ -1,4 +1,266 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Sun, 13 Feb 2022 02:00:43 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Gradle Debugging Dependencies</title><link>https://clavinjune.dev/en/blogs/gradle-debugging-dependencies/</link><pubDate>Sun, 13 Feb 2022 02:00:43 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/gradle-debugging-dependencies/</guid><description><![CDATA[
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Sun, 20 Feb 2022 00:00:17 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Construct Golang Struct Using Optional Function</title><link>https://clavinjune.dev/en/blogs/construct-golang-struct-using-optional-function/</link><pubDate>Sun, 20 Feb 2022 00:00:17 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/construct-golang-struct-using-optional-function/</guid><description><![CDATA[
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+
+
+
+
+
+
+
+<figure>
+  <div class="img-box">
+    <img
+      srcset="https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_240x0_resize_q50_h2_box_3.webp 240w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_300x0_resize_q50_h2_box_3.webp 300w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_360x0_resize_q50_h2_box_3.webp 360w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_480x0_resize_q50_h2_box_3.webp 480w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_600x0_resize_q50_h2_box_3.webp 600w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_768x0_resize_q50_h2_box_3.webp 768w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_800x0_resize_q50_h2_box_3.webp 800w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_960x0_resize_q50_h2_box_3.webp 960w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1024x0_resize_q50_h2_box_3.webp 1024w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1080x0_resize_q50_h2_box_3.webp 1080w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1200x0_resize_q50_h2_box_3.webp 1200w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1366x0_resize_q50_h2_box_3.webp 1366w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1920x0_resize_q50_h2_box_3.webp 1920w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_3840x0_resize_q50_h2_box_3.webp 3840w"
+      sizes="(max-width: 200px) 200px, 100vw"
+      src="https://clavinjune.dev/img/sunday-snippet/image.png" alt="Sunday Snippet #5 construct golang struct using optional function" title="Sunday Snippet #5 construct golang struct using optional function"/>
+  </div>
+  <figcaption class="font-16">Sunday Snippet #5 construct golang struct using optional function</figcaption>
+</figure>
+<p>Using optional function to allow user optionally set attributes</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#00f">package</span> main
+
+<span style="color:#00f">import</span> (
+	<span style="color:#a31515">&#34;bytes&#34;</span>
+	<span style="color:#a31515">&#34;encoding/json&#34;</span>
+	<span style="color:#a31515">&#34;fmt&#34;</span>
+)
+
+<span style="color:#008000">// ExampleOptFunc sets Example&#39;s optional attribute
+</span><span style="color:#008000"></span><span style="color:#00f">type</span> ExampleOptFunc <span style="color:#00f">func</span>(*Example)
+
+<span style="color:#008000">// WithAttr1 sets Example&#39;s OptionalAttr1 as true
+</span><span style="color:#008000"></span><span style="color:#00f">func</span> WithAttr1() ExampleOptFunc {
+	<span style="color:#00f">return</span> <span style="color:#00f">func</span>(e *Example) {
+		e.OptionalAttr1 = <span style="color:#00f">true</span>
+	}
+}
+
+<span style="color:#008000">// WithAttr2 sets Example&#39;s OptionalAttr2 as i
+</span><span style="color:#008000"></span><span style="color:#00f">func</span> WithAttr2(i <span style="color:#2b91af">int</span>) ExampleOptFunc {
+	<span style="color:#00f">return</span> <span style="color:#00f">func</span>(e *Example) {
+		e.OptionalAttr2 = i
+	}
+}
+
+<span style="color:#008000">// WithAttr3 sets Example&#39;s OptionalAttr3 as s
+</span><span style="color:#008000"></span><span style="color:#00f">func</span> WithAttr3(s <span style="color:#2b91af">string</span>) ExampleOptFunc {
+	<span style="color:#00f">return</span> <span style="color:#00f">func</span>(e *Example) {
+		e.OptionalAttr3 = s
+	}
+}
+
+<span style="color:#008000">// Example is an example struct with some optional attributes
+</span><span style="color:#008000"></span><span style="color:#00f">type</span> Example <span style="color:#00f">struct</span> {
+	Name          <span style="color:#2b91af">string</span> <span style="color:#a31515">`json:&#34;name&#34;`</span>
+	OptionalAttr1 <span style="color:#2b91af">bool</span>   <span style="color:#a31515">`json:&#34;optional_attr1&#34;`</span>
+	OptionalAttr2 <span style="color:#2b91af">int</span>    <span style="color:#a31515">`json:&#34;optional_attr2&#34;`</span>
+	OptionalAttr3 <span style="color:#2b91af">string</span> <span style="color:#a31515">`json:&#34;optional_attr3&#34;`</span>
+}
+
+<span style="color:#008000">// NewExample creates Example ptr
+</span><span style="color:#008000">// requires name
+</span><span style="color:#008000"></span><span style="color:#00f">func</span> NewExample(name <span style="color:#2b91af">string</span>, opts ...ExampleOptFunc) *Example {
+	e := &amp;Example{
+		Name: name,
+	}
+
+	<span style="color:#00f">for</span> _, opt := <span style="color:#00f">range</span> opts {
+		opt(e)
+	}
+
+	<span style="color:#00f">return</span> e
+}
+
+<span style="color:#008000">// String returns json-encoded string
+</span><span style="color:#008000"></span><span style="color:#00f">func</span> (e *Example) String() <span style="color:#2b91af">string</span> {
+	<span style="color:#00f">var</span> b bytes.Buffer
+	enc := json.NewEncoder(&amp;b)
+	enc.SetIndent(<span style="color:#a31515">&#34;&#34;</span>, <span style="color:#a31515">&#34;  &#34;</span>)
+	_ = enc.Encode(e)
+	<span style="color:#00f">return</span> b.String()
+}
+
+<span style="color:#00f">func</span> main() {
+	e := NewExample(<span style="color:#a31515">&#34;example&#34;</span>,
+		WithAttr1(),
+		WithAttr2(100),
+		WithAttr3(<span style="color:#a31515">&#34;testing&#34;</span>))
+
+	fmt.Println(e)
+	<span style="color:#008000">// {
+</span><span style="color:#008000"></span>	<span style="color:#008000">//   &#34;name&#34;: &#34;example&#34;,
+</span><span style="color:#008000"></span>	<span style="color:#008000">//   &#34;optional_attr1&#34;: true,
+</span><span style="color:#008000"></span>	<span style="color:#008000">//   &#34;optional_attr2&#34;: 100,
+</span><span style="color:#008000"></span>	<span style="color:#008000">//   &#34;optional_attr3&#34;: &#34;testing&#34;
+</span><span style="color:#008000"></span>	<span style="color:#008000">// }
+</span><span style="color:#008000"></span>}
+</code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>Gradle Debugging Dependencies</title><link>https://clavinjune.dev/en/blogs/gradle-debugging-dependencies/</link><pubDate>Sun, 13 Feb 2022 02:00:43 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/gradle-debugging-dependencies/</guid><description><![CDATA[
   
     
     
