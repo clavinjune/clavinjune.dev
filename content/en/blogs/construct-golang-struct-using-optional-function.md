@@ -1,7 +1,7 @@
 ---
 title: "Construct Golang Struct Using Optional Function"
-date: 2022-02-00T00:00:17+07:00
-draft: true
+date: 2022-02-20T00:00:17+07:00
+draft: false
 iscjklanguage: false
 isarchived: false
 categories: ["sunday-snippet"]
