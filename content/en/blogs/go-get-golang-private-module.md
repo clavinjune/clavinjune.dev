@@ -29,5 +29,7 @@ If this is a private repository, see https://golang.org/doc/faq#git_https for ad
 $ git config --global --add url."git@github.com:".insteadOf "https://github.com/"
 $ go get github.com/clavinjune/testing@latest
 go get: added github.com/clavinjune/testing v1.0.0
-# success!
+# success! But if above method still doesn't work set GOPRIVATE first
+$ go env -w GOPRIVATE="github.com/clavinjune/*"
+# then, go get again
 ```

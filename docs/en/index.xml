@@ -1296,6 +1296,8 @@ wire: example/user: wrote /tmp/example/user/wire_gen.go
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ mkdir example &amp;&amp; cd example
@@ -1312,7 +1314,9 @@ If this is a private repository, see https://golang.org/doc/faq#git_https <span 
 $ git config --global --add url.<span style="color:#a31515">&#34;git@github.com:&#34;</span>.insteadOf <span style="color:#a31515">&#34;https://github.com/&#34;</span>
 $ go get github.com/clavinjune/testing@latest
 go get: added github.com/clavinjune/testing v1.0.0
-<span style="color:#008000"># success!</span>
+<span style="color:#008000"># success! But if above method still doesn&#39;t work set GOPRIVATE first</span>
+$ go env -w GOPRIVATE=<span style="color:#a31515">&#34;github.com/clavinjune/*&#34;</span>
+<span style="color:#008000"># then, go get again</span>
 </code></pre></td></tr></table>
 </div>
 </div>]]></description></item><item><title>Simple HTTP Server Using Python</title><link>https://clavinjune.dev/en/blogs/simple-http-server-using-python/</link><pubDate>Sun, 23 Jan 2022 20:07:24 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/simple-http-server-using-python/</guid><description><![CDATA[
