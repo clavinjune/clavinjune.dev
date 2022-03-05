@@ -1,5 +1,5 @@
 ---
-title: "Linux Print Aliased Command's Location"
+title: "UNIX Print Aliased Command's Location"
 date: 2022-03-06T00:00:10+07:00
 draft: false 
 iscjklanguage: false
