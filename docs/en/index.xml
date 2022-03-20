@@ -1,4 +1,121 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Sun, 13 Mar 2022 00:00:14 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Golang WASM Async Function</title><link>https://clavinjune.dev/en/blogs/golang-wasm-async-function/</link><pubDate>Sun, 13 Mar 2022 00:00:14 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/golang-wasm-async-function/</guid><description><![CDATA[
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Sun, 20 Mar 2022 22:05:52 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Change Directory to Git Root Directory</title><link>https://clavinjune.dev/en/blogs/change-directory-to-git-root-directory/</link><pubDate>Sun, 20 Mar 2022 22:05:52 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/change-directory-to-git-root-directory/</guid><description><![CDATA[
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+
+
+
+
+
+
+
+<figure>
+  <div class="img-box">
+    <img
+      srcset="https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_240x0_resize_q50_h2_box_3.webp 240w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_300x0_resize_q50_h2_box_3.webp 300w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_360x0_resize_q50_h2_box_3.webp 360w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_480x0_resize_q50_h2_box_3.webp 480w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_600x0_resize_q50_h2_box_3.webp 600w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_768x0_resize_q50_h2_box_3.webp 768w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_800x0_resize_q50_h2_box_3.webp 800w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_960x0_resize_q50_h2_box_3.webp 960w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1024x0_resize_q50_h2_box_3.webp 1024w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1080x0_resize_q50_h2_box_3.webp 1080w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1200x0_resize_q50_h2_box_3.webp 1200w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1366x0_resize_q50_h2_box_3.webp 1366w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1920x0_resize_q50_h2_box_3.webp 1920w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_3840x0_resize_q50_h2_box_3.webp 3840w"
+      sizes="(max-width: 200px) 200px, 100vw"
+      src="https://clavinjune.dev/img/sunday-snippet/image.png" alt="Sunday Snippet #9 change directory to git root directory" title="Sunday Snippet #9 change directory to git root directory"/>
+  </div>
+  <figcaption class="font-16">Sunday Snippet #9 change directory to git root directory</figcaption>
+</figure>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="display:block;width:100%;background-color:#e5e5e5"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ pwd
+/tmp/bjora-project/backend/scripts/docker
+<span style="display:block;width:100%;background-color:#e5e5e5">$ cd <span style="color:#a31515">`</span>git rev-parse --show-toplevel<span style="color:#a31515">`</span>
+</span>$ pwd
+/tmp/bjora-project/backend
+</code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>Golang WASM Async Function</title><link>https://clavinjune.dev/en/blogs/golang-wasm-async-function/</link><pubDate>Sun, 13 Mar 2022 00:00:14 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/golang-wasm-async-function/</guid><description><![CDATA[
   
     
     
