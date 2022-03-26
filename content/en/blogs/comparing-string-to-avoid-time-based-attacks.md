@@ -7,10 +7,10 @@ isarchived: false
 categories: ["sunday-snippet"]
 images: ["/img/sunday-snippet/image.png"]
 aliases: []
-description: "sunday snippet #9 comparing string to avoid time based attacks"
+description: "sunday snippet #10 comparing string to avoid time based attacks"
 ---
 
-{{< img src="/img/sunday-snippet/image.png" alt="Sunday Snippet #9 comparing string to avoid time based attacks" >}}
+{{< img src="/img/sunday-snippet/image.png" alt="Sunday Snippet #10 comparing string to avoid time based attacks" >}}
 
 ## Code
 
