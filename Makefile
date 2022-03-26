@@ -1,6 +1,6 @@
 IP = http://$(shell ipconfig getifaddr en0) 
 build:
-	@rm -rf docs/ && hugo --minify --i18n-warnings && \
+	@rm -rf docs/ && hugo --minify && \
 	cp CNAME docs/CNAME && \
 	touch docs/.nojekyll && \
 	cp docs/en/404.html docs/404.html
