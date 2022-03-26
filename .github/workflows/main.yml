@@ -20,14 +20,12 @@ jobs:
     - name: Setup Hugo
       uses: peaceiris/actions-hugo@v2
       with:
-          hugo-version: 'latest'
+          hugo-version: 'v0.92.0'
           extended: true
 
-    - name: Build
-      run: make build
-
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
+    - name: CD
+      run: |
+      git config --global user.name 'Clavianus Juneardo'
+      git config --global user.email '24659468+ClavinJune@users.noreply.github.com'
+      git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+      make publish
