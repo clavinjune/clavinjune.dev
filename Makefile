@@ -11,4 +11,4 @@ serve:
 publish: build
 	@git add . && \
 	git commit -sm "build `date -R #--rfc-3339=ns`" && \
-	git push
+	git push origin test-CI
