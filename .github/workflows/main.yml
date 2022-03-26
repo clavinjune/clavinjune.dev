@@ -1,6 +1,7 @@
 name: CD
 
 on:
+  pull_request:
   schedule:
     - cron: '*/5 * * * *'
 
