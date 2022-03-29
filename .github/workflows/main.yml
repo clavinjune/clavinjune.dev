@@ -28,5 +28,5 @@ jobs:
         git config --global user.name 'Clavianus Juneardo'
         git config --global user.email '24659468+ClavinJune@users.noreply.github.com'
         git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-        git commit --no-verify --signoff -am "GH Actions CD"
-        git push origin HEAD:master
+        git commit --no-verify --signoff -am "GH Actions CD" || true
+        git push origin HEAD:master || true
