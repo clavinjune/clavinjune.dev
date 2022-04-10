@@ -1,162 +1,279 @@
-<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatbile content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=author content="Clavin June"><meta http-equiv=content-security-policy content="default-src 'self' 'unsafe-inline' https:; object-src 'none'; style-src 'self' 'unsafe-inline' fonts.googleapis.com github.githubassets.com; font-src fonts.gstatic.com; script-src 'self' 'unsafe-inline' www.googletagmanager.com gist.github.com giscus.app; base-uri 'none'; img-src 'self' images.unsplash.com i.kym-cdn.com iq.opengenus.org;"><meta name=google-site-verification content="n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE"><meta name=monetization content="$ilp.uphold.com/RYNmdxrFrPJB"><link rel=me href=mailto:juneardoc@gmail.com><link rel=pingback href=https://webmention.io/clavinjune.dev_en_/xmlrpc><link rel=webmention href=https://webmention.io/clavinjune.dev_en_/webmention><meta name=description content="This post contains my own experience in creating try-catch-like error handler for golang"><meta property="og:locale" content="en_US"><meta property="og:site_name" content="June Personal Web"><meta property="og:title" content="Creating Taboo Error Handler for Go"><meta property="og:description" content="This post contains my own experience in creating try-catch-like error handler for golang"><meta property="og:type" content="article"><meta property="og:url" content="https://clavinjune.dev/en/blogs/creating-taboo-error-handler-for-go/"><meta property="og:image" content="https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=1920&q=50"><meta property="article:section" content="blogs"><meta property="article:published_time" content="2020-10-28T00:00:00+07:00"><meta property="article:modified_time" content="2020-10-28T00:00:00+07:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=1920&q=50"><meta name=twitter:title content="Creating Taboo Error Handler for Go"><meta name=twitter:description content="This post contains my own experience in creating try-catch-like error handler for golang"><title>June Personal Web - Creating Taboo Error Handler for Go</title><link rel=stylesheet href="/css/style.min.caf3859664f2f17538a5252c2da2fafd55c3c16af6cf7edc370e96f06f065494.css" integrity="sha256-yvOFlmTy8XU4pSUsLaL6/VXDwWr2z37cNw6W8G8GVJQ="><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=preload href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap" as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap"></noscript><link rel=preload href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap"></noscript><link rel=stylesheet href="/css/single.min.8fd5840abe28ebecdfc8e2187d0aebb2a710f2f0524a066f73a3361c1de972cc.css" integrity="sha256-j9WECr4o6+zfyOIYfQrrsqcQ8vBSSgZvc6M2HB3pcsw="></head><body><nav class=fg-bold><a id=skip-to-content href=#content>Skip to content</a><ul id=menu><li><a href=https://clavinjune.dev/en/>HOME</a></li><li><a class=active href=https://clavinjune.dev/en/blogs/>BLOG</a></li></ul></nav><main class=single><h1 class=title>Creating Taboo Error Handler for Go</h1><div class="metadata font-16"><a class=category href=https://clavinjune.dev/en/categories/tech>tech</a>
+<!doctype html><html lang=en>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatbile content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=author content="Clavin June">
+<meta http-equiv=content-security-policy content="default-src 'self' 'unsafe-inline' https:; object-src 'none'; style-src 'self' 'unsafe-inline' fonts.googleapis.com github.githubassets.com; font-src fonts.gstatic.com; script-src 'self' 'unsafe-inline' www.googletagmanager.com gist.github.com giscus.app; base-uri 'none'; img-src 'self' images.unsplash.com i.kym-cdn.com iq.opengenus.org;">
+<meta name=google-site-verification content="n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE">
+<meta name=monetization content="$ilp.uphold.com/RYNmdxrFrPJB">
+<link rel=me href=mailto:juneardoc@gmail.com>
+<link rel=pingback href=https://webmention.io/clavinjune.dev_en_/xmlrpc>
+<link rel=webmention href=https://webmention.io/clavinjune.dev_en_/webmention>
+<meta name=description content="This post contains my own experience in creating try-catch-like error handler for golang">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="June Personal Web">
+<meta property="og:title" content="Creating Taboo Error Handler for Go">
+<meta property="og:description" content="This post contains my own experience in creating try-catch-like error handler for golang">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://clavinjune.dev/en/blogs/creating-taboo-error-handler-for-go/"><meta property="og:image" content="https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=1920&q=50"><meta property="article:section" content="blogs">
+<meta property="article:published_time" content="2020-10-28T00:00:00+07:00">
+<meta property="article:modified_time" content="2020-10-28T00:00:00+07:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?w=1920&q=50">
+<meta name=twitter:title content="Creating Taboo Error Handler for Go">
+<meta name=twitter:description content="This post contains my own experience in creating try-catch-like error handler for golang">
+<title>June Personal Web - Creating Taboo Error Handler for Go</title>
+<link rel=stylesheet href="/css/style.min.caf3859664f2f17538a5252c2da2fafd55c3c16af6cf7edc370e96f06f065494.css" integrity="sha256-yvOFlmTy8XU4pSUsLaL6/VXDwWr2z37cNw6W8G8GVJQ=">
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin>
+<link rel=preload href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap" as=style onload="this.onload=null,this.rel='stylesheet'">
+<noscript>
+<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap">
+</noscript>
+<link rel=preload href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" as=style onload="this.onload=null,this.rel='stylesheet'">
+<noscript>
+<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap">
+</noscript>
+<link rel=stylesheet href="/css/single.min.8fd5840abe28ebecdfc8e2187d0aebb2a710f2f0524a066f73a3361c1de972cc.css" integrity="sha256-j9WECr4o6+zfyOIYfQrrsqcQ8vBSSgZvc6M2HB3pcsw=">
+</head>
+<body><nav class=fg-bold>
+<a id=skip-to-content href=#content>Skip to content</a>
+<ul id=menu><li><a href=https://clavinjune.dev/en/>HOME</a></li><li><a class=active href=https://clavinjune.dev/en/blogs/>BLOG</a></li></ul>
+</nav>
+<main class=single>
+<h1 class=title>Creating Taboo Error Handler for Go</h1>
+<div class="metadata font-16">
+<a class=category href=https://clavinjune.dev/en/categories/tech>tech</a>
 <span class=middot>&#183;</span>
 <span>Oct 28, 2020</span>
 <span class=middot>&#183;</span>
-<span>~3 min</span></div><div id=content><figure><div class=img-box><img srcset="https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=240 240w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=300 300w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=360 360w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=480 480w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=600 600w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=768 768w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=800 800w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=960 960w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=1024 1024w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=1080 1080w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=1200 1200w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=1366 1366w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=1920 1920w" sizes="(max-width: 200px) 200px, 100vw" src="https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=1920" alt="Photo by @hhh13 on Unsplash" title="Photo by @hhh13 on Unsplash"></div><figcaption class=font-16>Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target=_blank href=https://unsplash.com/@hhh13>@hhh13</a> on Unsplash</figcaption></figure><p>I created <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://github.com/anon-org/taboo>this module</a> for Golang to help me with error handling. This idea showed when a colleague of mine was thinking to pass <code>context</code> from handler to service, to repository to trace the error log more verbose. I disagreed with him because I thought that&rsquo;s not what <code>context</code> is for. Perhaps I was wrong or he was wrong, or maybe both of us wrong because this is our first Golang project that deployed on production.</p><p>Despite our opinion about <code>context</code>, we both agreed that Golang&rsquo;s error handling is too verbose and bulky. It makes us read more error handling more than read the system flow itself. Then I remember when I was coding using Java/Kotlin that I always use <code>throws</code>, <code>throw</code>, and <code>try-catch block</code> to handle any errors.</p><p>Hmm&mldr;</p><p>Why don&rsquo;t I create it for Golang?</p><p>Then I create this <code>try-catch block</code> module for Golang called <code>taboo</code>. Because I know this thing creates polemic among Golang developer but, then I thought why don&rsquo;t I give it a try?</p><p>For the design itself, I was inspired by <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://hackthology.com/exceptions-for-go-as-a-library.html>this article</a> but the whole implementation is all adjusted with my current needs. Instead of <code>error</code>, this module is based on <code>panic</code> and <code>recover</code> so it is quite dangerous whenever used in the wrong condition.</p><p>Let&rsquo;s take an example:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>package</span> main
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> div(a, b <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
-</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> a / b
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> main() {
-</span></span><span style=display:flex><span>  div(10, 0)
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><p>When <code>b</code> is filled with <code>zero</code>, it causes panic</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain><span style=display:flex><span>panic: runtime error: integer divide by zero
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>goroutine 1 [running]:
-</span></span><span style=display:flex><span>main.div(...)
-</span></span><span style=display:flex><span>        /tmp/anon-org/taboo/cmd/example.go:4
-</span></span><span style=display:flex><span>main.main()
-</span></span><span style=display:flex><span>        /tmp/anon-org/taboo/cmd/example.go:8 +0x12
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Process finished with exit code 2
-</span></span></code></pre></td></tr></table></div></div><p>So, we can handle it using <code>taboo</code> like this:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span>taboo.Try(<span style=color:#00f>func</span>() {
-</span></span><span style=display:flex><span>  div(10, 0)  
-</span></span><span style=display:flex><span>}).Catch(<span style=color:#00f>func</span>(e *taboo.Exception) {
-</span></span><span style=display:flex><span>  fmt.Println(e.Error())
-</span></span><span style=display:flex><span>}).Do()
-</span></span></code></pre></td></tr></table></div></div><p><code>taboo</code> will catch the <code>panic</code> and try to <code>recover</code> it and make a stack of error called <code>taboo.Exception</code> to trace error more verbose. So the program ends like this:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain><span style=display:flex><span>main.div:9 runtime error: integer divide by zero
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Process finished with exit code 0
-</span></span></code></pre></td></tr></table></div></div><p>Quite handy right?</p><p>Then, what if I want to throw or rethrow the error to the first caller?</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>package</span> main
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>import</span> (
-</span></span><span style=display:flex><span>  <span style=color:#a31515>&#34;errors&#34;</span>
-</span></span><span style=display:flex><span>  <span style=color:#a31515>&#34;fmt&#34;</span>
-</span></span><span style=display:flex><span>  <span style=color:#a31515>&#34;github.com/anon-org/taboo/pkg/taboo&#34;</span>
-</span></span><span style=display:flex><span>)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> div(a, b <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
-</span></span><span style=display:flex><span>  <span style=color:#00f>if</span> b == 0 {
-</span></span><span style=display:flex><span>    taboo.Throw(errors.New(<span style=color:#a31515>&#34;division by zero detected&#34;</span>))
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> a / b
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> callDiv() <span style=color:#2b91af>int</span> {
-</span></span><span style=display:flex><span>  <span style=color:#00f>var</span> result <span style=color:#2b91af>int</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  taboo.Try(<span style=color:#00f>func</span>() {
-</span></span><span style=display:flex><span>    result = div(10, 0)
-</span></span><span style=display:flex><span>  }).Catch(<span style=color:#00f>func</span>(e *taboo.Exception) {
-</span></span><span style=display:flex><span>    e.Throw(<span style=color:#a31515>&#34;callDiv rethrow this error&#34;</span>)
-</span></span><span style=display:flex><span>  }).Do()
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> result
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> callCallDiv() <span style=color:#2b91af>int</span> {
-</span></span><span style=display:flex><span>  <span style=color:#00f>var</span> result <span style=color:#2b91af>int</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  taboo.Try(<span style=color:#00f>func</span>() {
-</span></span><span style=display:flex><span>    result = callDiv()
-</span></span><span style=display:flex><span>  }).Catch(<span style=color:#00f>func</span>(e *taboo.Exception) {
-</span></span><span style=display:flex><span>    e.Throw(<span style=color:#a31515>&#34;callCallDiv rethrow this error&#34;</span>)
-</span></span><span style=display:flex><span>  }).Do()
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> result
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> main() {
-</span></span><span style=display:flex><span>  taboo.Try(<span style=color:#00f>func</span>() {
-</span></span><span style=display:flex><span>    callCallDiv()
-</span></span><span style=display:flex><span>  }).Catch(<span style=color:#00f>func</span>(e *taboo.Exception) {
-</span></span><span style=display:flex><span>    fmt.Println(e.Error())
-</span></span><span style=display:flex><span>  }).Do()
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><p><code>e.Throw(message)</code> Will wrap the previous exception, and throw it again to the previous caller. So the printed error will be like this:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain><span style=display:flex><span>main.callCallDiv:34 callCallDiv rethrow this error caused by:
-</span></span><span style=display:flex><span>  main.callDiv:22 callDiv rethrow this error caused by:
-</span></span><span style=display:flex><span>    main.div:11 division by zero detected
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Process finished with exit code 0
-</span></span></code></pre></td></tr></table></div></div><p>It just like <code>try-catch block</code> in Java/Kotlin I think but with many flaws lol. This module is still an experiment that I myself is not going to using this module in production. Or perhaps should I?</p><p>Thank you for reading!</p></div><div class=separator><span>&#183;</span>
+<span>~3 min</span>
+</div>
+<div id=content>
+<figure>
+<div class=img-box>
+<img srcset="https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=240 240w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=300 300w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=360 360w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=480 480w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=600 600w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=768 768w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=800 800w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=960 960w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=1024 1024w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=1080 1080w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=1200 1200w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=1366 1366w,https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=1920 1920w" sizes="(max-width: 200px) 200px, 100vw" src="https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?fm=webp&q=50&w=1920" alt="Photo by @hhh13 on Unsplash" title="Photo by @hhh13 on Unsplash">
+</div>
+<figcaption class=font-16>Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target=_blank href=https://unsplash.com/@hhh13>@hhh13</a> on Unsplash</figcaption>
+</figure>
+<p>I created <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://github.com/anon-org/taboo>this module</a> for Golang to help me with error handling. This idea showed when a colleague of mine was thinking to pass <code>context</code> from handler to service, to repository to trace the error log more verbose. I disagreed with him because I thought that&rsquo;s not what <code>context</code> is for. Perhaps I was wrong or he was wrong, or maybe both of us wrong because this is our first Golang project that deployed on production.</p>
+<p>Despite our opinion about <code>context</code>, we both agreed that Golang&rsquo;s error handling is too verbose and bulky. It makes us read more error handling more than read the system flow itself. Then I remember when I was coding using Java/Kotlin that I always use <code>throws</code>, <code>throw</code>, and <code>try-catch block</code> to handle any errors.</p>
+<p>Hmm&mldr;</p>
+<p>Why don&rsquo;t I create it for Golang?</p>
+<p>Then I create this <code>try-catch block</code> module for Golang called <code>taboo</code>. Because I know this thing creates polemic among Golang developer but, then I thought why don&rsquo;t I give it a try?</p>
+<p>For the design itself, I was inspired by <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://hackthology.com/exceptions-for-go-as-a-library.html>this article</a> but the whole implementation is all adjusted with my current needs. Instead of <code>error</code>, this module is based on <code>panic</code> and <code>recover</code> so it is quite dangerous whenever used in the wrong condition.</p>
+<p>Let&rsquo;s take an example:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> main
+
+<span style=color:#00f>func</span> div(a, b <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
+  <span style=color:#00f>return</span> a / b
+}
+
+<span style=color:#00f>func</span> main() {
+  div(10, 0)
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>When <code>b</code> is filled with <code>zero</code>, it causes panic</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>panic: runtime error: integer divide by zero
+
+goroutine 1 [running]:
+main.div(...)
+        /tmp/anon-org/taboo/cmd/example.go:4
+main.main()
+        /tmp/anon-org/taboo/cmd/example.go:8 +0x12
+
+Process finished with exit code 2
+</code></pre></td></tr></table>
+</div>
+</div><p>So, we can handle it using <code>taboo</code> like this:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>taboo.Try(<span style=color:#00f>func</span>() {
+  div(10, 0)  
+}).Catch(<span style=color:#00f>func</span>(e *taboo.Exception) {
+  fmt.Println(e.Error())
+}).Do()
+</code></pre></td></tr></table>
+</div>
+</div><p><code>taboo</code> will catch the <code>panic</code> and try to <code>recover</code> it and make a stack of error called <code>taboo.Exception</code> to trace error more verbose. So the program ends like this:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>main.div:9 runtime error: integer divide by zero
+
+Process finished with exit code 0
+</code></pre></td></tr></table>
+</div>
+</div><p>Quite handy right?</p>
+<p>Then, what if I want to throw or rethrow the error to the first caller?</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> main
+
+<span style=color:#00f>import</span> (
+  <span style=color:#a31515>&#34;errors&#34;</span>
+  <span style=color:#a31515>&#34;fmt&#34;</span>
+  <span style=color:#a31515>&#34;github.com/anon-org/taboo/pkg/taboo&#34;</span>
+)
+
+<span style=color:#00f>func</span> div(a, b <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
+  <span style=color:#00f>if</span> b == 0 {
+    taboo.Throw(errors.New(<span style=color:#a31515>&#34;division by zero detected&#34;</span>))
+  }
+  <span style=color:#00f>return</span> a / b
+}
+
+<span style=color:#00f>func</span> callDiv() <span style=color:#2b91af>int</span> {
+  <span style=color:#00f>var</span> result <span style=color:#2b91af>int</span>
+
+  taboo.Try(<span style=color:#00f>func</span>() {
+    result = div(10, 0)
+  }).Catch(<span style=color:#00f>func</span>(e *taboo.Exception) {
+    e.Throw(<span style=color:#a31515>&#34;callDiv rethrow this error&#34;</span>)
+  }).Do()
+
+  <span style=color:#00f>return</span> result
+}
+
+<span style=color:#00f>func</span> callCallDiv() <span style=color:#2b91af>int</span> {
+  <span style=color:#00f>var</span> result <span style=color:#2b91af>int</span>
+
+  taboo.Try(<span style=color:#00f>func</span>() {
+    result = callDiv()
+  }).Catch(<span style=color:#00f>func</span>(e *taboo.Exception) {
+    e.Throw(<span style=color:#a31515>&#34;callCallDiv rethrow this error&#34;</span>)
+  }).Do()
+
+  <span style=color:#00f>return</span> result
+}
+
+<span style=color:#00f>func</span> main() {
+  taboo.Try(<span style=color:#00f>func</span>() {
+    callCallDiv()
+  }).Catch(<span style=color:#00f>func</span>(e *taboo.Exception) {
+    fmt.Println(e.Error())
+  }).Do()
+}
+</code></pre></td></tr></table>
+</div>
+</div><p><code>e.Throw(message)</code> Will wrap the previous exception, and throw it again to the previous caller. So the printed error will be like this:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>main.callCallDiv:34 callCallDiv rethrow this error caused by:
+  main.callDiv:22 callDiv rethrow this error caused by:
+    main.div:11 division by zero detected
+
+Process finished with exit code 0
+</code></pre></td></tr></table>
+</div>
+</div><p>It just like <code>try-catch block</code> in Java/Kotlin I think but with many flaws lol. This module is still an experiment that I myself is not going to using this module in production. Or perhaps should I?</p>
+<p>Thank you for reading!</p>
+</div>
+<div class=separator>
 <span>&#183;</span>
-<span>&#183;</span></div><h2 class=subtitle>Love This Content?</h2><div class="fg-light support-me">Any kind of supports is greatly appreciated! Kindly support me via <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://www.blockchain.com/btc/address/17Afj6o7xm3ZxQ38adnvSFHSBKhHiCDiev>Bitcoin</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://ko-fi.com/clavinjune>Ko-fi</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://trakteer.id/clavinjune>Trakteer</a>, or just continue to read another content. You can write a response via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://webmention.io/ target=_blank>Webmention</a> and let me know the URL via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://telegraph.p3k.io/send-a-webmention target=_blank>Telegraph</a>.</div><div id=webmentions></div><script defer type=text/javascript src=https://clavinjune.dev/js/webmention.js></script></main><script type=text/javascript src=https://clavinjune.dev/js/ga.js defer></script>
-<script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script><footer>Copyright &copy; 2022 &#183; Clavin June</footer><script defer type=text/javascript src=https://clavinjune.dev/js/copy.js></script></body></html>
+<span>&#183;</span>
+<span>&#183;</span>
+</div>
+<h2 class=subtitle>Love This Content?</h2>
+<div class="fg-light support-me">Any kind of supports is greatly appreciated! Kindly support me via <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://www.blockchain.com/btc/address/17Afj6o7xm3ZxQ38adnvSFHSBKhHiCDiev>Bitcoin</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://ko-fi.com/clavinjune>Ko-fi</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://trakteer.id/clavinjune>Trakteer</a>, or just continue to read another content. You can write a response via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://webmention.io/ target=_blank>Webmention</a> and let me know the URL via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://telegraph.p3k.io/send-a-webmention target=_blank>Telegraph</a>.</div><div id=webmentions></div>
+<script defer type=text/javascript src=https://clavinjune.dev/js/webmention.js></script>
+</main>
+<script type=text/javascript src=https://clavinjune.dev/js/ga.js defer></script>
+<script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script><footer>
+Copyright &copy; 2022 &#183; Clavin June
+</footer>
+<script defer type=text/javascript src=https://clavinjune.dev/js/copy.js></script>
+</body>
+</html>
