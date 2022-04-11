@@ -1,458 +1,322 @@
-<!doctype html><html lang=en>
-<head><meta charset=utf-8>
-<meta http-equiv=x-ua-compatbile content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta name=author content="Clavin June">
-<meta http-equiv=content-security-policy content="default-src 'self' 'unsafe-inline' https:; object-src 'none'; style-src 'self' 'unsafe-inline' fonts.googleapis.com github.githubassets.com; font-src fonts.gstatic.com; script-src 'self' 'unsafe-inline' www.googletagmanager.com gist.github.com giscus.app; base-uri 'none'; img-src 'self' images.unsplash.com i.kym-cdn.com iq.opengenus.org;">
-<meta name=google-site-verification content="n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE">
-<meta name=monetization content="$ilp.uphold.com/RYNmdxrFrPJB">
-<link rel=me href=mailto:juneardoc@gmail.com>
-<link rel=pingback href=https://webmention.io/clavinjune.dev_en_/xmlrpc>
-<link rel=webmention href=https://webmention.io/clavinjune.dev_en_/webmention>
-<meta name=description content="This post contains notes on how to mock HTTP Call in golang">
-<meta property="og:locale" content="en_US">
-<meta property="og:site_name" content="June Personal Web">
-<meta property="og:title" content="Mocking HTTP Call in Golang">
-<meta property="og:description" content="This post contains notes on how to mock HTTP Call in golang">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://clavinjune.dev/en/blogs/mocking-http-call-in-golang/"><meta property="og:image" content="https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=1920&q=50"><meta property="article:section" content="blogs">
-<meta property="article:published_time" content="2021-04-11T00:00:00+07:00">
-<meta property="article:modified_time" content="2021-04-11T00:00:00+07:00">
-<meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=1920&q=50">
-<meta name=twitter:title content="Mocking HTTP Call in Golang">
-<meta name=twitter:description content="This post contains notes on how to mock HTTP Call in golang">
-<title>June Personal Web - Mocking HTTP Call in Golang</title>
-<link rel=stylesheet href="/css/style.min.caf3859664f2f17538a5252c2da2fafd55c3c16af6cf7edc370e96f06f065494.css" integrity="sha256-yvOFlmTy8XU4pSUsLaL6/VXDwWr2z37cNw6W8G8GVJQ=">
-<link rel=preconnect href=https://fonts.gstatic.com crossorigin>
-<link rel=preload href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap" as=style onload="this.onload=null,this.rel='stylesheet'">
-<noscript>
-<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap">
-</noscript>
-<link rel=preload href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" as=style onload="this.onload=null,this.rel='stylesheet'">
-<noscript>
-<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap">
-</noscript>
-<link rel=stylesheet href="/css/single.min.8fd5840abe28ebecdfc8e2187d0aebb2a710f2f0524a066f73a3361c1de972cc.css" integrity="sha256-j9WECr4o6+zfyOIYfQrrsqcQ8vBSSgZvc6M2HB3pcsw=">
-</head>
-<body><nav class=fg-bold>
-<a id=skip-to-content href=#content>Skip to content</a>
-<ul id=menu><li><a href=https://clavinjune.dev/en/>HOME</a></li><li><a class=active href=https://clavinjune.dev/en/blogs/>BLOG</a></li></ul>
-</nav>
-<main class=single>
-<h1 class=title>Mocking HTTP Call in Golang</h1>
-<div class="metadata font-16">
-<a class=category href=https://clavinjune.dev/en/categories/tech>tech</a>
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatbile content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=author content="Clavin June"><meta http-equiv=content-security-policy content="default-src 'self' 'unsafe-inline' https:; object-src 'none'; style-src 'self' 'unsafe-inline' fonts.googleapis.com github.githubassets.com; font-src fonts.gstatic.com; script-src 'self' 'unsafe-inline' www.googletagmanager.com gist.github.com giscus.app; base-uri 'none'; img-src 'self' images.unsplash.com i.kym-cdn.com iq.opengenus.org;"><meta name=google-site-verification content="n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE"><meta name=monetization content="$ilp.uphold.com/RYNmdxrFrPJB"><link rel=me href=mailto:juneardoc@gmail.com><link rel=pingback href=https://webmention.io/clavinjune.dev_en_/xmlrpc><link rel=webmention href=https://webmention.io/clavinjune.dev_en_/webmention><meta name=description content="This post contains notes on how to mock HTTP Call in golang"><meta property="og:locale" content="en_US"><meta property="og:site_name" content="June Personal Web"><meta property="og:title" content="Mocking HTTP Call in Golang"><meta property="og:description" content="This post contains notes on how to mock HTTP Call in golang"><meta property="og:type" content="article"><meta property="og:url" content="https://clavinjune.dev/en/blogs/mocking-http-call-in-golang/"><meta property="og:image" content="https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=1920&q=50"><meta property="article:section" content="blogs"><meta property="article:published_time" content="2021-04-11T00:00:00+07:00"><meta property="article:modified_time" content="2021-04-11T00:00:00+07:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=1920&q=50"><meta name=twitter:title content="Mocking HTTP Call in Golang"><meta name=twitter:description content="This post contains notes on how to mock HTTP Call in golang"><title>June Personal Web - Mocking HTTP Call in Golang</title><link rel=stylesheet href="/css/style.min.caf3859664f2f17538a5252c2da2fafd55c3c16af6cf7edc370e96f06f065494.css" integrity="sha256-yvOFlmTy8XU4pSUsLaL6/VXDwWr2z37cNw6W8G8GVJQ="><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=preload href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap" as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap"></noscript><link rel=preload href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap"></noscript><link rel=stylesheet href="/css/single.min.8fd5840abe28ebecdfc8e2187d0aebb2a710f2f0524a066f73a3361c1de972cc.css" integrity="sha256-j9WECr4o6+zfyOIYfQrrsqcQ8vBSSgZvc6M2HB3pcsw="></head><body><nav class=fg-bold><a id=skip-to-content href=#content>Skip to content</a><ul id=menu><li><a href=https://clavinjune.dev/en/>HOME</a></li><li><a class=active href=https://clavinjune.dev/en/blogs/>BLOG</a></li></ul></nav><main class=single><h1 class=title>Mocking HTTP Call in Golang</h1><div class="metadata font-16"><a class=category href=https://clavinjune.dev/en/categories/tech>tech</a>
 <span class=middot>&#183;</span>
 <span>Apr 11, 2021</span>
 <span class=middot>&#183;</span>
-<span>~4 min</span>
-</div>
-<div id=content>
-<figure>
-<div class=img-box>
-<img srcset="https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=240 240w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=300 300w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=360 360w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=480 480w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=600 600w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=768 768w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=800 800w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=960 960w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=1024 1024w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=1080 1080w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=1200 1200w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=1366 1366w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=1920 1920w" sizes="(max-width: 200px) 200px, 100vw" src="https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=1920" alt="Photo by @kellysikkema on Unsplash" title="Photo by @kellysikkema on Unsplash">
-</div>
-<figcaption class=font-16>Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target=_blank href=https://unsplash.com/@kellysikkema>@kellysikkema</a> on Unsplash</figcaption>
-</figure>
-<blockquote>
-<p>This article has been updated. I recommend you to read the <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://clavinjune.dev/en/blogs/mocking-http-call-in-golang-a-better-way/>updated article</a>.</p>
-</blockquote>
-<p>This blog post code is running on go1.16.2</p>
-<h2 id=api-interface-to-be-tested>API Interface to be tested</h2>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>type</span> API <span style=color:#00f>interface</span> {
-  <span style=color:green>// this function will do http call to external resource
-</span><span style=color:green></span>  FetchPostByID(ctx context.Context, id <span style=color:#2b91af>int</span>) (*APIPost, <span style=color:#2b91af>error</span>)
-}
-
-<span style=color:#00f>type</span> APIPost <span style=color:#00f>struct</span> {
-  ID     <span style=color:#2b91af>int</span>    <span style=color:#a31515>`json:&#34;id&#34;`</span>
-  UserID <span style=color:#2b91af>int</span>    <span style=color:#a31515>`json:&#34;userId&#34;`</span>
-  Title  <span style=color:#2b91af>string</span> <span style=color:#a31515>`json:&#34;title&#34;`</span>
-  Body   <span style=color:#2b91af>string</span> <span style=color:#a31515>`json:&#34;body&#34;`</span>
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>We can simply mock the <code>API interface FetchPostByID function</code> result in our unit test by creating a mock implementation of the <code>API interface</code> like this:</p>
-<h2 id=api-mock-implementation>API Mock implementation</h2>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>type</span> APIMock <span style=color:#00f>struct</span> {}
-
-<span style=color:#00f>func</span> (a APIMock) FetchPostByID(ctx context.Context, id <span style=color:#2b91af>int</span>) (*APIPost, <span style=color:#2b91af>error</span>) {
-  <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, fmt.Errorf(http.StatusText(http.StatusNotFound))
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>But by doing that, it doesn&rsquo;t increase the test coverage and it will skip the rest of the code inside the <code>FetchPostByID</code> real implementation.</p>
-<p>So we&rsquo;re gonna make the testable real implementation first of the <code>API interface</code>.</p>
-<h2 id=implementation>Implementation</h2>
-<p>To mock only the HTTP Call, we need to create http.Client mock implementation. the <code>real http.Client</code> have <code>Do function</code> that executed whenever we want to do HTTP call. So we need to mock the <code>Do function</code>. Because <code>http.Client</code> doesn&rsquo;t have any interface implemented by it, we need to create one.</p>
-<h3 id=http-client-mock>HTTP Client Mock</h3>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>type</span> HTTPClient <span style=color:#00f>interface</span> {
-  Do(*http.Request) (*http.Response, <span style=color:#2b91af>error</span>)
-}
-
-<span style=color:#00f>type</span> HTTPClientMock <span style=color:#00f>struct</span> {
-  <span style=color:green>// DoFunc will be executed whenever Do function is executed
-</span><span style=color:green></span>  <span style=color:green>// so we&#39;ll be able to create a custom response
-</span><span style=color:green></span>  DoFunc <span style=color:#00f>func</span>(*http.Request) (*http.Response, <span style=color:#2b91af>error</span>)
-}
-
-<span style=color:#00f>func</span> (H HTTPClientMock) Do(r *http.Request) (*http.Response, <span style=color:#2b91af>error</span>) {
-  <span style=color:#00f>return</span> H.DoFunc(r)
-}
-</code></pre></td></tr></table>
-</div>
-</div><h3 id=api-implementation-struct>API Implementation Struct</h3>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> NewAPI(client HTTPClient, baseURL <span style=color:#2b91af>string</span>, timeout time.Duration) API {
-  <span style=color:#00f>return</span> &amp;apiV1{
-    c:       client,
-    baseURL: baseURL,
-    timeout: timeout,
-  }
-}
-
-<span style=color:#00f>type</span> apiV1 <span style=color:#00f>struct</span> {
-  <span style=color:green>// we need to put the http.Client here
-</span><span style=color:green></span>  <span style=color:green>// so we can mock it inside the unit test
-</span><span style=color:green></span>  c       HTTPClient
-  baseURL <span style=color:#2b91af>string</span>
-  timeout time.Duration
-}
-
-<span style=color:#00f>func</span> (a apiV1) FetchPostByID(ctx context.Context, id <span style=color:#2b91af>int</span>) (*APIPost, <span style=color:#2b91af>error</span>) {
-  u := fmt.Sprintf(<span style=color:#a31515>&#34;%s/posts/%d&#34;</span>, a.baseURL, id)
-
-  ctx, cancel := context.WithTimeout(ctx, a.timeout)
-  <span style=color:#00f>defer</span> cancel()
-
-  req, err := http.NewRequestWithContext(ctx, http.MethodGet, u, <span style=color:#00f>nil</span>)
-  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
-    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
-  }
-
-  resp, err := a.c.Do(req)
-  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
-    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
-  }
-  <span style=color:#00f>defer</span> resp.Body.Close()
-
-  <span style=color:#00f>if</span> resp.StatusCode != http.StatusOK {
-    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, fmt.Errorf(http.StatusText(resp.StatusCode))
-  }
-
-  <span style=color:#00f>var</span> result *APIPost
-  <span style=color:#00f>return</span> result, json.NewDecoder(resp.Body).Decode(&amp;result)
-}
-</code></pre></td></tr></table>
-</div>
-</div><h3 id=unit-test>Unit Test</h3>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">57
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">58
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">59
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">60
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">61
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">62
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">63
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">64
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">65
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">66
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">67
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">68
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">69
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">70
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">71
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">72
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">73
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">74
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">75
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">76
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">77
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">78
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">79
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">80
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>var</span> (
-  <span style=color:green>// our custom client
-</span><span style=color:green></span>  client = &amp;HTTPClientMock{}
-  <span style=color:green>// our api
-</span><span style=color:green></span>  api = NewAPI(client, <span style=color:#a31515>&#34;&#34;</span>, 0)
-)
-
-<span style=color:#00f>func</span> TestApiV1_FetchPostByID(t *testing.T) {
-  <span style=color:green>// test table
-</span><span style=color:green></span>  tt := []<span style=color:#00f>struct</span> {
-    <span style=color:green>// Body mock the response body
-</span><span style=color:green></span>    Body <span style=color:#2b91af>string</span>
-    <span style=color:green>// StatusCode mock the response statusCode
-</span><span style=color:green></span>    StatusCode <span style=color:#2b91af>int</span>
-
-    <span style=color:green>// Expected Result
-</span><span style=color:green></span>    Result *APIPost
-    <span style=color:green>// Expected Error
-</span><span style=color:green></span>    Error <span style=color:#2b91af>error</span>
-  }{
-    {
-      Body:       <span style=color:#a31515>`{&#34;userId&#34;: 1,&#34;id&#34;: 1,&#34;title&#34;: &#34;test title&#34;,&#34;body&#34;: &#34;test body&#34;}`</span>,
-      StatusCode: 200,
-      Result: &amp;APIPost{
-        ID:     1,
-        UserID: 1,
-        Title:  <span style=color:#a31515>&#34;test title&#34;</span>,
-        Body:   <span style=color:#a31515>&#34;test body&#34;</span>,
-      },
-      Error: <span style=color:#00f>nil</span>,
-    },
-    {
-      Body:       <span style=color:#a31515>`{&#34;userId&#34;: 2,&#34;id&#34;: 2,&#34;title&#34;: &#34;test title2&#34;,&#34;body&#34;: &#34;test body2&#34;}`</span>,
-      StatusCode: 200,
-      Result: &amp;APIPost{
-        ID:     2,
-        UserID: 2,
-        Title:  <span style=color:#a31515>&#34;test title2&#34;</span>,
-        Body:   <span style=color:#a31515>&#34;test body2&#34;</span>,
-      },
-      Error: <span style=color:#00f>nil</span>,
-    },
-    {
-      Body:       <span style=color:#a31515>``</span>,
-      StatusCode: http.StatusNotFound,
-      Result:     <span style=color:#00f>nil</span>,
-      Error:      fmt.Errorf(http.StatusText(http.StatusNotFound)),
-    },
-    {
-      Body:       <span style=color:#a31515>``</span>,
-      StatusCode: http.StatusBadRequest,
-      Result:     <span style=color:#00f>nil</span>,
-      Error:      fmt.Errorf(http.StatusText(http.StatusBadRequest)),
-    },
-  }
-
-  <span style=color:#00f>for</span> _, test := <span style=color:#00f>range</span> tt {
-    <span style=color:green>// we adjust the DoFunc for each test case
-</span><span style=color:green></span>    client.DoFunc = <span style=color:#00f>func</span>(r *http.Request) (*http.Response, <span style=color:#2b91af>error</span>) {
-      <span style=color:#00f>return</span> &amp;http.Response{
-        <span style=color:green>// create the custom body
-</span><span style=color:green></span>        Body: io.NopCloser(strings.NewReader(test.Body)),
-        <span style=color:green>// create the custom status code
-</span><span style=color:green></span>        StatusCode: test.StatusCode,
-      }, <span style=color:#00f>nil</span>
-    }
-
-    <span style=color:green>// execute the func
-</span><span style=color:green></span>    p, err := api.FetchPostByID(context.Background(), 0)
-
-    <span style=color:green>// validation
-</span><span style=color:green></span>    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> &amp;&amp; err.Error() != test.Error.Error() {
-      t.Fatalf(<span style=color:#a31515>&#34;want %v, got %v&#34;</span>, test.Error, err)
-    }
-
-    <span style=color:#00f>if</span> !reflect.DeepEqual(p, test.Result) {
-      t.Fatalf(<span style=color:#a31515>&#34;want %v, got %v&#34;</span>, test.Result, p)
-    }
-  }
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Because we only change the <code>http.Client</code>, our <code>FetchPostByID func</code> is tested as it is except for this line:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>resp, err := a.c.Do(req)
-</code></pre></td></tr></table>
-</div>
-</div><p>Because the <code>a.c.Do</code> is already adjusted with our mock <code>DoFunc</code> inside the unit test, the <code>a.c.Do</code> behavior will be changed according to this line:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>client.DoFunc = <span style=color:#00f>func</span>(r *http.Request) (*http.Response, <span style=color:#2b91af>error</span>) {
-  <span style=color:#00f>return</span> &amp;http.Response{
-    Body: io.NopCloser(strings.NewReader(test.Body)),
-    StatusCode: test.StatusCode,
-  }, <span style=color:#00f>nil</span>
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Let&rsquo;s run the test</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ go test ./... -race -coverprofile /tmp/coverage.out &amp;&amp; go tool cover -html=/tmp/coverage.out
-</code></pre></td></tr></table>
-</div>
-</div><p><figure>
-<img src=https://clavinjune.dev/img/mocking-http-call-in-golang/coverage.png alt="Test Coverage" title="Test Coverage" width=100% height=auto>
-<figcaption>Test Coverage</figcaption>
-</figure></p>
-<p>Thank you for reading!</p>
-</div>
-<div class=separator>
+<span>~4 min</span></div><div id=content><figure><div class=img-box><img srcset="https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=240 240w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=300 300w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=360 360w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=480 480w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=600 600w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=768 768w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=800 800w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=960 960w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=1024 1024w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=1080 1080w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=1200 1200w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=1366 1366w,https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=1920 1920w" sizes="(max-width: 200px) 200px, 100vw" src="https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?fm=webp&q=50&w=1920" alt="Photo by @kellysikkema on Unsplash" title="Photo by @kellysikkema on Unsplash"></div><figcaption class=font-16>Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target=_blank href=https://unsplash.com/@kellysikkema>@kellysikkema</a> on Unsplash</figcaption></figure><blockquote><p>This article has been updated. I recommend you to read the <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://clavinjune.dev/en/blogs/mocking-http-call-in-golang-a-better-way/>updated article</a>.</p></blockquote><p>This blog post code is running on go1.16.2</p><h2 id=api-interface-to-be-tested>API Interface to be tested</h2><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>type</span> API <span style=color:#00f>interface</span> {
+</span></span><span style=display:flex><span>  <span style=color:green>// this function will do http call to external resource
+</span></span></span><span style=display:flex><span><span style=color:green></span>  FetchPostByID(ctx context.Context, id <span style=color:#2b91af>int</span>) (*APIPost, <span style=color:#2b91af>error</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#00f>type</span> APIPost <span style=color:#00f>struct</span> {
+</span></span><span style=display:flex><span>  ID     <span style=color:#2b91af>int</span>    <span style=color:#a31515>`json:&#34;id&#34;`</span>
+</span></span><span style=display:flex><span>  UserID <span style=color:#2b91af>int</span>    <span style=color:#a31515>`json:&#34;userId&#34;`</span>
+</span></span><span style=display:flex><span>  Title  <span style=color:#2b91af>string</span> <span style=color:#a31515>`json:&#34;title&#34;`</span>
+</span></span><span style=display:flex><span>  Body   <span style=color:#2b91af>string</span> <span style=color:#a31515>`json:&#34;body&#34;`</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>We can simply mock the <code>API interface FetchPostByID function</code> result in our unit test by creating a mock implementation of the <code>API interface</code> like this:</p><h2 id=api-mock-implementation>API Mock implementation</h2><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>type</span> APIMock <span style=color:#00f>struct</span> {}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#00f>func</span> (a APIMock) FetchPostByID(ctx context.Context, id <span style=color:#2b91af>int</span>) (*APIPost, <span style=color:#2b91af>error</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, fmt.Errorf(http.StatusText(http.StatusNotFound))
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>But by doing that, it doesn&rsquo;t increase the test coverage and it will skip the rest of the code inside the <code>FetchPostByID</code> real implementation.</p><p>So we&rsquo;re gonna make the testable real implementation first of the <code>API interface</code>.</p><h2 id=implementation>Implementation</h2><p>To mock only the HTTP Call, we need to create http.Client mock implementation. the <code>real http.Client</code> have <code>Do function</code> that executed whenever we want to do HTTP call. So we need to mock the <code>Do function</code>. Because <code>http.Client</code> doesn&rsquo;t have any interface implemented by it, we need to create one.</p><h3 id=http-client-mock>HTTP Client Mock</h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>type</span> HTTPClient <span style=color:#00f>interface</span> {
+</span></span><span style=display:flex><span>  Do(*http.Request) (*http.Response, <span style=color:#2b91af>error</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#00f>type</span> HTTPClientMock <span style=color:#00f>struct</span> {
+</span></span><span style=display:flex><span>  <span style=color:green>// DoFunc will be executed whenever Do function is executed
+</span></span></span><span style=display:flex><span><span style=color:green></span>  <span style=color:green>// so we&#39;ll be able to create a custom response
+</span></span></span><span style=display:flex><span><span style=color:green></span>  DoFunc <span style=color:#00f>func</span>(*http.Request) (*http.Response, <span style=color:#2b91af>error</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#00f>func</span> (H HTTPClientMock) Do(r *http.Request) (*http.Response, <span style=color:#2b91af>error</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> H.DoFunc(r)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><h3 id=api-implementation-struct>API Implementation Struct</h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>func</span> NewAPI(client HTTPClient, baseURL <span style=color:#2b91af>string</span>, timeout time.Duration) API {
+</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> &amp;apiV1{
+</span></span><span style=display:flex><span>    c:       client,
+</span></span><span style=display:flex><span>    baseURL: baseURL,
+</span></span><span style=display:flex><span>    timeout: timeout,
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#00f>type</span> apiV1 <span style=color:#00f>struct</span> {
+</span></span><span style=display:flex><span>  <span style=color:green>// we need to put the http.Client here
+</span></span></span><span style=display:flex><span><span style=color:green></span>  <span style=color:green>// so we can mock it inside the unit test
+</span></span></span><span style=display:flex><span><span style=color:green></span>  c       HTTPClient
+</span></span><span style=display:flex><span>  baseURL <span style=color:#2b91af>string</span>
+</span></span><span style=display:flex><span>  timeout time.Duration
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#00f>func</span> (a apiV1) FetchPostByID(ctx context.Context, id <span style=color:#2b91af>int</span>) (*APIPost, <span style=color:#2b91af>error</span>) {
+</span></span><span style=display:flex><span>  u := fmt.Sprintf(<span style=color:#a31515>&#34;%s/posts/%d&#34;</span>, a.baseURL, id)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  ctx, cancel := context.WithTimeout(ctx, a.timeout)
+</span></span><span style=display:flex><span>  <span style=color:#00f>defer</span> cancel()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  req, err := http.NewRequestWithContext(ctx, http.MethodGet, u, <span style=color:#00f>nil</span>)
+</span></span><span style=display:flex><span>  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+</span></span><span style=display:flex><span>    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  resp, err := a.c.Do(req)
+</span></span><span style=display:flex><span>  <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+</span></span><span style=display:flex><span>    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, err
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#00f>defer</span> resp.Body.Close()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#00f>if</span> resp.StatusCode != http.StatusOK {
+</span></span><span style=display:flex><span>    <span style=color:#00f>return</span> <span style=color:#00f>nil</span>, fmt.Errorf(http.StatusText(resp.StatusCode))
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#00f>var</span> result *APIPost
+</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> result, json.NewDecoder(resp.Body).Decode(&amp;result)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><h3 id=unit-test>Unit Test</h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">53
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">54
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">55
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">56
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">57
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">58
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">59
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">60
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">61
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">62
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">63
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">64
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">65
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">66
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">67
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">68
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">69
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">70
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">71
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">72
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">73
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">74
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">75
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">76
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">77
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">78
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">79
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">80
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>var</span> (
+</span></span><span style=display:flex><span>  <span style=color:green>// our custom client
+</span></span></span><span style=display:flex><span><span style=color:green></span>  client = &amp;HTTPClientMock{}
+</span></span><span style=display:flex><span>  <span style=color:green>// our api
+</span></span></span><span style=display:flex><span><span style=color:green></span>  api = NewAPI(client, <span style=color:#a31515>&#34;&#34;</span>, 0)
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#00f>func</span> TestApiV1_FetchPostByID(t *testing.T) {
+</span></span><span style=display:flex><span>  <span style=color:green>// test table
+</span></span></span><span style=display:flex><span><span style=color:green></span>  tt := []<span style=color:#00f>struct</span> {
+</span></span><span style=display:flex><span>    <span style=color:green>// Body mock the response body
+</span></span></span><span style=display:flex><span><span style=color:green></span>    Body <span style=color:#2b91af>string</span>
+</span></span><span style=display:flex><span>    <span style=color:green>// StatusCode mock the response statusCode
+</span></span></span><span style=display:flex><span><span style=color:green></span>    StatusCode <span style=color:#2b91af>int</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:green>// Expected Result
+</span></span></span><span style=display:flex><span><span style=color:green></span>    Result *APIPost
+</span></span><span style=display:flex><span>    <span style=color:green>// Expected Error
+</span></span></span><span style=display:flex><span><span style=color:green></span>    Error <span style=color:#2b91af>error</span>
+</span></span><span style=display:flex><span>  }{
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      Body:       <span style=color:#a31515>`{&#34;userId&#34;: 1,&#34;id&#34;: 1,&#34;title&#34;: &#34;test title&#34;,&#34;body&#34;: &#34;test body&#34;}`</span>,
+</span></span><span style=display:flex><span>      StatusCode: 200,
+</span></span><span style=display:flex><span>      Result: &amp;APIPost{
+</span></span><span style=display:flex><span>        ID:     1,
+</span></span><span style=display:flex><span>        UserID: 1,
+</span></span><span style=display:flex><span>        Title:  <span style=color:#a31515>&#34;test title&#34;</span>,
+</span></span><span style=display:flex><span>        Body:   <span style=color:#a31515>&#34;test body&#34;</span>,
+</span></span><span style=display:flex><span>      },
+</span></span><span style=display:flex><span>      Error: <span style=color:#00f>nil</span>,
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      Body:       <span style=color:#a31515>`{&#34;userId&#34;: 2,&#34;id&#34;: 2,&#34;title&#34;: &#34;test title2&#34;,&#34;body&#34;: &#34;test body2&#34;}`</span>,
+</span></span><span style=display:flex><span>      StatusCode: 200,
+</span></span><span style=display:flex><span>      Result: &amp;APIPost{
+</span></span><span style=display:flex><span>        ID:     2,
+</span></span><span style=display:flex><span>        UserID: 2,
+</span></span><span style=display:flex><span>        Title:  <span style=color:#a31515>&#34;test title2&#34;</span>,
+</span></span><span style=display:flex><span>        Body:   <span style=color:#a31515>&#34;test body2&#34;</span>,
+</span></span><span style=display:flex><span>      },
+</span></span><span style=display:flex><span>      Error: <span style=color:#00f>nil</span>,
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      Body:       <span style=color:#a31515>``</span>,
+</span></span><span style=display:flex><span>      StatusCode: http.StatusNotFound,
+</span></span><span style=display:flex><span>      Result:     <span style=color:#00f>nil</span>,
+</span></span><span style=display:flex><span>      Error:      fmt.Errorf(http.StatusText(http.StatusNotFound)),
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      Body:       <span style=color:#a31515>``</span>,
+</span></span><span style=display:flex><span>      StatusCode: http.StatusBadRequest,
+</span></span><span style=display:flex><span>      Result:     <span style=color:#00f>nil</span>,
+</span></span><span style=display:flex><span>      Error:      fmt.Errorf(http.StatusText(http.StatusBadRequest)),
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#00f>for</span> _, test := <span style=color:#00f>range</span> tt {
+</span></span><span style=display:flex><span>    <span style=color:green>// we adjust the DoFunc for each test case
+</span></span></span><span style=display:flex><span><span style=color:green></span>    client.DoFunc = <span style=color:#00f>func</span>(r *http.Request) (*http.Response, <span style=color:#2b91af>error</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#00f>return</span> &amp;http.Response{
+</span></span><span style=display:flex><span>        <span style=color:green>// create the custom body
+</span></span></span><span style=display:flex><span><span style=color:green></span>        Body: io.NopCloser(strings.NewReader(test.Body)),
+</span></span><span style=display:flex><span>        <span style=color:green>// create the custom status code
+</span></span></span><span style=display:flex><span><span style=color:green></span>        StatusCode: test.StatusCode,
+</span></span><span style=display:flex><span>      }, <span style=color:#00f>nil</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:green>// execute the func
+</span></span></span><span style=display:flex><span><span style=color:green></span>    p, err := api.FetchPostByID(context.Background(), 0)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:green>// validation
+</span></span></span><span style=display:flex><span><span style=color:green></span>    <span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> &amp;&amp; err.Error() != test.Error.Error() {
+</span></span><span style=display:flex><span>      t.Fatalf(<span style=color:#a31515>&#34;want %v, got %v&#34;</span>, test.Error, err)
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#00f>if</span> !reflect.DeepEqual(p, test.Result) {
+</span></span><span style=display:flex><span>      t.Fatalf(<span style=color:#a31515>&#34;want %v, got %v&#34;</span>, test.Result, p)
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>Because we only change the <code>http.Client</code>, our <code>FetchPostByID func</code> is tested as it is except for this line:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span>resp, err := a.c.Do(req)
+</span></span></code></pre></td></tr></table></div></div><p>Because the <code>a.c.Do</code> is already adjusted with our mock <code>DoFunc</code> inside the unit test, the <code>a.c.Do</code> behavior will be changed according to this line:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span>client.DoFunc = <span style=color:#00f>func</span>(r *http.Request) (*http.Response, <span style=color:#2b91af>error</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> &amp;http.Response{
+</span></span><span style=display:flex><span>    Body: io.NopCloser(strings.NewReader(test.Body)),
+</span></span><span style=display:flex><span>    StatusCode: test.StatusCode,
+</span></span><span style=display:flex><span>  }, <span style=color:#00f>nil</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>Let&rsquo;s run the test</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>$ go test ./... -race -coverprofile /tmp/coverage.out &amp;&amp; go tool cover -html=/tmp/coverage.out
+</span></span></code></pre></td></tr></table></div></div><p><figure><img src=https://clavinjune.dev/img/mocking-http-call-in-golang/coverage.png alt="Test Coverage" title="Test Coverage" width=100% height=auto><figcaption>Test Coverage</figcaption></figure></p><p>Thank you for reading!</p></div><div class=separator><span>&#183;</span>
 <span>&#183;</span>
-<span>&#183;</span>
-<span>&#183;</span>
-</div>
-<h2 class=subtitle>Love This Content?</h2>
-<div class="fg-light support-me">Any kind of supports is greatly appreciated! Kindly support me via <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://www.blockchain.com/btc/address/17Afj6o7xm3ZxQ38adnvSFHSBKhHiCDiev>Bitcoin</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://ko-fi.com/clavinjune>Ko-fi</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://trakteer.id/clavinjune>Trakteer</a>, or just continue to read another content. You can write a response via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://webmention.io/ target=_blank>Webmention</a> and let me know the URL via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://telegraph.p3k.io/send-a-webmention target=_blank>Telegraph</a>.</div><div id=webmentions></div>
-<script defer type=text/javascript src=https://clavinjune.dev/js/webmention.js></script>
-</main>
-<script type=text/javascript src=https://clavinjune.dev/js/ga.js defer></script>
-<script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script><footer>
-Copyright &copy; 2022 &#183; Clavin June
-</footer>
-<script defer type=text/javascript src=https://clavinjune.dev/js/copy.js></script>
-</body>
-</html>
+<span>&#183;</span></div><h2 class=subtitle>Love This Content?</h2><div class="fg-light support-me">Any kind of supports is greatly appreciated! Kindly support me via <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://www.blockchain.com/btc/address/17Afj6o7xm3ZxQ38adnvSFHSBKhHiCDiev>Bitcoin</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://ko-fi.com/clavinjune>Ko-fi</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://trakteer.id/clavinjune>Trakteer</a>, or just continue to read another content. You can write a response via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://webmention.io/ target=_blank>Webmention</a> and let me know the URL via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://telegraph.p3k.io/send-a-webmention target=_blank>Telegraph</a>.</div><div id=webmentions></div><script defer type=text/javascript src=https://clavinjune.dev/js/webmention.js></script></main><script type=text/javascript src=https://clavinjune.dev/js/ga.js defer></script>
+<script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script><footer>Copyright &copy; 2022 &#183; Clavin June</footer><script defer type=text/javascript src=https://clavinjune.dev/js/copy.js></script></body></html>
