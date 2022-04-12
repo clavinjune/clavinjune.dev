@@ -46,7 +46,7 @@ EOF
 done
 
 # create cluster from existing containers
-docker container exec -it myredis-1 redis-cli --cluster create $nodes --cluster-replicas 1
+docker container exec -it myredis-1 redis-cli --cluster-yes --cluster create $nodes --cluster-replicas 1
 
 printf "\n\n=> redis nodes:"
 
