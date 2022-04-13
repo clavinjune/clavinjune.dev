@@ -304,7 +304,7 @@ nodes=<span style="color:#a31515">&#34;&#34;</span>
 <span style="color:#00f">done</span>
 
 <span style="color:#008000"># create cluster from existing containers</span>
-docker container exec -it myredis-1 redis-cli --cluster-yes --cluster create $nodes --cluster-replicas 1
+docker container exec myredis-1 redis-cli --cluster-yes --cluster create $nodes --cluster-replicas 1
 
 printf <span style="color:#a31515">&#34;\n\n=&gt; redis nodes:&#34;</span>
 
