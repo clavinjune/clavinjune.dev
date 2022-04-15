@@ -1,470 +1,667 @@
-<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatbile content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=author content="Clavin June"><meta http-equiv=content-security-policy content="default-src 'self' 'unsafe-inline' https:; object-src 'none'; style-src 'self' 'unsafe-inline' fonts.googleapis.com github.githubassets.com; font-src fonts.gstatic.com; script-src 'self' 'unsafe-inline' www.googletagmanager.com gist.github.com giscus.app; base-uri 'none'; img-src 'self' images.unsplash.com i.kym-cdn.com iq.opengenus.org;"><meta name=google-site-verification content="n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE"><meta name=monetization content="$ilp.uphold.com/RYNmdxrFrPJB"><link rel=me href=mailto:juneardoc@gmail.com><link rel=pingback href=https://webmention.io/clavinjune.dev_en_/xmlrpc><link rel=webmention href=https://webmention.io/clavinjune.dev_en_/webmention><meta name=description content="Implementing dependency injection in Golang using Google Wire"><meta property="og:locale" content="en_US"><meta property="og:site_name" content="June Personal Web"><meta property="og:title" content="Golang Dependency Injection Using Wire"><meta property="og:description" content="Implementing dependency injection in Golang using Google Wire"><meta property="og:type" content="article"><meta property="og:url" content="https://clavinjune.dev/en/blogs/golang-dependency-injection-using-wire/"><meta property="og:image" content="https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?w=1920&q=50"><meta property="article:section" content="blogs"><meta property="article:published_time" content="2022-02-02T18:18:57+07:00"><meta property="article:modified_time" content="2022-02-02T18:18:57+07:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?w=1920&q=50"><meta name=twitter:title content="Golang Dependency Injection Using Wire"><meta name=twitter:description content="Implementing dependency injection in Golang using Google Wire"><title>June Personal Web - Golang Dependency Injection Using Wire</title><link rel=stylesheet href="/css/style.min.caf3859664f2f17538a5252c2da2fafd55c3c16af6cf7edc370e96f06f065494.css" integrity="sha256-yvOFlmTy8XU4pSUsLaL6/VXDwWr2z37cNw6W8G8GVJQ="><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=preload href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap" as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap"></noscript><link rel=preload href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap"></noscript><link rel=stylesheet href="/css/single.min.8fd5840abe28ebecdfc8e2187d0aebb2a710f2f0524a066f73a3361c1de972cc.css" integrity="sha256-j9WECr4o6+zfyOIYfQrrsqcQ8vBSSgZvc6M2HB3pcsw="></head><body><nav class=fg-bold><a id=skip-to-content href=#content>Skip to content</a><ul id=menu><li><a href=https://clavinjune.dev/en/>HOME</a></li><li><a class=active href=https://clavinjune.dev/en/blogs/>BLOG</a></li></ul></nav><main class=single><h1 class=title>Golang Dependency Injection Using Wire</h1><div class="metadata font-16"><a class=category href=https://clavinjune.dev/en/categories/tech>tech</a>
+<!doctype html><html lang=en>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatbile content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=author content="Clavin June">
+<meta http-equiv=content-security-policy content="default-src 'self' 'unsafe-inline' https:; object-src 'none'; style-src 'self' 'unsafe-inline' fonts.googleapis.com github.githubassets.com; font-src fonts.gstatic.com; script-src 'self' 'unsafe-inline' www.googletagmanager.com gist.github.com giscus.app; base-uri 'none'; img-src 'self' images.unsplash.com i.kym-cdn.com iq.opengenus.org;">
+<meta name=google-site-verification content="n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE">
+<meta name=monetization content="$ilp.uphold.com/RYNmdxrFrPJB">
+<link rel=me href=mailto:juneardoc@gmail.com>
+<link rel=pingback href=https://webmention.io/clavinjune.dev_en_/xmlrpc>
+<link rel=webmention href=https://webmention.io/clavinjune.dev_en_/webmention>
+<meta name=description content="Implementing dependency injection in Golang using Google Wire">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="June Personal Web">
+<meta property="og:title" content="Golang Dependency Injection Using Wire">
+<meta property="og:description" content="Implementing dependency injection in Golang using Google Wire">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://clavinjune.dev/en/blogs/golang-dependency-injection-using-wire/"><meta property="og:image" content="https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?w=1920&q=50"><meta property="article:section" content="blogs">
+<meta property="article:published_time" content="2022-02-02T18:18:57+07:00">
+<meta property="article:modified_time" content="2022-02-02T18:18:57+07:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?w=1920&q=50">
+<meta name=twitter:title content="Golang Dependency Injection Using Wire">
+<meta name=twitter:description content="Implementing dependency injection in Golang using Google Wire">
+<title>June Personal Web - Golang Dependency Injection Using Wire</title>
+<link rel=stylesheet href="/css/style.min.caf3859664f2f17538a5252c2da2fafd55c3c16af6cf7edc370e96f06f065494.css" integrity="sha256-yvOFlmTy8XU4pSUsLaL6/VXDwWr2z37cNw6W8G8GVJQ=">
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin>
+<link rel=preload href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap" as=style onload="this.onload=null,this.rel='stylesheet'">
+<noscript>
+<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap">
+</noscript>
+<link rel=preload href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" as=style onload="this.onload=null,this.rel='stylesheet'">
+<noscript>
+<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap">
+</noscript>
+<link rel=stylesheet href="/css/single.min.8fd5840abe28ebecdfc8e2187d0aebb2a710f2f0524a066f73a3361c1de972cc.css" integrity="sha256-j9WECr4o6+zfyOIYfQrrsqcQ8vBSSgZvc6M2HB3pcsw=">
+</head>
+<body><nav class=fg-bold>
+<a id=skip-to-content href=#content>Skip to content</a>
+<ul id=menu><li><a href=https://clavinjune.dev/en/>HOME</a></li><li><a class=active href=https://clavinjune.dev/en/blogs/>BLOG</a></li></ul>
+</nav>
+<main class=single>
+<h1 class=title>Golang Dependency Injection Using Wire</h1>
+<div class="metadata font-16">
+<a class=category href=https://clavinjune.dev/en/categories/tech>tech</a>
 <span class=middot>&#183;</span>
 <span>Feb 2, 2022</span>
 <span class=middot>&#183;</span>
-<span>~7 min</span></div><div id=content><figure><div class=img-box><img srcset="https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=240 240w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=300 300w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=360 360w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=480 480w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=600 600w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=768 768w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=800 800w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=960 960w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=1024 1024w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=1080 1080w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=1200 1200w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=1366 1366w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=1920 1920w" sizes="(max-width: 200px) 200px, 100vw" src="https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=1920" alt="Photo by @diana_pole on Unsplash" title="Photo by @diana_pole on Unsplash"></div><figcaption class=font-16>Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target=_blank href=https://unsplash.com/@diana_pole>@diana_pole</a> on Unsplash</figcaption></figure><h2 id=introduction>Introduction</h2><p>When it comes to maintaining a large application codebase, sometimes you are confused with dependencies. Moreover, when you create a new struct that depends on a struct with many attributes, you need to provide those attributes manually. What if those attributes need other structs? It will take forever.</p><p>Dependency injection is a technique you need to learn to maintain a large application codebase. It helps you to provide the necessary attribute to a struct automatically. Using dependency injection from a small codebase is a good investment. Although a dependency injection on a small code base seems like an over-engineered solution, it will help you whenever your codebase grows big or when the team members are increasing.</p><p>In Go, there are many dependency injection tools out there. You can choose whichever you want. Some dependency injection tools work at runtime levels, which use reflection to provide the dependencies but are hard to debug. <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://github.com/google/wire/>Google Wire</a> provides a dependency injection tool that works at compile-time. Google Wire utilises code generation to help developers achieve a dependency injection pattern at compile-time. So, in this article, you will learn how to implement a dependency injection pattern using Google Wire.</p><h2 id=directory-structure>Directory Structure</h2><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>tree .
-</span></span><span style=display:flex><span>.
-</span></span><span style=display:flex><span>├── cmd
-</span></span><span style=display:flex><span>│   └── web
-</span></span><span style=display:flex><span>│       └── main.go
-</span></span><span style=display:flex><span>├── domain
-</span></span><span style=display:flex><span>│   └── user.go
-</span></span><span style=display:flex><span>├── go.mod
-</span></span><span style=display:flex><span>├── go.sum
-</span></span><span style=display:flex><span>└── user
-</span></span><span style=display:flex><span>    ├── handler.go
-</span></span><span style=display:flex><span>    ├── provider.go
-</span></span><span style=display:flex><span>    ├── repository.go
-</span></span><span style=display:flex><span>    ├── service.go
-</span></span><span style=display:flex><span>    └── wire.go
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>4 directories, 9 files
-</span></span></code></pre></td></tr></table></div></div><p>Let&rsquo;s say you have this <code>example</code> module structure.</p><h3 id=domainusergo>domain/user.go</h3><p><code>domain/user.go</code> is where you put your structs and interfaces, for example:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>package</span> domain
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>import</span> (
-</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;context&#34;</span>
-</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;net/http&#34;</span>
-</span></span><span style=display:flex><span>)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>type</span> (
-</span></span><span style=display:flex><span>	User <span style=color:#00f>struct</span> {
-</span></span><span style=display:flex><span>		ID       <span style=color:#2b91af>string</span> <span style=color:#a31515>`json:&#34;id&#34;`</span>
-</span></span><span style=display:flex><span>		Username <span style=color:#2b91af>string</span> <span style=color:#a31515>`json:&#34;username&#34;`</span>
-</span></span><span style=display:flex><span>	}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	UserEntity <span style=color:#00f>struct</span> {
-</span></span><span style=display:flex><span>		ID       <span style=color:#2b91af>string</span>
-</span></span><span style=display:flex><span>		Username <span style=color:#2b91af>string</span>
-</span></span><span style=display:flex><span>		Password <span style=color:#2b91af>string</span>
-</span></span><span style=display:flex><span>	}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	UserRepository <span style=color:#00f>interface</span> {
-</span></span><span style=display:flex><span>		FetchByUsername(ctx context.Context, username <span style=color:#2b91af>string</span>) (*UserEntity, <span style=color:#2b91af>error</span>)
-</span></span><span style=display:flex><span>	}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	UserService <span style=color:#00f>interface</span> {
-</span></span><span style=display:flex><span>		FetchByUsername(ctx context.Context, username <span style=color:#2b91af>string</span>) (*User, <span style=color:#2b91af>error</span>)
-</span></span><span style=display:flex><span>	}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	UserHandler <span style=color:#00f>interface</span> {
-</span></span><span style=display:flex><span>		FetchByUsername() http.HandlerFunc
-</span></span><span style=display:flex><span>	}
-</span></span><span style=display:flex><span>)
-</span></span></code></pre></td></tr></table></div></div><p><code>user/</code> directory is where you put your implementation for those interfaces, for example:</p><h3 id=userhandlergo>user/handler.go</h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>package</span> user
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>import</span> (
-</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;example/domain&#34;</span>
-</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;net/http&#34;</span>
-</span></span><span style=display:flex><span>)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>type</span> handler <span style=color:#00f>struct</span> {
-</span></span><span style=display:flex><span>	svc domain.UserService
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> (h *handler) FetchByUsername() http.HandlerFunc {
-</span></span><span style=display:flex><span>	panic(<span style=color:#a31515>&#34;implement me&#34;</span>)
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><h3 id=userservicego>user/service.go</h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>package</span> user
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>import</span> (
-</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;context&#34;</span>
-</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;example/domain&#34;</span>
-</span></span><span style=display:flex><span>)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>type</span> service <span style=color:#00f>struct</span> {
-</span></span><span style=display:flex><span>	repo domain.UserRepository
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> (s *service) FetchByUsername(ctx context.Context, username <span style=color:#2b91af>string</span>) (*domain.User, <span style=color:#2b91af>error</span>) {
-</span></span><span style=display:flex><span>	panic(<span style=color:#a31515>&#34;implement me&#34;</span>)
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><h3 id=userrepositorygo>user/repository.go</h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>package</span> user
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>import</span> (
-</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;context&#34;</span>
-</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;database/sql&#34;</span>
-</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;example/domain&#34;</span>
-</span></span><span style=display:flex><span>)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>type</span> repository <span style=color:#00f>struct</span> {
-</span></span><span style=display:flex><span>	db *sql.DB
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> (r *repository) FetchByUsername(ctx context.Context, username <span style=color:#2b91af>string</span>) (*domain.UserEntity, <span style=color:#2b91af>error</span>) {
-</span></span><span style=display:flex><span>	panic(<span style=color:#a31515>&#34;implement me&#34;</span>)
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><p>As you can see from the code above:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback><span style=display:flex><span>-&gt; Handler depends on Service
-</span></span><span style=display:flex><span>-&gt; Service depends on Repository
-</span></span><span style=display:flex><span>-&gt; Repository depends on Database Connection
-</span></span></code></pre></td></tr></table></div></div><p>It is pretty much straightforward. So If you want to create the <code>handler</code>, first you need to create <code>a database connection</code>, <code>repository</code>, and finally the <code>service</code>. That&rsquo;s all for one domain. If you have multiple domains, and each struct has many attributes, it will be more bulky, right? Before it gets more complicated, let&rsquo;s try to use <code>Google Wire</code>.</p><h2 id=using-google-wire>Using Google Wire</h2><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:green># installing wire code generator</span>
-</span></span><span style=display:flex><span>$ go install github.com/google/wire/cmd/wire@latest
-</span></span><span style=display:flex><span><span style=color:green># downloading wire module</span>
-</span></span><span style=display:flex><span>$ go get github.com/google/wire@latest
-</span></span><span style=display:flex><span>go get: added github.com/google/wire v0.5.0
-</span></span></code></pre></td></tr></table></div></div><p>After installing Google Wire, let&rsquo;s talk about <code>provider</code>.</p><h3 id=provider>Provider</h3><p><code>Provider</code> is an initializer function where you create a single struct. For example:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>func</span> ProvideRepository(db *sql.DB) *repository {
-</span></span><span style=display:flex><span>	<span style=color:#00f>return</span> &amp;repository{
-</span></span><span style=display:flex><span>		db: db,
-</span></span><span style=display:flex><span>	}
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><p>Pretty much it. Other than that, you can also create a singleton provider using <code>sync.Once</code> to keep the creation only running once. For example, here is what your <code>user/provider.go</code> file contents look like:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>package</span> user
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>import</span> (
-</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;database/sql&#34;</span>
-</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;example/domain&#34;</span>
-</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;sync&#34;</span>
-</span></span><span style=display:flex><span>)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>var</span> (
-</span></span><span style=display:flex><span>	hdl     *handler
-</span></span><span style=display:flex><span>	hdlOnce sync.Once
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	svc     *service
-</span></span><span style=display:flex><span>	svcOnce sync.Once
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	repo     *repository
-</span></span><span style=display:flex><span>	repoOnce sync.Once
-</span></span><span style=display:flex><span>)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> ProvideHandler(svc domain.UserService) *handler {
-</span></span><span style=display:flex><span>	hdlOnce.Do(<span style=color:#00f>func</span>() {
-</span></span><span style=display:flex><span>		hdl = &amp;handler{
-</span></span><span style=display:flex><span>			svc: svc,
-</span></span><span style=display:flex><span>		}
-</span></span><span style=display:flex><span>	})
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	<span style=color:#00f>return</span> hdl
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> ProvideService(repo domain.UserRepository) *service {
-</span></span><span style=display:flex><span>	svcOnce.Do(<span style=color:#00f>func</span>() {
-</span></span><span style=display:flex><span>		svc = &amp;service{
-</span></span><span style=display:flex><span>			repo: repo,
-</span></span><span style=display:flex><span>		}
-</span></span><span style=display:flex><span>	})
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	<span style=color:#00f>return</span> svc
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> ProvideRepository(db *sql.DB) *repository {
-</span></span><span style=display:flex><span>	repoOnce.Do(<span style=color:#00f>func</span>() {
-</span></span><span style=display:flex><span>		repo = &amp;repository{
-</span></span><span style=display:flex><span>			db: db,
-</span></span><span style=display:flex><span>		}
-</span></span><span style=display:flex><span>	})
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	<span style=color:#00f>return</span> repo
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><h3 id=provider-set>Provider Set</h3><p>As it sounds, a <code>provider set</code> is a set of providers. It groups providers into one. If you are going to use those providers are frequently together, a provider set will be helpful. You can add a provider set to your <code>user/provider.go</code> file.</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span>...
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>ProviderSet wire.ProviderSet = wire.NewSet(
-</span></span><span style=display:flex><span>    ProvideHandler,
-</span></span><span style=display:flex><span>    ProvideService,
-</span></span><span style=display:flex><span>    ProvideRepository,
-</span></span><span style=display:flex><span>)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>...
-</span></span></code></pre></td></tr></table></div></div><p>So, in case you need to import your providers one by one, you can easily import your provider set.</p><h3 id=interface-binding>Interface Binding</h3><p><code>Interface binding</code> is needed to <strong>bind an abstract interface to its concrete implementation</strong>. Your <code>UserService interface</code> depends on a <code>UserRepository interface</code>, but your <code>repository provider</code> returns <code>a pointer of the repository struct</code>, not a <code>UserRepository interface</code>. There are two ways to fix this problem:</p><ol><li>Change <code>ProvideRepository</code>&rsquo;s return type to <code>domain.UserRepository</code></li><li>Bind <code>*repository</code> to the <code>domain.UserRepository</code></li></ol><p>But since there&rsquo;s a Go proverb that says <code>accept interfaces, return structs</code>. It would be wise if you chose the second option. Now you can bind your interfaces inside the provider set.</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span>...
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>ProviderSet wire.ProviderSet = wire.NewSet(
-</span></span><span style=display:flex><span>    ProvideHandler,
-</span></span><span style=display:flex><span>    ProvideService,
-</span></span><span style=display:flex><span>    ProvideRepository,
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:green>// bind each one of the interfaces
-</span></span></span><span style=display:flex><span><span style=color:green></span>    wire.Bind(new(domain.UserHandler), new(*handler)),
-</span></span><span style=display:flex><span>    wire.Bind(new(domain.UserService), new(*service)),
-</span></span><span style=display:flex><span>    wire.Bind(new(domain.UserRepository), new(*repository)),
-</span></span><span style=display:flex><span>)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>...
-</span></span></code></pre></td></tr></table></div></div><h3 id=userwirego>user/wire.go</h3><p>Now, after all the dependencies have a provider, let&rsquo;s move on to the <code>user/wire.go</code> file.</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:green>// +build wireinject
-</span></span></span><span style=display:flex><span><span style=color:green></span>
-</span></span><span style=display:flex><span><span style=color:#00f>package</span> user
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>import</span> (
-</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;database/sql&#34;</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;github.com/google/wire&#34;</span>
-</span></span><span style=display:flex><span>)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> Wire(db *sql.DB) *handler {
-</span></span><span style=display:flex><span>	panic(wire.Build(ProviderSet))
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><p>You need to define the <code>+build wireinject</code> tag to make Google Wire generate the complete code from your current file. <code>wire.Build</code> is flexible. You can refer to the <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://github.com/google/wire/blob/main/docs/guide.md>documentation</a> to use all the possibilities. In this case, since you have defined all the providers inside the provider set, you only need to put the provider set as an argument.</p><h2 id=generate-the-code>Generate the Code</h2><p>Now, you can use wire CLI tools to generate the complete code by executing <code>wire ./...</code> command in your project root directory.</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ wire ./...
-</span></span><span style=display:flex><span>wire: example/user: wrote /tmp/example/user/wire_gen.go
-</span></span></code></pre></td></tr></table></div></div><p>Here is the content of <code>wire_gen.go</code> file:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:green>// Code generated by Wire. DO NOT EDIT.
-</span></span></span><span style=display:flex><span><span style=color:green></span>
-</span></span><span style=display:flex><span><span style=color:green>//go:generate go run github.com/google/wire/cmd/wire
-</span></span></span><span style=display:flex><span><span style=color:green>//go:build !wireinject
-</span></span></span><span style=display:flex><span><span style=color:green>// +build !wireinject
-</span></span></span><span style=display:flex><span><span style=color:green></span>
-</span></span><span style=display:flex><span><span style=color:#00f>package</span> user
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>import</span> (
-</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;database/sql&#34;</span>
-</span></span><span style=display:flex><span>)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:green>// Injectors from wire.go:
-</span></span></span><span style=display:flex><span><span style=color:green></span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> Wire(db *sql.DB) *handler {
-</span></span><span style=display:flex><span>	userRepository := ProvideRepository(db)
-</span></span><span style=display:flex><span>	userService := ProvideService(userRepository)
-</span></span><span style=display:flex><span>	userHandler := ProvideHandler(userService)
-</span></span><span style=display:flex><span>	<span style=color:#00f>return</span> userHandler
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><p><code>Wire</code> function automatically generated by wire. You can directly use the <code>Wire</code> function inside your main function.</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>package</span> main
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>import</span> (
-</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;database/sql&#34;</span>
-</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;example/user&#34;</span>
-</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;net/http&#34;</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	_ <span style=color:#a31515>&#34;github.com/lib/pq&#34;</span>
-</span></span><span style=display:flex><span>)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> main() {
-</span></span><span style=display:flex><span>	db, err := sql.Open(<span style=color:#a31515>&#34;postgres&#34;</span>, <span style=color:#a31515>&#34;&#34;</span>)
-</span></span><span style=display:flex><span>	<span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
-</span></span><span style=display:flex><span>		panic(err)
-</span></span><span style=display:flex><span>	}
-</span></span><span style=display:flex><span>	<span style=color:#00f>defer</span> db.Close()
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	userHandler := user.Wire(db)
-</span></span><span style=display:flex><span>	http.Handle(<span style=color:#a31515>&#34;/user&#34;</span>, userHandler.FetchByUsername())
-</span></span><span style=display:flex><span>	http.ListenAndServe(<span style=color:#a31515>&#34;:8000&#34;</span>, <span style=color:#00f>nil</span>)
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><h2 id=conclusion>Conclusion</h2><p>Using Google Wire on a small codebase seems like a waste, but it helps You create a cleaner constructor function. Instead of initializing all the structs at the main function, you can depend on Wire to inject all the dependencies.</p><p>Thank you for reading!</p></div><div class=separator><span>&#183;</span>
+<span>~7 min</span>
+</div>
+<div id=content>
+<figure>
+<div class=img-box>
+<img srcset="https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=240 240w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=300 300w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=360 360w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=480 480w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=600 600w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=768 768w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=800 800w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=960 960w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=1024 1024w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=1080 1080w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=1200 1200w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=1366 1366w,https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=1920 1920w" sizes="(max-width: 200px) 200px, 100vw" src="https://images.unsplash.com/photo-1611690828749-66c846dbd1b4?fm=webp&q=50&w=1920" alt="Photo by @diana_pole on Unsplash" title="Photo by @diana_pole on Unsplash">
+</div>
+<figcaption class=font-16>Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target=_blank href=https://unsplash.com/@diana_pole>@diana_pole</a> on Unsplash</figcaption>
+</figure>
+<h2 id=introduction>Introduction</h2>
+<p>When it comes to maintaining a large application codebase, sometimes you are confused with dependencies. Moreover, when you create a new struct that depends on a struct with many attributes, you need to provide those attributes manually. What if those attributes need other structs? It will take forever.</p>
+<p>Dependency injection is a technique you need to learn to maintain a large application codebase. It helps you to provide the necessary attribute to a struct automatically. Using dependency injection from a small codebase is a good investment. Although a dependency injection on a small code base seems like an over-engineered solution, it will help you whenever your codebase grows big or when the team members are increasing.</p>
+<p>In Go, there are many dependency injection tools out there. You can choose whichever you want. Some dependency injection tools work at runtime levels, which use reflection to provide the dependencies but are hard to debug. <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://github.com/google/wire/>Google Wire</a> provides a dependency injection tool that works at compile-time. Google Wire utilises code generation to help developers achieve a dependency injection pattern at compile-time. So, in this article, you will learn how to implement a dependency injection pattern using Google Wire.</p>
+<h2 id=directory-structure>Directory Structure</h2>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>tree .
+.
+├── cmd
+│   └── web
+│       └── main.go
+├── domain
+│   └── user.go
+├── go.mod
+├── go.sum
+└── user
+    ├── handler.go
+    ├── provider.go
+    ├── repository.go
+    ├── service.go
+    └── wire.go
+
+4 directories, 9 files
+</code></pre></td></tr></table>
+</div>
+</div><p>Let&rsquo;s say you have this <code>example</code> module structure.</p>
+<h3 id=domainusergo>domain/user.go</h3>
+<p><code>domain/user.go</code> is where you put your structs and interfaces, for example:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> domain
+
+<span style=color:#00f>import</span> (
+	<span style=color:#a31515>&#34;context&#34;</span>
+	<span style=color:#a31515>&#34;net/http&#34;</span>
+)
+
+<span style=color:#00f>type</span> (
+	User <span style=color:#00f>struct</span> {
+		ID       <span style=color:#2b91af>string</span> <span style=color:#a31515>`json:&#34;id&#34;`</span>
+		Username <span style=color:#2b91af>string</span> <span style=color:#a31515>`json:&#34;username&#34;`</span>
+	}
+
+	UserEntity <span style=color:#00f>struct</span> {
+		ID       <span style=color:#2b91af>string</span>
+		Username <span style=color:#2b91af>string</span>
+		Password <span style=color:#2b91af>string</span>
+	}
+
+	UserRepository <span style=color:#00f>interface</span> {
+		FetchByUsername(ctx context.Context, username <span style=color:#2b91af>string</span>) (*UserEntity, <span style=color:#2b91af>error</span>)
+	}
+
+	UserService <span style=color:#00f>interface</span> {
+		FetchByUsername(ctx context.Context, username <span style=color:#2b91af>string</span>) (*User, <span style=color:#2b91af>error</span>)
+	}
+
+	UserHandler <span style=color:#00f>interface</span> {
+		FetchByUsername() http.HandlerFunc
+	}
+)
+</code></pre></td></tr></table>
+</div>
+</div><p><code>user/</code> directory is where you put your implementation for those interfaces, for example:</p>
+<h3 id=userhandlergo>user/handler.go</h3>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> user
+
+<span style=color:#00f>import</span> (
+	<span style=color:#a31515>&#34;example/domain&#34;</span>
+	<span style=color:#a31515>&#34;net/http&#34;</span>
+)
+
+<span style=color:#00f>type</span> handler <span style=color:#00f>struct</span> {
+	svc domain.UserService
+}
+
+<span style=color:#00f>func</span> (h *handler) FetchByUsername() http.HandlerFunc {
+	panic(<span style=color:#a31515>&#34;implement me&#34;</span>)
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=userservicego>user/service.go</h3>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> user
+
+<span style=color:#00f>import</span> (
+	<span style=color:#a31515>&#34;context&#34;</span>
+	<span style=color:#a31515>&#34;example/domain&#34;</span>
+)
+
+<span style=color:#00f>type</span> service <span style=color:#00f>struct</span> {
+	repo domain.UserRepository
+}
+
+<span style=color:#00f>func</span> (s *service) FetchByUsername(ctx context.Context, username <span style=color:#2b91af>string</span>) (*domain.User, <span style=color:#2b91af>error</span>) {
+	panic(<span style=color:#a31515>&#34;implement me&#34;</span>)
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=userrepositorygo>user/repository.go</h3>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> user
+
+<span style=color:#00f>import</span> (
+	<span style=color:#a31515>&#34;context&#34;</span>
+	<span style=color:#a31515>&#34;database/sql&#34;</span>
+	<span style=color:#a31515>&#34;example/domain&#34;</span>
+)
+
+<span style=color:#00f>type</span> repository <span style=color:#00f>struct</span> {
+	db *sql.DB
+}
+
+<span style=color:#00f>func</span> (r *repository) FetchByUsername(ctx context.Context, username <span style=color:#2b91af>string</span>) (*domain.UserEntity, <span style=color:#2b91af>error</span>) {
+	panic(<span style=color:#a31515>&#34;implement me&#34;</span>)
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>As you can see from the code above:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>-&gt; Handler depends on Service
+-&gt; Service depends on Repository
+-&gt; Repository depends on Database Connection
+</code></pre></td></tr></table>
+</div>
+</div><p>It is pretty much straightforward. So If you want to create the <code>handler</code>, first you need to create <code>a database connection</code>, <code>repository</code>, and finally the <code>service</code>. That&rsquo;s all for one domain. If you have multiple domains, and each struct has many attributes, it will be more bulky, right? Before it gets more complicated, let&rsquo;s try to use <code>Google Wire</code>.</p>
+<h2 id=using-google-wire>Using Google Wire</h2>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:green># installing wire code generator</span>
+$ go install github.com/google/wire/cmd/wire@latest
+<span style=color:green># downloading wire module</span>
+$ go get github.com/google/wire@latest
+go get: added github.com/google/wire v0.5.0
+</code></pre></td></tr></table>
+</div>
+</div><p>After installing Google Wire, let&rsquo;s talk about <code>provider</code>.</p>
+<h3 id=provider>Provider</h3>
+<p><code>Provider</code> is an initializer function where you create a single struct. For example:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> ProvideRepository(db *sql.DB) *repository {
+	<span style=color:#00f>return</span> &amp;repository{
+		db: db,
+	}
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>Pretty much it. Other than that, you can also create a singleton provider using <code>sync.Once</code> to keep the creation only running once. For example, here is what your <code>user/provider.go</code> file contents look like:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> user
+
+<span style=color:#00f>import</span> (
+	<span style=color:#a31515>&#34;database/sql&#34;</span>
+	<span style=color:#a31515>&#34;example/domain&#34;</span>
+	<span style=color:#a31515>&#34;sync&#34;</span>
+)
+
+<span style=color:#00f>var</span> (
+	hdl     *handler
+	hdlOnce sync.Once
+
+	svc     *service
+	svcOnce sync.Once
+
+	repo     *repository
+	repoOnce sync.Once
+)
+
+<span style=color:#00f>func</span> ProvideHandler(svc domain.UserService) *handler {
+	hdlOnce.Do(<span style=color:#00f>func</span>() {
+		hdl = &amp;handler{
+			svc: svc,
+		}
+	})
+
+	<span style=color:#00f>return</span> hdl
+}
+
+<span style=color:#00f>func</span> ProvideService(repo domain.UserRepository) *service {
+	svcOnce.Do(<span style=color:#00f>func</span>() {
+		svc = &amp;service{
+			repo: repo,
+		}
+	})
+
+	<span style=color:#00f>return</span> svc
+}
+
+<span style=color:#00f>func</span> ProvideRepository(db *sql.DB) *repository {
+	repoOnce.Do(<span style=color:#00f>func</span>() {
+		repo = &amp;repository{
+			db: db,
+		}
+	})
+
+	<span style=color:#00f>return</span> repo
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=provider-set>Provider Set</h3>
+<p>As it sounds, a <code>provider set</code> is a set of providers. It groups providers into one. If you are going to use those providers are frequently together, a provider set will be helpful. You can add a provider set to your <code>user/provider.go</code> file.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>...
+
+ProviderSet wire.ProviderSet = wire.NewSet(
+    ProvideHandler,
+    ProvideService,
+    ProvideRepository,
+)
+
+...
+</code></pre></td></tr></table>
+</div>
+</div><p>So, in case you need to import your providers one by one, you can easily import your provider set.</p>
+<h3 id=interface-binding>Interface Binding</h3>
+<p><code>Interface binding</code> is needed to <strong>bind an abstract interface to its concrete implementation</strong>. Your <code>UserService interface</code> depends on a <code>UserRepository interface</code>, but your <code>repository provider</code> returns <code>a pointer of the repository struct</code>, not a <code>UserRepository interface</code>. There are two ways to fix this problem:</p>
+<ol>
+<li>Change <code>ProvideRepository</code>&rsquo;s return type to <code>domain.UserRepository</code></li>
+<li>Bind <code>*repository</code> to the <code>domain.UserRepository</code></li>
+</ol>
+<p>But since there&rsquo;s a Go proverb that says <code>accept interfaces, return structs</code>. It would be wise if you chose the second option. Now you can bind your interfaces inside the provider set.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>...
+
+ProviderSet wire.ProviderSet = wire.NewSet(
+    ProvideHandler,
+    ProvideService,
+    ProvideRepository,
+
+    <span style=color:green>// bind each one of the interfaces
+</span><span style=color:green></span>    wire.Bind(new(domain.UserHandler), new(*handler)),
+    wire.Bind(new(domain.UserService), new(*service)),
+    wire.Bind(new(domain.UserRepository), new(*repository)),
+)
+
+...
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=userwirego>user/wire.go</h3>
+<p>Now, after all the dependencies have a provider, let&rsquo;s move on to the <code>user/wire.go</code> file.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:green>// +build wireinject
+</span><span style=color:green></span>
+<span style=color:#00f>package</span> user
+
+<span style=color:#00f>import</span> (
+	<span style=color:#a31515>&#34;database/sql&#34;</span>
+
+	<span style=color:#a31515>&#34;github.com/google/wire&#34;</span>
+)
+
+<span style=color:#00f>func</span> Wire(db *sql.DB) *handler {
+	panic(wire.Build(ProviderSet))
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>You need to define the <code>+build wireinject</code> tag to make Google Wire generate the complete code from your current file. <code>wire.Build</code> is flexible. You can refer to the <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://github.com/google/wire/blob/main/docs/guide.md>documentation</a> to use all the possibilities. In this case, since you have defined all the providers inside the provider set, you only need to put the provider set as an argument.</p>
+<h2 id=generate-the-code>Generate the Code</h2>
+<p>Now, you can use wire CLI tools to generate the complete code by executing <code>wire ./...</code> command in your project root directory.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ wire ./...
+wire: example/user: wrote /tmp/example/user/wire_gen.go
+</code></pre></td></tr></table>
+</div>
+</div><p>Here is the content of <code>wire_gen.go</code> file:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:green>// Code generated by Wire. DO NOT EDIT.
+</span><span style=color:green></span>
+<span style=color:green>//go:generate go run github.com/google/wire/cmd/wire
+</span><span style=color:green>//go:build !wireinject
+</span><span style=color:green>// +build !wireinject
+</span><span style=color:green></span>
+<span style=color:#00f>package</span> user
+
+<span style=color:#00f>import</span> (
+	<span style=color:#a31515>&#34;database/sql&#34;</span>
+)
+
+<span style=color:green>// Injectors from wire.go:
+</span><span style=color:green></span>
+<span style=color:#00f>func</span> Wire(db *sql.DB) *handler {
+	userRepository := ProvideRepository(db)
+	userService := ProvideService(userRepository)
+	userHandler := ProvideHandler(userService)
+	<span style=color:#00f>return</span> userHandler
+}
+</code></pre></td></tr></table>
+</div>
+</div><p><code>Wire</code> function automatically generated by wire. You can directly use the <code>Wire</code> function inside your main function.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> main
+
+<span style=color:#00f>import</span> (
+	<span style=color:#a31515>&#34;database/sql&#34;</span>
+	<span style=color:#a31515>&#34;example/user&#34;</span>
+	<span style=color:#a31515>&#34;net/http&#34;</span>
+
+	_ <span style=color:#a31515>&#34;github.com/lib/pq&#34;</span>
+)
+
+<span style=color:#00f>func</span> main() {
+	db, err := sql.Open(<span style=color:#a31515>&#34;postgres&#34;</span>, <span style=color:#a31515>&#34;&#34;</span>)
+	<span style=color:#00f>if</span> err != <span style=color:#00f>nil</span> {
+		panic(err)
+	}
+	<span style=color:#00f>defer</span> db.Close()
+
+	userHandler := user.Wire(db)
+	http.Handle(<span style=color:#a31515>&#34;/user&#34;</span>, userHandler.FetchByUsername())
+	http.ListenAndServe(<span style=color:#a31515>&#34;:8000&#34;</span>, <span style=color:#00f>nil</span>)
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=conclusion>Conclusion</h2>
+<p>Using Google Wire on a small codebase seems like a waste, but it helps You create a cleaner constructor function. Instead of initializing all the structs at the main function, you can depend on Wire to inject all the dependencies.</p>
+<p>Thank you for reading!</p>
+</div>
+<div class=separator>
 <span>&#183;</span>
-<span>&#183;</span></div><h2 class=subtitle>Love This Content?</h2><div class="fg-light support-me">Any kind of supports is greatly appreciated! Kindly support me via <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://www.blockchain.com/btc/address/17Afj6o7xm3ZxQ38adnvSFHSBKhHiCDiev>Bitcoin</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://ko-fi.com/clavinjune>Ko-fi</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://trakteer.id/clavinjune>Trakteer</a>, or just continue to read another content. You can write a response via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://webmention.io/ target=_blank>Webmention</a> and let me know the URL via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://telegraph.p3k.io/send-a-webmention target=_blank>Telegraph</a>.</div><div id=webmentions></div><script defer type=text/javascript src=https://clavinjune.dev/js/webmention.js></script><h2 class=subtitle>Drop Your Comment Below</h2><script defer src=https://giscus.app/client.js data-repo=ClavinJune/ClavinJune.github.io data-repo-id="MDEwOlJlcG9zaXRvcnkxNTUyMjU5NTU=" data-category=General data-category-id=DIC_kwDOCUCPY84B_g1a data-mapping=title data-reactions-enabled=1 data-emit-metadata=0 data-theme=light crossorigin=anonymous async></script></main><script type=text/javascript src=https://clavinjune.dev/js/ga.js defer></script>
-<script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script><footer>Copyright &copy; 2022 &#183; Clavin June</footer><script defer type=text/javascript src=https://clavinjune.dev/js/copy.js></script></body></html>
+<span>&#183;</span>
+<span>&#183;</span>
+</div>
+<h2 class=subtitle>Love This Content?</h2>
+<div class="fg-light support-me">Any kind of supports is greatly appreciated! Kindly support me via <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://www.blockchain.com/btc/address/17Afj6o7xm3ZxQ38adnvSFHSBKhHiCDiev>Bitcoin</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://ko-fi.com/clavinjune>Ko-fi</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://trakteer.id/clavinjune>Trakteer</a>, or just continue to read another content. You can write a response via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://webmention.io/ target=_blank>Webmention</a> and let me know the URL via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://telegraph.p3k.io/send-a-webmention target=_blank>Telegraph</a>.</div><div id=webmentions></div>
+<script defer type=text/javascript src=https://clavinjune.dev/js/webmention.js></script>
+<h2 class=subtitle>Drop Your Comment Below</h2>
+<script defer src=https://giscus.app/client.js data-repo=ClavinJune/ClavinJune.github.io data-repo-id="MDEwOlJlcG9zaXRvcnkxNTUyMjU5NTU=" data-category=General data-category-id=DIC_kwDOCUCPY84B_g1a data-mapping=title data-reactions-enabled=1 data-emit-metadata=0 data-theme=light crossorigin=anonymous async></script>
+</main>
+<script type=text/javascript src=https://clavinjune.dev/js/ga.js defer></script>
+<script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script><footer>
+Copyright &copy; 2022 &#183; Clavin June
+</footer>
+<script defer type=text/javascript src=https://clavinjune.dev/js/copy.js></script>
+</body>
+</html>

@@ -1,610 +1,785 @@
-<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatbile content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=author content="Clavin June"><meta http-equiv=content-security-policy content="default-src 'self' 'unsafe-inline' https:; object-src 'none'; style-src 'self' 'unsafe-inline' fonts.googleapis.com github.githubassets.com; font-src fonts.gstatic.com; script-src 'self' 'unsafe-inline' www.googletagmanager.com gist.github.com giscus.app; base-uri 'none'; img-src 'self' images.unsplash.com i.kym-cdn.com iq.opengenus.org;"><meta name=google-site-verification content="n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE"><meta name=monetization content="$ilp.uphold.com/RYNmdxrFrPJB"><link rel=me href=mailto:juneardoc@gmail.com><link rel=pingback href=https://webmention.io/clavinjune.dev_en_/xmlrpc><link rel=webmention href=https://webmention.io/clavinjune.dev_en_/webmention><meta name=description content="This post contains notes on how to implementing least recently used (LRU) cache in Golang that has O(1) Time Complexity"><meta property="og:locale" content="en_US"><meta property="og:site_name" content="June Personal Web"><meta property="og:title" content="LRU Cache in Go"><meta property="og:description" content="This post contains notes on how to implementing least recently used (LRU) cache in Golang that has O(1) Time Complexity"><meta property="og:type" content="article"><meta property="og:url" content="https://clavinjune.dev/en/blogs/lru-cache-in-go/"><meta property="og:image" content="https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=1920&q=50"><meta property="article:section" content="blogs"><meta property="article:published_time" content="2021-02-06T00:00:00+07:00"><meta property="article:modified_time" content="2021-02-06T00:00:00+07:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=1920&q=50"><meta name=twitter:title content="LRU Cache in Go"><meta name=twitter:description content="This post contains notes on how to implementing least recently used (LRU) cache in Golang that has O(1) Time Complexity"><title>June Personal Web - LRU Cache in Go</title><link rel=stylesheet href="/css/style.min.caf3859664f2f17538a5252c2da2fafd55c3c16af6cf7edc370e96f06f065494.css" integrity="sha256-yvOFlmTy8XU4pSUsLaL6/VXDwWr2z37cNw6W8G8GVJQ="><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=preload href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap" as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap"></noscript><link rel=preload href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap"></noscript><link rel=stylesheet href="/css/single.min.8fd5840abe28ebecdfc8e2187d0aebb2a710f2f0524a066f73a3361c1de972cc.css" integrity="sha256-j9WECr4o6+zfyOIYfQrrsqcQ8vBSSgZvc6M2HB3pcsw="></head><body><nav class=fg-bold><a id=skip-to-content href=#content>Skip to content</a><ul id=menu><li><a href=https://clavinjune.dev/en/>HOME</a></li><li><a class=active href=https://clavinjune.dev/en/blogs/>BLOG</a></li></ul></nav><main class=single><h1 class=title>LRU Cache in Go</h1><div class="metadata font-16"><a class=category href=https://clavinjune.dev/en/categories/tech>tech</a>
+<!doctype html><html lang=en>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatbile content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=author content="Clavin June">
+<meta http-equiv=content-security-policy content="default-src 'self' 'unsafe-inline' https:; object-src 'none'; style-src 'self' 'unsafe-inline' fonts.googleapis.com github.githubassets.com; font-src fonts.gstatic.com; script-src 'self' 'unsafe-inline' www.googletagmanager.com gist.github.com giscus.app; base-uri 'none'; img-src 'self' images.unsplash.com i.kym-cdn.com iq.opengenus.org;">
+<meta name=google-site-verification content="n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE">
+<meta name=monetization content="$ilp.uphold.com/RYNmdxrFrPJB">
+<link rel=me href=mailto:juneardoc@gmail.com>
+<link rel=pingback href=https://webmention.io/clavinjune.dev_en_/xmlrpc>
+<link rel=webmention href=https://webmention.io/clavinjune.dev_en_/webmention>
+<meta name=description content="This post contains notes on how to implementing least recently used (LRU) cache in Golang that has O(1) Time Complexity">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="June Personal Web">
+<meta property="og:title" content="LRU Cache in Go">
+<meta property="og:description" content="This post contains notes on how to implementing least recently used (LRU) cache in Golang that has O(1) Time Complexity">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://clavinjune.dev/en/blogs/lru-cache-in-go/"><meta property="og:image" content="https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=1920&q=50"><meta property="article:section" content="blogs">
+<meta property="article:published_time" content="2021-02-06T00:00:00+07:00">
+<meta property="article:modified_time" content="2021-02-06T00:00:00+07:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://images.unsplash.com/photo-1580188911874-f95af62924ee?w=1920&q=50">
+<meta name=twitter:title content="LRU Cache in Go">
+<meta name=twitter:description content="This post contains notes on how to implementing least recently used (LRU) cache in Golang that has O(1) Time Complexity">
+<title>June Personal Web - LRU Cache in Go</title>
+<link rel=stylesheet href="/css/style.min.caf3859664f2f17538a5252c2da2fafd55c3c16af6cf7edc370e96f06f065494.css" integrity="sha256-yvOFlmTy8XU4pSUsLaL6/VXDwWr2z37cNw6W8G8GVJQ=">
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin>
+<link rel=preload href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap" as=style onload="this.onload=null,this.rel='stylesheet'">
+<noscript>
+<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap">
+</noscript>
+<link rel=preload href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" as=style onload="this.onload=null,this.rel='stylesheet'">
+<noscript>
+<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap">
+</noscript>
+<link rel=stylesheet href="/css/single.min.8fd5840abe28ebecdfc8e2187d0aebb2a710f2f0524a066f73a3361c1de972cc.css" integrity="sha256-j9WECr4o6+zfyOIYfQrrsqcQ8vBSSgZvc6M2HB3pcsw=">
+</head>
+<body><nav class=fg-bold>
+<a id=skip-to-content href=#content>Skip to content</a>
+<ul id=menu><li><a href=https://clavinjune.dev/en/>HOME</a></li><li><a class=active href=https://clavinjune.dev/en/blogs/>BLOG</a></li></ul>
+</nav>
+<main class=single>
+<h1 class=title>LRU Cache in Go</h1>
+<div class="metadata font-16">
+<a class=category href=https://clavinjune.dev/en/categories/tech>tech</a>
 <span class=middot>&#183;</span>
 <span>Feb 6, 2021</span>
 <span class=middot>&#183;</span>
-<span>~7 min</span></div><div id=content><figure><div class=img-box><img srcset="https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=240 240w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=300 300w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=360 360w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=480 480w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=600 600w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=768 768w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=800 800w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=960 960w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=1024 1024w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=1080 1080w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=1200 1200w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=1366 1366w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=1920 1920w" sizes="(max-width: 200px) 200px, 100vw" src="https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=1920" alt="Photo by @mrthetrain on Unsplash" title="Photo by @mrthetrain on Unsplash"></div><figcaption class=font-16>Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target=_blank href=https://unsplash.com/@mrthetrain>@mrthetrain</a> on Unsplash</figcaption></figure><p>Two days ago, I failed to implement the optimized LRU cache in coding interview due to panic and stopped by the interviewer. Yes, I suck at coding interviews. I have implemented LRU cache before, so I know how it works and of course know how to implement it. But if you never heard of it, I think <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_recently_used_%28LRU%29>this explanation</a> is enough.</p><h2 id=brief-definition>Brief definition</h2><p>LRU Cache is a combination of hash map and queue. Hash map will store the elements by keys and values while the queue keeps track the least recently used keys. We will implement the queue using doubly linked list.</p><h2 id=rules>Rules</h2><ol><li>Track each key usage</li><li>Set max capacity that LRU cache will handle</li><li>If the size is over the defined capacity, remove the least recently used data, and store the new data</li><li>Accessed (get/set) the data means we use the data so mark it as the most recently used data</li></ol><h2 id=node-structure>Node Structure</h2><p>Node structure will store the key, value, and its previous & next nodes (doubly linked list).</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>type</span> Node <span style=color:#00f>struct</span> {
-</span></span><span style=display:flex><span>  Key   <span style=color:#2b91af>int</span>
-</span></span><span style=display:flex><span>  Value <span style=color:#2b91af>int</span>
-</span></span><span style=display:flex><span>  Prev  *Node
-</span></span><span style=display:flex><span>  Next  *Node
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> NewNode(key, value <span style=color:#2b91af>int</span>) *Node {
-</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> &amp;Node{
-</span></span><span style=display:flex><span>    Key:   key,
-</span></span><span style=display:flex><span>    Value: value,
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><h2 id=lru-structure>LRU Structure</h2><p>LRU will store the capacity, size (optional), the stored data, and it will track the most and the least recently used using tail and head pointer. Size is optional since you can use <code>len(v Type)</code> method.</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>type</span> LRU <span style=color:#00f>struct</span> {
-</span></span><span style=display:flex><span>  capacity <span style=color:#2b91af>int</span>
-</span></span><span style=display:flex><span>  size     <span style=color:#2b91af>int</span>
-</span></span><span style=display:flex><span>  data     <span style=color:#00f>map</span>[<span style=color:#2b91af>int</span>]*Node
-</span></span><span style=display:flex><span>  tail     *Node
-</span></span><span style=display:flex><span>  head     *Node
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> NewLRU(capacity <span style=color:#2b91af>int</span>) *LRU {
-</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> &amp;LRU{
-</span></span><span style=display:flex><span>    capacity: capacity,
-</span></span><span style=display:flex><span>    size:     0,
-</span></span><span style=display:flex><span>    data:     make(<span style=color:#00f>map</span>[<span style=color:#2b91af>int</span>]*Node),
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><h2 id=queue-operation>Queue Operation</h2><h3 id=push-tail>Push Tail</h3><p>Push tail will append the given node to the queue.</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>func</span> (l *LRU) pushTail(n *Node) {
-</span></span><span style=display:flex><span>  <span style=color:#00f>if</span> l.head == <span style=color:#00f>nil</span> {
-</span></span><span style=display:flex><span>    l.head = n
-</span></span><span style=display:flex><span>    l.tail = n
-</span></span><span style=display:flex><span>    <span style=color:#00f>return</span>
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  l.tail.Next = n
-</span></span><span style=display:flex><span>  n.Prev = l.tail
-</span></span><span style=display:flex><span>  l.tail = n
-</span></span><span style=display:flex><span>  l.tail.Next = <span style=color:#00f>nil</span>
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><h3 id=pop-head>Pop Head</h3><p>Pop head will remove the head (least recently used) node.</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>func</span> (l *LRU) popHead() *Node {
-</span></span><span style=display:flex><span>  ret := l.head
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#00f>if</span> l.head == l.tail {
-</span></span><span style=display:flex><span>    l.head = <span style=color:#00f>nil</span>
-</span></span><span style=display:flex><span>  } <span style=color:#00f>else</span> {
-</span></span><span style=display:flex><span>    l.head = l.head.Next
-</span></span><span style=display:flex><span>    l.head.Prev = <span style=color:#00f>nil</span>
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> ret
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><h3 id=pop-tail>Pop Tail</h3><p>Pop tail will remove the tail (most recently used) node. We will not use this method directly, but it will be used later whenever user reset the tail value.</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>func</span> (l *LRU) popTail() *Node {
-</span></span><span style=display:flex><span>  ret := l.tail
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#00f>if</span> l.head == l.tail {
-</span></span><span style=display:flex><span>    l.head = <span style=color:#00f>nil</span>
-</span></span><span style=display:flex><span>  } <span style=color:#00f>else</span> {
-</span></span><span style=display:flex><span>    l.tail = l.tail.Prev
-</span></span><span style=display:flex><span>    l.tail.Next = <span style=color:#00f>nil</span>
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> ret
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><h3 id=pop>Pop</h3><p>This Pop method will receive node that we want to pop.</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>func</span> (l *LRU) pop(n *Node) *Node {
-</span></span><span style=display:flex><span>  <span style=color:#00f>switch</span> n {
-</span></span><span style=display:flex><span>  <span style=color:#00f>case</span> l.head:
-</span></span><span style=display:flex><span>    <span style=color:#00f>return</span> l.popHead()
-</span></span><span style=display:flex><span>  <span style=color:#00f>case</span> l.tail:
-</span></span><span style=display:flex><span>    <span style=color:#00f>return</span> l.popTail()
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  n.Next.Prev = n.Prev
-</span></span><span style=display:flex><span>  n.Prev.Next = n.Next
-</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> n
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><p>Now all the queue operations has defined, let&rsquo;s implement the main operation of the LRU.</p><h2 id=set>Set</h2><p>Set method will store the given value identified by the given key. Remember the 3rd and 4th rules.</p><blockquote><ul><li>If the size is over the defined capacity, remove the least recently used data, and store the new data</li><li>Accessed (get/set) the data means we use the data so mark it as the most recently used data</li></ul></blockquote><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>func</span> (l *LRU) Set(key, value <span style=color:#2b91af>int</span>) {
-</span></span><span style=display:flex><span>  <span style=color:green>// check if the key exists
-</span></span></span><span style=display:flex><span><span style=color:green></span>  <span style=color:green>// if it exists, we need to remove it
-</span></span></span><span style=display:flex><span><span style=color:green></span>  <span style=color:green>// then we append it to the queue
-</span></span></span><span style=display:flex><span><span style=color:green></span>  <span style=color:green>// 4th rule (mark it as the most recently used)
-</span></span></span><span style=display:flex><span><span style=color:green></span>  <span style=color:#00f>if</span> val, isOk := l.data[key]; isOk {
-</span></span><span style=display:flex><span>    <span style=color:green>// this is the reason why we need to use popTail
-</span></span></span><span style=display:flex><span><span style=color:green></span>    l.pop(val)
-</span></span><span style=display:flex><span>    l.size--
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:green>// 3rd rule
-</span></span></span><span style=display:flex><span><span style=color:green></span>  <span style=color:#00f>if</span> l.size &gt;= l.capacity {
-</span></span><span style=display:flex><span>    n := l.popHead()
-</span></span><span style=display:flex><span>    delete(l.data, n.Key)
-</span></span><span style=display:flex><span>    l.size--
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:green>// push new data
-</span></span></span><span style=display:flex><span><span style=color:green></span>  n := NewNode(key, value)
-</span></span><span style=display:flex><span>  l.data[key] = n
-</span></span><span style=display:flex><span>  l.pushTail(n)
-</span></span><span style=display:flex><span>  l.size++
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><h2 id=get>Get</h2><p>Get method will return the stored value depends on the given key. Remember the 4th rule.</p><blockquote><ul><li>Accessed (get/set) the data means we use the data so mark it as the most recently used data</li></ul></blockquote><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>func</span> (l *LRU) Get(key <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
-</span></span><span style=display:flex><span>  val, isOk := l.data[key]
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#00f>if</span> !isOk {
-</span></span><span style=display:flex><span>    <span style=color:#00f>return</span> -1
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:green>// remove it
-</span></span></span><span style=display:flex><span><span style=color:green></span>  l.pop(val)
-</span></span><span style=display:flex><span>  <span style=color:green>// then mark it as the most recently used
-</span></span></span><span style=display:flex><span><span style=color:green></span>  l.pushTail(val)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> val.Value
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><p>Lastly, to ensure our queue rotation is correct, let&rsquo;s implement the showQueue method.</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>func</span> (l *LRU) ShowQueue() {
-</span></span><span style=display:flex><span>  fmt.Printf(<span style=color:#a31515>&#34;Least &#34;</span>)
-</span></span><span style=display:flex><span>  <span style=color:#00f>for</span> n := l.head ; n != l.tail ; n = n.Next {
-</span></span><span style=display:flex><span>    fmt.Printf(<span style=color:#a31515>&#34;%v -&gt; &#34;</span>, n.Key)
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  fmt.Println(l.tail.Key, <span style=color:#a31515>&#34;Most&#34;</span>)
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><p>Let&rsquo;s test it</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>func</span> main() {
-</span></span><span style=display:flex><span>  lru := NewLRU(3)
-</span></span><span style=display:flex><span>  lru.Set(1, 1)
-</span></span><span style=display:flex><span>  lru.Set(2, 2)
-</span></span><span style=display:flex><span>  lru.Set(3, 3)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:green>// Least 1 -&gt; 2 -&gt; 3 Most
-</span></span></span><span style=display:flex><span><span style=color:green></span>  lru.ShowQueue()
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:green>// 2
-</span></span></span><span style=display:flex><span><span style=color:green></span>  fmt.Println(lru.Get(2))
-</span></span><span style=display:flex><span>  <span style=color:green>// Least 1 -&gt; 3 -&gt; 2 Most
-</span></span></span><span style=display:flex><span><span style=color:green></span>  lru.ShowQueue()
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  lru.Set(1, 100)
-</span></span><span style=display:flex><span>  <span style=color:green>// Least 3 -&gt; 2 -&gt; 1 Most
-</span></span></span><span style=display:flex><span><span style=color:green></span>  lru.ShowQueue()
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  lru.Set(4, 4)
-</span></span><span style=display:flex><span>  <span style=color:green>// Least 2 -&gt; 1 -&gt; 4 Most
-</span></span></span><span style=display:flex><span><span style=color:green></span>  lru.ShowQueue()
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><p>The whole code should be like this:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  2
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  3
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  4
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  5
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  6
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  7
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  8
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  9
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 10
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 11
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 12
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 13
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 14
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 15
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 16
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 17
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 18
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 19
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 20
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 21
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 22
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 23
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 24
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 25
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 26
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 27
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 28
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 29
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 30
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 31
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 32
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 33
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 34
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 35
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 36
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 37
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 38
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 39
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 40
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 41
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 42
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 43
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 44
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 45
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 46
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 47
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 48
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 49
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 50
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 51
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 52
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 53
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 54
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 55
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 56
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 57
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 58
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 59
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 60
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 61
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 62
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 63
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 64
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 65
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 66
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 67
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 68
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 69
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 70
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 71
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 72
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 73
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 74
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 75
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 76
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 77
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 78
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 79
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 80
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 81
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 82
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 83
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 84
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 85
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 86
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 87
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 88
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 89
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 90
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 91
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 92
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 93
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 94
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 95
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 96
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 97
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 98
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 99
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">100
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">101
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">102
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">103
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">104
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">105
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">106
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">107
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">108
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">109
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">110
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">111
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">112
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">113
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">114
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">115
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">116
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">117
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">118
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">119
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">120
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">121
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">122
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">123
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">124
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">125
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">126
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">127
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">128
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">129
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">130
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">131
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">132
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">133
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">134
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">135
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">136
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">137
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">138
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">139
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">140
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">141
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">142
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">143
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">144
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">145
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">146
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">147
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">148
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">149
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">150
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">151
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">152
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">153
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">154
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">155
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">156
-</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">157
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>package</span> main
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>import</span> <span style=color:#a31515>&#34;fmt&#34;</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>type</span> Node <span style=color:#00f>struct</span> {
-</span></span><span style=display:flex><span>  Key   <span style=color:#2b91af>int</span>
-</span></span><span style=display:flex><span>  Value <span style=color:#2b91af>int</span>
-</span></span><span style=display:flex><span>  Prev  *Node
-</span></span><span style=display:flex><span>  Next  *Node
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> NewNode(key, value <span style=color:#2b91af>int</span>) *Node {
-</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> &amp;Node{
-</span></span><span style=display:flex><span>    Key:   key,
-</span></span><span style=display:flex><span>    Value: value,
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>type</span> LRU <span style=color:#00f>struct</span> {
-</span></span><span style=display:flex><span>  capacity <span style=color:#2b91af>int</span>
-</span></span><span style=display:flex><span>  size     <span style=color:#2b91af>int</span>
-</span></span><span style=display:flex><span>  data     <span style=color:#00f>map</span>[<span style=color:#2b91af>int</span>]*Node
-</span></span><span style=display:flex><span>  tail     *Node
-</span></span><span style=display:flex><span>  head     *Node
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> NewLRU(capacity <span style=color:#2b91af>int</span>) *LRU {
-</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> &amp;LRU{
-</span></span><span style=display:flex><span>    capacity: capacity,
-</span></span><span style=display:flex><span>    size:     0,
-</span></span><span style=display:flex><span>    data:     make(<span style=color:#00f>map</span>[<span style=color:#2b91af>int</span>]*Node),
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> (l *LRU) pushTail(n *Node) {
-</span></span><span style=display:flex><span>  <span style=color:#00f>if</span> l.head == <span style=color:#00f>nil</span> {
-</span></span><span style=display:flex><span>    l.head = n
-</span></span><span style=display:flex><span>    l.tail = n
-</span></span><span style=display:flex><span>    <span style=color:#00f>return</span>
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  l.tail.Next = n
-</span></span><span style=display:flex><span>  n.Prev = l.tail
-</span></span><span style=display:flex><span>  l.tail = n
-</span></span><span style=display:flex><span>  l.tail.Next = <span style=color:#00f>nil</span>
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> (l *LRU) popHead() *Node {
-</span></span><span style=display:flex><span>  ret := l.head
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#00f>if</span> l.head == l.tail {
-</span></span><span style=display:flex><span>    l.head = <span style=color:#00f>nil</span>
-</span></span><span style=display:flex><span>  } <span style=color:#00f>else</span> {
-</span></span><span style=display:flex><span>    l.head = l.head.Next
-</span></span><span style=display:flex><span>    l.head.Prev = <span style=color:#00f>nil</span>
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> ret
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> (l *LRU) popTail() *Node {
-</span></span><span style=display:flex><span>  ret := l.tail
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#00f>if</span> l.head == l.tail {
-</span></span><span style=display:flex><span>    l.head = <span style=color:#00f>nil</span>
-</span></span><span style=display:flex><span>  } <span style=color:#00f>else</span> {
-</span></span><span style=display:flex><span>    l.tail = l.tail.Prev
-</span></span><span style=display:flex><span>    l.tail.Next = <span style=color:#00f>nil</span>
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> ret
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> (l *LRU) pop(n *Node) *Node {
-</span></span><span style=display:flex><span>  <span style=color:#00f>switch</span> n {
-</span></span><span style=display:flex><span>  <span style=color:#00f>case</span> l.head:
-</span></span><span style=display:flex><span>    <span style=color:#00f>return</span> l.popHead()
-</span></span><span style=display:flex><span>  <span style=color:#00f>case</span> l.tail:
-</span></span><span style=display:flex><span>    <span style=color:#00f>return</span> l.popTail()
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  n.Next.Prev = n.Prev
-</span></span><span style=display:flex><span>  n.Prev.Next = n.Next
-</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> n
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> (l *LRU) Set(key, value <span style=color:#2b91af>int</span>) {
-</span></span><span style=display:flex><span>  <span style=color:green>// check if the key exists
-</span></span></span><span style=display:flex><span><span style=color:green></span>  <span style=color:green>// if it exists, we need to remove it
-</span></span></span><span style=display:flex><span><span style=color:green></span>  <span style=color:green>// then we append it to the queue
-</span></span></span><span style=display:flex><span><span style=color:green></span>  <span style=color:green>// 4th rule (mark it as the most recently used)
-</span></span></span><span style=display:flex><span><span style=color:green></span>  <span style=color:#00f>if</span> val, isOk := l.data[key]; isOk {
-</span></span><span style=display:flex><span>    <span style=color:green>// this is the reason why we need to use popTail
-</span></span></span><span style=display:flex><span><span style=color:green></span>    l.pop(val)
-</span></span><span style=display:flex><span>    l.size--
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:green>// 3rd rule
-</span></span></span><span style=display:flex><span><span style=color:green></span>  <span style=color:#00f>if</span> l.size &gt;= l.capacity {
-</span></span><span style=display:flex><span>    n := l.popHead()
-</span></span><span style=display:flex><span>    delete(l.data, n.Key)
-</span></span><span style=display:flex><span>    l.size--
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:green>// push new data
-</span></span></span><span style=display:flex><span><span style=color:green></span>  n := NewNode(key, value)
-</span></span><span style=display:flex><span>  l.data[key] = n
-</span></span><span style=display:flex><span>  l.pushTail(n)
-</span></span><span style=display:flex><span>  l.size++
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> (l *LRU) Get(key <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
-</span></span><span style=display:flex><span>  val, isOk := l.data[key]
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#00f>if</span> !isOk {
-</span></span><span style=display:flex><span>    <span style=color:#00f>return</span> -1
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:green>// remove it
-</span></span></span><span style=display:flex><span><span style=color:green></span>  l.pop(val)
-</span></span><span style=display:flex><span>  <span style=color:green>// then mark it as the most recently used
-</span></span></span><span style=display:flex><span><span style=color:green></span>  l.pushTail(val)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#00f>return</span> val.Value
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> (l *LRU) ShowQueue() {
-</span></span><span style=display:flex><span>  fmt.Printf(<span style=color:#a31515>&#34;Least &#34;</span>)
-</span></span><span style=display:flex><span>  <span style=color:#00f>for</span> n := l.head; n != l.tail; n = n.Next {
-</span></span><span style=display:flex><span>    fmt.Printf(<span style=color:#a31515>&#34;%v -&gt; &#34;</span>, n.Key)
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  fmt.Println(l.tail.Key, <span style=color:#a31515>&#34;Most&#34;</span>)
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#00f>func</span> main() {
-</span></span><span style=display:flex><span>  lru := NewLRU(3)
-</span></span><span style=display:flex><span>  lru.Set(1, 1)
-</span></span><span style=display:flex><span>  lru.Set(2, 2)
-</span></span><span style=display:flex><span>  lru.Set(3, 3)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:green>// Least 1 -&gt; 2 -&gt; 3 Most
-</span></span></span><span style=display:flex><span><span style=color:green></span>  lru.ShowQueue()
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:green>// 2
-</span></span></span><span style=display:flex><span><span style=color:green></span>  fmt.Println(lru.Get(2))
-</span></span><span style=display:flex><span>  <span style=color:green>// Least 1 -&gt; 3 -&gt; 2 Most
-</span></span></span><span style=display:flex><span><span style=color:green></span>  lru.ShowQueue()
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  lru.Set(1, 100)
-</span></span><span style=display:flex><span>  <span style=color:green>// Least 3 -&gt; 2 -&gt; 1 Most
-</span></span></span><span style=display:flex><span><span style=color:green></span>  lru.ShowQueue()
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  lru.Set(4, 4)
-</span></span><span style=display:flex><span>  <span style=color:green>// Least 2 -&gt; 1 -&gt; 4 Most
-</span></span></span><span style=display:flex><span><span style=color:green></span>  lru.ShowQueue()
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></td></tr></table></div></div><p>Thank you for reading!</p></div><div class=separator><span>&#183;</span>
+<span>~7 min</span>
+</div>
+<div id=content>
+<figure>
+<div class=img-box>
+<img srcset="https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=240 240w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=300 300w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=360 360w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=480 480w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=600 600w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=768 768w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=800 800w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=960 960w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=1024 1024w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=1080 1080w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=1200 1200w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=1366 1366w,https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=1920 1920w" sizes="(max-width: 200px) 200px, 100vw" src="https://images.unsplash.com/photo-1580188911874-f95af62924ee?fm=webp&q=50&w=1920" alt="Photo by @mrthetrain on Unsplash" title="Photo by @mrthetrain on Unsplash">
+</div>
+<figcaption class=font-16>Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target=_blank href=https://unsplash.com/@mrthetrain>@mrthetrain</a> on Unsplash</figcaption>
+</figure>
+<p>Two days ago, I failed to implement the optimized LRU cache in coding interview due to panic and stopped by the interviewer. Yes, I suck at coding interviews. I have implemented LRU cache before, so I know how it works and of course know how to implement it. But if you never heard of it, I think <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_recently_used_%28LRU%29>this explanation</a> is enough.</p>
+<h2 id=brief-definition>Brief definition</h2>
+<p>LRU Cache is a combination of hash map and queue. Hash map will store the elements by keys and values while the queue keeps track the least recently used keys. We will implement the queue using doubly linked list.</p>
+<h2 id=rules>Rules</h2>
+<ol>
+<li>Track each key usage</li>
+<li>Set max capacity that LRU cache will handle</li>
+<li>If the size is over the defined capacity, remove the least recently used data, and store the new data</li>
+<li>Accessed (get/set) the data means we use the data so mark it as the most recently used data</li>
+</ol>
+<h2 id=node-structure>Node Structure</h2>
+<p>Node structure will store the key, value, and its previous & next nodes (doubly linked list).</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>type</span> Node <span style=color:#00f>struct</span> {
+  Key   <span style=color:#2b91af>int</span>
+  Value <span style=color:#2b91af>int</span>
+  Prev  *Node
+  Next  *Node
+}
+
+<span style=color:#00f>func</span> NewNode(key, value <span style=color:#2b91af>int</span>) *Node {
+  <span style=color:#00f>return</span> &amp;Node{
+    Key:   key,
+    Value: value,
+  }
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=lru-structure>LRU Structure</h2>
+<p>LRU will store the capacity, size (optional), the stored data, and it will track the most and the least recently used using tail and head pointer. Size is optional since you can use <code>len(v Type)</code> method.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>type</span> LRU <span style=color:#00f>struct</span> {
+  capacity <span style=color:#2b91af>int</span>
+  size     <span style=color:#2b91af>int</span>
+  data     <span style=color:#00f>map</span>[<span style=color:#2b91af>int</span>]*Node
+  tail     *Node
+  head     *Node
+}
+
+<span style=color:#00f>func</span> NewLRU(capacity <span style=color:#2b91af>int</span>) *LRU {
+  <span style=color:#00f>return</span> &amp;LRU{
+    capacity: capacity,
+    size:     0,
+    data:     make(<span style=color:#00f>map</span>[<span style=color:#2b91af>int</span>]*Node),
+  }
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=queue-operation>Queue Operation</h2>
+<h3 id=push-tail>Push Tail</h3>
+<p>Push tail will append the given node to the queue.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (l *LRU) pushTail(n *Node) {
+  <span style=color:#00f>if</span> l.head == <span style=color:#00f>nil</span> {
+    l.head = n
+    l.tail = n
+    <span style=color:#00f>return</span>
+  }
+
+  l.tail.Next = n
+  n.Prev = l.tail
+  l.tail = n
+  l.tail.Next = <span style=color:#00f>nil</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=pop-head>Pop Head</h3>
+<p>Pop head will remove the head (least recently used) node.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (l *LRU) popHead() *Node {
+  ret := l.head
+
+  <span style=color:#00f>if</span> l.head == l.tail {
+    l.head = <span style=color:#00f>nil</span>
+  } <span style=color:#00f>else</span> {
+    l.head = l.head.Next
+    l.head.Prev = <span style=color:#00f>nil</span>
+  }
+
+  <span style=color:#00f>return</span> ret
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=pop-tail>Pop Tail</h3>
+<p>Pop tail will remove the tail (most recently used) node. We will not use this method directly, but it will be used later whenever user reset the tail value.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (l *LRU) popTail() *Node {
+  ret := l.tail
+
+  <span style=color:#00f>if</span> l.head == l.tail {
+    l.head = <span style=color:#00f>nil</span>
+  } <span style=color:#00f>else</span> {
+    l.tail = l.tail.Prev
+    l.tail.Next = <span style=color:#00f>nil</span>
+  }
+
+  <span style=color:#00f>return</span> ret
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=pop>Pop</h3>
+<p>This Pop method will receive node that we want to pop.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (l *LRU) pop(n *Node) *Node {
+  <span style=color:#00f>switch</span> n {
+  <span style=color:#00f>case</span> l.head:
+    <span style=color:#00f>return</span> l.popHead()
+  <span style=color:#00f>case</span> l.tail:
+    <span style=color:#00f>return</span> l.popTail()
+  }
+
+  n.Next.Prev = n.Prev
+  n.Prev.Next = n.Next
+  <span style=color:#00f>return</span> n
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>Now all the queue operations has defined, let&rsquo;s implement the main operation of the LRU.</p>
+<h2 id=set>Set</h2>
+<p>Set method will store the given value identified by the given key. Remember the 3rd and 4th rules.</p>
+<blockquote>
+<ul>
+<li>If the size is over the defined capacity, remove the least recently used data, and store the new data</li>
+<li>Accessed (get/set) the data means we use the data so mark it as the most recently used data</li>
+</ul>
+</blockquote>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (l *LRU) Set(key, value <span style=color:#2b91af>int</span>) {
+  <span style=color:green>// check if the key exists
+</span><span style=color:green></span>  <span style=color:green>// if it exists, we need to remove it
+</span><span style=color:green></span>  <span style=color:green>// then we append it to the queue
+</span><span style=color:green></span>  <span style=color:green>// 4th rule (mark it as the most recently used)
+</span><span style=color:green></span>  <span style=color:#00f>if</span> val, isOk := l.data[key]; isOk {
+    <span style=color:green>// this is the reason why we need to use popTail
+</span><span style=color:green></span>    l.pop(val)
+    l.size--
+  }
+
+  <span style=color:green>// 3rd rule
+</span><span style=color:green></span>  <span style=color:#00f>if</span> l.size &gt;= l.capacity {
+    n := l.popHead()
+    delete(l.data, n.Key)
+    l.size--
+  }
+
+  <span style=color:green>// push new data
+</span><span style=color:green></span>  n := NewNode(key, value)
+  l.data[key] = n
+  l.pushTail(n)
+  l.size++
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=get>Get</h2>
+<p>Get method will return the stored value depends on the given key. Remember the 4th rule.</p>
+<blockquote>
+<ul>
+<li>Accessed (get/set) the data means we use the data so mark it as the most recently used data</li>
+</ul>
+</blockquote>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (l *LRU) Get(key <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
+  val, isOk := l.data[key]
+
+  <span style=color:#00f>if</span> !isOk {
+    <span style=color:#00f>return</span> -1
+  }
+
+  <span style=color:green>// remove it
+</span><span style=color:green></span>  l.pop(val)
+  <span style=color:green>// then mark it as the most recently used
+</span><span style=color:green></span>  l.pushTail(val)
+
+  <span style=color:#00f>return</span> val.Value
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>Lastly, to ensure our queue rotation is correct, let&rsquo;s implement the showQueue method.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> (l *LRU) ShowQueue() {
+  fmt.Printf(<span style=color:#a31515>&#34;Least &#34;</span>)
+  <span style=color:#00f>for</span> n := l.head ; n != l.tail ; n = n.Next {
+    fmt.Printf(<span style=color:#a31515>&#34;%v -&gt; &#34;</span>, n.Key)
+  }
+
+  fmt.Println(l.tail.Key, <span style=color:#a31515>&#34;Most&#34;</span>)
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>Let&rsquo;s test it</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>func</span> main() {
+  lru := NewLRU(3)
+  lru.Set(1, 1)
+  lru.Set(2, 2)
+  lru.Set(3, 3)
+
+  <span style=color:green>// Least 1 -&gt; 2 -&gt; 3 Most
+</span><span style=color:green></span>  lru.ShowQueue()
+
+  <span style=color:green>// 2
+</span><span style=color:green></span>  fmt.Println(lru.Get(2))
+  <span style=color:green>// Least 1 -&gt; 3 -&gt; 2 Most
+</span><span style=color:green></span>  lru.ShowQueue()
+
+  lru.Set(1, 100)
+  <span style=color:green>// Least 3 -&gt; 2 -&gt; 1 Most
+</span><span style=color:green></span>  lru.ShowQueue()
+
+  lru.Set(4, 4)
+  <span style=color:green>// Least 2 -&gt; 1 -&gt; 4 Most
+</span><span style=color:green></span>  lru.ShowQueue()
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>The whole code should be like this:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 51
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 52
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 53
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 54
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 55
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 56
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 57
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 58
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 59
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 60
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 61
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 62
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 63
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 64
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 65
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 66
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 67
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 68
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 69
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 70
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 71
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 72
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 73
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 74
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 75
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 76
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 77
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 78
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 79
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 80
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 81
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 82
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 83
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 84
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 85
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 86
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 87
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 88
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 89
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 90
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 91
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 92
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 93
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 94
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 95
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 96
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 97
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 98
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 99
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">100
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">101
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">102
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">103
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">104
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">105
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">106
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">107
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">108
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">109
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">110
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">111
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">112
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">113
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">114
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">115
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">116
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">117
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">118
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">119
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">120
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">121
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">122
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">123
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">124
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">125
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">126
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">127
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">128
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">129
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">130
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">131
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">132
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">133
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">134
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">135
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">136
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">137
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">138
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">139
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">140
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">141
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">142
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">143
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">144
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">145
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">146
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">147
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">148
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">149
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">150
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">151
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">152
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">153
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">154
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">155
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">156
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">157
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#00f>package</span> main
+
+<span style=color:#00f>import</span> <span style=color:#a31515>&#34;fmt&#34;</span>
+
+<span style=color:#00f>type</span> Node <span style=color:#00f>struct</span> {
+  Key   <span style=color:#2b91af>int</span>
+  Value <span style=color:#2b91af>int</span>
+  Prev  *Node
+  Next  *Node
+}
+
+<span style=color:#00f>func</span> NewNode(key, value <span style=color:#2b91af>int</span>) *Node {
+  <span style=color:#00f>return</span> &amp;Node{
+    Key:   key,
+    Value: value,
+  }
+}
+
+<span style=color:#00f>type</span> LRU <span style=color:#00f>struct</span> {
+  capacity <span style=color:#2b91af>int</span>
+  size     <span style=color:#2b91af>int</span>
+  data     <span style=color:#00f>map</span>[<span style=color:#2b91af>int</span>]*Node
+  tail     *Node
+  head     *Node
+}
+
+<span style=color:#00f>func</span> NewLRU(capacity <span style=color:#2b91af>int</span>) *LRU {
+  <span style=color:#00f>return</span> &amp;LRU{
+    capacity: capacity,
+    size:     0,
+    data:     make(<span style=color:#00f>map</span>[<span style=color:#2b91af>int</span>]*Node),
+  }
+}
+
+<span style=color:#00f>func</span> (l *LRU) pushTail(n *Node) {
+  <span style=color:#00f>if</span> l.head == <span style=color:#00f>nil</span> {
+    l.head = n
+    l.tail = n
+    <span style=color:#00f>return</span>
+  }
+
+  l.tail.Next = n
+  n.Prev = l.tail
+  l.tail = n
+  l.tail.Next = <span style=color:#00f>nil</span>
+}
+
+<span style=color:#00f>func</span> (l *LRU) popHead() *Node {
+  ret := l.head
+
+  <span style=color:#00f>if</span> l.head == l.tail {
+    l.head = <span style=color:#00f>nil</span>
+  } <span style=color:#00f>else</span> {
+    l.head = l.head.Next
+    l.head.Prev = <span style=color:#00f>nil</span>
+  }
+
+  <span style=color:#00f>return</span> ret
+}
+
+<span style=color:#00f>func</span> (l *LRU) popTail() *Node {
+  ret := l.tail
+
+  <span style=color:#00f>if</span> l.head == l.tail {
+    l.head = <span style=color:#00f>nil</span>
+  } <span style=color:#00f>else</span> {
+    l.tail = l.tail.Prev
+    l.tail.Next = <span style=color:#00f>nil</span>
+  }
+
+  <span style=color:#00f>return</span> ret
+}
+
+<span style=color:#00f>func</span> (l *LRU) pop(n *Node) *Node {
+  <span style=color:#00f>switch</span> n {
+  <span style=color:#00f>case</span> l.head:
+    <span style=color:#00f>return</span> l.popHead()
+  <span style=color:#00f>case</span> l.tail:
+    <span style=color:#00f>return</span> l.popTail()
+  }
+
+  n.Next.Prev = n.Prev
+  n.Prev.Next = n.Next
+  <span style=color:#00f>return</span> n
+}
+
+<span style=color:#00f>func</span> (l *LRU) Set(key, value <span style=color:#2b91af>int</span>) {
+  <span style=color:green>// check if the key exists
+</span><span style=color:green></span>  <span style=color:green>// if it exists, we need to remove it
+</span><span style=color:green></span>  <span style=color:green>// then we append it to the queue
+</span><span style=color:green></span>  <span style=color:green>// 4th rule (mark it as the most recently used)
+</span><span style=color:green></span>  <span style=color:#00f>if</span> val, isOk := l.data[key]; isOk {
+    <span style=color:green>// this is the reason why we need to use popTail
+</span><span style=color:green></span>    l.pop(val)
+    l.size--
+  }
+
+  <span style=color:green>// 3rd rule
+</span><span style=color:green></span>  <span style=color:#00f>if</span> l.size &gt;= l.capacity {
+    n := l.popHead()
+    delete(l.data, n.Key)
+    l.size--
+  }
+
+  <span style=color:green>// push new data
+</span><span style=color:green></span>  n := NewNode(key, value)
+  l.data[key] = n
+  l.pushTail(n)
+  l.size++
+}
+
+<span style=color:#00f>func</span> (l *LRU) Get(key <span style=color:#2b91af>int</span>) <span style=color:#2b91af>int</span> {
+  val, isOk := l.data[key]
+
+  <span style=color:#00f>if</span> !isOk {
+    <span style=color:#00f>return</span> -1
+  }
+
+  <span style=color:green>// remove it
+</span><span style=color:green></span>  l.pop(val)
+  <span style=color:green>// then mark it as the most recently used
+</span><span style=color:green></span>  l.pushTail(val)
+
+  <span style=color:#00f>return</span> val.Value
+}
+
+<span style=color:#00f>func</span> (l *LRU) ShowQueue() {
+  fmt.Printf(<span style=color:#a31515>&#34;Least &#34;</span>)
+  <span style=color:#00f>for</span> n := l.head; n != l.tail; n = n.Next {
+    fmt.Printf(<span style=color:#a31515>&#34;%v -&gt; &#34;</span>, n.Key)
+  }
+
+  fmt.Println(l.tail.Key, <span style=color:#a31515>&#34;Most&#34;</span>)
+}
+
+<span style=color:#00f>func</span> main() {
+  lru := NewLRU(3)
+  lru.Set(1, 1)
+  lru.Set(2, 2)
+  lru.Set(3, 3)
+
+  <span style=color:green>// Least 1 -&gt; 2 -&gt; 3 Most
+</span><span style=color:green></span>  lru.ShowQueue()
+
+  <span style=color:green>// 2
+</span><span style=color:green></span>  fmt.Println(lru.Get(2))
+  <span style=color:green>// Least 1 -&gt; 3 -&gt; 2 Most
+</span><span style=color:green></span>  lru.ShowQueue()
+
+  lru.Set(1, 100)
+  <span style=color:green>// Least 3 -&gt; 2 -&gt; 1 Most
+</span><span style=color:green></span>  lru.ShowQueue()
+
+  lru.Set(4, 4)
+  <span style=color:green>// Least 2 -&gt; 1 -&gt; 4 Most
+</span><span style=color:green></span>  lru.ShowQueue()
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>Thank you for reading!</p>
+</div>
+<div class=separator>
 <span>&#183;</span>
-<span>&#183;</span></div><h2 class=subtitle>Love This Content?</h2><div class="fg-light support-me">Any kind of supports is greatly appreciated! Kindly support me via <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://www.blockchain.com/btc/address/17Afj6o7xm3ZxQ38adnvSFHSBKhHiCDiev>Bitcoin</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://ko-fi.com/clavinjune>Ko-fi</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://trakteer.id/clavinjune>Trakteer</a>, or just continue to read another content. You can write a response via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://webmention.io/ target=_blank>Webmention</a> and let me know the URL via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://telegraph.p3k.io/send-a-webmention target=_blank>Telegraph</a>.</div><div id=webmentions></div><script defer type=text/javascript src=https://clavinjune.dev/js/webmention.js></script></main><script type=text/javascript src=https://clavinjune.dev/js/ga.js defer></script>
-<script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script><footer>Copyright &copy; 2022 &#183; Clavin June</footer><script defer type=text/javascript src=https://clavinjune.dev/js/copy.js></script></body></html>
+<span>&#183;</span>
+<span>&#183;</span>
+</div>
+<h2 class=subtitle>Love This Content?</h2>
+<div class="fg-light support-me">Any kind of supports is greatly appreciated! Kindly support me via <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://www.blockchain.com/btc/address/17Afj6o7xm3ZxQ38adnvSFHSBKhHiCDiev>Bitcoin</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://ko-fi.com/clavinjune>Ko-fi</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://trakteer.id/clavinjune>Trakteer</a>, or just continue to read another content. You can write a response via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://webmention.io/ target=_blank>Webmention</a> and let me know the URL via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://telegraph.p3k.io/send-a-webmention target=_blank>Telegraph</a>.</div><div id=webmentions></div>
+<script defer type=text/javascript src=https://clavinjune.dev/js/webmention.js></script>
+</main>
+<script type=text/javascript src=https://clavinjune.dev/js/ga.js defer></script>
+<script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script><footer>
+Copyright &copy; 2022 &#183; Clavin June
+</footer>
+<script defer type=text/javascript src=https://clavinjune.dev/js/copy.js></script>
+</body>
+</html>
