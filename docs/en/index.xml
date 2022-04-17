@@ -196,24 +196,7 @@
 </span></span><span style="display:flex;"><span>^Csignal: interrupt
 </span></span></code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>{<span style="color:#a31515">&#34;shortRef&#34;</span>: <span style="color:#a31515">&#34;da8920f5&#34;</span>, <span style="color:#a31515">&#34;authorDateIso&#34;</span>: <span style="color:#a31515">&#34;2022-04-04T00:47:49+00:00&#34;</span>, <span style="color:#a31515">&#34;authorName&#34;</span>: <span style="color:#a31515">&#34;24659468+ClavinJune&#34;</span>, <span style="color:#a31515">&#34;message&#34;</span>: <span style="color:#a31515">&#34;GH-Actions-CD&#34;</span>}
-</span></span><span style="display:flex;"><span>{<span style="color:#a31515">&#34;shortRef&#34;</span>: <span style="color:#a31515">&#34;16b77e0b&#34;</span>, <span style="color:#a31515">&#34;authorDateIso&#34;</span>: <span style="color:#a31515">&#34;2022-04-03T20:35:22+07:00&#34;</span>, <span style="color:#a31515">&#34;authorName&#34;</span>: <span style="color:#a31515">&#34;24659468+ClavinJune&#34;</span>, <span style="color:#a31515">&#34;message&#34;</span>: <span style="color:#a31515">&#34;build-Sun-03-Apr-2022-20-35-22-0700&#34;</span>}
-</span></span><span style="display:flex;"><span>{<span style="color:#a31515">&#34;shortRef&#34;</span>: <span style="color:#a31515">&#34;950aaea6&#34;</span>, <span style="color:#a31515">&#34;authorDateIso&#34;</span>: <span style="color:#a31515">&#34;2022-03-29T09:12:26+07:00&#34;</span>, <span style="color:#a31515">&#34;authorName&#34;</span>: <span style="color:#a31515">&#34;clavianus.juneardo&#34;</span>, <span style="color:#a31515">&#34;message&#34;</span>: <span style="color:#a31515">&#34;Update-main.yml&#34;</span>}
-</span></span><span style="display:flex;"><span>{<span style="color:#a31515">&#34;shortRef&#34;</span>: <span style="color:#a31515">&#34;e4f74e7c&#34;</span>, <span style="color:#a31515">&#34;authorDateIso&#34;</span>: <span style="color:#a31515">&#34;2022-03-29T09:12:05+07:00&#34;</span>, <span style="color:#a31515">&#34;authorName&#34;</span>: <span style="color:#a31515">&#34;clavianus.juneardo&#34;</span>, <span style="color:#a31515">&#34;message&#34;</span>: <span style="color:#a31515">&#34;Update-main.yml&#34;</span>}
-</span></span><span style="display:flex;"><span>{<span style="color:#a31515">&#34;shortRef&#34;</span>: <span style="color:#a31515">&#34;b16f6ca7&#34;</span>, <span style="color:#a31515">&#34;authorDateIso&#34;</span>: <span style="color:#a31515">&#34;2022-03-27T00:49:02+00:00&#34;</span>, <span style="color:#a31515">&#34;authorName&#34;</span>: <span style="color:#a31515">&#34;24659468+ClavinJune&#34;</span>, <span style="color:#a31515">&#34;message&#34;</span>: <span style="color:#a31515">&#34;GH-Actions-CD&#34;</span>}
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://git-scm.com/docs/pretty-formats"   >Reference</a></p>
-]]></description></item><item><title>Git Log Prettify</title><link>https://clavinjune.dev/en/blogs/git-log-prettify/</link><pubDate>Sun, 10 Apr 2022 00:00:01 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/git-log-prettify/</guid><description><![CDATA[
+</div>]]></description></item><item><title>Git Log Prettify</title><link>https://clavinjune.dev/en/blogs/git-log-prettify/</link><pubDate>Sun, 10 Apr 2022 00:00:01 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/git-log-prettify/</guid><description><![CDATA[
   
     
     
