@@ -1,6 +1,6 @@
 {
 	"version": 3,
-	"file": "style.css",
+	"file": "style.min.css",
 	"sourceRoot": "/Users/clavianusjuneardo/Public/ClavinJune.github.io",
 	"sources": [
 		"themes/june/assets/sass/style.scss",

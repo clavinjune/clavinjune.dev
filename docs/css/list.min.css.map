@@ -1,6 +1,6 @@
 {
 	"version": 3,
-	"file": "list.css",
+	"file": "list.min.css",
 	"sourceRoot": "/Users/clavianusjuneardo/Public/ClavinJune.github.io",
 	"sources": [
 		"themes/june/assets/sass/list.scss",

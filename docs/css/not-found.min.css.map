@@ -1,6 +1,6 @@
 {
 	"version": 3,
-	"file": "not-found.css",
+	"file": "not-found.min.css",
 	"sourceRoot": "/Users/clavianusjuneardo/Public/ClavinJune.github.io",
 	"sources": [
 		"themes/june/assets/sass/not-found.scss",
