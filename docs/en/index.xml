@@ -1,4 +1,219 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Sun, 10 Apr 2022 00:00:01 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Git Log Prettify</title><link>https://clavinjune.dev/en/blogs/git-log-prettify/</link><pubDate>Sun, 10 Apr 2022 00:00:01 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/git-log-prettify/</guid><description><![CDATA[
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Sun, 17 Apr 2022 00:00:01 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Golang Stream All Lines From Stdin</title><link>https://clavinjune.dev/en/blogs/golang-stream-all-lines-from-stdin/</link><pubDate>Sun, 17 Apr 2022 00:00:01 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/golang-stream-all-lines-from-stdin/</guid><description><![CDATA[
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+
+
+
+
+
+
+
+<figure>
+  <div class="img-box">
+    <img
+      srcset="https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_240x0_resize_q50_h2_box_3.webp 240w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_300x0_resize_q50_h2_box_3.webp 300w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_360x0_resize_q50_h2_box_3.webp 360w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_480x0_resize_q50_h2_box_3.webp 480w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_600x0_resize_q50_h2_box_3.webp 600w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_768x0_resize_q50_h2_box_3.webp 768w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_800x0_resize_q50_h2_box_3.webp 800w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_960x0_resize_q50_h2_box_3.webp 960w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1024x0_resize_q50_h2_box_3.webp 1024w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1080x0_resize_q50_h2_box_3.webp 1080w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1200x0_resize_q50_h2_box_3.webp 1200w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1366x0_resize_q50_h2_box_3.webp 1366w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1920x0_resize_q50_h2_box_3.webp 1920w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_3840x0_resize_q50_h2_box_3.webp 3840w"
+      sizes="(max-width: 200px) 200px, 100vw"
+      src="https://clavinjune.dev/img/sunday-snippet/image.png" alt="Sunday Snippet #13 golang stream all lines from stdin" title="Sunday Snippet #13 golang stream all lines from stdin"/>
+  </div>
+  <figcaption class="font-16">Sunday Snippet #13 golang stream all lines from stdin</figcaption>
+</figure>
+<h2 id="writesh">write.sh</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#00f">#! /bin/sh
+</span></span></span><span style="display:flex;"><span><span style="color:#00f"></span>
+</span></span><span style="display:flex;"><span>set -euo pipefail
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">for</span> i in <span style="color:#a31515">`</span>seq 1 1000<span style="color:#a31515">`</span>; <span style="color:#00f">do</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#a31515">&#34;</span>$i<span style="color:#a31515">&#34;</span>
+</span></span><span style="display:flex;"><span>    sleep 1
+</span></span><span style="display:flex;"><span><span style="color:#00f">done</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="maingo">main.go</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#00f">package</span> main
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#a31515">&#34;bufio&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a31515">&#34;encoding/base64&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a31515">&#34;log&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a31515">&#34;os&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">func</span> main() {
+</span></span><span style="display:flex;"><span>	l := log.New(os.Stdout, <span style="color:#a31515">&#34;[STREAM] &#34;</span>, log.Lshortfile|log.LstdFlags|log.Lmsgprefix)
+</span></span><span style="display:flex;"><span>	s := bufio.NewScanner(os.Stdin)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#00f">for</span> s.Scan() {
+</span></span><span style="display:flex;"><span>		t := s.Text()
+</span></span><span style="display:flex;"><span>		b := s.Bytes()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#008000">// for example process the input to b64
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>		b64 := base64.StdEncoding.EncodeToString(b)
+</span></span><span style="display:flex;"><span>		l.Println(t, <span style="color:#a31515">&#34;=&gt;&#34;</span>, b64)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="usage">Usage</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sh write.sh | go run main.go
+</span></span><span style="display:flex;"><span>2022/04/10 20:55:25 main.go:20: [STREAM] 1 =&gt; MQ==
+</span></span><span style="display:flex;"><span>2022/04/10 20:55:26 main.go:20: [STREAM] 2 =&gt; Mg==
+</span></span><span style="display:flex;"><span>2022/04/10 20:55:27 main.go:20: [STREAM] 3 =&gt; Mw==
+</span></span><span style="display:flex;"><span>2022/04/10 20:55:28 main.go:20: [STREAM] 4 =&gt; NA==
+</span></span><span style="display:flex;"><span>2022/04/10 20:55:29 main.go:20: [STREAM] 5 =&gt; NQ==
+</span></span><span style="display:flex;"><span>2022/04/10 20:55:30 main.go:20: [STREAM] 6 =&gt; Ng==
+</span></span><span style="display:flex;"><span>^Csignal: interrupt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>{<span style="color:#a31515">&#34;shortRef&#34;</span>: <span style="color:#a31515">&#34;da8920f5&#34;</span>, <span style="color:#a31515">&#34;authorDateIso&#34;</span>: <span style="color:#a31515">&#34;2022-04-04T00:47:49+00:00&#34;</span>, <span style="color:#a31515">&#34;authorName&#34;</span>: <span style="color:#a31515">&#34;24659468+ClavinJune&#34;</span>, <span style="color:#a31515">&#34;message&#34;</span>: <span style="color:#a31515">&#34;GH-Actions-CD&#34;</span>}
+</span></span><span style="display:flex;"><span>{<span style="color:#a31515">&#34;shortRef&#34;</span>: <span style="color:#a31515">&#34;16b77e0b&#34;</span>, <span style="color:#a31515">&#34;authorDateIso&#34;</span>: <span style="color:#a31515">&#34;2022-04-03T20:35:22+07:00&#34;</span>, <span style="color:#a31515">&#34;authorName&#34;</span>: <span style="color:#a31515">&#34;24659468+ClavinJune&#34;</span>, <span style="color:#a31515">&#34;message&#34;</span>: <span style="color:#a31515">&#34;build-Sun-03-Apr-2022-20-35-22-0700&#34;</span>}
+</span></span><span style="display:flex;"><span>{<span style="color:#a31515">&#34;shortRef&#34;</span>: <span style="color:#a31515">&#34;950aaea6&#34;</span>, <span style="color:#a31515">&#34;authorDateIso&#34;</span>: <span style="color:#a31515">&#34;2022-03-29T09:12:26+07:00&#34;</span>, <span style="color:#a31515">&#34;authorName&#34;</span>: <span style="color:#a31515">&#34;clavianus.juneardo&#34;</span>, <span style="color:#a31515">&#34;message&#34;</span>: <span style="color:#a31515">&#34;Update-main.yml&#34;</span>}
+</span></span><span style="display:flex;"><span>{<span style="color:#a31515">&#34;shortRef&#34;</span>: <span style="color:#a31515">&#34;e4f74e7c&#34;</span>, <span style="color:#a31515">&#34;authorDateIso&#34;</span>: <span style="color:#a31515">&#34;2022-03-29T09:12:05+07:00&#34;</span>, <span style="color:#a31515">&#34;authorName&#34;</span>: <span style="color:#a31515">&#34;clavianus.juneardo&#34;</span>, <span style="color:#a31515">&#34;message&#34;</span>: <span style="color:#a31515">&#34;Update-main.yml&#34;</span>}
+</span></span><span style="display:flex;"><span>{<span style="color:#a31515">&#34;shortRef&#34;</span>: <span style="color:#a31515">&#34;b16f6ca7&#34;</span>, <span style="color:#a31515">&#34;authorDateIso&#34;</span>: <span style="color:#a31515">&#34;2022-03-27T00:49:02+00:00&#34;</span>, <span style="color:#a31515">&#34;authorName&#34;</span>: <span style="color:#a31515">&#34;24659468+ClavinJune&#34;</span>, <span style="color:#a31515">&#34;message&#34;</span>: <span style="color:#a31515">&#34;GH-Actions-CD&#34;</span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://git-scm.com/docs/pretty-formats"   >Reference</a></p>
+]]></description></item><item><title>Git Log Prettify</title><link>https://clavinjune.dev/en/blogs/git-log-prettify/</link><pubDate>Sun, 10 Apr 2022 00:00:01 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/git-log-prettify/</guid><description><![CDATA[
   
     
     
