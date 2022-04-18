@@ -18,7 +18,7 @@ description: "sunday snippet #13 golang stream all lines from stdin"
 
 set -euo pipefail
 
-for i in `seq 1 1000`; do
+for i in {1..100}; do
     echo "$i"
     sleep 1
 done
