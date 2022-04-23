@@ -6,7 +6,7 @@ build:
 	touch docs/.nojekyll && \
 	cp docs/en/404.html docs/404.html
 serve:
-	hugo server -D --minify \
+	hugo server -D -F --minify \
 	--disableFastRender --printUnusedTemplates \
 	--printI18nWarnings --printMemoryUsage --printPathWarnings \
 	--bind 0.0.0.0 --port 1313 --baseURL $(IP)
