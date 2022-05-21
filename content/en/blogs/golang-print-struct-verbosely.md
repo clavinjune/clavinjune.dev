@@ -33,11 +33,14 @@ func NewFoo(number int, word string) *Foo {
 }
 
 func main() {
-	fmt.Printf("%+v", NewFoo(10, "testing"))
+	f := NewFoo(10, "testing")
+	fmt.Printf("%+v\n%#v\n%v", f, f, f)
 }
 ```
 
 ```shell
 $ go run main.go
 &{bar:{number:10 word:testing}}
+&main.Foo{bar:main.Bar{number:10, word:"testing"}}
+&{{10 testing}}
 ```

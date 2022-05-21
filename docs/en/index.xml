@@ -275,6 +275,7 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#00f">package</span> main
@@ -297,7 +298,8 @@
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#00f">func</span> main() {
-</span></span><span style="display:flex;"><span>	fmt.Printf(<span style="color:#a31515">&#34;%+v&#34;</span>, NewFoo(10, <span style="color:#a31515">&#34;testing&#34;</span>))
+</span></span><span style="display:flex;"><span>	f := NewFoo(10, <span style="color:#a31515">&#34;testing&#34;</span>)
+</span></span><span style="display:flex;"><span>	fmt.Printf(<span style="color:#a31515">&#34;%+v\n%#v\n%v&#34;</span>, f, f, f)
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></td></tr></table>
 </div>
@@ -305,10 +307,14 @@
 <table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ go run main.go
 </span></span><span style="display:flex;"><span>&amp;{bar:{number:10 word:testing}}
+</span></span><span style="display:flex;"><span>&amp;main.Foo{bar:main.Bar{number:10, word:<span style="color:#a31515">&#34;testing&#34;</span>}}
+</span></span><span style="display:flex;"><span>&amp;{{10 testing}}
 </span></span></code></pre></td></tr></table>
 </div>
 </div>]]></description></item><item><title>Golang Inject Build Time Variable</title><link>https://clavinjune.dev/en/blogs/golang-inject-build-time-variable/</link><pubDate>Sun, 01 May 2022 00:00:01 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/golang-inject-build-time-variable/</guid><description><![CDATA[
