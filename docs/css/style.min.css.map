@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "style.min.css",
-	"sourceRoot": "/home/runner/work/ClavinJune.github.io/ClavinJune.github.io",
+	"sourceRoot": "/home/runner/work/clavinjune.dev/clavinjune.dev",
 	"sources": [
 		"themes/june/assets/sass/style.scss",
 		"themes/june/assets/sass/_colors.scss",
