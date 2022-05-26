@@ -1,7 +1,7 @@
 ---
 title: "Golang HTTP Handler With Gzip"
 date: 2022-05-26T16:52:21+07:00
-draft: true
+draft: false
 iscjklanguage: false
 isarchived: false
 categories: ["tech"]

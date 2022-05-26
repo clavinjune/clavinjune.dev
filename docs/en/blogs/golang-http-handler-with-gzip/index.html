@@ -1,0 +1,306 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatbile content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=author content="Clavin June"><meta http-equiv=content-security-policy content="default-src 'self' 'unsafe-inline' https:; object-src 'none'; style-src 'self' 'unsafe-inline' fonts.googleapis.com github.githubassets.com; font-src fonts.gstatic.com; script-src 'self' 'unsafe-inline' www.googletagmanager.com gist.github.com giscus.app; base-uri 'none'; img-src 'self' images.unsplash.com i.kym-cdn.com iq.opengenus.org;"><meta name=google-site-verification content="n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE"><meta name=monetization content="$ilp.uphold.com/RYNmdxrFrPJB"><link rel=me href=mailto:juneardoc@gmail.com><link rel=pingback href=https://webmention.io/clavinjune.dev_en_/xmlrpc><link rel=webmention href=https://webmention.io/clavinjune.dev_en_/webmention><meta name=description content="create a simple golang HTTP handler and request with compressed payload using gzip"><meta property="og:locale" content="en_US"><meta property="og:site_name" content="June Personal Web"><meta property="og:title" content="Golang HTTP Handler With Gzip"><meta property="og:description" content="create a simple golang HTTP handler and request with compressed payload using gzip"><meta property="og:type" content="article"><meta property="og:url" content="https://clavinjune.dev/en/blogs/golang-http-handler-with-gzip/"><meta property="og:image" content="https://images.unsplash.com/photo-1595246135406-803418233494?w=1920&q=50"><meta property="article:section" content="blogs"><meta property="article:published_time" content="2022-05-26T16:52:21+07:00"><meta property="article:modified_time" content="2022-05-26T16:52:21+07:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://images.unsplash.com/photo-1595246135406-803418233494?w=1920&q=50"><meta name=twitter:title content="Golang HTTP Handler With Gzip"><meta name=twitter:description content="create a simple golang HTTP handler and request with compressed payload using gzip"><title>June Personal Web - Golang HTTP Handler With Gzip</title><link rel=stylesheet href=https://clavinjune.dev/css/style.min.18b5dac8bd8a35f52a3a027a9faec3e09327d0500eb2b1b42cdb8df5f29f8b16.css integrity="sha256-GLXayL2KNfUqOgJ6n67D4JMn0FAOsrG0LNuN9fKfixY="><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=preload href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap" as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700&display=swap"></noscript><link rel=preload href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap"></noscript><link rel=stylesheet href=https://clavinjune.dev/css/single.min.e8889c0752ac6ca9337cbb89ec2e249a2f3effd2a56faa77f8307f247d2433dd.css integrity="sha256-6IicB1KsbKkzfLuJ7C4kmi8+/9Klb6p3+DB/JH0kM90="></head><body><nav class=fg-bold><a id=skip-to-content href=#content>Skip to content</a><ul id=menu><li><a href=https://clavinjune.dev/en/>HOME</a></li><li><a class=active href=https://clavinjune.dev/en/blogs/>BLOG</a></li></ul></nav><main class=single><h1 class=title>Golang HTTP Handler With Gzip</h1><div class="metadata font-16"><a class=category href=https://clavinjune.dev/en/categories/tech>tech</a>
+<span class=middot>&#183;</span>
+<span>May 26, 2022</span>
+<span class=middot>&#183;</span>
+<span>~6 min</span></div><div id=content><figure><div class=img-box><img srcset="https://images.unsplash.com/photo-1595246135406-803418233494?fm=webp&q=50&w=240 240w,https://images.unsplash.com/photo-1595246135406-803418233494?fm=webp&q=50&w=300 300w,https://images.unsplash.com/photo-1595246135406-803418233494?fm=webp&q=50&w=360 360w,https://images.unsplash.com/photo-1595246135406-803418233494?fm=webp&q=50&w=480 480w,https://images.unsplash.com/photo-1595246135406-803418233494?fm=webp&q=50&w=600 600w,https://images.unsplash.com/photo-1595246135406-803418233494?fm=webp&q=50&w=768 768w,https://images.unsplash.com/photo-1595246135406-803418233494?fm=webp&q=50&w=800 800w,https://images.unsplash.com/photo-1595246135406-803418233494?fm=webp&q=50&w=960 960w,https://images.unsplash.com/photo-1595246135406-803418233494?fm=webp&q=50&w=1024 1024w,https://images.unsplash.com/photo-1595246135406-803418233494?fm=webp&q=50&w=1080 1080w,https://images.unsplash.com/photo-1595246135406-803418233494?fm=webp&q=50&w=1200 1200w,https://images.unsplash.com/photo-1595246135406-803418233494?fm=webp&q=50&w=1366 1366w,https://images.unsplash.com/photo-1595246135406-803418233494?fm=webp&q=50&w=1920 1920w" sizes="(max-width: 200px) 200px, 100vw" src="https://images.unsplash.com/photo-1595246135406-803418233494?fm=webp&q=50&w=1920" alt="Photo by @mildlee on Unsplash" title="Photo by @mildlee on Unsplash"></div><figcaption class=font-16>Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target=_blank href=https://unsplash.com/@mildlee>@mildlee</a> on Unsplash</figcaption></figure><h2 id=introduction>Introduction</h2><p>Golang has many kinds of compression technique within its standard library which you can use to compress our data. A compression is needed to reduce the size of the data. Even in a web server, a compression technique would be beneficial to increase the communication speed between client and server. <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://www.gnu.org/software/gzip/>Gzip</a> is one of the compression techniques supported by both Golang and web. This article will cover the creation of golang HTTP handler that (de)compress gzip request/response and how to create an HTTP request that send/receive the gzip-compressed body payload. All the code covered in this article you can find it in <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://github.com/anon-org/golang-http-handler-with-gzip>this repository</a>.</p><h2 id=directory-structure>Directory Structure</h2><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ tree .
+</span></span><span style=display:flex><span>.
+</span></span><span style=display:flex><span>├── LICENSE
+</span></span><span style=display:flex><span>├── Makefile
+</span></span><span style=display:flex><span>├── README.md
+</span></span><span style=display:flex><span>├── client
+</span></span><span style=display:flex><span>│   └── main.go
+</span></span><span style=display:flex><span>├── curl.sh
+</span></span><span style=display:flex><span>├── go.mod
+</span></span><span style=display:flex><span>├── server
+</span></span><span style=display:flex><span>│   └── main.go
+</span></span><span style=display:flex><span>└── util.go
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>2 directories, 8 files
+</span></span></code></pre></td></tr></table></div></div><h2 id=servermaingo>server/main.go</h2><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>package</span> main
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#00f>import</span> (
+</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;example&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;log&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;net/http&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#00f>func</span> main() {
+</span></span><span style=display:flex><span>	log.Println(<span style=color:#a31515>&#34;server listening at :8000&#34;</span>)
+</span></span><span style=display:flex><span>	http.ListenAndServe(<span style=color:#a31515>&#34;:8000&#34;</span>, http.HandlerFunc(<span style=color:#00f>func</span>(w http.ResponseWriter, r *http.Request) {
+</span></span><span style=display:flex><span>		body := example.MustReadCompressedBody[example.Payload](r.Body)
+</span></span><span style=display:flex><span>		body.Number++
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		example.MustWriteCompressedResponse(w, body)
+</span></span><span style=display:flex><span>	}))
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>The server only run a single endpoint which will <code>read a compressed body</code>, <code>increment the payload content</code>, then <code>respond with new body</code>.</p><h2 id=utilgo>util.go</h2><h3 id=payload>Payload</h3><p>You can use the simplest payload just to test the compression, for example:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>type</span> Payload <span style=color:#00f>struct</span> {
+</span></span><span style=display:flex><span>	Number <span style=color:#2b91af>int</span> <span style=color:#a31515>`json:&#34;number&#34;`</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><h3 id=read-a-compressed-body-payload>Read a Compressed Body Payload</h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>func</span> MustReadCompressedBody[T any](r io.Reader) *T {
+</span></span><span style=display:flex><span>	gr, err := gzip.NewReader(r)
+</span></span><span style=display:flex><span>	PanicIfErr(err)
+</span></span><span style=display:flex><span>	<span style=color:#00f>defer</span> gr.Close()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#00f>var</span> t T
+</span></span><span style=display:flex><span>	PanicIfErr(json.NewDecoder(gr).Decode(&amp;t))
+</span></span><span style=display:flex><span>	<span style=color:#00f>return</span> &amp;t
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>To read a gzip-compressed payload, you need to create a <code>gzip.Reader</code> from your response or request. Then decode the JSON as usual using the <code>gzip.Reader</code> instance.</p><h3 id=write-a-compressed-response>Write a Compressed Response</h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>func</span> MustWriteCompressedResponse(w http.ResponseWriter, body any) {
+</span></span><span style=display:flex><span>	w.Header().Set(<span style=color:#a31515>&#34;Content-Type&#34;</span>, <span style=color:#a31515>&#34;application/json&#34;</span>)
+</span></span><span style=display:flex><span>	w.Header().Set(<span style=color:#a31515>&#34;Content-Encoding&#34;</span>, <span style=color:#a31515>&#34;gzip&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	gw := gzip.NewWriter(w)
+</span></span><span style=display:flex><span>	<span style=color:#00f>defer</span> gw.Close()
+</span></span><span style=display:flex><span>	PanicIfErr(json.NewEncoder(gw).Encode(body))
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>As usual, it is better to inform the client about your <code>Content-Type</code>, and <code>Content-Encoding</code>. But in golang case, informing the client about <code>Content-Encoding</code> will help golang <code>http.Request</code> to decompress the payload automatically. Just like <a class=link rel="nofollow noreferrer noopener" href=#read-a-compressed-body-payload>reading the payload</a>, you only need to create a <code>gzip.Writer</code> then encode the content normally. Also, <strong>don&rsquo;t forget to call <code>gw.Close()</code> to avoid EOF error</strong>.</p><h2 id=test-the-server>Test the Server</h2><p>Now, your server has completely (de)compress the request and response. Let&rsquo;s try to test it using cURL command first.</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:green># run the server on another terminal</span>
+</span></span><span style=display:flex><span><span style=color:green># using `go run ./server/` command</span>
+</span></span><span style=display:flex><span>$ echo <span style=color:#a31515>&#39;{&#34;number&#34;: 99}&#39;</span> | gzip | <span style=color:#a31515>\
+</span></span></span><span style=display:flex><span><span style=color:#a31515></span>curl -iXPOST http://localhost:8000/ <span style=color:#a31515>\
+</span></span></span><span style=display:flex><span><span style=color:#a31515></span>-H <span style=color:#a31515>&#34;Content-Type: application/json&#34;</span> <span style=color:#a31515>\
+</span></span></span><span style=display:flex><span><span style=color:#a31515></span>-H <span style=color:#a31515>&#34;Content-Encoding: gzip&#34;</span> <span style=color:#a31515>\
+</span></span></span><span style=display:flex><span><span style=color:#a31515></span>--compressed --data-binary @-
+</span></span></code></pre></td></tr></table></div></div><p>Since the server will increase the <code>Payload.Number</code>, you can expect the response number will be <code>100</code> by sending a request with <code>99</code>. The expected result would be similar to this:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>HTTP/1.1 200 OK
+</span></span><span style=display:flex><span>Content-Encoding: gzip
+</span></span><span style=display:flex><span>Content-Type: application/json
+</span></span><span style=display:flex><span>Date: Thu, 26 May 2022 12:04:53 GMT
+</span></span><span style=display:flex><span>Content-Length: 39
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>{<span style=color:#a31515>&#34;number&#34;</span>:100}
+</span></span></code></pre></td></tr></table></div></div><p>Now, after you sure that your server works completely fine, let&rsquo;s try to send the HTTP request using golang <code>http.Request</code>.</p><h2 id=clientmaingo>client/main.go</h2><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>package</span> main
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#00f>import</span> (
+</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;context&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;encoding/json&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;example&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;log&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;net/http&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#a31515>&#34;time&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#00f>func</span> main() {
+</span></span><span style=display:flex><span>	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+</span></span><span style=display:flex><span>	<span style=color:#00f>defer</span> cancel()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	body := &amp;example.Payload{
+</span></span><span style=display:flex><span>		Number: 100,
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	log.Printf(<span style=color:#a31515>&#34;create compressed request with %#v&#34;</span>, body)
+</span></span><span style=display:flex><span>	req := example.MustCreateCompressedRequest(ctx, http.MethodPost, <span style=color:#a31515>&#34;http://localhost:8000/&#34;</span>, body)
+</span></span><span style=display:flex><span>	<span style=color:#00f>defer</span> req.Body.Close()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	log.Printf(<span style=color:#a31515>&#34;send compressed request&#34;</span>)
+</span></span><span style=display:flex><span>	resp, err := http.DefaultClient.Do(req)
+</span></span><span style=display:flex><span>	example.PanicIfErr(err)
+</span></span><span style=display:flex><span>	<span style=color:#00f>defer</span> resp.Body.Close()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	log.Println(<span style=color:#a31515>&#34;resp.Uncompressed?&#34;</span>, resp.Uncompressed)
+</span></span><span style=display:flex><span>	<span style=color:#00f>var</span> responsePayload *example.Payload
+</span></span><span style=display:flex><span>	<span style=color:#00f>if</span> resp.Uncompressed {
+</span></span><span style=display:flex><span>		err = json.NewDecoder(resp.Body).Decode(&amp;responsePayload)
+</span></span><span style=display:flex><span>	} <span style=color:#00f>else</span> {
+</span></span><span style=display:flex><span>		responsePayload = example.MustReadCompressedBody[example.Payload](resp.Body)
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	log.Printf(<span style=color:#a31515>&#34;read response %#v&#34;</span>, responsePayload)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>Just like a normal HTTP request, you just need to <code>create an HTTP.Request</code>, <code>send the request</code>, and lastly <code>decode the response</code>. But, before send the request payload, don&rsquo;t forget to compress it fist.</p><h3 id=create-a-compressed-request>Create a Compressed Request</h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>func</span> MustCreateCompressedRequest(ctx context.Context, method, url <span style=color:#2b91af>string</span>, body any) *http.Request {
+</span></span><span style=display:flex><span>	pr, pw := io.Pipe()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#00f>go</span> <span style=color:#00f>func</span>() {
+</span></span><span style=display:flex><span>		gw := gzip.NewWriter(pw)
+</span></span><span style=display:flex><span>		err := json.NewEncoder(gw).Encode(body)
+</span></span><span style=display:flex><span>		<span style=color:#00f>defer</span> PanicIfErr(gw.Close())
+</span></span><span style=display:flex><span>		<span style=color:#00f>defer</span> pw.CloseWithError(err)
+</span></span><span style=display:flex><span>	}()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	r, err := http.NewRequestWithContext(ctx, method, url, pr)
+</span></span><span style=display:flex><span>	PanicIfErr(err)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	r.Header.Set(<span style=color:#a31515>&#34;Content-Type&#34;</span>, <span style=color:#a31515>&#34;application/json&#34;</span>)
+</span></span><span style=display:flex><span>	r.Header.Set(<span style=color:#a31515>&#34;Content-Encoding&#34;</span>, <span style=color:#a31515>&#34;gzip&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#00f>return</span> r
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>Create a new compressed request is quite easy, just like <a class=link rel="nofollow noreferrer noopener" href=#write-a-compressed-response>write a compressed response</a> we need to create a new <code>gzip.Writer</code>. Code above utilize <code>io.Pipe</code> to avoid buffer the body into a memory and unecessary allocations. But here&rsquo;s the alternative if you want to buffer the body first:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>func</span> MustCreateCompressedRequest(ctx context.Context, method, url <span style=color:#2b91af>string</span>, body any) *http.Request {
+</span></span><span style=display:flex><span>	<span style=color:#00f>var</span> b bytes.Buffer
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	gw := gzip.NewWriter(&amp;b)
+</span></span><span style=display:flex><span>	err := json.NewEncoder(gw).Encode(body)
+</span></span><span style=display:flex><span>	<span style=color:#00f>defer</span> PanicIfErr(gw.Close())
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	r, err := http.NewRequestWithContext(ctx, method, url, &amp;b)
+</span></span><span style=display:flex><span>	PanicIfErr(err)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	r.Header.Set(<span style=color:#a31515>&#34;Content-Type&#34;</span>, <span style=color:#a31515>&#34;application/json&#34;</span>)
+</span></span><span style=display:flex><span>	r.Header.Set(<span style=color:#a31515>&#34;Content-Encoding&#34;</span>, <span style=color:#a31515>&#34;gzip&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#00f>return</span> r
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>Again, <code>gw.Close()</code> is also necessary here. If you don&rsquo;t close the <code>gzip.Writer</code>, you&rsquo;ll see an EOF error similar to this:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>2022/05/26 19:23:58 http: panic serving [::1]:56436: unexpected EOF
+</span></span></code></pre></td></tr></table></div></div><p>Lastly, after creating the compressed request, you only need to send the request like a normal request. But here&rsquo;s a tricky part.</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#00f>var</span> responsePayload *example.Payload
+</span></span><span style=display:flex><span><span style=color:#00f>if</span> resp.Uncompressed {
+</span></span><span style=display:flex><span>    err = json.NewDecoder(resp.Body).Decode(&amp;responsePayload)
+</span></span><span style=display:flex><span>} <span style=color:#00f>else</span> {
+</span></span><span style=display:flex><span>    responsePayload = example.MustReadCompressedBody[example.Payload](resp.Body)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>After you receive a response which you want to decompress and decode, please be aware with the <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://github.com/golang/go/blob/master/src/net/http/response.go#L89-L96>resp.Uncompressed</a>. If the server returns a header <code>Content-Encoding: gzip</code>, as it said <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://github.com/golang/go/blob/master/src/net/http/transport.go#L182-L190>here</a> Golang will try to <code>decompress</code> the payload for you so you don&rsquo;t need to use <code>example.MustReadCompressedBody[example.Payload](resp.Body)</code>. But if you add <code>r.Header.Set("Accept-Encoding", "gzip")</code> on your request, it won&rsquo;t be automatically decompressed.</p><h2 id=test-the-client>Test the Client</h2><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:green># run the server on another terminal</span>
+</span></span><span style=display:flex><span><span style=color:green># using `go run ./server/` command</span>
+</span></span><span style=display:flex><span>$ go run ./client
+</span></span><span style=display:flex><span>2022/05/26 19:41:34 create compressed request with &amp;example.Payload{Number:100}
+</span></span><span style=display:flex><span>2022/05/26 19:41:34 send compressed request
+</span></span><span style=display:flex><span>2022/05/26 19:41:34 resp.Uncompressed? true
+</span></span><span style=display:flex><span>2022/05/26 19:41:34 read response &amp;example.Payload{Number:101}
+</span></span></code></pre></td></tr></table></div></div><h2 id=conclusion>Conclusion</h2><p>Implementation of the gzip compression on Golang HTTP handler and requests might be adding a little complexity on your code, but I believe modern browser / API gateway these days can implement this easily without changing your code. Also this <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://github.com/nytimes/gziphandler>middleware</a> created by NY Times can help you to minimize the effort on implementing this compression. You can find all the code used on in this article <a class=link rel="nofollow noreferrer noopener" target=_blank href=https://github.com/anon-org/golang-http-handler-with-gzip>here</a>.</p><p>Thank you for reading!</p></div><div class=separator><span>&#183;</span>
+<span>&#183;</span>
+<span>&#183;</span></div><h2 class=subtitle>Love This Content?</h2><div class="fg-light support-me">Any kind of supports is greatly appreciated! Kindly support me via <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://www.blockchain.com/btc/address/17Afj6o7xm3ZxQ38adnvSFHSBKhHiCDiev>Bitcoin</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://ko-fi.com/clavinjune>Ko-fi</a>, <a rel="noreferrer noopener" target=_blank class="fg-bold bottom-red" href=https://trakteer.id/clavinjune>Trakteer</a>, or just continue to read another content. You can write a response via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://webmention.io/ target=_blank>Webmention</a> and let me know the URL via <a class="fg-bold bottom-red" rel="noreferrer nofollow noopener" href=https://telegraph.p3k.io/send-a-webmention target=_blank>Telegraph</a>.</div><div id=webmentions></div><script defer type=text/javascript src=https://clavinjune.dev/js/webmention.js></script><h2 class=subtitle>Drop Your Comment Below</h2><script defer src=https://giscus.app/client.js data-repo=ClavinJune/ClavinJune.github.io data-repo-id="MDEwOlJlcG9zaXRvcnkxNTUyMjU5NTU=" data-category=General data-category-id=DIC_kwDOCUCPY84B_g1a data-mapping=title data-reactions-enabled=1 data-emit-metadata=0 data-theme=light crossorigin=anonymous async></script></main><script type=text/javascript src=https://clavinjune.dev/js/ga.js defer></script>
+<script defer src="https://www.googletagmanager.com/gtag/js?id=G-MTSJ0LHJ06"></script><footer>Copyright &copy; 2022 &#183; Clavin June</footer><script defer type=text/javascript src=https://clavinjune.dev/js/copy.js></script></body></html>
