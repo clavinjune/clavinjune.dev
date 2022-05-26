@@ -14,7 +14,7 @@ description: "create a simple golang HTTP handler and request with compressed pa
 
 ## Introduction
 
-Golang has many kinds of compression technique within its standard library which you can use to compress our data. A compression is needed to reduce the size of the data. Even in a web server, a compression technique would be beneficial to increase the communication speed between client and server. [Gzip](https://www.gnu.org/software/gzip/) is one of the compression techniques supported by both Golang and web. This article will cover the creation of golang HTTP handler that (de)compress gzip request/response and how to create an HTTP request that send/receive the gzip-compressed body payload. All the code covered in this article you can find it in [this repository](https://github.com/anon-org/golang-http-handler-with-gzip).
+Golang has many kinds of compression technique within its standard library which you can use to compress your data. A compression is needed to reduce the size of the data. Even in a web server, a compression technique would be beneficial to increase the communication speed between client and server. [Gzip](https://www.gnu.org/software/gzip/) is one of the compression techniques supported by both Golang and web. This article will cover the creation of golang HTTP handler that (de)compress gzip request/response and how to create an HTTP request that send/receive the gzip-compressed body payload. All the code covered in this article you can find it in [this repository](https://github.com/anon-org/golang-http-handler-with-gzip).
 
 ## Directory Structure
 
@@ -172,7 +172,7 @@ func main() {
 }
 ```
 
-Just like a normal HTTP request, you just need to `create an HTTP.Request`, `send the request`, and lastly `decode the response`. But, before send the request payload, don't forget to compress it fist.
+Just like a normal HTTP request, you just need to `create an HTTP.Request`, `send the request`, and lastly `decode the response`. But, before send the request payload, don't forget to compress it first.
 
 ### Create a Compressed Request
 
