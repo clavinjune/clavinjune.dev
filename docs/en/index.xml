@@ -1,4 +1,129 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Thu, 26 May 2022 16:52:21 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Golang HTTP Handler With Gzip</title><link>https://clavinjune.dev/en/blogs/golang-http-handler-with-gzip/</link><pubDate>Thu, 26 May 2022 16:52:21 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/golang-http-handler-with-gzip/</guid><description><![CDATA[
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Sun, 29 May 2022 00:00:01 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Podman Support Multi Arch</title><link>https://clavinjune.dev/en/blogs/podman-support-multi-arch/</link><pubDate>Sun, 29 May 2022 00:00:01 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/podman-support-multi-arch/</guid><description><![CDATA[
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+
+
+
+
+
+
+
+<figure>
+  <div class="img-box">
+    <img
+      srcset="https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_240x0_resize_q50_h2_box_3.webp 240w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_300x0_resize_q50_h2_box_3.webp 300w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_360x0_resize_q50_h2_box_3.webp 360w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_480x0_resize_q50_h2_box_3.webp 480w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_600x0_resize_q50_h2_box_3.webp 600w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_768x0_resize_q50_h2_box_3.webp 768w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_800x0_resize_q50_h2_box_3.webp 800w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_960x0_resize_q50_h2_box_3.webp 960w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1024x0_resize_q50_h2_box_3.webp 1024w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1080x0_resize_q50_h2_box_3.webp 1080w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1200x0_resize_q50_h2_box_3.webp 1200w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1366x0_resize_q50_h2_box_3.webp 1366w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_1920x0_resize_q50_h2_box_3.webp 1920w,https://clavinjune.dev/img/sunday-snippet/image_hue13c312488fca6d938ef79df129ac998_89894_3840x0_resize_q50_h2_box_3.webp 3840w"
+      sizes="(max-width: 200px) 200px, 100vw"
+      src="https://clavinjune.dev/img/sunday-snippet/image.png" alt="Sunday Snippet #19 podman support multi arch" title="Sunday Snippet #19 podman support multi arch"/>
+  </div>
+  <figcaption class="font-16">Sunday Snippet #19 podman support multi arch</figcaption>
+</figure>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ podman machine ssh
+</span></span><span style="display:flex;"><span><span style="color:#008000"># inside podman machine</span>
+</span></span><span style="display:flex;"><span>$ sudo rpm-ostree install qemu-user-static
+</span></span><span style="display:flex;"><span>$ sudo systemctl reboot
+</span></span><span style="display:flex;"><span><span style="color:#008000"># outside podman machine, wait for podman machine done restarting</span>
+</span></span><span style="display:flex;"><span>$ podman run -it --rm --arch=amd64 alpine:3.14 uname -m
+</span></span><span style="display:flex;"><span>x86_64
+</span></span><span style="display:flex;"><span>$ podman run -it --rm --arch=arm64 alpine:3.14 uname -m
+</span></span><span style="display:flex;"><span>aarch64
+</span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>Golang HTTP Handler With Gzip</title><link>https://clavinjune.dev/en/blogs/golang-http-handler-with-gzip/</link><pubDate>Thu, 26 May 2022 16:52:21 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/golang-http-handler-with-gzip/</guid><description><![CDATA[
   
 
   
