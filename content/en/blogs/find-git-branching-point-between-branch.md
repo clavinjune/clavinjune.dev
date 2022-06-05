@@ -12,11 +12,10 @@ description: "sunday snippet #20 find git branching point between branch"
 
 {{< img src="/img/sunday-snippet/image.png" alt="Sunday Snippet #20 find git branching point between branch" >}}
 
-
 ```shell
 ➜  pet git:(master) git --no-pager log --oneline -1
 2422e70 (HEAD -> master, origin/master) update README.md
-➜  pet git:(master) gcob testing
+➜  pet git:(master) git checkout -b testing
 Switched to a new branch 'testing'
 ➜  pet git:(testing) git commit --allow-empty -sam "first"
 [testing 8210c2d] first

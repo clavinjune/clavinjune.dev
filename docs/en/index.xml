@@ -124,7 +124,7 @@
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>➜  pet git:(master) git --no-pager log --oneline -1
 </span></span><span style="display:flex;"><span>2422e70 (HEAD -&gt; master, origin/master) update README.md
-</span></span><span style="display:flex;"><span>➜  pet git:(master) gcob testing
+</span></span><span style="display:flex;"><span>➜  pet git:(master) git checkout -b testing
 </span></span><span style="display:flex;"><span>Switched to a new branch <span style="color:#a31515">&#39;testing&#39;</span>
 </span></span><span style="display:flex;"><span>➜  pet git:(testing) git commit --allow-empty -sam <span style="color:#a31515">&#34;first&#34;</span>
 </span></span><span style="display:flex;"><span>[testing 8210c2d] first
