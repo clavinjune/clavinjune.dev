@@ -223,6 +223,6 @@ Let's run the test
 $ go test ./... -race -coverprofile /tmp/coverage.out && go tool cover -html=/tmp/coverage.out
 ```
 
-![Test Coverage](/img/mocking-http-call-in-golang/coverage.png)
+{{< img src="/img/mocking-http-call-in-golang/coverage.png" alt="Test Coverage" >}}
 
 Thank you for reading!

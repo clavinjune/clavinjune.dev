@@ -20,7 +20,7 @@ When I said this:
 
 It's half true because there's a case that BST makes a linear tree like this:
 
-![linear tree](/img/avl-tree-in-go/linear-tree.png)
+{{< img src="/img/avl-tree-in-go/linear-tree.png" alt="Linear Tree" >}}
 
 And if you want to find a node with value 6, in the end, you will travel the whole tree. That’s why we need AVL to improve the time complexity. AVL will try to rebalance the tree whenever it becomes imbalance after insertion/deletion.
 

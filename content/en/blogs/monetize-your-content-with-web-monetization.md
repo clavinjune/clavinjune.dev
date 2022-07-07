@@ -26,13 +26,13 @@ The implementation was so easy, you just need to have a digital wallet account. 
 
 Currently, [Web Monetization](https://webmonetization.org) only provider is [Coil](https://coil.com). For every Coil paid members that visit your monetized content will stream a micro amount of money to your ILP automatically. `Coil` will pay you per second for about `$0.36/hour` according to [this FAQ](https://help.coil.com/accounts/creator-accounts#faqs) which you should read to learn how Coil works. As the paid members of Coil, you can enjoy exclusive contents from [these websites](https://coil.com/explore). This is my content income after integrated with `Web Monetization`.
 
-![Moneeeeeeyyy](/img/monetize-your-content-with-web-monetization/uphold.png)
+{{< img src="/img/monetize-your-content-with-web-monetization/uphold.png" alt="Moneeeeeeyyy" >}}
 
 To make your “premium” visitors feel more valued when visiting your content, you can give them exclusive content that free member can’t access, or perhaps removing ads. Then, the next question is how can you differentiate premium visitors from free visitors? The answer is in [this documentation](https://webmonetization.org/docs/api) along with the examples. Besides your personal web, you can also monetize your [Youtube](https://help.coil.com/for-creators/youtube-channels), [Twitch](https://help.coil.com/for-creators/twitch-stream) contents, and [DEV](https://dev.to/devteam/you-can-now-web-monetize-your-dev-posts-but-don-t-get-your-hopes-up-too-quickly-goc) posts.
 
 Even though this post is like sponsoring some companies (which I hope so), they didn't sponsor me to write this. The whole content of this post is to encourage you to try Web Monetization because I think this is the new future for monetizing digital contents. I really hate it when I only need to read one or two articles from a web then I meet paywall.
 
-![Paywall](/img/monetize-your-content-with-web-monetization/paywall.png)
+{{< img src="/img/monetize-your-content-with-web-monetization/paywall.png" alt="Paywall" >}}
 
 I like the concept behind this `Web Monetization` to only subscribe to one provider, then you can consume exclusive contents from many websites instead of subscribing to a lot of websites which perhaps you wouldn't consume their contents daily. Despite the costs, it's hard to manage this kind of subscription model.
 
