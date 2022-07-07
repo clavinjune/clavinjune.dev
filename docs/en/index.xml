@@ -9959,10 +9959,75 @@
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ go test ./... -race -coverprofile /tmp/coverage.out &amp;&amp; go tool cover -html=/tmp/coverage.out
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p><figure>
-  <img src="https://clavinjune.dev/img/mocking-http-call-in-golang/coverage.png" alt="Test Coverage" title="Test Coverage" width="100%" height="auto" />
-  <figcaption>Test Coverage</figcaption>
-</figure></p>
+</div>
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+<figure>
+  <div class="img-box">
+    <img
+      srcset="https://clavinjune.dev/img/mocking-http-call-in-golang/coverage_hua596659947ff3c42bcd4841f092065ca_68179_240x0_resize_q50_h2_box_3.webp 240w,https://clavinjune.dev/img/mocking-http-call-in-golang/coverage_hua596659947ff3c42bcd4841f092065ca_68179_300x0_resize_q50_h2_box_3.webp 300w,https://clavinjune.dev/img/mocking-http-call-in-golang/coverage_hua596659947ff3c42bcd4841f092065ca_68179_360x0_resize_q50_h2_box_3.webp 360w,https://clavinjune.dev/img/mocking-http-call-in-golang/coverage_hua596659947ff3c42bcd4841f092065ca_68179_480x0_resize_q50_h2_box_3.webp 480w,https://clavinjune.dev/img/mocking-http-call-in-golang/coverage_hua596659947ff3c42bcd4841f092065ca_68179_600x0_resize_q50_h2_box_3.webp 600w,https://clavinjune.dev/img/mocking-http-call-in-golang/coverage_hua596659947ff3c42bcd4841f092065ca_68179_744x0_resize_q50_h2_box_3.webp 744w"
+      sizes="(max-width: 200px) 200px, 100vw"
+      src="https://clavinjune.dev/img/mocking-http-call-in-golang/coverage.png" alt="Test Coverage" title="Test Coverage"/>
+  </div>
+  <figcaption class="font-16">Test Coverage</figcaption>
+</figure>
 <p>Thank you for reading!</p>
 ]]></description></item><item><title>Execute Date Format in Cron</title><link>https://clavinjune.dev/en/blogs/execute-date-format-in-cron/</link><pubDate>Fri, 26 Mar 2021 00:00:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/execute-date-format-in-cron/</guid><description><![CDATA[<p>Escaping <code>%</code> in crontab using <code>\%</code></p>
 <p>example</p>
@@ -13673,10 +13738,75 @@ To be summarized, <code>Encrypt</code> is the method you want to use when <code>
 <p>To find a specific node you don&rsquo;t have to go around the whole tree, you need to know that BST can route to a specific node by checking the node value</p>
 </blockquote>
 <p>It&rsquo;s half true because there&rsquo;s a case that BST makes a linear tree like this:</p>
-<p><figure>
-  <img src="https://clavinjune.dev/img/avl-tree-in-go/linear-tree.png" alt="linear tree" title="linear tree" width="100%" height="auto" />
-  <figcaption>linear tree</figcaption>
-</figure></p>
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+<figure>
+  <div class="img-box">
+    <img
+      srcset="https://clavinjune.dev/img/avl-tree-in-go/linear-tree_hu2c2db3b164a6b69d7fd514ab702fe93b_14209_240x0_resize_q50_h2_box_3.webp 240w,https://clavinjune.dev/img/avl-tree-in-go/linear-tree_hu2c2db3b164a6b69d7fd514ab702fe93b_14209_300x0_resize_q50_h2_box_3.webp 300w,https://clavinjune.dev/img/avl-tree-in-go/linear-tree_hu2c2db3b164a6b69d7fd514ab702fe93b_14209_360x0_resize_q50_h2_box_3.webp 360w,https://clavinjune.dev/img/avl-tree-in-go/linear-tree_hu2c2db3b164a6b69d7fd514ab702fe93b_14209_480x0_resize_q50_h2_box_3.webp 480w,https://clavinjune.dev/img/avl-tree-in-go/linear-tree_hu2c2db3b164a6b69d7fd514ab702fe93b_14209_600x0_resize_q50_h2_box_3.webp 600w,https://clavinjune.dev/img/avl-tree-in-go/linear-tree_hu2c2db3b164a6b69d7fd514ab702fe93b_14209_614x0_resize_q50_h2_box_3.webp 614w"
+      sizes="(max-width: 200px) 200px, 100vw"
+      src="https://clavinjune.dev/img/avl-tree-in-go/linear-tree.png" alt="Linear Tree" title="Linear Tree"/>
+  </div>
+  <figcaption class="font-16">Linear Tree</figcaption>
+</figure>
 <p>And if you want to find a node with value 6, in the end, you will travel the whole tree. That’s why we need AVL to improve the time complexity. AVL will try to rebalance the tree whenever it becomes imbalance after insertion/deletion.</p>
 <p>The whole concept of AVL is much the same with BST besides the rebalancing algorithm. In AVL we need to rebalance the tree by rotating every imbalance sub-tree in every insertion/deletion. So we&rsquo;re gonna use all the code from <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="/en/blogs/binary-search-tree-in-go/"   >here</a> and modified it a bit.</p>
 <p>To see the tree is balanced or not, we need to define the height on each node. We can calculate the height by counting the maximum height of the left and the right node recursively. If the node has no child, it means its height is 1 otherwise we compare the maximum height of the children.</p>
@@ -16008,16 +16138,192 @@ To be summarized, <code>Encrypt</code> is the method you want to use when <code>
 <p>The implementation was so easy, you just need to have a digital wallet account. Currently, <code>Web Monetization</code> only supports digital wallet like <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://webmonetization.org/docs/gatehub"   >Gatehub</a>,  <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://webmonetization.org/docs/uphold"   >Uphold</a>, and <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://webmonetization.org/docs/xrptipbot"   >XRP Tipbot</a>. I personally use uphold because it has many withdrawal currencies. You can follow the registration steps by clicking the link that I referred on each wallet, find your <code>Interledger payment pointer</code> (<strong>ILP</strong>) which has this format <code>$wallet.example.com/alice</code>, and finally put it on your blog&rsquo;s <code>meta tag</code>. <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://webmonetization.org/docs/getting-started"   >This docs</a> is to the point and clear.</p>
 <h2 id="where-the-money-comes-from">Where the money comes from?</h2>
 <p>Currently, <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://webmonetization.org"   >Web Monetization</a> only provider is <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://coil.com"   >Coil</a>. For every Coil paid members that visit your monetized content will stream a micro amount of money to your ILP automatically. <code>Coil</code> will pay you per second for about <code>$0.36/hour</code> according to <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://help.coil.com/accounts/creator-accounts#faqs"   >this FAQ</a> which you should read to learn how Coil works. As the paid members of Coil, you can enjoy exclusive contents from <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://coil.com/explore"   >these websites</a>. This is my content income after integrated with <code>Web Monetization</code>.</p>
-<p><figure>
-  <img src="https://clavinjune.dev/img/monetize-your-content-with-web-monetization/uphold.png" alt="Moneeeeeeyyy" title="Moneeeeeeyyy" width="100%" height="auto" />
-  <figcaption>Moneeeeeeyyy</figcaption>
-</figure></p>
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+
+<figure>
+  <div class="img-box">
+    <img
+      srcset="https://clavinjune.dev/img/monetize-your-content-with-web-monetization/uphold_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_240x0_resize_q50_h2_box_3.webp 240w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/uphold_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_300x0_resize_q50_h2_box_3.webp 300w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/uphold_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_360x0_resize_q50_h2_box_3.webp 360w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/uphold_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_480x0_resize_q50_h2_box_3.webp 480w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/uphold_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_600x0_resize_q50_h2_box_3.webp 600w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/uphold_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_768x0_resize_q50_h2_box_3.webp 768w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/uphold_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_800x0_resize_q50_h2_box_3.webp 800w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/uphold_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_960x0_resize_q50_h2_box_3.webp 960w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/uphold_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_1024x0_resize_q50_h2_box_3.webp 1024w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/uphold_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_1080x0_resize_q50_h2_box_3.webp 1080w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/uphold_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_1200x0_resize_q50_h2_box_3.webp 1200w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/uphold_hudb6c5cbc207f47e5a1b3b7a3072e7a12_81266_1366x0_resize_q50_h2_box_3.webp 1366w"
+      sizes="(max-width: 200px) 200px, 100vw"
+      src="https://clavinjune.dev/img/monetize-your-content-with-web-monetization/uphold.png" alt="Moneeeeeeyyy" title="Moneeeeeeyyy"/>
+  </div>
+  <figcaption class="font-16">Moneeeeeeyyy</figcaption>
+</figure>
 <p>To make your “premium” visitors feel more valued when visiting your content, you can give them exclusive content that free member can’t access, or perhaps removing ads. Then, the next question is how can you differentiate premium visitors from free visitors? The answer is in <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://webmonetization.org/docs/api"   >this documentation</a> along with the examples. Besides your personal web, you can also monetize your <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://help.coil.com/for-creators/youtube-channels"   >Youtube</a>, <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://help.coil.com/for-creators/twitch-stream"   >Twitch</a> contents, and <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://dev.to/devteam/you-can-now-web-monetize-your-dev-posts-but-don-t-get-your-hopes-up-too-quickly-goc"   >DEV</a> posts.</p>
 <p>Even though this post is like sponsoring some companies (which I hope so), they didn&rsquo;t sponsor me to write this. The whole content of this post is to encourage you to try Web Monetization because I think this is the new future for monetizing digital contents. I really hate it when I only need to read one or two articles from a web then I meet paywall.</p>
-<p><figure>
-  <img src="https://clavinjune.dev/img/monetize-your-content-with-web-monetization/paywall.png" alt="Paywall" title="Paywall" width="100%" height="auto" />
-  <figcaption>Paywall</figcaption>
-</figure></p>
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+    
+    
+    
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+<figure>
+  <div class="img-box">
+    <img
+      srcset="https://clavinjune.dev/img/monetize-your-content-with-web-monetization/paywall_hu578ff701073d72714a6f36ccad75bbd4_189339_240x0_resize_q50_h2_box_3.webp 240w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/paywall_hu578ff701073d72714a6f36ccad75bbd4_189339_300x0_resize_q50_h2_box_3.webp 300w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/paywall_hu578ff701073d72714a6f36ccad75bbd4_189339_360x0_resize_q50_h2_box_3.webp 360w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/paywall_hu578ff701073d72714a6f36ccad75bbd4_189339_480x0_resize_q50_h2_box_3.webp 480w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/paywall_hu578ff701073d72714a6f36ccad75bbd4_189339_600x0_resize_q50_h2_box_3.webp 600w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/paywall_hu578ff701073d72714a6f36ccad75bbd4_189339_768x0_resize_q50_h2_box_3.webp 768w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/paywall_hu578ff701073d72714a6f36ccad75bbd4_189339_800x0_resize_q50_h2_box_3.webp 800w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/paywall_hu578ff701073d72714a6f36ccad75bbd4_189339_960x0_resize_q50_h2_box_3.webp 960w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/paywall_hu578ff701073d72714a6f36ccad75bbd4_189339_1024x0_resize_q50_h2_box_3.webp 1024w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/paywall_hu578ff701073d72714a6f36ccad75bbd4_189339_1080x0_resize_q50_h2_box_3.webp 1080w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/paywall_hu578ff701073d72714a6f36ccad75bbd4_189339_1200x0_resize_q50_h2_box_3.webp 1200w,https://clavinjune.dev/img/monetize-your-content-with-web-monetization/paywall_hu578ff701073d72714a6f36ccad75bbd4_189339_1349x0_resize_q50_h2_box_3.webp 1349w"
+      sizes="(max-width: 200px) 200px, 100vw"
+      src="https://clavinjune.dev/img/monetize-your-content-with-web-monetization/paywall.png" alt="Paywall" title="Paywall"/>
+  </div>
+  <figcaption class="font-16">Paywall</figcaption>
+</figure>
 <p>I like the concept behind this <code>Web Monetization</code> to only subscribe to one provider, then you can consume exclusive contents from many websites instead of subscribing to a lot of websites which perhaps you wouldn&rsquo;t consume their contents daily. Despite the costs, it&rsquo;s hard to manage this kind of subscription model.</p>
 <p>Though <code>Web Monetization</code> is not a standard yet for monetizing digital content, it is currently being proposed as a <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://discourse.wicg.io/t/proposal-web-monetization-a-new-revenue-model-for-the-web/3785"   >W3C standard</a>. I hope it become one and implemented everywhere ASAP.</p>
 <p>Thank you for reading!</p>
