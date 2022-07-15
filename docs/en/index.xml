@@ -1,4 +1,400 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Sun, 05 Jun 2022 00:00:17 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Find Git Branching Point Between Branch</title><link>https://clavinjune.dev/en/blogs/find-git-branching-point-between-branch/</link><pubDate>Sun, 05 Jun 2022 00:00:17 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/find-git-branching-point-between-branch/</guid><description><![CDATA[
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June Personal Web</title><link>https://clavinjune.dev/en/</link><description>Recent content on June Personal Web</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>juneardoc@gmail.com (Clavin June)</managingEditor><webMaster>juneardoc@gmail.com (Clavin June)</webMaster><lastBuildDate>Fri, 15 Jul 2022 11:23:00 +0700</lastBuildDate><atom:link href="https://clavinjune.dev/en/index.xml" rel="self" type="application/rss+xml"/><link href="https://clavinjune.dev/en/index.xml" rel="self" xmlns="http://www.w3.org/2005/Atom"/><link href="https://clavinjune.superfeedr.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/><item><title>Create Flag Using Bitmask and Bitwise Operator in Go</title><link>https://clavinjune.dev/en/blogs/create-flag-using-bitmask-and-bitwise-operator-in-go/</link><pubDate>Fri, 15 Jul 2022 11:23:00 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/create-flag-using-bitmask-and-bitwise-operator-in-go/</guid><description><![CDATA[
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+<figure>
+  <div class="img-box">
+    <img
+      srcset="https://images.unsplash.com/photo-1569605803663-e9337d901ff9?fm=webp&amp;q=50&amp;w=240 240w,https://images.unsplash.com/photo-1569605803663-e9337d901ff9?fm=webp&amp;q=50&amp;w=300 300w,https://images.unsplash.com/photo-1569605803663-e9337d901ff9?fm=webp&amp;q=50&amp;w=360 360w,https://images.unsplash.com/photo-1569605803663-e9337d901ff9?fm=webp&amp;q=50&amp;w=480 480w,https://images.unsplash.com/photo-1569605803663-e9337d901ff9?fm=webp&amp;q=50&amp;w=600 600w,https://images.unsplash.com/photo-1569605803663-e9337d901ff9?fm=webp&amp;q=50&amp;w=768 768w,https://images.unsplash.com/photo-1569605803663-e9337d901ff9?fm=webp&amp;q=50&amp;w=800 800w,https://images.unsplash.com/photo-1569605803663-e9337d901ff9?fm=webp&amp;q=50&amp;w=960 960w,https://images.unsplash.com/photo-1569605803663-e9337d901ff9?fm=webp&amp;q=50&amp;w=1024 1024w,https://images.unsplash.com/photo-1569605803663-e9337d901ff9?fm=webp&amp;q=50&amp;w=1080 1080w,https://images.unsplash.com/photo-1569605803663-e9337d901ff9?fm=webp&amp;q=50&amp;w=1200 1200w,https://images.unsplash.com/photo-1569605803663-e9337d901ff9?fm=webp&amp;q=50&amp;w=1366 1366w,https://images.unsplash.com/photo-1569605803663-e9337d901ff9?fm=webp&amp;q=50&amp;w=1920 1920w"
+      sizes="(max-width: 200px) 200px, 100vw"
+      src="https://images.unsplash.com/photo-1569605803663-e9337d901ff9?fm=webp&amp;q=50&amp;w=1920" alt="Photo by @swimstaralex on Unsplash" title="Photo by @swimstaralex on Unsplash"/>
+  </div>
+  <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://unsplash.com/@swimstaralex">@swimstaralex</a> on Unsplash</figcaption>
+</figure>
+<h2 id="introduction">Introduction</h2>
+<p>I revisit some of my college notes, and find that in my first year of college, in Algorithm and Programming Course, Bitwise operator was mentioned but wasn&rsquo;t highlighted. It&rsquo;s either I didn&rsquo;t write the notes on that specific topic (<em>I stopped writing notes in my second semester</em>) or the Lecturer didn&rsquo;t explain anything about the usage. But then I found it is quite useful for Bitmasking. For example, in Unix&rsquo; file access control it uses bitmask to represent the access:</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>000 =&gt; 0 =&gt; can&#39;t access anything
+</span></span><span style="display:flex;"><span>001 =&gt; 1 =&gt; can only execute
+</span></span><span style="display:flex;"><span>010 =&gt; 2 =&gt; can only read
+</span></span><span style="display:flex;"><span>011 =&gt; 3 =&gt; can execute+read
+</span></span><span style="display:flex;"><span>100 =&gt; 4 =&gt; can only write
+</span></span><span style="display:flex;"><span>101 =&gt; 5 =&gt; can execute+write
+</span></span><span style="display:flex;"><span>110 =&gt; 6 =&gt; can read+write
+</span></span><span style="display:flex;"><span>111 =&gt; 7 =&gt; can execute+read+write
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>All of those combination can be construct with just only 3 bits. As you can see, Bitmask uses sets of bit to show specific access is given or not. If it is 0, means that specific access is not given, otherwise it is given. In this article, you will learn how to implement Bitmasking and its operation in Golang.</p>
+<h2 id="code">Code</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-golang" data-lang="golang"><span style="display:flex;"><span><span style="color:#00f">package</span> main
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">import</span> <span style="color:#a31515">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">type</span> Permission <span style="color:#2b91af">uint8</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">const</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#008000">// 1
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>	PermissionExecute Permission = 1 &lt;&lt; <span style="color:#00f">iota</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#008000">// 2
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>	PermissionRead
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#008000">// 4
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>	PermissionWrite
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">const</span> (
+</span></span><span style="display:flex;"><span>	PermissionAll = PermissionExecute | PermissionRead | PermissionWrite
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">func</span> Set(p, flag Permission) Permission {
+</span></span><span style="display:flex;"><span>	<span style="color:#00f">return</span> p | flag
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">func</span> Clear(p, flag Permission) Permission {
+</span></span><span style="display:flex;"><span>	<span style="color:#00f">return</span> p &amp;^ flag
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">func</span> HasAll(p, flag Permission) <span style="color:#2b91af">bool</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#00f">return</span> p&amp;flag == flag
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">func</span> HasOneOf(p, flag Permission) <span style="color:#2b91af">bool</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#00f">return</span> p&amp;flag != 0
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">func</span> main() {
+</span></span><span style="display:flex;"><span>	<span style="color:#00f">var</span> p Permission
+</span></span><span style="display:flex;"><span>    <span style="color:#008000">// you can use Set/Clear(p, PermissionExecute|PermissionRead|PermissionWrite) to set multiple bits
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>	p = Set(p, PermissionAll)
+</span></span><span style="display:flex;"><span>	p = Clear(p, PermissionRead)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#008000">// false, because PermissionRead is cleared
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>	hasExecuteAndRead := HasAll(p, PermissionExecute|PermissionRead)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#008000">// true, because PermissionExecute and PermissionWrite are set
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>	hasExecuteAndWrite := HasAll(p, PermissionExecute|PermissionWrite)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#008000">// true, because PermissionExecute is set even though PermissionRead is cleared
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>	hasExecuteOrRead := HasOneOf(p, PermissionExecute|PermissionRead)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	fmt.Println(hasExecuteAndRead, hasExecuteAndWrite, hasExecuteOrRead)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Let&rsquo;s go to the explanation line per line.</p>
+<h3 id="set">Set</h3>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-golang" data-lang="golang"><span style="display:flex;"><span><span style="color:#00f">var</span> p Permission <span style="color:#008000">// has no permission 000
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>p = Set(p, PermissionAll) <span style="color:#008000">// set all permission 111
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>
+</span></span><span style="display:flex;"><span><span style="color:#008000">// 000 (current permission)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 111 (PermissionAll)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// --- OR
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 111
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="clear">Clear</h3>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-golang" data-lang="golang"><span style="display:flex;"><span><span style="color:#008000">// clear the bit of PermissionRead (010)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>p = Clear(p, PermissionRead)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#008000">// reverse the PermissionRead first
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 010
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// ---- NOT
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 101 (NOT result)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>
+</span></span><span style="display:flex;"><span><span style="color:#008000">// 111 (current permission)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 101 (NOT result)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// --- AND
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 101
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>It is important to use BITCLEAR (AND NOT) operator instead of NOT (in this case, XOR) operator.
+BITCLEAR is always set the bit to 0 because it reverse the flag first using NOT, then using AND.
+Meanwhile, NOT is reverse the bit, so if you doing NOT operation twice, it will toggle back.
+See the snippet below for example.</p>
+</blockquote>
+<h3 id="toggle-vs-clear">Toggle vs Clear</h3>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-golang" data-lang="golang"><span style="display:flex;"><span><span style="color:#008000">// toggling using NOT/XOR
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>foo := PermissionAll
+</span></span><span style="display:flex;"><span>fmt.Printf(<span style="color:#a31515">&#34;Set All %03b\n&#34;</span>, foo) <span style="color:#008000">// 111
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>foo ^= PermissionRead
+</span></span><span style="display:flex;"><span>fmt.Printf(<span style="color:#a31515">&#34;Toggle %03b\n&#34;</span>, foo) <span style="color:#008000">// 101
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>foo ^= PermissionRead
+</span></span><span style="display:flex;"><span>fmt.Printf(<span style="color:#a31515">&#34;Toggle %03b\n&#34;</span>, foo) <span style="color:#008000">// 111 it toggles back!
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>
+</span></span><span style="display:flex;"><span><span style="color:#008000">// clearing using BITCLEAR
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>bar := PermissionAll
+</span></span><span style="display:flex;"><span>fmt.Printf(<span style="color:#a31515">&#34;Set All %03b\n&#34;</span>, bar) <span style="color:#008000">// 111
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>bar &amp;^= PermissionRead
+</span></span><span style="display:flex;"><span>fmt.Printf(<span style="color:#a31515">&#34;Clear %03b\n&#34;</span>, bar) <span style="color:#008000">// 101
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>bar &amp;^= PermissionRead
+</span></span><span style="display:flex;"><span>fmt.Printf(<span style="color:#a31515">&#34;Clear %03b\n&#34;</span>, bar) <span style="color:#008000">// 101
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="hasall">HasAll</h3>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-golang" data-lang="golang"><span style="display:flex;"><span><span style="color:#008000">// check whether has both Execute AND Read permission
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>hasExecuteAndRead := HasAll(p, PermissionExecute|PermissionRead) <span style="color:#008000">// false
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>
+</span></span><span style="display:flex;"><span><span style="color:#008000">// PermissionExecute|PermissionRead
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 001 (PermissionExecute)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 010 (PermissionRead)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// --- OR
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 011 (PermissionRead+PermissionExecute)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>
+</span></span><span style="display:flex;"><span><span style="color:#008000">// check whether has both Execute AND Read permission
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 101 (current permission)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 011 (PermissionRead+PermissionExecute)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// --- AND
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 001 (PermissionExecute)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>
+</span></span><span style="display:flex;"><span><span style="color:#008000">// 001 != 011 so it doesn&#39;t have both Execute AND Read permission
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>
+</span></span><span style="display:flex;"><span><span style="color:#008000">// check whether has both Execute AND Write permission
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>hasExecuteAndWrite := HasAll(p, PermissionExecute|PermissionWrite)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#008000">// PermissionExecute|PermissionWrite
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 001 (PermissionExecute)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 100 (PermissionWrite)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// --- OR
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 101 (Write+Execute)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>
+</span></span><span style="display:flex;"><span><span style="color:#008000">// check whether has both Execute AND Write permission
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 101 (current permission)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 101 (PermissionWrite+PermissionExecute)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// --- AND
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 101 (PermissionWrite+PermissionExecute)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>
+</span></span><span style="display:flex;"><span><span style="color:#008000">// 101 == 101 so it has both Execute AND Write permission
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="hasoneof">HasOneOf</h3>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-golang" data-lang="golang"><span style="display:flex;"><span><span style="color:#008000">// check whether has either Execute OR Read permission
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>hasExecuteOrRead := HasOneOf(p, PermissionExecute|PermissionRead)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#008000">// PermissionExecute|PermissionRead
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 001 (PermissionExecute)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 010 (PermissionRead)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// --- OR
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 011 (PermissionRead+PermissionExecute)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>
+</span></span><span style="display:flex;"><span><span style="color:#008000">// check whether has either Execute OR Read permission
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 101 (current permission)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 011 (PermissionRead+PermissionExecute)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// --- AND
+</span></span></span><span style="display:flex;"><span><span style="color:#008000">// 001 (PermissionExecute)
+</span></span></span><span style="display:flex;"><span><span style="color:#008000"></span>
+</span></span><span style="display:flex;"><span><span style="color:#008000">// 001 != 0 so it has either Execute OR Read permission
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="things-to-be-concerned">Things To Be Concerned</h2>
+<p>You can store the bitmasks on your databases also, but it might be not a good idea to use <code>iota</code> on your logic. From the code above, let&rsquo;s say you want to remove <code>PermissionRead</code>. Then <code>PermissionWrite</code> will be represented by 2 instead of 4. To avoid this, you may want to set a <a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://cs.opensource.google/go/x/tools/&#43;/master:go/packages/packages.go;l=96-117;drc=db8f89b397771c885c6218de3f383d800d72e62a"   >Deprecated flag</a> to your permission instead of remove it completely from your code. Or, as an alternative, you can put the number manually but it just another pain to handle if you have lots of permission.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>In this case, Bitmasking is a useful tool to implement access control. You have implemented the access control in only 1 byte because you only need to use <code>uint8</code>. For example, if you use sets of boolean variables to represent the access control, you need more than 1 variable and it will take more than 1 byte to store.</p>
+<p>Thank you for reading!</p>
+]]></description></item><item><title>Find Git Branching Point Between Branch</title><link>https://clavinjune.dev/en/blogs/find-git-branching-point-between-branch/</link><pubDate>Sun, 05 Jun 2022 00:00:17 +0700</pubDate><author>juneardoc@gmail.com (Clavin June)</author><guid>https://clavinjune.dev/en/blogs/find-git-branching-point-between-branch/</guid><description><![CDATA[
   
     
     
