@@ -14,3 +14,5 @@ publish: build
 	@git add . && \
 	git commit -sm "build `date -R #--rfc-3339=ns`" && \
 	git push origin master
+gen-utm:
+	@echo "?utm_medium=organic_social&utm_term=social_media&utm_content=text&utm_source=link_clavinjune_dev"
