@@ -175,7 +175,7 @@ theme = 'june'
       URL  = "https://twitter.com/clavinjune"
       
     [params.june.giscus]
-      Repo =  "ClavinJune/ClavinJune.github.io"
+      Repo =  "clavinjune/clavinjune.dev"
       RepoID = "MDEwOlJlcG9zaXRvcnkxNTUyMjU5NTU="
       Category = "General"
       CategoryID = "DIC_kwDOCUCPY84B_g1a"
