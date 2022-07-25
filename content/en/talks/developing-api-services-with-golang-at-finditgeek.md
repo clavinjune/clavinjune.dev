@@ -4,5 +4,5 @@ date: 2022-07-25T22:07:51+07:00
 draft: false
 description: "Developing Api Services With Golang at Finditgeek on August 2022"
 aliases:
-    - "/finditgeek-aug-22"
+    - "/fig-aug-22"
 ---
