@@ -58,6 +58,11 @@ theme = 'june'
       name = 'BLOG'
       url = '/blogs/'
       weight = 2
+    
+    # [[languages.en.menu.main]]
+    #   name = 'TALK'
+    #   url = '/talks/'
+    #   weight = 3
 
     # [[languages.en.menu.main]]
     #   name = 'PODCAST'
@@ -140,6 +145,7 @@ theme = 'june'
     googleSiteVerification = 'n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE'
     monetization = '$ilp.uphold.com/RYNmdxrFrPJB'
     superfeedrURL = 'https://clavinjune.superfeedr.com/'
+    talksRepo = 'github.com/clavinjune/presents'
 
     [params.june.webmention]
       LoginURL    = 'mailto:juneardoc@gmail.com'
@@ -164,7 +170,7 @@ theme = 'june'
 
     [[params.june.contact]]
       Name = "Github"
-      URL  = "https://github.com/ClavinJune"
+      URL  = "https://github.com/clavinjune"
 
     [[params.june.contact]]
       Name = "LinkedIn"
