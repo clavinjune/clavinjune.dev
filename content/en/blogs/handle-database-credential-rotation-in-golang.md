@@ -1,7 +1,7 @@
 ---
 title: "Handle Database Credential Rotation in Golang"
 date: 2022-08-29T16:30:58+07:00
-draft: true
+draft: false
 iscjklanguage: false
 isarchived: false
 categories: ["tech"]
