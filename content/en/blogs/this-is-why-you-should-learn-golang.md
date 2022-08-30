@@ -10,7 +10,7 @@ aliases: []
 description: "My opinion about why you should consider learning Golang"
 ---
 
-{{< img src="/img/this-is-why-you-should-learn-golang/golang.png" alt="Photo by <a class=\"link unsplash-ref\" rel=\"noreferrer nofollow noopener\" target=\"_blank\" href=\"https://www.kindpng.com/userpngs/469/\">Dun Liu</a> on KindPNG" >}}
+{{< img src="/img/this-is-why-you-should-learn-golang/golang.png" alt="Photo by <a class='link unsplash-ref' rel='noreferrer nofollow noopener' target='_blank' href='https://www.kindpng.com/userpngs/469/'>Dun Liu</a> on KindPNG" >}}
 
 ## Introduction
 

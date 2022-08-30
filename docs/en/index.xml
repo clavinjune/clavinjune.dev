@@ -8496,7 +8496,7 @@ See the snippet below for example.</p>
       sizes="(max-width: 200px) 200px, 100vw"
       src="https://clavinjune.dev/img/this-is-why-you-should-learn-golang/golang.png" alt="Photo by Dun Liu on KindPNG" title="Photo by Dun Liu on KindPNG"/>
   </div>
-  <figcaption class="font-16">Photo by <a class="link unsplash-ref" rel="noreferrer nofollow noopener" target="_blank" href="https://www.kindpng.com/userpngs/469/">Dun Liu</a> on KindPNG</figcaption>
+  <figcaption class="font-16">Photo by <a class='link unsplash-ref' rel='noreferrer nofollow noopener' target='_blank' href='https://www.kindpng.com/userpngs/469/'>Dun Liu</a> on KindPNG</figcaption>
 </figure>
 <h2 id="introduction">Introduction</h2>
 <p><a class="link" rel="nofollow noreferrer noopener"  target="_blank" href="https://golang.org/"   >Golang</a> is one of the youngest programming languages. Until this post is published, the current stable Golang version is 1.17.2. Besides that, it is considered a popular programming language amongst developers. It can be built and run on many platforms and environments (Sorry, Java), bundled with solid and supportive built-in packages, and many more.</p>
