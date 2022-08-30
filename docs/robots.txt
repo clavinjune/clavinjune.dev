@@ -1,8 +1,0 @@
-User-agent: *
-
-Sitemap: https://clavinjune.dev/sitemap.xml
-Sitemap: https://clavinjune.dev/en/sitemap.xml
-Sitemap: https://clavinjune.dev/id/sitemap.xml
-Sitemap: https://clavinjune.dev/ja/sitemap.xml
-
-Allow: /
