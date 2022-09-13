@@ -54,7 +54,7 @@ So you can read your logs data like this:
   $ips           => 111.114.195.106,10.0.0.11
 ```
 
-## Create the parser
+## Create the Parser
 
 Let's create a `main.go` file with the logs data and the format. To be easily used by the regex, you should escape the special symbol in your format using `\`.
 
