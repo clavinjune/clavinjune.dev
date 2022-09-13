@@ -1,5 +1,5 @@
 ---
-title: "Create Log Parser Using Go"
+title: "Membuat Log Parser dengan Go"
 date: 2022-09-13T14:02:31+07:00
 draft: false
 iscjklanguage: false
