@@ -7,7 +7,7 @@ isarchived: false
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1647166545674-ce28ce93bdca?w=1920&q=50"]
 aliases: []
-description: "working with multiple gitconfig"
+description: "working with multiple gitconfig, separate your git personas"
 ---
 
 {{< unsplash user="@praveentcom" src="photo-1647166545674-ce28ce93bdca" q="50" >}}
