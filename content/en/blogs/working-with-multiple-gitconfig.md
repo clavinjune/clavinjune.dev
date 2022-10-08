@@ -1,5 +1,5 @@
 ---
-title: "Working With Multiple Gitconfig"
+title: "Working with Multiple Gitconfig"
 date: 2022-10-08T11:57:59+07:00
 draft: false
 iscjklanguage: false
