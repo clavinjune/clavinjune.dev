@@ -5,7 +5,7 @@ draft: false
 iscjklanguage: false
 isarchived: false
 categories: ["tech"]
-images: ["https://images.unsplash.com/photo-1501139083538-0139583c060f?w=1920&q=50"]
+images: ["https://images.unsplash.com/photo-1647166545674-ce28ce93bdca?w=1920&q=50"]
 aliases: []
 description: "working with multiple gitconfig"
 ---
