@@ -1,7 +1,7 @@
 ---
 name: Translation Request
 about: Translation request for specific article
-title: "[TRANSLATION]"
+title: "[TRANSLATION] <Article Title> - <Requsted Language>"
 labels: translation
 assignees: clavinjune
 
