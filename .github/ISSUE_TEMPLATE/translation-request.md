@@ -11,4 +11,4 @@ assignees: clavinjune
 
 | Article URL | Language | 
 | --- | --- |
-| **Requested Article URL** | **Requested Language** |
+| [Requested Article URL](https://clavinjune.dev/en/blogs/<article-name>) | **Requested Language** |
