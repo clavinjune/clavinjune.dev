@@ -20,7 +20,7 @@ Javascript is a language with thousands of users and modules. Every single thing
 
 For example, let's take a look at this [giscuss.app](https://giscus.app/) script tag:
 
-```html {hl_lines="2-12"}
+```html
 <script src="https://giscus.app/client.js"
         data-repo="[ENTER REPO HERE]"
         data-repo-id="[ENTER REPO ID HERE]"
@@ -38,7 +38,7 @@ For example, let's take a look at this [giscuss.app](https://giscus.app/) script
 </script>
 ```
 
-The highlighted attributes are called [dataset](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset). It's a custom attributes that you can put to HTML elements. As long as you use `data-` as a prefix, it's considered as dataset. You can also put your custom elements/attributes without `data-` prefixed, but it's just an attribute, not dataset. Now, how do you fetch the attributes value?
+Line 2 until 12 are called [dataset](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset). It's a custom attributes that you can put to HTML elements. As long as you use `data-` as a prefix, it's considered as dataset. You can also put your custom elements/attributes without `data-` prefixed, but it's just an attribute, not dataset. Now, how do you fetch the attributes value?
 
 ## Code
 
