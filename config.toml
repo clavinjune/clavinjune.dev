@@ -177,6 +177,10 @@ theme = 'june'
       URL  = "https://linkedin.com/in/juneardoc"
 
     [[params.june.contact]]
+      Name = "Resume"
+      URL  = "https://docs.google.com/document/d/156u8qJGL2XsN6DLcvtO89wFcvz_HLdFIbEsfjejaT0k/edit?usp=sharing"
+
+    [[params.june.contact]]
       Name = "Twitter"
       URL  = "https://twitter.com/clavinjune"
       
