@@ -1,2 +1,6 @@
+[build]
+publish = "docs"
+command = "make netlify"
+
 [context.production.environment]
-  HUGO_VERSION = "0.113.0"
+HUGO_VERSION = "0.113.0"
