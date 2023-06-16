@@ -4,3 +4,6 @@ command = "make netlify"
 
 [context.production.environment]
 HUGO_VERSION = "0.113.0"
+
+[context.deploy-preview.environment]
+HUGO_VERSION = "0.113.0"
