@@ -1,4 +1,5 @@
 IP = http://$(shell ipconfig getifaddr en0) 
+
 build:
 	@rm -rf docs/ && hugo --minify --printUnusedTemplates \
 	--printI18nWarnings --printMemoryUsage --printPathWarnings && \
@@ -6,7 +7,7 @@ build:
 	touch docs/.nojekyll && \
 	cp docs/en/404.html docs/404.html
 netlify:
-	@rm -rf docs/ && hugo -b $DEPLOY_PRIME_URL --minify --printUnusedTemplates \
+	@rm -rf docs/ && hugo -b $(DEPLOY_PRIME_URL) --minify --printUnusedTemplates \
 	--printI18nWarnings --printMemoryUsage --printPathWarnings && \
 	cp CNAME docs/CNAME && \
 	touch docs/.nojekyll && \
