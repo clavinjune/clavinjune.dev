@@ -1,6 +1,6 @@
 [build]
 publish = "docs"
-command = "make serve"
+command = "echo 1"
 
 [context.production.environment]
 HUGO_VERSION = "0.113.0"
