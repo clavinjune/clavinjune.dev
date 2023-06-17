@@ -13,7 +13,7 @@ description: "Menggunakan docker context untuk bekerja dengan remote docker seca
 {{< unsplash user="@carrier_lost" src="photo-1605745341112-85968b19335b" q="50" >}}
 
 ## Pengenalan
-Ini adalah contekan cara menggunakan _docker context_ untuk terhubung dengan _remote docker_ secara lokal. Mungkin dapat membantu Anda terhubung dengan remote docker Anda tanpa perlu SSH secara manual ke server remote.
+Ini adalah contekan cara menggunakan _docker context_ untuk terhubung dengan _remote docker_ secara lokal. Mungkin dapat membantu Anda terhubung dengan _remote docker_ Anda tanpa perlu SSH secara manual ke server _remote_.
 
 ## Menambahkan Context
 
@@ -33,7 +33,7 @@ Host my-remote-docker-machine
 $ docker context create my-remote-docker-machine --docker "host=ssh://my-remote-docker-machine"
 ```
 
-Selain `ssh`, Anda juga dapat menambahkan context Anda menggunakan protokol `tcp` jika Anda mengaktifkan `Docker API`.
+Selain `ssh`, Anda juga dapat menambahkan _context_ Anda menggunakan protokol `tcp` jika Anda mengaktifkan `Docker API`.
 
 ## Tampilkan Semua Context
 
@@ -70,7 +70,7 @@ my-remote-docker-machine *                                             ssh://use
 
 ```
 
-See the `*` is moved from `default` to `my-remote-docker-machine`. Now you can use your docker command without `--context` flag.
+Perhatikan bahwa `*` berpindah dari `default` ke `my-remote-docker-machine`. Sekarang Anda dapat menggunakan perintah _docker_ tanpa _flag_ `--context`.
 
 ## Menghapus Context
 
