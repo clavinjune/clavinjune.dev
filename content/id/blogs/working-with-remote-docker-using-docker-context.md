@@ -1,6 +1,6 @@
 ---
 title: "Bekerja dengan Remote Docker menggunakan Docker Context"
-date: 2021-12-02T15:36:25+07:00
+date: 2023-06-17T23:36:25+07:00
 draft: false
 iscjklanguage: false
 isarchived: false
@@ -9,6 +9,7 @@ images: ["https://images.unsplash.com/photo-1605745341112-85968b19335b?w=1920&q=
 aliases: []
 description: "Menggunakan docker context untuk bekerja dengan remote docker secara lokal"
 ---
+#### Translated by: [@paramithatm](https://github.com/paramithatm)
 
 {{< unsplash user="@carrier_lost" src="photo-1605745341112-85968b19335b" q="50" >}}
 
