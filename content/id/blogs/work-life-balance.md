@@ -1,6 +1,6 @@
 ---
 title: "Work Life Balance"
-date: 2020-11-01T00:00:00+07:00
+date: 2023-06-19T22:47:16+07:00
 draft: false
 iscjklanguage: false
 isarchived: true
