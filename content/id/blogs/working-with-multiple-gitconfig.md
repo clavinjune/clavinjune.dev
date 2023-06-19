@@ -1,5 +1,5 @@
 ---
-title: "Bekerja menggunakan beberapa Gitconfig"
+title: "Bekerja menggunakan lebih dari 1 Gitconfig"
 date: 2023-06-19T20:51:59+07:00
 draft: false
 iscjklanguage: false
@@ -74,7 +74,7 @@ $ cat work
 	editor = vim
 ```
 
-Sekarang kedua akun Anda sudah diatur. Bagaimana cara berganti antara kedua gitconfig?
+Sekarang kedua akun Anda sudah diatur. Bagaimana cara berpindah dari satu Gitconfig ke Gitconfig yang lain?
 Katakanlah semua direktori git pekerjaan Anda terletak di `~/Works`, dan yang pribadi di `~/Personals`. Anda dapat mengganti gitconfig dengan cara mengatur gitconfig global menggunakan `includeIf`.
 
 ```shell
