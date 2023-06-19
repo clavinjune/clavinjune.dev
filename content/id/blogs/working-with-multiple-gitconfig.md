@@ -1,5 +1,5 @@
 ---
-title: "Bekerja menggunakan lebih dari 1 Gitconfig"
+title: "Bekerja Menggunakan Lebih dari Satu Gitconfig"
 date: 2023-06-19T20:51:59+07:00
 draft: false
 iscjklanguage: false
