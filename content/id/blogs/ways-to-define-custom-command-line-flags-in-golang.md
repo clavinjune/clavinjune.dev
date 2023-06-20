@@ -106,7 +106,7 @@ func main() {
 }
 ```
 
-Seperti yang kalian lihat, ini mirip dengan `flag.Var`, tapi menggunakan `MarshalText` dan `UnmarshalText`, sebagai ganti metode `String` dan `Set`.
+Seperti yang kalian lihat, ini mirip dengan `flag.Var`, tapi menggunakan `MarshalText` dan `UnmarshalText`, sebagai pengganti metode `String` dan `Set`.
 
 ## Kesimpulan
 
