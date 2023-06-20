@@ -1,5 +1,5 @@
 ---
-title: "Cara Membuat _Command-Line Flags Custom_ di Golang"
+title: "Cara Membuat Command-Line Flags Custom di Golang"
 date: 2023-06-19T23:09:05+07:00
 draft: false
 iscjklanguage: false
