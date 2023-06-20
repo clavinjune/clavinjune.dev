@@ -15,7 +15,7 @@ description: "pakai banyak gitconfig, pisahkan persona git kalian"
 
 ## Pengenalan
 
-Ini adalah tips singkat untuk menggunakan beberapa git config pada 1 mesin lokal. Jika kalian bekerja menggunakan Gitlab/Bitbucket/Github dengan beberapa email/username/gpgsign yang berbeda, atau jika kalian menggunakan akun personal dan akun kerja kalian di mesin yang sama.
+Ini adalah tips singkat untuk menggunakan beberapa git config pada mesin lokal yang sama. Jika kalian bekerja menggunakan Gitlab/Bitbucket/Github dengan beberapa email/username/gpgsign yang berbeda, atau jika kalian menggunakan akun personal dan akun kerja kalian di mesin yang sama.
 
 ## Mengatur Direktori Gitconfig
 
@@ -29,7 +29,7 @@ $ pwd
 
 ## Mengatur Masing-masing Gitconfig
 
-Setelah membuat direktori, misalnya kalian mau mengatur akun `personal` dan `kerja`:
+Setelah membuat direktori, misalnya kalian mau mengatur akun `personal` dan `kerja` kalian:
 
 ### Mengatur Gitconfig Personal
 
@@ -40,7 +40,7 @@ $ git config --file=personal core.editor "vim"
 ...
 ```
 
-Dengan menggunakan penanda `--file=personal`, gitconfig tersebut akan dikonfigurasi di dalam _file_ `personal`.
+Dengan menggunakan _flag_ `--file=personal`, gitconfig tersebut akan dikonfigurasi di dalam _file_ `personal`.
 
 ```shell
 $ cat personal
