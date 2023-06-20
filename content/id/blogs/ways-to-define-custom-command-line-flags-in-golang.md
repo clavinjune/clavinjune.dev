@@ -60,7 +60,7 @@ Hal penting yang perlu diperhatikan adalah metode `Set`. Setiap _flag_ kalian di
 
 ## Flag Func
 
-`flag.Func` adalah cara yang mudah untuk mendefinisikan sebuah _flag custom_. Ia menggunakan `flag.Var` sebagai basisnya, jadi kalian tidak perlu membuat _custom struct_.
+`flag.Func` adalah cara yang mudah untuk mendefinisikan sebuah _flag custom_. `flag.Func` menggunakan `flag.Var` sebagai basisnya, jadi kalian tidak perlu membuat _custom struct_.
 
 ```go
 func main() {
