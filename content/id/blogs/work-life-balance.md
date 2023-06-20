@@ -7,7 +7,7 @@ isarchived: true
 categories: ["life-style"]
 images: ["https://d3t3ozftmdmh3i.cloudfront.net/production/podcast_uploaded_episode/6959825/6959825-1604216114712-74967a0dc6ae2.jpg"]
 aliases: []
-description: "Di podcast ini, kami berdiskusi mengenai betapa pentingnya mencapai keseimbangan kehidupan personal dan pekerjaan. Kami berbagi pengalaman kami membagi waktu kerja dan kehidupan personal, dan apa yang kami lakukan untuk meningkatkan kualitas _Work Life Balance_ kami, serta beberapa aktivitas yang kami lakukan di luar jam kerja."
+description: "Di podcast ini, kami berdiskusi mengenai betapa pentingnya mencapai keseimbangan kehidupan personal dan pekerjaan. Kami berbagi pengalaman kami membagi waktu kerja dan kehidupan personal, dan apa yang kami lakukan untuk meningkatkan kualitas Work Life Balance kami, serta beberapa aktivitas yang kami lakukan di luar jam kerja."
 ---
 
 Di salah satu [episode](https://open.spotify.com/episode/6U5LH5iAZNNDd32N3nKIJl?si=06f11v9nSAWHHf11IwDmRg) podcast [positif.dev](https://positif.dev), saya dan Devin berdiskusi mengenai apa itu _work-life balance_. Saya berpendapat bahwa _work-life balance_ adalah kebahagiaan yang sulit dicapai, karena kita perlu memisahkan kehidupan personal dan pekerjaan, waktu, dan lingkungan dimana kita tidak perlu memikirkan tentang pekerjaan di luar jam kerja.

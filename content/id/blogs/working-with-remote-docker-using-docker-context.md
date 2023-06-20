@@ -14,7 +14,7 @@ description: "Menggunakan docker context untuk bekerja dengan remote docker seca
 {{< unsplash user="@carrier_lost" src="photo-1605745341112-85968b19335b" q="50" >}}
 
 ## Pengenalan
-Ini adalah contekan cara menggunakan _docker context_ untuk terhubung dengan _remote docker_ secara lokal. Mungkin dapat membantu Anda terhubung dengan _remote docker_ Anda tanpa perlu SSH secara manual ke server _remote_.
+Ini adalah contekan cara menggunakan _docker context_ untuk terhubung dengan _remote docker_ secara lokal. Mungkin dapat membantu kalian terhubung dengan _remote docker_ kalian tanpa perlu SSH secara manual ke server _remote_.
 
 ## Menambahkan Context
 
@@ -24,7 +24,7 @@ my-remote-docker-machine
 Successfully created context "my-remote-docker-machine"
 ```
 
-Anda juga dapat memanfaatkan file `SSH Config` untuk terhubung ke _remote docker_. Khususnya ketika Anda perlu mendefinisikan `private key` atau `password` sendiri.
+Kalian juga dapat memanfaatkan file `SSH Config` untuk terhubung ke _remote docker_. Khususnya ketika kalian perlu mendefinisikan `private key` atau `password` sendiri.
 
 ```bash
 $ cat ~/.ssh/config 
@@ -34,7 +34,7 @@ Host my-remote-docker-machine
 $ docker context create my-remote-docker-machine --docker "host=ssh://my-remote-docker-machine"
 ```
 
-Selain `ssh`, Anda juga dapat menambahkan _context_ Anda menggunakan protokol `tcp` jika Anda mengaktifkan `Docker API`.
+Selain `ssh`, kalian juga dapat menambahkan _context_ menggunakan protokol `tcp` jika kalian mengaktifkan `Docker API`.
 
 ## Tampilkan Semua Context
 
@@ -71,7 +71,7 @@ my-remote-docker-machine *                                             ssh://use
 
 ```
 
-Perhatikan bahwa `*` berpindah dari `default` ke `my-remote-docker-machine`. Sekarang Anda dapat menggunakan perintah _docker_ tanpa _flag_ `--context`.
+Perhatikan bahwa `*` berpindah dari `default` ke `my-remote-docker-machine`. Sekarang kalian dapat menggunakan perintah _docker_ tanpa _flag_ `--context`.
 
 ## Menghapus Context
 
