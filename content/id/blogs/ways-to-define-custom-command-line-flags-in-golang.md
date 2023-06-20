@@ -14,11 +14,11 @@ description: "beberapa cara membuat custom command line flags di golang"
 
 ## Pengenalan
 
-Jika Anda familiar dengan _command-line interface_, Anda mungkin pernah melihat _flag_ atau penanda seperti `-h`, `-v`, `--name foo`, dan sebagainya. Beberapa _flag_ menggunakan tipe data primitif seperti `string`, `int`, `bool`, dan sejenisnya. Sisanya adalah _flag_ khusus yang menggunakan pola spesifik atau struktur data seperti `IP`, `URL`, `Array`, `Map`, dan sebagainya. Golang menyediakan sebuah _library_ bawaan `flag` untuk membuat _flag command-line_ khusus. Beberapa fungsi yang disediakan untuk membuat _flag_ sudah cukup jelas, seperti `flag.String`, `flag.Int`, dsb. Tapi, bagaimana dengan _custom flag_? Di artikel ini, Anda akan mempelajari beberapa cara untuk membuat _flag command-line custom_ pada Golang.
+Jika kalian familiar dengan _command-line interface_, kalian mungkin pernah melihat _flag_ atau penanda seperti `-h`, `-v`, `--name foo`, dan sebagainya. Beberapa _flag_ menggunakan tipe data primitif seperti `string`, `int`, `bool`, dan sejenisnya. Sisanya adalah _flag_ khusus yang menggunakan pola spesifik atau struktur data seperti `IP`, `URL`, `Array`, `Map`, dan sebagainya. Golang menyediakan sebuah _library_ bawaan `flag` untuk membuat _flag command-line_ khusus. Beberapa fungsi yang disediakan untuk membuat _flag_ sudah cukup jelas, seperti `flag.String`, `flag.Int`, dsb. Tapi, bagaimana dengan _custom flag_? Di artikel ini, kalian akan mempelajari beberapa cara untuk membuat _flag command-line custom_ pada Golang.
 
 ## Contoh
 
-Misalnya Anda mau membuat _flag custom_ yang menerima sebuah _list_ berisi `string`. Penggunaan _flag_-nya akan seperti ini:
+Misalnya kalian mau membuat _flag custom_ yang menerima sebuah _list_ berisi `string`. Penggunaan _flag_-nya akan seperti ini:
 
 ```bash
 $ go run main.go --list a --list b,c,d
@@ -56,11 +56,11 @@ func main() {
 }
 ```
 
-Hal penting yang perlu diperhatikan adalah metode `Set`. Setiap _flag_ Anda dipanggil, metode `Set` akan dipanggil.
+Hal penting yang perlu diperhatikan adalah metode `Set`. Setiap _flag_ kalian dipanggil, metode `Set` akan dipanggil.
 
 ## Flag Func
 
-`flag.Func` is a straight forward way to define a custom flag. It uses `flag.Var` under the hood so you don't need to create a custom struct.
+`flag.Func` adalah cara yang mudah untuk mendefinisikan sebuah _flag custom_. Ia menggunakan `flag.Var` sebagai basisnya, jadi kalian tidak perlu membuat _custom struct_.
 
 ```go
 func main() {
@@ -77,11 +77,11 @@ func main() {
 }
 ```
 
-As you see, the last parameter of `flag.Func` is a `Set` method you implemented in the previous example.
+Seperti kalian lihat, parameter terakhir dari `flag.Func` adalah metode `Set` yang kalian implementasikan pada contoh sebelumnya.
 
 ## Flag TextVar
 
-`flag.TextVar` is a new way introduced in `go1.19`. It uses `flag.Var` under the hood like `flag.Func`, but it accepts a `encoding.TextUnmarshaler` and `encoding.TextMarshaler` interface instead of `flag.Value` interface. It means you can use built-in struct like `big.Int`, `netip.Addr`, and `time.Time` as flags without needed to implement a custom struct.
+`flag.TextVar` adalah cara baru yang diperkenalkan pada `go1.19`. Ia menggunakan `flag.Var` sebagai basisnya seperti `flag.Func`, tapi ia menerima _interface_ `encoding.TextUnmarshaler` dan `encoding.TextMarshaler`, dan bukan `flag.Value`. Artinya, kalian dapat menggunakan _struct_ bawaan seperti `big.Int`, `netip.Addr`, dan `time.Time` sebagai _flag_ tanpa harus mengimplementasikan _custom struct_.
 
 ```go
 type ListFlag []string
@@ -106,12 +106,10 @@ func main() {
 }
 ```
 
-As you see, it's similar to `flag.Var` but it uses `MarshalText` and `UnmarshalText` instead of `String` and `Set` method.
+Seperti yang kalian lihat, ini mirip dengan `flag.Var`, tapi menggunakan `MarshalText` dan `UnmarshalText`, sebagai ganti metode `String` dan `Set`.
 
 ## Kesimpulan
 
-Sekarang Anda tau beberapa cara mendefinisikan _command-line flag custom_ menggunakan Golang. Jika ingin mempelajari _package_ `flag` lebih lanjut, Anda bisa membaca dokumentasi resminya [di sini](https://pkg.go.dev/flag).
-
-Now you know some ways to define custom command-line flags in Golang. If you want to learn more about `flag` package, you can read the official documentation [here](https://pkg.go.dev/flag).
+Sekarang kalian tahu beberapa cara mendefinisikan _command-line flag custom_ menggunakan Golang. Jika ingin mempelajari _package_ `flag` lebih lanjut, kalian bisa membaca dokumentasi resminya [di sini](https://pkg.go.dev/flag).
 
 Terima kasih sudah membaca!
