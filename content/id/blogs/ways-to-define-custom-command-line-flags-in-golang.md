@@ -81,7 +81,7 @@ Seperti kalian lihat, parameter terakhir dari `flag.Func` adalah metode `Set` ya
 
 ## Flag TextVar
 
-`flag.TextVar` adalah cara baru yang diperkenalkan pada `go1.19`. Ia menggunakan `flag.Var` sebagai basisnya seperti `flag.Func`, tapi ia menerima _interface_ `encoding.TextUnmarshaler` dan `encoding.TextMarshaler`, dan bukan `flag.Value`. Artinya, kalian dapat menggunakan _struct_ bawaan seperti `big.Int`, `netip.Addr`, dan `time.Time` sebagai _flag_ tanpa harus mengimplementasikan _custom struct_.
+`flag.TextVar` adalah cara baru yang diperkenalkan pada `go1.19`. `flag.TextVar` menggunakan `flag.Var` sebagai basisnya seperti `flag.Func`, tapi menerima _interface_ `encoding.TextUnmarshaler` dan `encoding.TextMarshaler`, dan bukan `flag.Value`. Artinya, kalian dapat menggunakan _struct_ bawaan seperti `big.Int`, `netip.Addr`, dan `time.Time` sebagai _flag_ tanpa harus mengimplementasikan _custom struct_.
 
 ```go
 type ListFlag []string
