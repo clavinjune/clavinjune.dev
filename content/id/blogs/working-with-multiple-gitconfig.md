@@ -7,7 +7,7 @@ isarchived: false
 categories: ["tech"]
 images: ["https://images.unsplash.com/photo-1647166545674-ce28ce93bdca?w=1920&q=50"]
 aliases: []
-description: "Pakai banyak gitconfig, pisahkan persona git Anda"
+description: "pakai banyak gitconfig, pisahkan persona git kalian"
 ---
 #### Translated by: [@paramithatm](https://github.com/paramithatm)
 
@@ -15,7 +15,7 @@ description: "Pakai banyak gitconfig, pisahkan persona git Anda"
 
 ## Pengenalan
 
-Ini adalah tips singkat untuk menggunakan beberapa git config pada 1 mesin lokal. Misalnya jika Anda bekerja menggunakan Gitlab/Bitbucket/Github dengan beberapa email/username/gpgsign yang berbeda, atau jika Anda menggunakan akun personal dan akun kerja Anda di mesin yang sama.
+Ini adalah tips singkat untuk menggunakan beberapa git config pada 1 mesin lokal. Jika kalian bekerja menggunakan Gitlab/Bitbucket/Github dengan beberapa email/username/gpgsign yang berbeda, atau jika kalian menggunakan akun personal dan akun kerja kalian di mesin yang sama.
 
 ## Mengatur Direktori Gitconfig
 
@@ -29,7 +29,7 @@ $ pwd
 
 ## Mengatur Masing-masing Gitconfig
 
-Setelah membuat direktori, misalnya Anda mau mengatur akun `personal` dan `kerja` Anda:
+Setelah membuat direktori, misalnya kalian mau mengatur akun `personal` dan `kerja`:
 
 ### Mengatur Gitconfig Personal
 
@@ -51,7 +51,7 @@ $ cat personal
 	editor = vim
 ```
 
-Mari lakukan hal yang sama untuk akun kerja Anda.
+Mari lakukan hal yang sama untuk akun kerja kalian.
 
 ### Mengatur Gitconfig untuk Kerja
 
@@ -74,8 +74,8 @@ $ cat work
 	editor = vim
 ```
 
-Sekarang kedua akun Anda sudah diatur. Bagaimana cara berpindah dari satu Gitconfig ke Gitconfig yang lain?
-Katakanlah semua direktori git pekerjaan Anda terletak di `~/Works`, dan yang pribadi di `~/Personals`. Anda dapat mengganti gitconfig dengan cara mengatur gitconfig global menggunakan `includeIf`.
+Sekarang kedua akun kalian sudah diatur. Bagaimana cara berpindah dari satu Gitconfig ke Gitconfig yang lain?
+Katakanlah semua direktori git pekerjaan kalian terletak di `~/Works`, dan yang pribadi di `~/Personals`. Kalian dapat mengganti gitconfig dengan cara mengatur gitconfig global menggunakan `includeIf`.
 
 ```shell
 cat <<EOF > ~/.gitconfig
@@ -88,8 +88,8 @@ EOF
 
 ## Kesimpulan
 
-Sekarang setiap Anda berada dalam direktori `~/Works/` Anda menggunakan konfigurasi `~/.gitconfig.d/work`, dan ketika Anda berada dalam `~/Personals/` Anda menggunakan konfigurasi `~/.gitconfig.d/personal`.
+Sekarang setiap kalian berada dalam direktori `~/Works/` kalian menggunakan konfigurasi `~/.gitconfig.d/work`, dan ketika berada dalam `~/Personals/` kalian menggunakan konfigurasi `~/.gitconfig.d/personal`.
 
-Anda dapat mengecek apakah gitconfig terpasang dengan benar dengan cara menjalankan perintah `git config user.email` dan cek email mana yang muncul.
+Kalian dapat mengecek apakah gitconfig terpasang dengan benar dengan cara menjalankan perintah `git config user.email` dan cek email mana yang muncul.
 
 Terima kasih sudah membaca!
