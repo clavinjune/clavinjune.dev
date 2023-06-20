@@ -29,7 +29,7 @@ Di bawah ini adalah beberapa cara untuk mendefinisikan _flag custom_ tersebut.
 
 ## Flag Var
 
-`flag.Var` adalah cara mendefinisikan _flag custom_. Ia menerima sebuah _custom struct_ yang mengimplementasikan _interface_ `flag.Value`.
+`flag.Var` adalah cara mendefinisikan _flag custom_. `flag.Var` menerima sebuah _custom struct_ yang mengimplementasikan _interface_ `flag.Value`.
 
 ```go
 type ListFlag []string
