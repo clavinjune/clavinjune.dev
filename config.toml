@@ -145,7 +145,7 @@ theme = 'june'
     googleSiteVerification = 'n8iUJq2zr7wQ8eTS_ozpypgZQhfezUeUOXhOr3-INrE'
     monetization = '$ilp.uphold.com/RYNmdxrFrPJB'
     superfeedrURL = 'https://clavinjune.superfeedr.com/'
-    talksRepo = 'github.com/clavinjune/presents'
+    talksURL = 'https://presents.clavinjune.dev'
 
     [params.june.webmention]
       LoginURL    = 'mailto:juneardoc@gmail.com'
