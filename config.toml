@@ -133,11 +133,11 @@ theme = 'june'
     #   url = '/works/'
     #   weight = 4
 
-[author]
-  Name = "Clavin June"
-  Email = 'juneardoc@gmail.com'
-
 [params]
+  [params.author]
+    name = "Clavin June"
+    email = 'juneardoc@gmail.com'
+
   [params.june]
     braveRewardsVerification = 'ze0dec1b3acfbd430cac887ce390fdefcb56679334fcd39bc49d434660a52e26c'
     # canonicalURL = 'https://another-page.com'
