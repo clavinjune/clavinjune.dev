@@ -23,7 +23,7 @@ theme = 'june'
     guessSyntax = true
     lineNos = true
     lineNumbersInTable = true
-    style = 'vs'
+    style = 'pygments'
     tabWidth = 4
 
 # [related]
@@ -192,4 +192,4 @@ theme = 'june'
       Mapping = "title"
       Reaction = "1"
       Metadata = "0"
-      Theme = "light"
+      Theme = "noborder_light"
