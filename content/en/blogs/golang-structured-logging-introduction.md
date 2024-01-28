@@ -10,7 +10,7 @@ aliases: []
 description: "introduction to a new standard library for structured logging in Golang"
 ---
 
-{{< unsplash user="@bugsster" src="photo-1602501437125-71e4a5c16c26" q="50" >}}
+{{< unsplash user="@izgubljenausvemiru" src="photo-1602501437125-71e4a5c16c26" q="50" >}}
 
 I was doing sharing session this week related to structured logging and how we can utilize it in my team at works. My team has already used Zerolog, but I guess it would be no harm if we update the knowledge regarding a new library more over because it is Golang standard library which we don't need to depends 3rd party. Here's the [presentation](https://go-talks.appspot.com/github.com/clavinjune/presents/golang-structured-logging-introduction/index.slide#1) I created.
 
