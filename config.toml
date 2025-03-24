@@ -8,10 +8,12 @@ enableRobotsTXT = true
 googleAnalytics = 'G-MTSJ0LHJ06'
 hasCJKLanguage = true
 languageCode = 'en-us'
-paginate = 5
 publishDir = 'docs'
 title = 'June Personal Web'
 theme = 'june'
+
+[pagination]
+  pagerSize = 5
 
 [markup]
   [markup.tableOfContents]
