@@ -5,7 +5,6 @@ defaultContentLanguage = 'en'
 defaultContentLanguageInSubdir = true
 enableMissingTranslationPlaceholders = true
 enableRobotsTXT = true
-googleAnalytics = 'G-MTSJ0LHJ06'
 hasCJKLanguage = true
 languageCode = 'en-us'
 publishDir = 'docs'
@@ -14,6 +13,16 @@ theme = 'june'
 
 [pagination]
   pagerSize = 5
+
+[services]
+  [services.googleAnalytics]
+    id = 'G-MTSJ0LHJ06'
+
+[privacy]
+  [privacy.googleAnalytics]
+    respectDoNotTrack = true
+  [privacy.x]
+    simple = false
 
 [markup]
   [markup.tableOfContents]
