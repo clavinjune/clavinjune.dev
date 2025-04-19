@@ -11,6 +11,9 @@ publishDir = 'docs'
 title = 'June Personal Web'
 theme = 'june'
 
+[markup.goldmark.renderer]
+  unsafe = true
+
 [pagination]
   pagerSize = 5
 
